@@ -35,7 +35,7 @@ Today we are going to kick-off a three part series on **calculating the size of 
 
 我已经将(有缺陷的)`order_points`方法重命名为`order_points_old`，这样我们就可以比较我们原始的和更新的方法。首先，打开一个新文件，命名为`order_coordinates.py`:
 
-```
+```py
 # import the necessary packages
 from __future__ import print_function
 from imutils import perspective
@@ -72,14 +72,14 @@ def order_points_old(pts):
 
 **第 2-8 行**处理导入我们需要的 Python 包。我们将在这篇博文的后面使用`imutils`包，所以如果你还没有安装它，一定要通过`pip`安装它:
 
-```
+```py
 $ pip install imutils
 
 ```
 
 否则，如果你*确实*安装了`imutils`，你应该升级到最新版本(它有更新的`order_points`实现):
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -116,7 +116,7 @@ $ pip install --upgrade imutils
 
 我们将要回顾的`order_points`函数的实现可以在 [imutils 包](https://github.com/jrosebr1/imutils)中找到；具体来说，在 [perspective.py 文件](https://github.com/jrosebr1/imutils/blob/master/imutils/perspective.py)中。为了完整起见，我在这篇博文中包含了具体的实现:
 
-```
+```py
 # import the necessary packages
 from scipy.spatial import distance as dist
 import numpy as np
@@ -173,7 +173,7 @@ def order_points(pts):
 
 现在我们已经有了`order_points`的*原版*和*更新版*，让我们继续实现我们的`order_coordinates.py`脚本，并让他们都试试:
 
-```
+```py
 # import the necessary packages
 from __future__ import print_function
 from imutils import perspective
@@ -241,7 +241,7 @@ edged = cv2.erode(edged, None, iterations=1)
 
 现在我们有了边缘图的轮廓，我们可以应用`cv2.findContours`函数来实际*提取*物体的轮廓:
 
-```
+```py
 # find contours in the edge map
 cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL,
 	cv2.CHAIN_APPROX_SIMPLE)
@@ -258,7 +258,7 @@ colors = ((0, 0, 255), (240, 0, 159), (255, 0, 0), (255, 255, 0))
 
 下一步是分别遍历每个轮廓:
 
-```
+```py
 # loop over the contours individually
 for (i, c) in enumerate(cnts):
 	# if the contour is not sufficiently large, ignore it
@@ -286,7 +286,7 @@ for (i, c) in enumerate(cnts):
 
 我们现在准备按顺时针方向排列边界框坐标:
 
-```
+```py
 	# order the points in the contour such that they appear
 	# in top-left, top-right, bottom-right, and bottom-left
 	# order, then draw the outline of the rotated bounding
@@ -312,7 +312,7 @@ for (i, c) in enumerate(cnts):
 
 最后，我们可以看到我们的结果:
 
-```
+```py
 	# loop over the original points and draw them
 	for ((x, y), color) in zip(rect, colors):
 		cv2.circle(image, (int(x), int(y)), 5, color, -1)
@@ -336,7 +336,7 @@ for (i, c) in enumerate(cnts):
 
 要使用最初有缺陷的实现来执行我们的脚本，只需发出以下命令:
 
-```
+```py
 $ python order_coordinates.py
 
 ```
@@ -375,7 +375,7 @@ $ python order_coordinates.py
 
 为了解决这个问题，我们可以使用 [imutils 包](https://github.com/jrosebr1/imutils)中更新的`order_points`函数。我们可以通过发出以下命令来验证我们更新的函数是否正常工作:
 
-```
+```py
 $ python order_coordinates.py --new 1
 
 ```

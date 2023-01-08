@@ -70,7 +70,7 @@
 
 按照以下说明安装`smbus`:
 
-```
+```py
 $ cd ~/.virtualenvs/py3cv4/lib/python3.5/site-packages/
 $ ln -s /usr/lib/python3/dist-packages/smbus.cpython-35m-arm-linux-gnueabihf.so smbus.so
 
@@ -80,7 +80,7 @@ $ ln -s /usr/lib/python3/dist-packages/smbus.cpython-35m-arm-linux-gnueabihf.so 
 
 启动 Raspbian 系统配置，打开 i2c 和摄像头接口(可能需要重启)。
 
-```
+```py
 $ sudo raspi-config
 # enable the i2c and camera interfaces via the menu
 
@@ -90,7 +90,7 @@ $ sudo raspi-config
 
 使用 pip，继续安装剩余的工具:
 
-```
+```py
 $ workon py3cv4
 $ pip install pantilthat
 $ pip install imutils
@@ -154,7 +154,7 @@ PID 是一个基本的控制理论概念。
 
 一旦你抓取了今天的 ***【下载】*** 并提取它们，你会看到下面的目录结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── pyimagesearch
@@ -182,7 +182,7 @@ $ tree --dirsfirst
 
 继续打开`pid.py`。让我们回顾一下:
 
-```
+```py
 # import necessary packages
 import time
 
@@ -209,7 +209,7 @@ class PID:
 
 现在让我们回顾一下`initialize`:
 
-```
+```py
 	def initialize(self):
 		# initialize the current and previous time
 		self.currTime = time.time()
@@ -233,7 +233,7 @@ P、I 和 D 变量建立在**行 20-22** 上。
 
 让我们转到 PID 类的核心——`update`方法:
 
-```
+```py
 	def update(self, error, sleep=0.2):
 		# pause for a bit
 		time.sleep(sleep)
@@ -302,7 +302,7 @@ P、I 和 D 变量建立在**行 20-22** 上。
 
 让我们继续实现我们的`ObjCenter`类，它将实现这两个目标:
 
-```
+```py
 # import necessary packages
 import imutils
 import cv2
@@ -328,7 +328,7 @@ class ObjCenter:
 
 让我们定义`update`方法，该方法将**找到一个面的中心 *(x，y)-* 坐标:**
 
-```
+```py
 	def update(self, frame, frameCenter):
 		# convert the frame to grayscale
 		gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -386,7 +386,7 @@ class ObjCenter:
 
 打开`pan_tilt_tracking.py`文件并插入以下代码:
 
-```
+```py
 # import necessary packages
 from multiprocessing import Manager
 from multiprocessing import Process
@@ -416,7 +416,7 @@ servoRange = (-90, 90)
 
 我们来定义一个*【ctrl+c】*`signal_handler`:
 
-```
+```py
 # function to handle keyboard interrupt
 def signal_handler(sig, frame):
 	# print a status message
@@ -445,7 +445,7 @@ def signal_handler(sig, frame):
 
 现在我们知道了我们的流程将如何退出，让我们定义我们的第一个流程:
 
-```
+```py
 def obj_center(args, objX, objY, centerX, centerY):
 	# signal trap to handle keyboard interrupt
 	signal.signal(signal.SIGINT, signal_handler)
@@ -514,7 +514,7 @@ def obj_center(args, objX, objY, centerX, centerY):
 
 让我们定义下一个流程，`pid_process`:
 
-```
+```py
 def pid_process(output, p, i, d, objCoord, centerCoord):
 	# signal trap to handle keyboard interrupt
 	signal.signal(signal.SIGINT, signal_handler)
@@ -559,7 +559,7 @@ def pid_process(output, p, i, d, objCoord, centerCoord):
 
 说到驱动我们的伺服系统，现在让我们实现一个伺服范围检查器和我们的伺服驱动器:
 
-```
+```py
 def in_range(val, start, end):
 	# determine the input value is in the supplied range
 	return (val >= start and val <= end)
@@ -601,7 +601,7 @@ def set_servos(pan, tlt):
 
 现在让我们[解析命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # check to see if this is the main body of execution
 if __name__ == "__main__":
 	# construct the argument parser and parse the arguments
@@ -618,7 +618,7 @@ if __name__ == "__main__":
 
 现在让我们使用进程安全变量并开始我们的进程:
 
-```
+```py
 	# start a manager for managing process-safe variables
 	with Manager() as manager:
 		# enable the servos
@@ -651,7 +651,7 @@ if __name__ == "__main__":
 
 现在我们将设置 P、I 和 D 常数:
 
-```
+```py
 		# set PID values for panning
 		panP = manager.Value("f", 0.09)
 		panI = manager.Value("f", 0.08)
@@ -668,7 +668,7 @@ if __name__ == "__main__":
 
 所有流程安全变量准备就绪后，让我们启动流程:
 
-```
+```py
 		# we have 4 independent processes
 		# 1\. objectCenter  - finds/localizes the object
 		# 2\. panning       - PID control loop determines panning angle
@@ -741,7 +741,7 @@ if __name__ == "__main__":
 
 继续 ***注释掉*驱动脚本中的平移过程**:
 
-```
+```py
 		# start all 4 processes
 		processObjectCenter.start()
 		#processPanning.start()
@@ -758,7 +758,7 @@ if __name__ == "__main__":
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python pan_tilt_tracking.py --cascade haarcascade_frontalface_default.xml
 
 ```
@@ -777,7 +777,7 @@ $ python pan_tilt_tracking.py --cascade haarcascade_frontalface_default.xml
 
 从那里**取消平移过程的注释:**
 
-```
+```py
 		# start all 4 processes
 		processObjectCenter.start()
 		processPanning.start()
@@ -794,7 +794,7 @@ $ python pan_tilt_tracking.py --cascade haarcascade_frontalface_default.xml
 
 再次执行以下命令:
 
-```
+```py
 $ python pan_tilt_tracking.py --cascade haarcascade_frontalface_default.xml
 
 ```
@@ -809,7 +809,7 @@ $ python pan_tilt_tracking.py --cascade haarcascade_frontalface_default.xml
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python pan_tilt_tracking.py --cascade haarcascade_frontalface_default.xml
 
 ```

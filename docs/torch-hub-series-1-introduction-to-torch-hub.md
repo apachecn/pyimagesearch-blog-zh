@@ -43,7 +43,7 @@ Torch Hub 允许您发布预先训练好的模型，以帮助研究共享和再�
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -90,7 +90,7 @@ Torch Hub 已经托管了一系列用于各种任务的模型，如图 3 所示�
 
 (*如果你想了解更多关于 DCGANs 的信息，一定要看看这个* [*博客*](https://pyimagesearch.com/2021/10/25/training-a-dcgan-in-pytorch/) *。)*
 
-```
+```py
 # USAGE
 # python inference.py
 
@@ -124,7 +124,7 @@ model = torch.hub.load("facebookresearch/pytorch_GAN_zoo:hub", "DCGAN",
 
 现在，这不是火炬中心提供的唯一主要功能。您可以使用其他几个值得注意的函数，比如`torch.hub.list`来列出所有属于存储库的可用入口点(可调用函数),以及`torch.hub.help`来显示目标入口点的文档 docstring。
 
-```
+```py
 # generate random noise to input to the generator
 (noise, _) = model.buildNoiseData(args["num_images"])
 
@@ -160,7 +160,7 @@ plt.show()
 
 接下来，我们将检查代码的突出部分。为此，我们将进入子目录。首先，让我们在`mlp.py`中构建我们的简单神经网络！
 
-```
+```py
 # import the necessary packages
 from collections import OrderedDict
 import torch.nn as nn
@@ -184,7 +184,7 @@ def get_training_model(inFeatures=4, hiddenDim=8, nbClasses=3):
 
 我们不会使用任何外部数据集来训练模型。相反，我们将自己生成数据点。让我们进入`train.py`。
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import mlp
 from torch.optim import SGD
@@ -218,7 +218,7 @@ print("[INFO] training using {}...".format(DEVICE))
 
 接下来，我们设置超参数(**第 21-23 行**)，如果有兼容的 GPU 可用，则将我们的`DEVICE`设置为`cuda`(**第 26 行**)。
 
-```
+```py
 # generate a 3-class classification problem with 1000 data points,
 # where each data point is a 4D feature vector
 print("[INFO] preparing data...")
@@ -237,7 +237,7 @@ testY = torch.from_numpy(testY).float()
 
 在**的第 32 行和第 33 行**，我们使用`make_blobs`函数来模拟实际三类数据集的数据点。使用 [scikit-learn 的](https://scikit-learn.org/stable/) `train_test_split`函数，我们创建数据的训练和测试分割。
 
-```
+```py
 # initialize our model and display its architecture
 mlp = mlp.get_training_model().to(DEVICE)
 print(mlp)
@@ -256,7 +256,7 @@ trainTemplate = "epoch: {} test loss: {:.3f} test accuracy: {:.3f}"
 
 第 53 行**上的`trainTemplate`变量将作为字符串模板打印精度和损耗。**
 
-```
+```py
 # loop through the epochs
 for epoch in range(0, EPOCHS):
 	# initialize tracker variables and set our model to trainable
@@ -300,7 +300,7 @@ for epoch in range(0, EPOCHS):
 
 对于每个时期，训练损失、精度和样本大小变量被升级(**行 80-82** )，并使用**行 85** 上的模板显示。
 
-```
+```py
 	# initialize tracker variables for testing, then set our model to
 	# evaluation mode
 	testLoss = 0
@@ -342,7 +342,7 @@ torch.save(mlp.state_dict(), MODEL_PATH)
 
 让我们来评估我们的模型的划时代的性能！
 
-```
+```py
 [INFO] training using cpu...
 [INFO] preparing data...
 Sequential(
@@ -385,7 +385,7 @@ epoch: 10 test loss: 0.173 test accuracy: 0.993
 
 模型训练完成后，我们的下一步是在 repo 中配置`hubconf.py`文件，使我们的模型可以通过 Torch Hub 访问。
 
-```
+```py
 # import the necessary packages
 import torch
 from pyimagesearch import mlp
@@ -414,7 +414,7 @@ def custom_model():
 
 回到我们的主项目目录，让我们进入`hub_usage.py`脚本。
 
-```
+```py
 # USAGE
 # python hub_usage.py
 
@@ -435,7 +435,7 @@ args = vars(ap.parse_args())
 
 在导入必要的包之后，我们为用户创建一个参数解析器(**第 13-16 行**)来输入数据的批量大小。
 
-```
+```py
 # load the model using torch hub
 print("[INFO] loading the model using torch hub...")
 model = torch.hub.load("cr0wley-zz/torch_hub_test:main",
@@ -461,7 +461,7 @@ testY = torch.from_numpy(testY).float()
 
 现在，为了评估模型，我们将按照我们在模型训练期间创建的相同方式创建数据(**第 26 行和第 27 行**)，并使用`train_test_split`创建数据分割(**第 31-36 行**)。
 
-```
+```py
 # initialize the neural network loss function
 lossFunc = nn.CrossEntropyLoss()
 
@@ -482,7 +482,7 @@ model.eval()
 
 将模型设置为评估模式(**行 50** )，并抓取单批数据供模型评估(**行 51** )。
 
-```
+```py
 # initialize a no-gradient context
 with torch.no_grad():
 	# load the data into device
@@ -508,7 +508,7 @@ with torch.no_grad():
 
 让我们看看这个模型的效果如何！
 
-```
+```py
 [INFO] loading the model using torch hub...
 [INFO] preparing data...
 [INFO] setting the model in evaluation mode...
@@ -529,7 +529,7 @@ Using cache found in /root/.cache/torch/hub/cr0wley-zz_torch_hub_test_main
 
 Chakraborty，D. **“火炬中心系列#1:火炬中心简介”， *PyImageSearch* ，2021，[https://PyImageSearch . com/2021/12/20/Torch-Hub-Series-1-Introduction-to-Torch-Hub/](https://pyimagesearch.com/2021/12/20/torch-hub-series-1-introduction-to-torch-hub/)**
 
-```
+```py
 @article{dev_2021_THS1,
    author = {Devjyoti Chakraborty},
    title = {{Torch Hub} Series \#1: Introduction to {Torch Hub}},

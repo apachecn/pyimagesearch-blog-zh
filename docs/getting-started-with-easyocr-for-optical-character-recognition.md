@@ -61,12 +61,12 @@ EasyOCR 是使用 Python 和 PyTorch 库实现的。如果你有一个支持 CUD
 
 当您准备好进行第五步时，只需执行以下操作:
 
-```
+```py
 $ pip install opencv-python # NOTE: *not* opencv-contrib-python
 $ pip install easyocr
 ```
 
-```
+```py
 $ workon easyocr # replace `easyocr` with your custom environment name
 $ pip freeze
 certifi==2020.6.20
@@ -109,7 +109,7 @@ torchvision==0.7.0
 
 花点时间找到这篇博文的 ***【下载】*** 部分。在项目文件夹中，您会找到以下文件:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── images
@@ -129,14 +129,14 @@ $ tree --dirsfirst
 
 打开项目目录结构中的`easy_ocr.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 from easyocr import Reader
 import argparse
 import cv2
 ```
 
-```
+```py
 def cleanup_text(text):
 	# strip out non-ASCII text so we can draw the text on the image
 	# using OpenCV
@@ -147,7 +147,7 @@ def cleanup_text(text):
 
 输入和便利实用程序准备就绪，现在让我们定义命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -167,7 +167,7 @@ args = vars(ap.parse_args())
 
 给定我们的命令行参数，让我们**执行 OCR:**
 
-```
+```py
 # break the input languages into a comma separated list
 langs = args["langs"].split(",")
 print("[INFO] OCR'ing with the following languages: {}".format(langs))
@@ -181,7 +181,7 @@ reader = Reader(langs, gpu=args["gpu"] > 0)
 results = reader.readtext(image)
 ```
 
-```
+```py
 # loop over the results
 for (bbox, text, prob) in results:
 	# display the OCR'd text and associated probability
@@ -214,7 +214,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python easy_ocr.py --image images/arabic_sign.jpg --langs en,ar
 [INFO] OCR'ing with the following languages: ['en', 'ar']
 [INFO] OCR'ing input image...
@@ -229,7 +229,7 @@ EasyOCR 能够检测并正确识别输入图像中的英文和阿拉伯文文本
 
 让我们尝试另一个图像，这个图像包含一个瑞典标志:
 
-```
+```py
 $ python easy_ocr.py --image images/swedish_sign.jpg --langs en,sv
 [INFO] OCR'ing with the following languages: ['en', 'sv']
 [INFO] OCR'ing input image...
@@ -247,7 +247,7 @@ Using CPU. Note: This module is much faster with a GPU.
 
 最后一个例子，让我们看看土耳其的停车标志:
 
-```
+```py
 $ python easy_ocr.py --image images/turkish_sign.jpg --langs en,tr
 [INFO] OCR'ing with the following languages: ['en', 'tr']
 [INFO] OCR'ing input image...
@@ -263,7 +263,7 @@ EasyOCR 能够检测文本，*“DUR”，*，当从土耳其语翻译成英语�
 
 此外，如果您有支持 CUDA 的 GPU，您可以通过提供`--gpu`命令行参数来获得*甚至更快的* OCR 结果，如下所示:
 
-```
+```py
 $ python easy_ocr.py --image images/turkish_sign.jpg --langs en,tr --gpu 1
 ```
 

@@ -44,7 +44,7 @@
 
 让我们首先打开一个名为`long_exposure.py`的新文件，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import imutils
@@ -64,7 +64,7 @@ args = vars(ap.parse_args())
 
 如果您的环境中还没有安装`imutils`，只需使用`pip`:
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -78,7 +78,7 @@ $ pip install --upgrade imutils
 
 接下来，我们将执行一些初始化步骤:
 
-```
+```py
 # initialize the Red, Green, and Blue channel averages, along with
 # the total number of frames read from the file
 (rAvg, gAvg, bAvg) = (None, None, None)
@@ -99,7 +99,7 @@ print("[INFO] computing frame averages (this will take awhile)...")
 
 现在让我们开始计算平均值的循环:
 
-```
+```py
 # loop over frames from the video file stream
 while True:
 	# grab the frame from the file stream
@@ -119,7 +119,7 @@ while True:
 
 在循环的剩余部分，我们将执行运行平均值计算:
 
-```
+```py
 	# if the frame averages are None, initialize them
 	if rAvg is None:
 		rAvg = R
@@ -146,7 +146,7 @@ while True:
 
 一旦我们循环了视频文件中的所有帧，我们就可以将(平均)通道合并到一个图像中，并将其写入磁盘:
 
-```
+```py
 # merge the RGB averages together and write the output image to disk
 avg = cv2.merge([bAvg, gAvg, rAvg]).astype("uint8")
 cv2.imwrite(args["output"], avg)
@@ -176,7 +176,7 @@ stream.release()
 
 要创建我们的长曝光效果，只需执行以下命令:
 
-```
+```py
 $ time python long_exposure.py --video videos/river_01.mov --output river_01.png 
 [INFO] opening video file pointer...
 [INFO] computing frame averages (this will take awhile)...
@@ -201,7 +201,7 @@ sys		0m40.207s
 
 以下命令用于生成长曝光图像:
 
-```
+```py
 $ time python long_exposure.py --video videos/river_02.mov --output river_02.png 
 [INFO] opening video file pointer...
 [INFO] computing frame averages (this will take awhile)...
@@ -226,7 +226,7 @@ sys		0m21.792s
 
 当使用 OpenCV 生成长曝光时，它会给输出一种超现实、梦幻般的感觉:
 
-```
+```py
 $ time python long_exposure.py --video videos/river_03.mov --output river_03.png 
 [INFO] opening video file pointer...
 [INFO] computing frame averages (this will take awhile)...

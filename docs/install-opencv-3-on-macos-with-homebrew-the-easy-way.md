@@ -51,7 +51,7 @@
 
 我假设您正在使用全新安装的 macOS 和 Xcode。如果是这样，你需要[接受开发者许可](http://apple.stackexchange.com/questions/175069/how-to-accept-xcode-license)才能继续。我个人认为，通过终端更容易做到这一点。只需打开一个终端并执行以下命令:
 
-```
+```py
 $ sudo xcodebuild -license
 
 ```
@@ -64,7 +64,7 @@ $ sudo xcodebuild -license
 
 既然 Xcode 已经安装好了，我们也接受了 Apple developer license，我们就可以安装 Apple 命令行工具了。这些工具包括 make、GCC、clang 等包。 ***这是一个必需的步骤*** ，所以让你通过:
 
-```
+```py
 $ sudo xcode-select --install
 
 ```
@@ -79,7 +79,7 @@ $ sudo xcode-select --install
 
 如果您还没有接受 Xcode 许可，请使用以下命令确定您已经接受了 Xcode 许可:
 
-```
+```py
 $ sudo xcodebuild -license
 
 ```
@@ -90,14 +90,14 @@ $ sudo xcodebuild -license
 
 安装家酿非常简单——只需将命令复制并粘贴到家酿网站的*“安装家酿”*部分下面(确保将*整个*命令复制并粘贴到您的终端中)。我包含了下面的命令作为参考:
 
-```
+```py
 $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 ```
 
 在 Homebrew 安装之后，您应该通过执行以下命令来确保包定义(即，用于安装给定库/包的指令)是最新的:
 
-```
+```py
 $ brew update
 
 ```
@@ -106,14 +106,14 @@ $ brew update
 
 文件*的`~/.bash_profile`可能*或者*可能*已经不在你的系统上了。在这两种情况下，用您最喜欢的文本编辑器打开它(在这个例子中我将使用`nano`):
 
-```
+```py
 $ nano ~/.bash_profile
 
 ```
 
 然后在文件底部插入以下几行(如果`~/.bash_profile`不存在，文件将是空的——这没关系，只需将以下几行添加到文件中):
 
-```
+```py
 # Homebrew
 export PATH=/usr/local/bin:$PATH
 
@@ -133,7 +133,7 @@ export PATH=/usr/local/bin:$PATH
 
 最后，我们需要手动`source`这个`~/.bash_profile`文件，以确保修改已经被重新加载:
 
-```
+```py
 $ source ~/.bash_profile
 
 ```
@@ -146,7 +146,7 @@ $ source ~/.bash_profile
 
 相反，你应该安装你自己的 Python 版本，该版本独立于系统安装。使用自制软件，我们可以使用以下命令安装*Python 2.7 和*Python 3:
 
-```
+```py
 $ brew install python python3
 
 ```
@@ -155,7 +155,7 @@ $ brew install python python3
 
 作为健全性检查，让我们确认你使用的是 Python 的*自制版本，而不是 Python* 的*系统版本。您可以通过`which`命令来完成:*
 
-```
+```py
 $ which python
 /usr/local/bin/python
 $ which python3
@@ -175,7 +175,7 @@ $ which python3
 
 安装 Python 2.7 和 Python 3 之后，*您将需要使用以下命令检查您的 Python 版本号*:
 
-```
+```py
 $ python --version
 Python 2.7.10
 $ python3 --version
@@ -189,14 +189,14 @@ Python 3.5.0
 
 例如，如果我告诉您检查 Python 3 安装的`site-packages`目录，并提供一个示例命令:
 
-```
+```py
 $ ls /usr/local/opt/opencv3/lib/python3.5/site-packages/
 
 ```
 
 你应该*首先*检查你的 Python 3 版本。如果上面的`python3 --version`命令报告了 *3.6* ，那么您需要将您的路径更新为:
 
-```
+```py
 $ ls /usr/local/opt/opencv3/lib/python3.6/site-packages/
 
 ```
@@ -213,7 +213,7 @@ $ ls /usr/local/opt/opencv3/lib/python3.6/site-packages/
 
 第一步是将`homebrew/science`存储库添加到我们正在跟踪的包集合中。这允许我们访问安装 OpenCV 的公式。为此，只需使用以下命令:
 
-```
+```py
 $ brew tap homebrew/science
 
 ```
@@ -232,7 +232,7 @@ $ brew tap homebrew/science
 
 您可以通过运行`brew info opencv3`来查看选项/开关的完整列表，我在下面列出了它的输出:
 
-```
+```py
 $ brew info opencv3
 ...
 --32-bit
@@ -300,7 +300,7 @@ $ brew info opencv3
 
 要启动 OpenCV 3 安装过程，只需执行以下命令:
 
-```
+```py
 $ brew install opencv3 --with-contrib --with-python3 --HEAD
 
 ```
@@ -334,7 +334,7 @@ $ brew install opencv3 --with-contrib --with-python3 --HEAD
 
 您会在安装输出的底部注意到一个小注释:
 
-```
+```py
 If you need Python to find bindings for this keg-only formula, run:
   echo /usr/local/opt/opencv3/lib/python2.7/site-packages >> /usr/local/lib/python2.7/site-packages/opencv3.pth
 
@@ -342,7 +342,7 @@ If you need Python to find bindings for this keg-only formula, run:
 
 这意味着我们的 **Python 2.7 + OpenCV 3 绑定**现在安装在`/usr/local/opt/opencv3/lib/python2.7/site-packages`中，这是 OpenCV 编译的自制路径。我们可以通过`ls`命令验证这一点:
 
-```
+```py
 $ ls -l /usr/local/opt/opencv3/lib/python2.7/site-packages
 total 6944
 -r--r--r--  1 admin  admin  3552288 Dec 15 09:28 cv2.so
@@ -351,7 +351,7 @@ total 6944
 
 然而，我们需要将这些绑定放入`/usr/local/lib/python2.7/site-packages/`，这是 Python 2.7 的`site-packages`目录。我们可以通过执行以下命令来实现这一点:
 
-```
+```py
 $ echo /usr/local/opt/opencv3/lib/python2.7/site-packages >> /usr/local/lib/python2.7/site-packages/opencv3.pth
 
 ```
@@ -372,7 +372,7 @@ $ echo /usr/local/opt/opencv3/lib/python2.7/site-packages >> /usr/local/lib/pyth
 
 然而，有一个小问题。如果你检查一下`/usr/local/opt/opencv3/lib/python3.5/site-packages/`的内容，你会发现我们的`cv2.so`文件有一个有趣的名字:
 
-```
+```py
 $ ls -l /usr/local/opt/opencv3/lib/python3.5/site-packages/
 total 6952
 -r--r--r--  1 admin  admin  3556384 Dec 15 09:28 cv2.cpython-35m-darwin.so
@@ -383,7 +383,7 @@ total 6952
 
 幸运的是，修复很容易——您需要做的只是将`cv2.cpython-35m-darwin.so`重命名为`cv2.so`:
 
-```
+```py
 $ cd /usr/local/opt/opencv3/lib/python3.5/site-packages/
 $ mv cv2.cpython-35m-darwin.so cv2.so
 $ cd ~
@@ -392,7 +392,7 @@ $ cd ~
 
 从那里，我们可以创建另一个`.pth`文件，这次是为了 Python 3 + OpenCV 3 安装:
 
-```
+```py
 $ echo /usr/local/opt/opencv3/lib/python3.5/site-packages >> /usr/local/lib/python3.5/site-packages/opencv3.pth
 
 ```
@@ -403,7 +403,7 @@ $ echo /usr/local/opt/opencv3/lib/python3.5/site-packages >> /usr/local/lib/pyth
 
 下面是我用来验证 OpenCV 3 和 Python 2.7 绑定在我的系统上工作的命令:
 
-```
+```py
 $ python
 Python 2.7.12 (default, Oct 11 2016, 05:20:59) 
 [GCC 4.2.1 Compatible Apple LLVM 8.0.0 (clang-800.0.38)] on darwin
@@ -437,21 +437,21 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 要安装`virtualenv`和`virtualenvwrapper`，只需使用`pip`:
 
-```
+```py
 $ pip install virtualenv virtualenvwrapper
 
 ```
 
 两个包成功安装后，您需要再次更新您的`~/.bash_profile`文件:
 
-```
+```py
 $ nano ~/.bash_profile
 
 ```
 
 将下列行追加到文件中:
 
-```
+```py
 # Virtualenv/VirtualenvWrapper
 source /usr/local/bin/virtualenvwrapper.sh
 
@@ -465,7 +465,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 一旦您确认您的`~/.bash_profile`已经创建，您需要使用`source`命令刷新您的 shell:
 
-```
+```py
 $ source ~/.bash_profile
 
 ```
@@ -478,14 +478,14 @@ $ source ~/.bash_profile
 
 **对于 Python 2.7，使用以下命令:**
 
-```
+```py
 $ mkvirtualenv cv -p python
 
 ```
 
 **对于 Python 3，使用这个命令:**
 
-```
+```py
 $ mkvirtualenv cv -p python3
 
 ```
@@ -494,7 +494,7 @@ $ mkvirtualenv cv -p python3
 
 `mkvirtualenv`命令只需要执行一次。要在创建完`cv` Python 虚拟环境后访问它，只需使用`workon`命令:
 
-```
+```py
 $ workon cv
 
 ```
@@ -517,7 +517,7 @@ OpenCV 的唯一 Python 先决条件是一个科学计算包 [NumPy](http://www.
 
 要安装 NumPy，首先确保您在`cv`虚拟环境中，然后让`pip`处理实际安装:
 
-```
+```py
 $ pip install numpy
 
 ```
@@ -530,7 +530,7 @@ $ pip install numpy
 
 要将`cv2.so`绑定符号链接到名为`cv`的 Python 2.7 虚拟环境中，请使用以下命令:
 
-```
+```py
 $ cd ~/.virtualenvs/cv/lib/python2.7/site-packages/
 $ ln -s /usr/local/opt/opencv3/lib/python2.7/site-packages/cv2.so cv2.so
 $ cd ~
@@ -541,7 +541,7 @@ $ cd ~
 
 要将通过 Homebrew 安装的`cv2.so`绑定符号链接到您的 Python 3 虚拟环境(名为`cv`)，请执行以下命令:
 
-```
+```py
 $ cd ~/.virtualenvs/cv/lib/python3.5/site-packages/
 $ ln -s /usr/local/opt/opencv3/lib/python3.5/site-packages/cv2.so cv2.so
 $ cd ~
@@ -562,7 +562,7 @@ $ cd ~
 
 以下是我用来验证我的 Python 虚拟环境+ OpenCV 安装是否正常工作的确切命令:
 
-```
+```py
 $ workon cv
 $ python
 >>> import cv2

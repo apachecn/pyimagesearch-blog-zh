@@ -91,7 +91,7 @@
 
 两者都可以使用以下命令进行 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 $ pip install scikit-image==0.18.1
 ```
@@ -121,7 +121,7 @@ $ pip install scikit-image==0.18.1
 
 首先访问本教程的 ***“下载”*** 部分，检索源代码和示例图像，然后查看文件夹:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── examples
@@ -149,7 +149,7 @@ $ tree . --dirsfirst
 
 打开项目目录结构中的`color_correction.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from imutils.perspective import four_point_transform
 from skimage import exposure
@@ -169,7 +169,7 @@ import sys
 
 处理好我们的导入后，我们可以继续定义`find_color_card`函数，这个方法负责在输入`image`中定位 Pantone 颜色匹配卡:
 
-```
+```py
 def find_color_card(image):
 	# load the ArUCo dictionary, grab the ArUCo parameters, and
 	# detect the markers in the input image
@@ -185,7 +185,7 @@ def find_color_card(image):
 
 接下来，让我们按*左上*、*右上*、*右下*和*左下*的顺序排列四个 ArUco 标记(应用*自上而下*透视变换所需的顺序):
 
-```
+```py
 	# try to extract the coordinates of the color correction card
 	try:
 		# otherwise, we've found the four ArUco markers, so we can
@@ -223,7 +223,7 @@ def find_color_card(image):
 
 假设我们找到了所有四个 ArUco 标记，我们现在可以应用透视变换:
 
-```
+```py
 	# build our list of reference points and apply a perspective
 	# transform to obtain a top-down, bird’s-eye view of the color
 	# matching card
@@ -241,7 +241,7 @@ def find_color_card(image):
 
 实现了我们的`find_color_card`函数后，让我们继续解析命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-r", "--reference", required=True,
@@ -260,7 +260,7 @@ args = vars(ap.parse_args())
 
 但在此之前，我们需要从磁盘加载参考和源图像:
 
-```
+```py
 # load the reference image and input images from disk
 print("[INFO] loading images...")
 ref = cv2.imread(args["reference"])
@@ -281,7 +281,7 @@ cv2.imshow("Input", image)
 
 加载完我们的图像后，现在让我们将`find_color_card`函数应用于两幅图像:
 
-```
+```py
 # find the color matching card in each image
 print("[INFO] finding color matching cards...")
 refCard = find_color_card(ref)
@@ -300,7 +300,7 @@ if refCard is None or imageCard is None:
 
 否则，我们可以安全地假设我们找到了颜色匹配卡，所以让我们应用颜色校正:
 
-```
+```py
 # show the color matching card in the reference image and input image,
 # respectively
 cv2.imshow("Reference Color Card", refCard)
@@ -331,7 +331,7 @@ cv2.waitKey(0)
 
 从那里，您可以打开一个 shell 并执行以下命令:
 
-```
+```py
 $ python color_correction.py --reference reference.jpg \
 	--input examples/01.jpg
 [INFO] loading images...
@@ -353,7 +353,7 @@ $ python color_correction.py --reference reference.jpg \
 
 让我们尝试另一个图像:
 
-```
+```py
 $ python color_correction.py --reference reference.jpg \
 	--input examples/02.jpg
 [INFO] loading images...
@@ -371,7 +371,7 @@ $ python color_correction.py --reference reference.jpg \
 
 这是最后一个例子:
 
-```
+```py
 $ python color_correction.py --reference reference.jpg \
 	--input examples/03.jpg
 [INFO] loading images...

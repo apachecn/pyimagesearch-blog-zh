@@ -84,7 +84,7 @@ maps the output pixel coordinates back to the source pixel coordinates.
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install tensorflow
 $ pip install matplotlib
 ```
@@ -118,7 +118,7 @@ $ pip install matplotlib
 
 从这里，看一下目录结构:
 
-```
+```py
 !tree .
 .
 ├── create_gif.py
@@ -150,7 +150,7 @@ $ pip install matplotlib
 
 在开始实现之前，让我们跳到`pyimagesearch`目录中的`config.py`脚本。这个脚本将定义在整个项目中使用的全局变量和路径。
 
-```
+```py
 # import the necessary packages
 from tensorflow.data import AUTOTUNE
 import os
@@ -175,7 +175,7 @@ BATCH_SIZE = 1024
 
 在**第 14 行，**我们已经定义了一个数据集路径，然后指定我们希望在我们的项目中使用哪个数据集(**第 15 行**)。最后，我们为我们的数据将被分割成的批次的大小定义一个值(**第 16 行**)。
 
-```
+```py
 # define the number of epochs
 EPOCHS = 100
 
@@ -215,7 +215,7 @@ STN_LAYER_NAME = "stn"
 
 这个函数将帮助我们建立我们的 GIF。它还允许我们在模型训练时跟踪模型的进度。这个函数可以在`pyimagesearch`中的`callback.py`脚本中找到。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.callbacks import Callback
 from tensorflow.keras import Model
@@ -234,7 +234,7 @@ def get_train_monitor(testDs, outputPath, stnLayerName):
 
 在**的第 8 行**，我们使用`next(iter(dataset))`来迭代我们的完整数据集。这是因为我们的数据集具有类似生成器的属性。当前批次图像存储在`testImg`变量中。
 
-```
+```py
 	# define a training monitor
 	class TrainMonitor(Callback):
 		def on_epoch_end(self, epoch, logs=None):
@@ -286,7 +286,7 @@ def get_train_monitor(testDs, outputPath, stnLayerName):
 
 如果你还记得这些指针，我们来分析一下代码。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Conv2D
@@ -324,7 +324,7 @@ def get_pixel_value(B, H, W, featureMap, x, y):
 
 在**行的第 13** **和第 14** 行，我们正在创建占位符批次索引。接下来，我们创建一个索引矩阵，我们将使用它从特征图中进行采样(**第 18 行和第 19 行**)。在**第 22 行**上，我们使用`tf.gather_nd`获得相应坐标的特征映射值。
 
-```
+```py
 def affine_grid_generator(B, H, W, theta):
 	# create normalized 2D grid
 	x = tf.linspace(-1.0, 1.0, H)
@@ -379,7 +379,7 @@ def affine_grid_generator(B, H, W, theta):
 
 最后，我们重塑`batchGrids`变量，让函数返回值(**第 54-57 行**)。注意，整形值是(`B, 2, H, W`)。值`2`是因为我们必须得到 X 坐标网格和 Y 坐标网格。
 
-```
+```py
 def bilinear_sampler(B, H, W, featureMap, x, y):
 	# define the bounds of the image
 	maxY = tf.cast(H - 1, "int32")
@@ -419,7 +419,7 @@ def bilinear_sampler(B, H, W, featureMap, x, y):
 
 接下来是剪切这些值，使它们不违反特征图边界(**行 78-81** )。
 
-```
+```py
 	# get pixel value at corner coords
 	Ia = get_pixel_value(B, H, W, featureMap, x0, y0)
 	Ib = get_pixel_value(B, H, W, featureMap, x0, y1)
@@ -460,7 +460,7 @@ def bilinear_sampler(B, H, W, featureMap, x, y):
 
 在**行 102-109** 上，我们使用增量来计算我们的转换后的最终特征图。
 
-```
+```py
 class STN(Layer):
 	def __init__(self, name, filter):
 		# initialize the layer
@@ -484,7 +484,7 @@ class STN(Layer):
 
 `__init__`函数用于初始化和分配我们将在`call`函数中使用的变量(**第 117-130 行**)。`output_bias`将在后面的密集函数中使用。
 
-```
+```py
 	def build(self, input_shape):
 		# get the batch size, height, width and channel size of the
 		# input
@@ -521,7 +521,7 @@ class STN(Layer):
 
 在**第 153-161 行**，我们有回归器网络，它将卷积输出作为其输入，并给我们变换参数`theta`。在这里，我们可以有把握地说`theta`成为一个可学习的参数。
 
-```
+```py
 	def call(self, x):
 		# get the localization feature map
 		localFeatureMap = self.localizationNet(x)
@@ -553,7 +553,7 @@ class STN(Layer):
 
 我们完整的分类模型相对简单，因为我们已经创建了空间转换器模块。因此，让我们转到`classification_model.py`脚本并分析架构。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras import Input
 from tensorflow.keras import Model
@@ -585,7 +585,7 @@ def get_training_model(batchSize, height, width, channel, stnLayer,
 
 接下来，我们在第 20 行添加空间变换层。创建一个模块的额外好处是我们的主架构脚本不那么杂乱。
 
-```
+```py
 	# apply a series of conv and maxpool layers
 	x = Conv2D(filter // 4, 3, activation="relu", 
 		kernel_initializer="he_normal")(x)
@@ -630,7 +630,7 @@ def get_training_model(batchSize, height, width, channel, stnLayer,
 
 完成所有的配置管道、助手函数和模型架构后，我们只需要插入数据并查看结果。为此，让我们继续讨论`train.py`。
 
-```
+```py
 # USAGE
 # python train.py
 
@@ -658,7 +658,7 @@ testingDs = tfds.load(name=config.DATASET_NAME,
 
 记住在导入部分调用我们的脚本很重要(**第 5-15 行**)。接下来，我们使用`tfds.load`直接下载我们需要的数据集(**第 19-23 行**)。我们这样做是为了同时获得训练和测试拆分。
 
-```
+```py
  # preprocess the train and test dataset
 print("[INFO] preprocessing the train and test dataset...")
 trainDs = (
@@ -691,7 +691,7 @@ model = get_training_model(batchSize=config.BATCH_SIZE,
 
 然后我们通过传递`stn`层和所需的配置变量来初始化我们的主模型(**第 45-48 行**)。
 
-```
+```py
 # print the model summary
 print("[INFO] the model summary...")
 print(model.summary())
@@ -736,7 +736,7 @@ model.fit(trainDs, epochs=config.EPOCHS,
 
 让我们看看我们的模特训练进展如何！
 
-```
+```py
 [INFO] compiling the model...
 [INFO] training the model...
 Epoch 1/100
@@ -789,7 +789,7 @@ CNN 的可连接模块最近越来越受欢迎。你可以在下周的博客上�
 
 **Chakraborty，D.** “使用 TensorFlow 的空间变压器网络”， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva，R. Raha 和 A. Thanki 编辑。，2022 年，【https://pyimg.co/4ham6 
 
-```
+```py
 @incollection{Chakraborty_2022_Spatial_Transformer,
   author = {Devjyoti Chakraborty},
   title = {Spatial Transformer Networks Using {TensorFlow}},

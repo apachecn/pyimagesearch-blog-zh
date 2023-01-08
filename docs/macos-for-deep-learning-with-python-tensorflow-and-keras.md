@@ -41,14 +41,14 @@
 
 从那里，打开一个终端并执行以下命令来接受开发人员许可证:
 
-```
+```py
 $ sudo xcodebuild -license
 
 ```
 
 下一步是安装苹果命令行工具:
 
-```
+```py
 $ sudo xcode-select --install
 
 ```
@@ -63,28 +63,28 @@ $ sudo xcode-select --install
 
 首先，我们将通过复制并粘贴**整个**命令到您的终端来安装 Homebrew:
 
-```
+```py
 $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 ```
 
 接下来，我们将更新我们的包定义:
 
-```
+```py
 $ brew update
 
 ```
 
 随后使用`nano`终端编辑器更新您的`~/.bash_profile`(任何其他编辑器也应该这样做):
 
-```
+```py
 $ nano ~/.bash_profile
 
 ```
 
 将以下几行添加到文件中:
 
-```
+```py
 # Homebrew
 export PATH=/usr/local/bin:$PATH
 
@@ -96,7 +96,7 @@ export PATH=/usr/local/bin:$PATH
 
 接下来，只需重新加载您的`~/.bash_profile`(当一个新的终端打开时，这将自动发生):
 
-```
+```py
 $ source ~/.bash_profile
 
 ```
@@ -111,14 +111,14 @@ macOS 自带 Python 安装；然而，我们将使用 Brew 安装一个非系统
 
 要用 Homebrew 安装 Python 3，只需执行以下命令:
 
-```
+```py
 $ brew install python3
 
 ```
 
 在继续之前，您需要验证您的 Python 3 安装是自制的，而不是 macOS 系统的:
 
-```
+```py
 $ which python3
 /usr/local/bin/python3
 $ which pip3
@@ -142,21 +142,21 @@ $ which pip3
 
 让我们通过`pip`安装[虚拟 T2【和](https://virtualenv.pypa.io/en/latest/)[虚拟包装器](https://virtualenvwrapper.readthedocs.org/en/latest/):
 
-```
+```py
 $ pip3 install virtualenv virtualenvwrapper
 
 ```
 
 从那里，我们将再次更新我们的`~/.bash_profile`:
 
-```
+```py
 $ nano ~/.bash_profile
 
 ```
 
 我们将在文件中添加以下几行:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
 source /usr/local/bin/virtualenvwrapper.sh
@@ -169,7 +169,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 然后重新加载文件:
 
-```
+```py
 $ source ~/.bash_profile
 
 ```
@@ -180,7 +180,7 @@ $ source ~/.bash_profile
 
 要使用 **Python 3** 创建 dl4cv 环境，只需输入以下命令:
 
-```
+```py
 $ mkvirtualenv dl4cv -p python3
 
 ```
@@ -193,14 +193,14 @@ $ mkvirtualenv dl4cv -p python3
 
 如果您没有看到修改后的 bash 提示符，那么您可以随时输入以下命令来随时进入环境:
 
-```
+```py
 $ workon dl4cv
 
 ```
 
 OpenCV 需要的唯一 Python 依赖项是 NumPy，我们可以在下面安装它:
 
-```
+```py
 $ pip install numpy
 
 ```
@@ -211,7 +211,7 @@ $ pip install numpy
 
 需要安装以下工具来进行编译、映像 I/O 和优化:
 
-```
+```py
 $ brew install cmake pkg-config wget
 $ brew install jpeg libpng libtiff openexr
 $ brew install eigen tbb
@@ -224,7 +224,7 @@ $ brew install eigen tbb
 
 首先，让我们下载源代码:
 
-```
+```py
 $ cd ~
 $ wget -O opencv.zip https://github.com/opencv/opencv/archive/3.3.0.zip
 $ wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/3.3.0.zip
@@ -233,7 +233,7 @@ $ wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/3.
 
 然后打开档案:
 
-```
+```py
 $ unzip opencv.zip
 $ unzip opencv_contrib.zip
 
@@ -241,7 +241,7 @@ $ unzip opencv_contrib.zip
 
 接下来用 CMake 配置构建(非常重要的是，您要完全复制 CMake 命令**，就像它在这里出现的那样，注意复制并越过整个**命令；我建议点击下面工具栏中的 *" < = > "* 按钮展开整个命令):****
 
-```
+```py
 $ cd ~/opencv-3.3.0/
 $ mkdir build
 $ cd build
@@ -269,7 +269,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 然后我们准备执行编译编译 OpenCV:
 
-```
+```py
 $ make -j4
 
 ```
@@ -278,14 +278,14 @@ $ make -j4
 
 从那里您可以安装 OpenCV:
 
-```
+```py
 $ sudo make install
 
 ```
 
 安装后，有必要将`cv2.so`文件符号链接到`dl4cv`虚拟环境中:
 
-```
+```py
 $ cd ~/.virtualenvs/dl4cv/lib/python3.6/site-packages/
 $ ln -s /usr/local/lib/python3.6/site-packages/cv2.cpython-36m-darwin.so cv2.so
 $ cd ~
@@ -294,7 +294,7 @@ $ cd ~
 
 最后，我们可以测试安装:
 
-```
+```py
 $ python
 >>> import cv2
 >>> cv2.__version__
@@ -312,14 +312,14 @@ $ python
 
 在开始这一步之前，确保您已经激活了`dl4cv` virtualenv。如果您不在该环境中，只需执行:
 
-```
+```py
 $ workon dl4cv
 
 ```
 
 然后，使用`pip`，安装所需的 Python 计算机视觉、图像处理和机器学习库:
 
-```
+```py
 $ pip install scipy pillow
 $ pip install imutils h5py requests progressbar2
 $ pip install scikit-learn scikit-image
@@ -328,7 +328,7 @@ $ pip install scikit-learn scikit-image
 
 接下来安装 matplotlib 并**更新渲染后端**:
 
-```
+```py
 $ pip install matplotlib
 $ touch ~/.matplotlib/matplotlibrc
 $ echo "backend: TkAgg" >> ~/.matplotlib/matplotlibrc
@@ -337,21 +337,21 @@ $ echo "backend: TkAgg" >> ~/.matplotlib/matplotlibrc
 
 然后，安装 TensorFlow:
 
-```
+```py
 $ pip install tensorflow
 
 ```
 
 其次是 keras:
 
-```
+```py
 $ pip install keras
 
 ```
 
 要验证 Keras 是否正确安装，我们可以导入它并检查错误:
 
-```
+```py
 $ python
 >>> import keras
 Using TensorFlow backend.
@@ -367,7 +367,7 @@ Keras 应该被正确导入，同时声明 TensorFlow 被用作后端。
 
 此时，您可以熟悉一下`~/.keras/keras.json`文件:
 
-```
+```py
 {
 	"image_data_format": "channels_last",
 	"backend": "tensorflow",

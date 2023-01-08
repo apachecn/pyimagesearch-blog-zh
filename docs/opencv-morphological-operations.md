@@ -83,7 +83,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -110,7 +110,7 @@ $ pip install opencv-contrib-python
 
 首先访问本教程的 ***“下载”*** 部分，检索源代码和示例图像:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── car.png
@@ -141,7 +141,7 @@ $ tree . --dirsfirst
 
 我们可以通过使用`cv2.erode`函数来执行腐蚀。让我们打开一个新文件，命名为`morphological.py_ops.py`，并开始编码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -163,7 +163,7 @@ args = vars(ap.parse_args())
 
 让我们从磁盘加载我们的输入`--image`,然后应用一系列腐蚀:
 
-```
+```py
 # load the image, convert it to grayscale, and display it to our
 # screen
 image = cv2.imread(args["image"])
@@ -207,7 +207,7 @@ for i in range(0, 3):
 
  *我们使用`cv2.dilate`函数来应用扩展:
 
-```
+```py
 # close all windows to cleanup the screen
 cv2.destroyAllWindows()
 cv2.imshow("Original", image)
@@ -243,7 +243,7 @@ for i in range(0, 3):
 
 让我们看一些将开口应用于图像的示例代码:
 
-```
+```py
 # close all windows to cleanup the screen, then initialize a list of
 # of kernels sizes that will be applied to the image
 cv2.destroyAllWindows()
@@ -293,7 +293,7 @@ for kernelSize in kernelSizes:
 
 下面的代码块包含执行结束的代码:
 
-```
+```py
 # close all windows to cleanup the screen
 cv2.destroyAllWindows()
 cv2.imshow("Original", image)
@@ -319,7 +319,7 @@ for kernelSize in kernelSizes:
 
 **形态梯度是膨胀*和侵蚀*之间的差异。******用于确定图像中特定对象的轮廓:**
 
-```
+```py
 # close all windows to cleanup the screen
 cv2.destroyAllWindows()
 cv2.imshow("Original", image)
@@ -355,7 +355,7 @@ for kernelSize in kernelSizes:
 
 为了测试 top hat 操作符，创建一个新文件，将其命名为`morphological_hats.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -371,7 +371,7 @@ args = vars(ap.parse_args())
 
 让我们从磁盘加载我们的输入`--image`:
 
-```
+```py
 # load the image and convert it to grayscale
 image = cv2.imread(args["image"])
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -397,7 +397,7 @@ blackhat = cv2.morphologyEx(gray, cv2.MORPH_BLACKHAT, rectKernel)
 
 以类似的方式，我们也可以应用礼帽/白帽操作:
 
-```
+```py
 # similarly, a tophat (also called a "whitehat") operation will
 # enable us to find light regions on a dark background
 tophat = cv2.morphologyEx(gray, cv2.MORPH_TOPHAT, rectKernel)
@@ -427,13 +427,13 @@ cv2.waitKey(0)
 
 您可以使用以下命令执行`morphological_ops.py`脚本:
 
-```
+```py
 $ python morphological_ops.py --image pyimagesearch_logo.png
 ```
 
 使用以下命令可以启动`morphological_hats.py`脚本:
 
-```
+```py
 $ python morphological_hats.py --image car.png
 ```
 

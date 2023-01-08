@@ -81,7 +81,7 @@
 
 将 Keras 包含在`tf.keras`中允许您使用标准 Keras 包，采用以下简单的前馈神经网络:
 
-```
+```py
 # import the necessary packages
 from keras.models import Sequential
 from keras.layers.core import Dense
@@ -97,7 +97,7 @@ model.add(Dense(10, activation="softmax"))
 
 然后使用 TensorFlow 的`tf.keras`子模块实现相同的网络:
 
-```
+```py
 # define the 3072-1024-512-3 architecture using tf.keras
 model = tf.keras.models.Sequential()
 model.add(tf.keras.layers.Dense(1024, input_shape=(3072,),
@@ -142,7 +142,7 @@ CIFAR-10 数据集本身由 10 个独立的类组成，包含 50，000 幅训练
 
 我们今天的项目结构可以在终端中用`tree`命令查看:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── pyimagesearch
@@ -187,7 +187,7 @@ $ tree --dirsfirst
 
 打开`minivggnetkeras.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from keras.layers.normalization import BatchNormalization
 from keras.layers.convolutional import Conv2D
@@ -205,7 +205,7 @@ from keras.models import Model
 
 从那里，我们定义了我们的`MiniVGGNetKeras`类:
 
-```
+```py
 class MiniVGGNetKeras:
 	@staticmethod
 	def build(width, height, depth, classes):
@@ -223,7 +223,7 @@ class MiniVGGNetKeras:
 
 让我们开始定义卷积神经网络的主体:
 
-```
+```py
 		# first (CONV => RELU) * 2 => POOL layer set
 		x = Conv2D(32, (3, 3), padding="same")(inputs)
 		x = Activation("relu")(x)
@@ -252,7 +252,7 @@ class MiniVGGNetKeras:
 
 让我们将全连接(FC)层添加到网络中:
 
-```
+```py
 		# first (and only) set of FC => RELU layers
 		x = Flatten()(x)
 		x = Dense(512)(x)
@@ -278,7 +278,7 @@ class MiniVGGNetKeras:
 
 打开`train_network_keras.py`并插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -314,7 +314,7 @@ args = vars(ap.parse_args())
 
 让我们加载 CIFAR-10 并对标签进行编码:
 
-```
+```py
 # load the training and testing data, then scale it into the
 # range [0, 1]
 print("[INFO] loading CIFAR-10 data...")
@@ -340,7 +340,7 @@ labelNames = ["airplane", "automobile", "bird", "cat", "deer",
 
 接下来，我们来训练模型:
 
-```
+```py
 # initialize the initial learning rate, total number of epochs to
 # train for, and batch size
 INIT_LR = 0.01
@@ -370,7 +370,7 @@ H = model.fit(trainX, trainY, validation_data=(testX, testY),
 
 让我们评估网络并生成一个图:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(testX, batch_size=32)
@@ -400,7 +400,7 @@ plt.savefig(args["plot"])
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python train_network_keras.py
 Using TensorFlow backend.
 [INFO] loading CIFAR-10 data...
@@ -463,7 +463,7 @@ avg / total       0.75      0.74      0.74     10000
 
 首先，打开`minivggnettf.py`文件，我们将实现我们的 TensorFlow 版本的`MiniVGGNet`:
 
-```
+```py
 # import the necessary packages
 import tensorflow as tf
 
@@ -529,7 +529,7 @@ class MiniVGGNetTF:
 
 打开`train_network_tf.py`并插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -578,7 +578,7 @@ labelNames = ["airplane", "automobile", "bird", "cat", "deer",
 
 让我们训练我们的模型:
 
-```
+```py
 # initialize the initial learning rate, total number of epochs to
 # train for, and batch size
 INIT_LR = 0.01
@@ -629,7 +629,7 @@ plt.savefig(args["plot"])
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python train_network_tf.py
 [INFO] loading CIFAR-10 data...
 [INFO] compiling model...

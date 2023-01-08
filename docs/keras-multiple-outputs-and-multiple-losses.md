@@ -112,7 +112,7 @@
 
 从那里，`unzip`归档并改变目录(`cd`)，如下所示。然后，利用`tree`命令，你可以有组织地查看文件和文件夹(双关语):
 
-```
+```py
 $ unzip multi-output-classification.zip
 ...
 $ cd multi-output-classification
@@ -216,7 +216,7 @@ FashionNet 架构包含两个特殊组件，包括:
 
 下载完成后，让我们打开`fashionnet.py`来回顾一下:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import BatchNormalization
@@ -238,7 +238,7 @@ import tensorflow as tf
 
 第一个`build_category_branch`，用于对 ***服装类型*** 进行分类，定义如下:
 
-```
+```py
 class FashionNet:
 	@staticmethod
 	def build_category_branch(inputs, numCategories,
@@ -280,7 +280,7 @@ class FashionNet:
 
 接下来是我们的两组`(CONV => RELU) * 2 => POOL`模块:
 
-```
+```py
 		# (CONV => RELU) * 2 => POOL
 		x = Conv2D(64, (3, 3), padding="same")(x)
 		x = Activation("relu")(x)
@@ -307,7 +307,7 @@ class FashionNet:
 
 让我们用一个`FC => RELU`层将它组合在一起:
 
-```
+```py
 		# define a branch of output layers for the number of different
 		# clothing categories (i.e., shirts, jeans, dresses, etc.)
 		x = Flatten()(x)
@@ -329,7 +329,7 @@ class FashionNet:
 
 让我们定义用于构建多输出分类网络的第二个函数。这一个被命名为`build_color_branch`，顾名思义，它负责对我们图像中的**进行分类:**
 
-```
+```py
 	@staticmethod
 	def build_color_branch(inputs, numColors, finalAct="softmax",
 		chanDim=-1):
@@ -364,7 +364,7 @@ class FashionNet:
 
 就像我们的品类分支一样，我们还有第二个全连通的头。让我们构建`FC => RELU`块来完成:
 
-```
+```py
 		# define a branch of output layers for the number of different
 		# colors (i.e., red, black, blue, etc.)
 		x = Flatten()(x)
@@ -384,7 +384,7 @@ class FashionNet:
 
 构建`FashionNet`的最后一步是将我们的两个分支放在一起，`build`最终架构:
 
-```
+```py
 	@staticmethod
 	def build(width, height, numCategories, numColors,
 		finalAct="softmax"):
@@ -430,7 +430,7 @@ class FashionNet:
 
 当你准备好了，打开`train.py`让我们开始吧:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -456,7 +456,7 @@ import os
 
 从那里我们解析我们的[命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -479,7 +479,7 @@ args = vars(ap.parse_args())
 
 现在，让我们建立四个重要的训练变量:
 
-```
+```py
 # initialize the number of epochs to train for, initial learning rate,
 # batch size, and image dimensions
 EPOCHS = 50
@@ -498,7 +498,7 @@ IMAGE_DIMS = (96, 96, 3)
 
 我们的下一步是抓住我们的图像路径，并随机洗牌。我们还将初始化列表，分别保存图像本身以及服装类别和颜色:
 
-```
+```py
 # grab the image paths and randomly shuffle them
 print("[INFO] loading images...")
 imagePaths = sorted(list(paths.list_images(args["dataset"])))
@@ -515,7 +515,7 @@ colorLabels = []
 
 随后，我们将循环遍历`imagePaths`，预处理，并填充`data`、`categoryLabels`和`colorLabels`列表:
 
-```
+```py
 # loop over the input images
 for imagePath in imagePaths:
 	# load the image, pre-process it, and store it in the data list
@@ -541,7 +541,7 @@ for imagePath in imagePaths:
 
 要了解这一点，只需在您的终端中启动 Python，并提供一个示例`imagePath`进行实验，如下所示:
 
-```
+```py
 $ python
 >>> import os
 >>> imagePath = "dataset/red_dress/00000000.jpg"
@@ -557,7 +557,7 @@ $ python
 
 让我们将这三个列表转换为 NumPy 数组，将标签二进制化，并将数据划分为训练和测试部分:
 
-```
+```py
 # scale the raw pixel intensities to the range [0, 1] and convert to
 # a NumPy array
 data = np.array(data, dtype="float") / 255.0
@@ -592,7 +592,7 @@ split = train_test_split(data, categoryLabels, colorLabels,
 
 让我们建立网络，定义我们的独立损失，并编译我们的模型:
 
-```
+```py
 # initialize our FashionNet multi-output network
 model = FashionNet.build(96, 96,
 	numCategories=len(categoryLB.classes_),
@@ -628,7 +628,7 @@ model.compile(optimizer=opt, loss=losses, loss_weights=lossWeights,
 
 我们的下一个模块只是开始了训练过程:
 
-```
+```py
 # train the network to perform multi-output classification
 H = model.fit(x=trainX,
 	y={"category_output": trainCategoryY, "color_output": trainColorY},
@@ -651,7 +651,7 @@ model.save(args["model"], save_format="h5")
 
 我们还将做同样的事情，将我们的标签二进制化器保存为序列化的 pickle 文件:
 
-```
+```py
 # save the category binarizer to disk
 print("[INFO] serializing category label binarizer...")
 f = open(args["categorybin"], "wb")
@@ -670,7 +670,7 @@ f.close()
 
 从这里开始，所有的工作都是在这个脚本中绘制结果:
 
-```
+```py
 # plot the total loss, category loss, and color loss
 lossNames = ["loss", "category_output_loss", "color_output_loss"]
 plt.style.use("ggplot")
@@ -703,7 +703,7 @@ plt.close()
 
 同样，我们将在单独的图像文件中绘制精度:
 
-```
+```py
 # create a new figure for the accuracies
 accuracyNames = ["category_output_accuracy", "color_output_accuracy"]
 plt.style.use("ggplot")
@@ -739,7 +739,7 @@ plt.close()
 
 打开终端。然后粘贴下面的命令开始训练过程(如果你没有 GPU，你也想喝一杯啤酒):
 
-```
+```py
 $ python train.py --dataset dataset --model output/fashion.model \
 	--categorybin output/category_lb.pickle --colorbin output/color_lb.pickle
 Using TensorFlow backend.
@@ -798,7 +798,7 @@ Epoch 50/50
 
 打开`classify.py`并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.models import load_model
@@ -813,7 +813,7 @@ import cv2
 
 首先，我们导入所需的包，然后解析命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-m", "--model", required=True,
@@ -837,7 +837,7 @@ args = vars(ap.parse_args())
 
 在那里，我们加载图像并对其进行预处理:
 
-```
+```py
 # load the image
 image = cv2.imread(args["image"])
 output = imutils.resize(image, width=400)
@@ -857,7 +857,7 @@ image = np.expand_dims(image, axis=0)
 
 接下来，让我们加载我们的序列化模型和两个标签二进制化器:
 
-```
+```py
 # load the trained convolutional neural network from disk, followed
 # by the category and color label binarizers, respectively
 print("[INFO] loading network...")
@@ -871,7 +871,7 @@ colorLB = pickle.loads(open(args["colorbin"], "rb").read())
 
 现在,( 1)多输出 Keras 模型和(2)标签二值化器都在内存中，我们可以对图像进行分类:
 
-```
+```py
 # classify the input image using Keras' multi-output functionality
 print("[INFO] classifying image...")
 (categoryProba, colorProba) = model.predict(image)
@@ -898,7 +898,7 @@ colorLabel = colorLB.classes_[colorIdx]
 
 让我们展示结果来证明这一点:
 
-```
+```py
 # draw the category label and color label on the image
 categoryText = "category: {} ({:.2f}%)".format(categoryLabel,
 	categoryProba[0][categoryIdx] * 100)
@@ -938,7 +938,7 @@ cv2.waitKey(0)
 
 让我们从“黑色牛仔裤”开始——这应该很容易，因为在训练数据集中有大量类似的图像。确保像这样使用四个[命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 $ python classify.py --model output/fashion.model \
 	--categorybin output/category_lb.pickle --colorbin output/color_lb.pickle \
 	--image examples/black_jeans.jpg
@@ -958,7 +958,7 @@ Using TensorFlow backend.
 
 让我们试试“红衬衫”:
 
-```
+```py
 $ python classify.py --model fashion.model \
 	--categorybin output/category_lb.pickle --colorbin output/color_lb.pickle \
 	--image examples/red_shirt.jpg
@@ -984,7 +984,7 @@ Using TensorFlow backend.
 
 让我们来看看:
 
-```
+```py
 $ python classify.py --model fashion.model \
 	--categorybin output/category_lb.pickle --colorbin output/color_lb.pickle \
 	--image examples/red_shoes.jpgUsing TensorFlow backend.
@@ -1009,7 +1009,7 @@ $ python classify.py --model fashion.model \
 
 我认为这一次我们很有可能成功，所以在您的终端中键入以下命令:
 
-```
+```py
 $ python classify.py --model fashion.model \
 	--categorybin output/category_lb.pickle --colorbin output/color_lb.pickle \
 	--image examples/black_dress.jpg
@@ -1031,7 +1031,7 @@ Using TensorFlow backend.
 
 为了理智起见，我们再试试一个*不熟悉的组合:*“蓝鞋”。在您的终端中输入相同的命令，这次将参数`--image`改为`examples/blue_shoes.jpg`:
 
-```
+```py
 $ python classify.py --model fashion.model \
 	--categorybin output/category_lb.pickle --colorbin output/color_lb.pickle \
 	--image examples/blue_shoes.jpg

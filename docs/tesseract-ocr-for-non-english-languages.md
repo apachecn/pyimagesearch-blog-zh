@@ -76,7 +76,7 @@
 
 我们希望移动到我们希望成为本地`tessdata`目录的父目录的目录。然后，我们将简单地发出下面的`git`命令来`clone`将回购文件发送到我们的本地目录。
 
-```
+```py
 $ git clone https://github.com/tesseract-ocr/tessdata
 ```
 
@@ -84,7 +84,7 @@ $ git clone https://github.com/tesseract-ocr/tessdata
 
 第二步是设置环境变量`TESSDATA_PREFIX`指向包含语言包的目录。我们将把目录(`cd`)改为`tessdata`目录，并使用`pwd`命令确定*到该目录的完整系统路径*:
 
-```
+```py
 $ cd tessdata/
 $ pwd
 /Users/adrianrosebrock/Desktop/tessdata
@@ -94,7 +94,7 @@ $ pwd
 
 从那里，您需要做的就是设置`TESSDATA_PREFIX`环境变量指向您的`tessdata`目录，从而允许 Tesseract 找到语言包。为此，只需执行以下命令:
 
-```
+```py
 $ export TESSDATA_PREFIX=/Users/adrianrosebrock/Desktop/tessdata
 ```
 
@@ -106,7 +106,7 @@ $ export TESSDATA_PREFIX=/Users/adrianrosebrock/Desktop/tessdata
 
 一旦您从本文的 ***【下载】*** 部分获取文件，您将看到以下目录结构:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── images
@@ -128,12 +128,12 @@ Python 文件`ocr_non_english.py`，位于我们的主目录中，是我们的�
 
 此时，您应该已经将 Tesseract 正确配置为支持非英语语言，但是作为一项健全性检查，让我们通过使用`echo`命令来验证`TESSDATA_PREFIX`环境变量是否设置正确:
 
-```
+```py
 $ echo $TESSDATA_PREFIX
 /Users/adrianrosebrock/Desktop/tessdata
 ```
 
-```
+```py
 $ tesseract german.png stdout -l deu
 ```
 
@@ -152,7 +152,7 @@ $ tesseract german.png stdout -l deu
 
 安装`textblob`只是一个快速命令:
 
-```
+```py
 $ pip install textblob
 ```
 
@@ -164,7 +164,7 @@ $ pip install textblob
 
 打开项目目录中的`ocr_non_english.py`文件，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from textblob import TextBlob
 import pytesseract
@@ -193,7 +193,7 @@ args = vars(ap.parse_args())
 
 导入、便利函数和命令行`args`都准备好了，在循环遍历帧之前，我们只需要处理一些初始化:
 
-```
+```py
 # load the input image and convert it from BGR to RGB channel
 # ordering
 image = cv2.imread(args["image"])
@@ -217,7 +217,7 @@ print("")
 
 接下来，我们将以本地语言显示 Tesseract 的 OCR 结果来结束这一部分(**第 32-35 行**):
 
-```
+```py
 # translate the text into a different language
 tb = TextBlob(text)
 translated = tb.translate(to=args["to"])
@@ -240,7 +240,7 @@ print(translated)
 
 打开终端，从主项目目录执行以下命令:
 
-```
+```py
 $ python ocr_non_english.py --image images/german.png --lang deu
 ORIGINAL
 ========
@@ -253,7 +253,7 @@ I need a beer!
 
 在图 3 的**中，**您可以看到一个带有文本*的输入图像，“我是 brauche ein Bier！”*这是德语中的*“我需要一杯啤酒！”*
 
-```
+```py
 $ python ocr_non_english.py --image images/swahili.png --lang swa
 ORIGINAL
 ========
@@ -270,7 +270,7 @@ My name is Adrian
 
 此示例显示如何对越南语文本进行 OCR，越南语是一种不同于前面示例的脚本/书写系统:
 
-```
+```py
 $ python ocr_non_english.py --image images/vietnamese.png --lang vie
 ORIGINAL
 ========
@@ -281,7 +281,7 @@ TRANSLATED
 I love you..
 ```
 
-```
+```py
 $ python ocr_non_english.py --image images/arabic.png --lang ara
 ORIGINAL
 ========
@@ -298,7 +298,7 @@ I only speak a little Arabic ..
 
 对于我们的最后一个示例，让我们对一大块德语文本进行 OCR:
 
-```
+```py
 $ python ocr_non_english.py --image images/german_block.png --lang deu --psm 3
 ORIGINAL
 ========

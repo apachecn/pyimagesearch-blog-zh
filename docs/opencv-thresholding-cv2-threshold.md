@@ -53,7 +53,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -82,7 +82,7 @@ $ pip install opencv-contrib-python
 
 然后，您将看到以下目录结构:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── images
@@ -112,7 +112,7 @@ $ tree . --dirsfirst
 
 让我们探索一些应用简单阈值方法的代码。打开项目目录结构中的`simple_thresholding.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -130,7 +130,7 @@ args = vars(ap.parse_args())
 
 完成导入和命令行参数之后，让我们继续从磁盘加载映像并对其进行预处理:
 
-```
+```py
 # load the image and display it
 image = cv2.imread(args["image"])
 cv2.imshow("Image", image)
@@ -151,7 +151,7 @@ blurred = cv2.GaussianBlur(gray, (7, 7), 0)
 
 现在，让我们继续应用实际的阈值:
 
-```
+```py
 # apply basic thresholding -- the first parameter is the image
 # we want to threshold, the second value is is our threshold
 # check; if a pixel value is greater than our threshold (in this
@@ -183,7 +183,7 @@ cv2.imshow("Threshold Binary Inverse", threshInv)
 
 相反，我们可以给`cv2.threshold`函数提供一个不同的标志:
 
-```
+```py
 # using normal thresholding (rather than inverse thresholding)
 (T, thresh) = cv2.threshold(blurred, 200, 255, cv2.THRESH_BINARY)
 cv2.imshow("Threshold Binary", thresh)
@@ -195,7 +195,7 @@ cv2.imshow("Threshold Binary", thresh)
 
 我们要执行的最后一项任务是显示图像中的前景对象，隐藏其他所有内容。还记得我们讨论过的[图像遮罩](https://pyimagesearch.com/2021/01/19/image-masking-with-opencv/)吗？这在这里会派上用场:
 
-```
+```py
 # visualize only the masked regions in the image
 masked = cv2.bitwise_and(image, image, mask=threshInv)
 cv2.imshow("Output", masked)
@@ -212,7 +212,7 @@ cv2.waitKey(0)
 
 从那里，您可以执行以下命令:
 
-```
+```py
 $ python simple_thresholding.py --image images/coins01.png
 ```
 
@@ -224,7 +224,7 @@ $ python simple_thresholding.py --image images/coins01.png
 
 让我们试试硬币的第二个图像:
 
-```
+```py
 $ python simple_thresholding.py --image images/coins02.png
 ```
 
@@ -248,7 +248,7 @@ $ python simple_thresholding.py --image images/coins02.png
 
 但是现在，让我们再看一个例子，在这个例子中，我们分割了 OpenCV 徽标的各个部分:
 
-```
+```py
 $ python simple_thresholding.py --image images/opencv_logo.png
 ```
 
@@ -278,7 +278,7 @@ Otsu 的方法假设我们的图像包含两类像素:*背景*和*前景*。
 
 让我们来看看执行 Otsu 阈值处理的一些代码。打开项目目录结构中的`otsu_thresholding.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -296,7 +296,7 @@ args = vars(ap.parse_args())
 
 我们现在可以加载和预处理我们的图像:
 
-```
+```py
 # load the image and display it
 image = cv2.imread(args["image"])
 cv2.imshow("Image", image)
@@ -312,7 +312,7 @@ blurred = cv2.GaussianBlur(gray, (7, 7), 0)
 
 现在让我们应用 Otsu 的阈值算法:
 
-```
+```py
 # apply Otsu's automatic thresholding which automatically determines
 # the best threshold value
 (T, threshInv) = cv2.threshold(blurred, 0, 255,
@@ -354,7 +354,7 @@ cv2.waitKey(0)
 
 从那里，您可以执行以下命令:
 
-```
+```py
 $ python otsu_thresholding.py --image images/coins01.png
 [INFO] otsu's thresholding value: 191.0
 ```
@@ -369,7 +369,7 @@ $ python otsu_thresholding.py --image images/coins01.png
 
 无论如何，让我们尝试第二个图像:
 
-```
+```py
 $ python otsu_thresholding.py --image images/coins02.png 
 [INFO] otsu's thresholding value: 180.0
 ```

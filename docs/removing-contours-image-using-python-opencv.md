@@ -33,7 +33,7 @@
 
 无论如何，让我们开始这个例子。打开一个新文件，命名为`remove_contours.py`，让我们开始编码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import imutils
@@ -67,7 +67,7 @@ def is_contour_bad(c):
 
 让我们完成解决这个问题的其他步骤:
 
-```
+```py
 # load the shapes image, convert it to grayscale, and edge edges in
 # the image
 image = cv2.imread("shapes.png")
@@ -111,7 +111,7 @@ cv2.waitKey(0)
 
 要执行我们的脚本，只需发出以下命令:
 
-```
+```py
 $ python remove_contours.py
 
 ```

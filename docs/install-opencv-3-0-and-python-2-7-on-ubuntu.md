@@ -26,7 +26,7 @@
 
 打开一个终端，更新`apt-get`包管理器，然后升级任何预安装的包:
 
-```
+```py
 $ sudo apt-get update
 $ sudo apt-get upgrade
 
@@ -36,7 +36,7 @@ $ sudo apt-get upgrade
 
 现在我们需要安装我们的开发工具:
 
-```
+```py
 $ sudo apt-get install build-essential cmake git pkg-config
 
 ```
@@ -47,7 +47,7 @@ $ sudo apt-get install build-essential cmake git pkg-config
 
 OpenCV 需要能够从磁盘加载各种图像文件格式，包括 JPEG、PNG、TIFF 等。为了从磁盘加载这些图像格式，我们需要我们的图像 I/O 包:
 
-```
+```py
 $ sudo apt-get install libjpeg8-dev libtiff4-dev libjasper-dev libpng12-dev
 
 ```
@@ -56,7 +56,7 @@ $ sudo apt-get install libjpeg8-dev libtiff4-dev libjasper-dev libpng12-dev
 
 此时，我们能够从磁盘上加载给定的图像。但是我们如何在屏幕上显示实际的图像呢？答案是 GTK 开发库，OpenCV 的`highgui`模块依赖它来引导图形用户界面(GUI):
 
-```
+```py
 $ sudo apt-get install libgtk2.0-dev
 
 ```
@@ -65,7 +65,7 @@ $ sudo apt-get install libgtk2.0-dev
 
 我们可以使用 OpenCV 加载图像，但是处理视频流和访问单个帧怎么办？我们在这里已经讨论过了:
 
-```
+```py
 $ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
 
 ```
@@ -74,7 +74,7 @@ $ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
 
 安装用于优化 OpenCV 内部各种例程的库:
 
-```
+```py
 $ sudo apt-get install libatlas-base-dev gfortran
 
 ```
@@ -83,7 +83,7 @@ $ sudo apt-get install libatlas-base-dev gfortran
 
 安装`pip`，一个 Python 包管理器:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python get-pip.py
 
@@ -93,7 +93,7 @@ $ sudo python get-pip.py
 
 安装[虚拟器](https://virtualenv.pypa.io/en/latest/)和[虚拟器包装器](https://virtualenvwrapper.readthedocs.org/en/latest/)。这两个包允许我们为我们正在进行的每个项目创建 ***单独的 Python 环境*** 。虽然安装`virtualenv`和`virtualenvwrapper`是 ***而不是* *要求*** 让 OpenCV 3.0 和 Python 2.7+在你的 Ubuntu 系统上运行， ***我强烈推荐它*** 并且本教程的其余部分 ***将假设你已经安装了它们！***
 
-```
+```py
 $ sudo pip install virtualenv virtualenvwrapper
 $ sudo rm -rf ~/.cache/pip
 
@@ -101,7 +101,7 @@ $ sudo rm -rf ~/.cache/pip
 
 现在我们已经安装了`virtualenv`和`virtualenvwrapper`，我们需要更新我们的`~/.bashrc`文件:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 source /usr/local/bin/virtualenvwrapper.sh
@@ -112,14 +112,14 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 要使对我们的`~/.bashrc`文件的更改生效，您可以(1)注销并重新登录，(2)关闭您当前的终端窗口并打开一个新窗口，或者最好是(3)重新加载您的`~/.bashrc`文件的内容:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
 
 最后，我们可以创建我们的`cv`虚拟环境，在那里我们将进行计算机视觉开发和 OpenCV 3.0 + Python 2.7+安装:
 
-```
+```py
 $ mkvirtualenv cv
 
 ```
@@ -128,14 +128,14 @@ $ mkvirtualenv cv
 
 正如我上面提到的，本教程涵盖了如何安装 OpenCV 3.0 和 Python 2.7+(我将在本月晚些时候推出 OpenCV 3.0 + Python 3 教程)，因此我们需要安装我们的 Python 2.7 开发工具:
 
-```
+```py
 $ sudo apt-get install python2.7-dev
 
 ```
 
 由于 OpenCV 将图像表示为多维 NumPy 数组，我们最好将 [NumPy](http://www.numpy.org) 安装到我们的`cv`虚拟环境中。我们还安装了[imutils](https://github.com/jrosebr1/imutils)——我的便利功能包:
 
-```
+```py
 $ pip install numpy
 $ pip install imutils
 
@@ -145,7 +145,7 @@ $ pip install imutils
 
 我们的环境现在已经设置好了——我们可以转到我们的主目录，[从 GitHub](https://github.com/Itseez/opencv) 中下载 OpenCV，并检查`3.0.0`版本:
 
-```
+```py
 $ cd ~
 $ git clone https://github.com/Itseez/opencv.git
 $ cd opencv
@@ -157,7 +157,7 @@ $ git checkout 3.0.0
 
 正如我上周提到的，我们也需要 [opencv_contrib 回购](https://github.com/itseez/opencv_contrib)。没有这个库，我们将无法访问标准的关键点检测器和局部不变描述符(如 SIFT、SURF 等)。)在 OpenCV 2.4.X 版本中可用。我们还将错过一些新的 OpenCV 3.0 特性，如自然图像中的文本检测:
 
-```
+```py
 $ cd ~
 $ git clone https://github.com/Itseez/opencv_contrib.git
 $ cd opencv_contrib
@@ -169,7 +169,7 @@ $ git checkout 3.0.0
 
 设置构建的时间:
 
-```
+```py
 $ cd ~/opencv
 $ mkdir build
 $ cd build
@@ -188,7 +188,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 现在我们终于可以编译 OpenCV 了:
 
-```
+```py
 $ make -j4
 
 ```
@@ -203,7 +203,7 @@ $ make -j4
 
 假设 OpenCV 编译无误，您现在可以将它安装到您的 Ubuntu 系统上:
 
-```
+```py
 $ sudo make install
 $ sudo ldconfig
 
@@ -215,7 +215,7 @@ $ sudo ldconfig
 
 然而，我们的`cv`虚拟环境位于我们的主目录中——因此，要在我们的`cv`环境中使用 OpenCV，我们首先需要将 OpenCV 符号链接到`cv`虚拟环境的`site-packages`目录中:
 
-```
+```py
 $ cd ~/.virtualenvs/cv/lib/python2.7/site-packages/
 $ ln -s /usr/local/lib/python2.7/site-packages/cv2.so cv2.so
 
@@ -227,7 +227,7 @@ $ ln -s /usr/local/lib/python2.7/site-packages/cv2.so cv2.so
 
 要确认您的安装，只需确保您在`cv`虚拟环境中，然后导入`cv2`:
 
-```
+```py
 $ workon cv
 $ python
 >>> import cv2
@@ -252,7 +252,7 @@ $ python
 
 打开您最喜欢的编辑器，创建一个新文件，将其命名为`find_game.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import imutils
@@ -285,7 +285,7 @@ cv2.waitKey(0)
 
 你还需要 **[下载 games.jpg 图像](https://pyimagesearch.com/wp-content/uploads/2015/06/games.jpg)** ，并将其放在与你的`find_game.py`文件相同的目录下。下载完`games.jpg`文件后，您可以通过以下方式执行脚本:
 
-```
+```py
 $ python find_game.py
 
 ```

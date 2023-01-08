@@ -108,7 +108,7 @@ CLR 方法允许我们的学习速率在下限和上限之间循环振荡；然�
 
 然后，用`tree`命令检查项目布局:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── output
@@ -150,7 +150,7 @@ pyimagesearch 模块包含三个类和一个配置:
 
 让我们开始吧——打开项目目录中的`learningratefinder.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.callbacks import LambdaCallback
 from tensorflow.keras import backend as K
@@ -199,7 +199,7 @@ class LearningRateFinder:
 
 `reset`方法是一个便利/帮助函数，用于从我们的构造函数中重置所有变量:
 
-```
+```py
 	def reset(self):
 		# re-initialize all variables from our constructor
 		self.lrs = []
@@ -225,7 +225,7 @@ class LearningRateFinder:
 
 `is_data_generator`函数可以确定我们的输入`data`是一个原始的 NumPy 数组还是我们正在使用一个数据生成器:
 
-```
+```py
 	def is_data_iter(self, data):
 		# define the set of class types we will check for
 		iterClasses = ["NumpyArrayIterator", "DirectoryIterator",
@@ -242,7 +242,7 @@ class LearningRateFinder:
 
 `on_batch_end`函数负责在每批完成后更新我们的学习率(即向前和向后传递):
 
-```
+```py
 	def on_batch_end(self, batch, logs):
 		# grab the current learning rate and add log it to the list of
 		# learning rates that we've tried
@@ -296,7 +296,7 @@ class LearningRateFinder:
 
 我们的下一个方法`find`，负责自动找到我们训练的最优学习率。当我们准备好找到我们的学习率时，我们将从我们的驱动程序脚本中调用这个方法:
 
-```
+```py
 	def find(self, trainData, startLR, endLR, epochs=None,
 		stepsPerEpoch=None, batchSize=32, sampleSize=2048,
 		verbose=1):
@@ -347,7 +347,7 @@ class LearningRateFinder:
 
 让我们转到自动学习率查找算法的核心:
 
-```
+```py
 		# compute the total number of batch updates that will take
 		# place while we are attempting to find a good starting
 		# learning rate
@@ -381,7 +381,7 @@ class LearningRateFinder:
 
 让我们创建我们的`LambdaCallback`，它将在每次批处理完成时调用我们的`on_batch_end`方法:
 
-```
+```py
 		# construct a callback that will be called at the end of each
 		# batch, enabling us to increase our learning rate as training
 		# progresses
@@ -421,7 +421,7 @@ class LearningRateFinder:
 
 我们的最后一种方法`plot_loss`，用于绘制我们的学习率和随时间的损失:
 
-```
+```py
 	def plot_loss(self, skipBegin=10, skipEnd=1, title=""):
 		# grab the learning rate and losses values to plot
 		lrs = self.lrs[skipBegin:-skipEnd]
@@ -449,7 +449,7 @@ class LearningRateFinder:
 
 打开`config.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -491,7 +491,7 @@ CLR_PLOT_PATH = os.path.sep.join(["output", "clr_plot.png"])
 
 打开`train.py`文件并插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -518,7 +518,7 @@ import sys
 
 让我们继续[解析命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-f", "--lr-find", type=int, default=0,
@@ -531,7 +531,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们准备数据:
 
-```
+```py
 # load the training and testing data
 print("[INFO] loading Fashion MNIST data...")
 ((trainX, trainY), (testX, testY)) = fashion_mnist.load_data()
@@ -572,7 +572,7 @@ aug = ImageDataGenerator(width_shift_range=0.1,
 
 从这里，我们可以`compile`我们的`model`:
 
-```
+```py
 # initialize the optimizer and model
 print("[INFO] compiling model...")
 opt = SGD(lr=config.MIN_LR, momentum=0.9)
@@ -586,7 +586,7 @@ model.compile(loss="categorical_crossentropy", optimizer=opt,
 
 下面的 if-then 块处理我们寻找最佳学习率时的情况:
 
-```
+```py
 # check to see if we are attempting to find an optimal learning rate
 # before training for the full number of epochs
 if args["lr_find"] > 0:
@@ -629,7 +629,7 @@ if args["lr_find"] > 0:
 
 假设我们已经完成了第 1 步和第 2 步，现在让我们处理第 3 步，我们的最小和最大学习率已经在配置中找到并更新了。在这种情况下，是时候初始化我们的[循环学习率类](https://pyimagesearch.com/2019/07/29/cyclical-learning-rates-with-keras-and-deep-learning/)并开始训练了:
 
-```
+```py
 # otherwise, we have already defined a learning rate space to train
 # over, so compute the step size and initialize the cyclic learning
 # rate method
@@ -668,7 +668,7 @@ print(classification_report(testY.argmax(axis=1),
 
 最后，让我们绘制我们的培训历史和 CLR 历史:
 
-```
+```py
 # construct a plot that plots and saves the training history
 N = np.arange(0, config.NUM_EPOCHS)
 plt.style.use("ggplot")
@@ -707,7 +707,7 @@ plt.savefig(config.CLR_PLOT_PATH)
 
 确保您已经使用本教程的 ***“下载”*** 部分下载了源代码——从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python train.py --lr-find 1
 [INFO] loading Fashion MNIST data...
 [INFO] compiling model...
@@ -747,7 +747,7 @@ Epoch 3/3
 
 如果还没有，回到我们的`config.py`文件，分别设置`MIN_LR = 1e-5`和`MAX_LR = 1e-2`:
 
-```
+```py
 # define the minimum learning rate, maximum learning rate, batch size,
 # step size, CLR method, and number of epochs
 MIN_LR = 1e-5
@@ -761,7 +761,7 @@ NUM_EPOCHS = 48
 
 从那里，执行以下命令:
 
-```
+```py
 $ python train.py
 [INFO] loading Fashion MNIST data...
 [INFO] compiling model...

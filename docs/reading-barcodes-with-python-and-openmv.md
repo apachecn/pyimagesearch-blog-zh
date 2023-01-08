@@ -100,7 +100,7 @@ OpenMV 的图像处理能力包括:
 
 让我们首先创建一个名为`openmv_barcode.py`的文件:
 
-```
+```py
 # import necessary packages
 import sensor
 import time
@@ -119,7 +119,7 @@ import image
 
 接下来，让我们设置摄像头传感器:
 
-```
+```py
 # reset the camera
 sensor.reset()
 
@@ -152,7 +152,7 @@ sensor.set_auto_whitebal(False)
 
 接下来，让我们执行初始化:
 
-```
+```py
 # initialize the LCD
 # uncomment if you are using the LCD
 #lcd.init()
@@ -168,7 +168,7 @@ clock = time.clock()
 
 在这里，我们将创建(1)一个查找表和(2)一个用于确定条形码类型的便利函数:
 
-```
+```py
 # barcode type lookup table
 barcode_type = {
 	image.EAN2: "EAN2",
@@ -206,7 +206,7 @@ def barcode_name(code):
 
 从那里，让我们进入正题，开始捕捉和处理帧！我们将从开始一个`while`循环开始:
 
-```
+```py
 # loop over frames and detect + decode barcodes
 while True:
 	# tick the clock for our FPS counter
@@ -225,7 +225,7 @@ while True:
 
 我们已经有了一个图像，让我们看看我们能做些什么:
 
-```
+```py
 	# loop over standard barcodes that are detected in the image
 	for code in img.find_barcodes():
 		# draw a rectangle around the barcode
@@ -254,7 +254,7 @@ while True:
 
 QR 码解码以类似的方式完成:
 
-```
+```py
 	# loop over QR codes that are detected in the image
 	for code in img.find_qrcodes():
 		# draw a rectangle around the barcode
@@ -311,7 +311,7 @@ IDE 可能会提示您更新固件(我通过单击按钮并等待大约 3-5 分�
 
 您可以从 IDE 的内置终端看到结果:
 
-```
+```py
 FPS: 2.793296
 type: QR, payload: https://pyimagesearch.com/
 FPS: 2.816901

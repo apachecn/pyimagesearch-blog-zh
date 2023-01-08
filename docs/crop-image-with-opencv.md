@@ -30,7 +30,7 @@
 
 让我们首先用范围从*【0，24】:*的值初始化一个 NumPy 列表
 
-```
+```py
 >>> import numpy as np
 >>> I = np.arange(0, 25)
 >>> I
@@ -41,7 +41,7 @@ array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
 
 现在让我们把这个 1D 列表重塑成一个 2D 矩阵，假设它是一个图像:
 
-```
+```py
 >>> I = I.reshape((5, 5))
 >>> I
 array([[ 0,  1,  2,  3,  4],
@@ -54,7 +54,7 @@ array([[ 0,  1,  2,  3,  4],
 
 现在，假设我要提取从 *x = 0* 、 *y = 0* 开始，到 *x = 2* 、 *y = 3* 结束的“像素”。使用以下代码可以实现这一点:
 
-```
+```py
 >>> I[0:3, 0:2]
 array([[ 0,  1],
        [ 5,  6],
@@ -66,7 +66,7 @@ array([[ 0,  1],
 
 现在，让我们提取从 *x = 1* 、 *y = 3* 开始到 *x = 5* 和 *y = 5* 结束的像素:
 
-```
+```py
 >>> I[3:5, 1:5]
 array([[16, 17, 18, 19],
        [21, 22, 23, 24]])
@@ -91,7 +91,7 @@ array([[16, 17, 18, 19],
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -118,7 +118,7 @@ $ pip install opencv-contrib-python
 
 首先使用本指南的 ***“下载”*** 部分访问源代码和示例图像:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── adrian.png
@@ -135,7 +135,7 @@ $ tree . --dirsfirst
 
 打开项目目录结构中的`opencv_crop.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -153,7 +153,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们从磁盘加载我们的映像:
 
-```
+```py
 # load the input image and display it to our screen
 image = cv2.imread(args["image"])
 cv2.imshow("Original", image)
@@ -193,7 +193,7 @@ cv2.waitKey(0)
 
 同样，我们可以从图像中裁剪出我的身体:
 
-```
+```py
 # apply another image crop, this time extracting the body
 body = image[90:450, 0:290]
 cv2.imshow("Body", body)
@@ -212,7 +212,7 @@ cv2.waitKey(0)
 
 从那里，打开一个 shell 并执行以下命令:
 
-```
+```py
 $ python opencv_crop.py
 ```
 

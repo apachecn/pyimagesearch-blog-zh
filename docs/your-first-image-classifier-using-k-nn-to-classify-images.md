@@ -30,13 +30,13 @@
 
 让我们开始定义我们工具包的项目结构:
 
-```
+```py
 |--- pyimagesearch
 ```
 
 如您所见，我们有一个名为`pyimagesearch`的模块。我们开发的所有代码都将存在于`pyimagesearch`模块中。出于本课的目的，我们需要定义两个子模块:
 
-```
+```py
 |--- pyimagesearch
 |    |--- __init__.py
 |    |--- datasets
@@ -64,7 +64,7 @@
 
 让我们从基本的解决方案开始:构建一个调整图像大小的图像预处理器，忽略纵横比。打开`simplepreprocessor.py`，然后插入以下代码:
 
-```
+```py
 # import the necessary packages
 import cv2
 
@@ -99,7 +99,7 @@ class SimplePreprocessor:
 
 既然我们的`SimplePreprocessor`已经定义好了，让我们继续讨论`SimpleDatasetLoader`:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import cv2
@@ -124,7 +124,7 @@ class SimpleDatasetLoader:
 
  *然后我们可以继续讨论`load`方法，这是`SimpleDatasetLoader`的核心:
 
-```
+```py
   	def load(self, imagePaths, verbose=-1):
 		# initialize the list of features and labels
 		data = []
@@ -145,7 +145,7 @@ class SimpleDatasetLoader:
 
 在**第 22 行**上，我们开始循环每个输入图像。对于这些图像中的每一个，我们从磁盘中加载它(**第 26 行**)并基于文件路径提取类标签(**第 27 行**)。我们假设我们的数据集是根据以下目录结构在磁盘上组织的:
 
-```
+```py
 /dataset_name/class/image.jpg
 ```
 
@@ -157,7 +157,7 @@ class SimpleDatasetLoader:
 
 既然我们的映像已经从磁盘加载，我们可以对它进行预处理(如果需要的话):
 
-```
+```py
 			# check to see if our preprocessors are not None
 			if self.preprocessors is not None:
 				# loop over the preprocessors and apply each to
@@ -177,7 +177,7 @@ class SimpleDatasetLoader:
 
 我们的最后一个代码块只是处理对控制台的打印更新，然后将一个由`data`和`labels`组成的二元组返回给调用函数:
 
-```
+```py
 			# show an update every `verbose` images
 			if verbose > 0 and i > 0 and (i + 1) % verbose == 0:
 				print("[INFO] processed {}/{}".format(i + 1,
@@ -242,7 +242,7 @@ k-最近邻分类器*是迄今为止*最简单的机器学习和图像分类算�
 
 让我们开始吧。打开一个新文件，将其命名为`knn.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import LabelEncoder
@@ -266,7 +266,7 @@ import argparse
 
 接下来，让我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -286,7 +286,7 @@ args = vars(ap.parse_args())
 
 既然我们的命令行参数已经被解析，我们就可以获取数据集中图像的文件路径，然后加载并预处理它们(分类管道中的**步骤#1** ):
 
-```
+```py
 # grab the list of images that we'll be describing
 print("[INFO] loading images...")
 imagePaths = list(paths.list_images(args["dataset"]))
@@ -318,7 +318,7 @@ print("[INFO] features matrix: {:.1f}MB".format(
 
 接下来，让我们构建我们的培训和测试分割(管道中的**步骤#2** ):
 
-```
+```py
 # encode the labels as integers
 le = LabelEncoder()
 labels = le.fit_transform(labels)
@@ -337,7 +337,7 @@ labels = le.fit_transform(labels)
 
 最后，我们能够创建我们的 k-NN 分类器并评估它(图像分类管道中的**步骤#3 和#4** ):
 
-```
+```py
 # train and evaluate a k-NN classifier on the raw pixel intensities
 print("[INFO] evaluating k-NN classifier...")
 model = KNeighborsClassifier(n_neighbors=args["neighbors"],
@@ -355,13 +355,13 @@ print(classification_report(testY, model.predict(testX),
 
 要运行我们的 k-NN 分类器，请执行以下命令:
 
-```
+```py
 $ python knn.py --dataset ../datasets/animals
 ```
 
 然后，您应该会看到类似以下内容的输出:
 
-```
+```py
 [INFO] loading images...
 [INFO] processed 500/3000
 [INFO] processed 1000/3000

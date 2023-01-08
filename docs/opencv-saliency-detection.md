@@ -69,7 +69,7 @@ Jeff 的问题促使我对 OpenCV 中的显著性模块做了一些研究。经�
 
 您可以通过打开一个 Python shell 并尝试导入它来检查是否安装了`saliency`模块:
 
-```
+```py
 $ python
 >>> import cv2
 >>> cv2.saliency
@@ -99,7 +99,7 @@ OpenCV 为我们提供了四种使用 Python 绑定的显著性检测器实现�
 
 从那里，我们可以使用`tree`命令在终端中查看项目结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── images
@@ -140,7 +140,7 @@ OpenCV 实现了两种静态显著性检测算法。
 
 让我们继续尝试这两种静态显著性检测器。打开`static_salency.py`并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -164,7 +164,7 @@ image = cv2.imread(args["image"])
 
 我们的**第一个静态显著性方法**是静态谱显著性。让我们继续计算图像的显著性图并显示它:
 
-```
+```py
 # initialize OpenCV's static saliency spectral residual detector and
 # compute the saliency map
 saliency = cv2.saliency.StaticSaliencySpectralResidual_create()
@@ -192,7 +192,7 @@ cv2.waitKey(0)
 
 我们要应用的第二种静态显著方法叫做“细粒度”。下一个块模仿我们的第一个方法，除了我们正在实例化细粒度对象。我们还将执行一个阈值来演示一个二进制地图，您可能会处理轮廓(即，提取每个显著区域)。让我们看看它是如何做到的:
 
-```
+```py
 # initialize OpenCV's static fine grained saliency detector and
 # compute the saliency map
 saliency = cv2.saliency.StaticSaliencyFineGrained_create()
@@ -220,7 +220,7 @@ OpenCV 代码的贡献者以不同于光谱显著性的方式实现了细粒度�
 
 要执行静态显著性检测器，请务必下载源代码和示例(参见下面的 ***“下载”*** 部分)，然后执行以下命令:
 
-```
+```py
 $ python static_saliency.py --image images/neymar.jpg
 
 ```
@@ -241,7 +241,7 @@ $ python static_saliency.py --image images/neymar.jpg
 
 现在让我们在一张船的照片上尝试这两种方法:
 
-```
+```py
 $ python static_saliency.py --image images/boat.jpg
 
 ```
@@ -260,7 +260,7 @@ $ python static_saliency.py --image images/boat.jpg
 
 最后，让我们在三个足球运动员的图片上尝试光谱和细粒度静态显著性方法:
 
-```
+```py
 $ python static_saliency.py --image images/players.jpg
 
 ```
@@ -287,7 +287,7 @@ OpenCV 包括一个目标显著性检测器—*[. BING:二值化赋范梯度用�
 
 要了解如何使用 OpenCV 的 objectness 显著性检测器，请打开`objectness_saliency.py`并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -320,7 +320,7 @@ image = cv2.imread(args["image"])
 
 让我们计算对象显著性:
 
-```
+```py
 # initialize OpenCV's objectness saliency detector and set the path
 # to the input model files
 saliency = cv2.saliency.ObjectnessBING_create()
@@ -340,7 +340,7 @@ numDetections = saliencyMap.shape[0]
 
 现在，让我们循环查看每个检测(直到我们设置的最大值):
 
-```
+```py
 # loop over the detections
 for i in range(0, min(numDetections, args["max_detections"])):
 	# extract the bounding box coordinates
@@ -366,7 +366,7 @@ for i in range(0, min(numDetections, args["max_detections"])):
 
 要查看 OpenCV 的 objectness 显著性检测器，请务必下载源代码+示例图像，然后执行以下命令:
 
-```
+```py
 $ python objectness_saliency.py --model objectness_trained_model 
 	--image images/barcelona.jpg
 
@@ -388,7 +388,7 @@ $ python objectness_saliency.py --model objectness_trained_model
 
 打开`motion_saliency.py`并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 import imutils
@@ -408,7 +408,7 @@ time.sleep(2.0)
 
 从这里，我们将开始循环并在每个周期的顶部捕获一帧:
 
-```
+```py
 # loop over frames from the video file stream
 while True:
 	# grab the frame from the threaded video stream and resize it
@@ -430,7 +430,7 @@ while True:
 
 接下来，我们将计算显著图并显示我们的结果:
 
-```
+```py
 	# convert the input frame to grayscale and compute the saliency
 	# map based on the motion model
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -462,7 +462,7 @@ vs.stop()
 
 要执行运动显著性脚本，请输入以下命令:
 
-```
+```py
 $ python motion_saliency.py
 
 ```

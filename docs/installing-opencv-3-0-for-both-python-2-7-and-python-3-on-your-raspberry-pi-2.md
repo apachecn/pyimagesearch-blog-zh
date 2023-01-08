@@ -50,7 +50,7 @@
 
 让我们通过更新我们的 Raspberry Pi 来开始这个 OpenCV 3.0 安装教程:
 
-```
+```py
 $ sudo apt-get update
 $ sudo apt-get upgrade
 $ sudo rpi-update
@@ -61,7 +61,7 @@ $ sudo rpi-update
 
 现在，我们可以安装从源代码构建 OpenCV 所需的开发人员工具:
 
-```
+```py
 $ sudo apt-get install build-essential git cmake pkg-config
 
 ```
@@ -70,7 +70,7 @@ $ sudo apt-get install build-essential git cmake pkg-config
 
 以及用于从磁盘加载各种图像格式的安装包:
 
-```
+```py
 $ sudo apt-get install libjpeg8-dev libtiff4-dev libjasper-dev libpng12-dev
 
 ```
@@ -79,7 +79,7 @@ $ sudo apt-get install libjpeg8-dev libtiff4-dev libjasper-dev libpng12-dev
 
 让我们安装一些视频 I/O 包:
 
-```
+```py
 $ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
 
 ```
@@ -88,7 +88,7 @@ $ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
 
 安装 GTK，它处理 OpenCV 的 GUI 操作:
 
-```
+```py
 $ sudo apt-get install libgtk2.0-dev
 
 ```
@@ -97,7 +97,7 @@ $ sudo apt-get install libgtk2.0-dev
 
 我们还可以通过安装这些包来优化 OpenCV 中的各种功能(如矩阵运算):
 
-```
+```py
 $ sudo apt-get install libatlas-base-dev gfortran
 
 ```
@@ -106,7 +106,7 @@ $ sudo apt-get install libatlas-base-dev gfortran
 
 至此，我们已经安装了所有的先决条件，所以让我们从 GitHub 下载 [OpenCV 库并检查`3.0.0`版本:](https://github.com/Itseez/opencv)
 
-```
+```py
 $ cd ~
 $ git clone https://github.com/Itseez/opencv.git
 $ cd opencv
@@ -120,7 +120,7 @@ $ git checkout 3.0.0
 
 对于 OpenCV 3.0 的完整安装，也要抓取 [opencv_contrib](https://github.com/itseez/opencv_contrib) repo:
 
-```
+```py
 $ cd ~
 $ git clone https://github.com/Itseez/opencv_contrib.git
 $ cd opencv_contrib
@@ -142,7 +142,7 @@ $ git checkout 3.0.0
 
 安装 Python 2.7 头文件，以便我们可以编译 OpenCV 3.0 绑定:
 
-```
+```py
 $ sudo apt-get install python2.7-dev
 
 ```
@@ -151,7 +151,7 @@ $ sudo apt-get install python2.7-dev
 
 安装`pip`，兼容 Python 2.7 的 Python 包管理器:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python get-pip.py
 
@@ -163,7 +163,7 @@ $ sudo python get-pip.py
 
 安装`virtualenv`和`virtualenvwrapper`就像使用`pip`命令一样简单:
 
-```
+```py
 $ sudo pip install virtualenv virtualenvwrapper
 $ sudo rm -rf ~/.cache/pip
 
@@ -173,7 +173,7 @@ $ sudo rm -rf ~/.cache/pip
 
 接下来，我们需要更新我们的`~/.profile`文件，方法是在您最喜欢的编辑器中打开它，并在文件的底部添加以下几行。
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python2.7
 export WORKON_HOME=$HOME/.virtualenvs
@@ -185,14 +185,14 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 现在您的`~/.profile`文件已经更新了，您需要重新加载它，以便更改生效。强制重新加载。`profile`，可以:注销，重新登录；关闭您的终端并打开一个新的终端；或者最简单的解决方法是使用`source`命令:
 
-```
+```py
 $ source ~/.profile
 
 ```
 
 是时候创建`cv3`虚拟环境了，我们将在这里进行计算机视觉工作:
 
-```
+```py
 $ mkvirtualenv cv3
 
 ```
@@ -201,7 +201,7 @@ $ mkvirtualenv cv3
 
 如果您需要访问`cv3`虚拟环境(例如在您注销或重启您的 Pi 后)，只需`source`您的`~/.profile` `file (to ensure it has been loaded) and use the` 工作站 `command:`
 
-```
+```py
 $ workon cv3
 ```
 
@@ -209,7 +209,7 @@ $ workon cv3
 
 接下来，我们需要的唯一 Python 依赖项是 NumPy，所以确保您在`cv3`虚拟环境中并安装 NumPy:
 
-```
+```py
 $ pip install numpy
 
 ```
@@ -218,7 +218,7 @@ $ pip install numpy
 
 虽然不太可能，但自从我们使用`sudo`命令安装`pip`以来，我已经看到过`.cache`目录给出“权限被拒绝”错误的例子。如果您遇到这种情况，只需删除`.cache/pip`目录并重新安装 NumPy:
 
-```
+```py
 $ sudo rm -rf ~/.cache/pip/
 $ pip install numpy
 
@@ -234,14 +234,14 @@ $ pip install numpy
 
 所以我再说一遍，**在你运行任何其他命令**之前，你要确保你是在`cv3`虚拟环境中:
 
-```
+```py
 $ workon cv3
 
 ```
 
 一旦您进入`cv3`虚拟环境，您就可以使用`cmake`来设置构建:
 
-```
+```py
 $ cd ~/opencv
 $ mkdir build
 $ cd build
@@ -268,7 +268,7 @@ CMake 将运行大约 30 秒，在它完成后(假设没有错误)，您将需�
 
 现在剩下的就是编译 OpenCV 3.0 了:
 
-```
+```py
 $ make -j4
 
 ```
@@ -279,7 +279,7 @@ $ make -j4
 
 假设 OpenCV 已经编译成功，现在您可以将它安装到您的 Raspberry Pi 上:
 
-```
+```py
 $ sudo make install
 $ sudo ldconfig
 
@@ -297,7 +297,7 @@ $ sudo ldconfig
 
 您应该会看到一个名为`cv2.so`的文件，这是我们实际的 Python 绑定。我们需要采取的最后一步是将`cv2.so`文件符号链接到我们的`cv3`环境的`site-packages`目录中:
 
-```
+```py
 $ cd ~/.virtualenvs/cv3/lib/python2.7/site-packages/
 $ ln -s /usr/local/lib/python2.7/site-packages/cv2.so cv2.so
 
@@ -311,7 +311,7 @@ $ ln -s /usr/local/lib/python2.7/site-packages/cv2.so cv2.so
 
 首先:安装 Python 3 头文件，这样我们就可以编译 OpenCV 3.0 绑定:
 
-```
+```py
 $ sudo apt-get install python3-dev
 
 ```
@@ -320,7 +320,7 @@ $ sudo apt-get install python3-dev
 
 安装`pip`，确保它与 Python 3 兼容(注意我执行的是`python3`而不仅仅是`python`):
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python3 get-pip.py
 
@@ -332,7 +332,7 @@ $ sudo python3 get-pip.py
 
 使用`pip3`命令安装`virtualenv`和`virtualenvwrapper`:
 
-```
+```py
 $ sudo pip3 install virtualenv virtualenvwrapper
 
 ```
@@ -341,7 +341,7 @@ $ sudo pip3 install virtualenv virtualenvwrapper
 
 既然`virtualenv`和`virtualenvwrapper`已经安装在我们的系统上，我们需要更新每次启动终端时加载的`~/.profile`文件。在您最喜欢的文本编辑器中打开您的`~/.profile`文件(如果它不存在**创建它**，并添加以下几行:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 export WORKON_HOME=$HOME/.virtualenvs
@@ -351,14 +351,14 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 为了使对我们的`~/.profile`文件的更改生效，您可以(1)注销并重新登录，(2)关闭您当前的终端并打开一个新的终端，或者(3)简单地使用`source`命令:
 
-```
+```py
 $ source ~/.profile
 
 ```
 
 让我们创建我们的`cv`虚拟环境，OpenCV 将在其中编译和访问:
 
-```
+```py
 $ mkvirtualenv cv
 
 ```
@@ -369,7 +369,7 @@ $ mkvirtualenv cv
 
 这个命令将创建你的`cv`虚拟环境，它*完全独立于*Python 安装系统。如果您需要访问这个虚拟环境，只需使用`workon`命令:
 
-```
+```py
 $ workon cv
 
 ```
@@ -378,7 +378,7 @@ $ workon cv
 
 无论如何，我们需要的唯一 Python 依赖项是 NumPy，所以确保您在`cv`虚拟环境中并安装 NumPy:
 
-```
+```py
 $ pip install numpy
 
 ```
@@ -387,7 +387,7 @@ $ pip install numpy
 
 如果由于某种原因，你的`.cache`目录给你一个权限被拒绝的错误，只需删除它并重新安装 NumPy，否则你可以跳过这一步:
 
-```
+```py
 $ sudo rm -rf ~/.cache/pip/
 $ pip install numpy
 
@@ -405,14 +405,14 @@ $ pip install numpy
 
  ***同样，**在运行本节**中的任何其他命令之前，您需要确保您处于`cv`虚拟环境中:
 
-```
+```py
 $ workon cv
 
 ```
 
 在您进入`cv`虚拟环境后，我们可以设置我们的构建:
 
-```
+```py
 $ cd ~/opencv
 $ mkdir build
 $ cd build
@@ -441,7 +441,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 现在剩下的就是编译 OpenCV 3.0 了:
 
-```
+```py
 $ make -j4
 
 ```
@@ -452,7 +452,7 @@ $ make -j4
 
 假设 OpenCV 已经编译成功，现在您可以将它安装到您的 Raspberry Pi 上:
 
-```
+```py
 $ sudo make install
 $ sudo ldconfig
 
@@ -468,7 +468,7 @@ $ sudo ldconfig
 
 让我们列出该目录的内容，看看 OpenCV 绑定是否在其中:
 
-```
+```py
 $ ls -l /usr/local/lib/python3.2/site-packages
 total 1416
 -rw-r--r-- 1 root staff 1447637 Jun 22 18:26 cv2.cpython-32mu.so
@@ -479,7 +479,7 @@ total 1416
 
 然而，为了在我们的`cv`虚拟环境中使用 OpenCV 3.0，我们首先需要将 OpenCV 二进制文件符号链接到`cv`环境的`site-packages`目录中:
 
-```
+```py
 $ cd ~/.virtualenvs/cv/lib/python3.2/site-packages/
 $ ln -s /usr/local/lib/python3.2/site-packages/cv2.cpython-32mu.so cv2.so
 
@@ -497,7 +497,7 @@ $ ln -s /usr/local/lib/python3.2/site-packages/cv2.cpython-32mu.so cv2.so
 
 在我们结束本教程之前，让我们确保 OpenCV 绑定已经正确安装。打开一个终端，进入`cv`虚拟环境(或者`cv3`，如果你遵循 Python 2.7+安装步骤)，启动你的 Python shell 导入 OpenCV:
 
-```
+```py
 $ workon cv
 $ python
 >>> import cv2

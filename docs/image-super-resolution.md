@@ -58,7 +58,7 @@ SRCNNs 有许多重要的特征。下面列出了最重要的属性:
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -89,7 +89,7 @@ $ pip install opencv-contrib-python
 
 让我们从回顾这个项目的目录结构开始。第一步是在`pyimagesearch`的`conv`子模块中创建一个名为`srcnn.py`的新文件——这就是我们的超分辨率卷积神经网络将要存在的地方:
 
-```
+```py
 --- pyimagesearch
 |    |--- __init__.py
 ...
@@ -106,7 +106,7 @@ $ pip install opencv-contrib-python
 
 从那里，我们有了项目本身的以下目录结构:
 
-```
+```py
 --- super_resolution
 |    |--- build_dataset.py
 |    |--- config
@@ -132,7 +132,7 @@ $ pip install opencv-contrib-python
 
 现在让我们来看看`sr_config.py`文件:
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -160,7 +160,7 @@ PLOT_PATH = os.path.sep.join([BASE_OUTPUT, "plot.png"])
 
 让我们继续定义我们的配置:
 
-```
+```py
 # initialize the batch size and number of epochs for training
 BATCH_SIZE = 128
 NUM_EPOCHS = 10
@@ -197,7 +197,7 @@ STRIDE = 14
 
 让我们继续为 SRCNN 构建我们的训练数据集。打开`build_dataset.py`并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.io import HDF5DatasetWriter
 from conf import sr_config as config
@@ -229,7 +229,7 @@ total = 0
 
 让我们遍历每一个图像路径:
 
-```
+```py
 # loop over the image paths
 for imagePath in imagePaths:
 	# load the input image
@@ -273,7 +273,7 @@ for imagePath in imagePaths:
 
 我们现在可以为输入和目标生成子窗口:
 
-```
+```py
 	# slide a window from left-to-right and top-to-bottom
 	for y in range(0, h - config.INPUT_DIM + 1, config.STRIDE):
 		for x in range(0, w - config.INPUT_DIM + 1, config.STRIDE):
@@ -310,7 +310,7 @@ for imagePath in imagePaths:
 
 最后一步是构建两个 HDF5 数据集，一个用于输入，另一个用于输出(即目标):
 
-```
+```py
 # grab the paths to the images
 print("[INFO] building HDF5 datasets...")
 inputPaths = sorted(list(paths.list_images(config.IMAGES)))
@@ -346,7 +346,7 @@ shutil.rmtree(config.LABELS)
 
 要生成数据集，请执行以下命令:
 
-```
+```py
 $ python build_dataset.py 
 [INFO] creating temporary images...
 [INFO] building HDF5 datasets...
@@ -355,7 +355,7 @@ $ python build_dataset.py
 
 之后，您可以检查您的`BASE_OUTPUT`目录，找到`inputs.hdf5`和`outputs.hdf5`文件:
 
-```
+```py
 $ ls ../datasets/ukbench/output/*.hdf5
 inputs.hdf5		outputs.hdf5
 ```
@@ -364,7 +364,7 @@ inputs.hdf5		outputs.hdf5
 
 我们正在实现的 SRCNN 架构完全遵循[董等人](https://ieeexplore.ieee.org/document/7115171)的思路，使其易于实现。打开`srcnn.py`并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D
@@ -410,7 +410,7 @@ class SRCNN:
 
 训练我们的 SRCNN 是一个相当简单的过程。打开`train.py`并插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -428,7 +428,7 @@ import numpy as np
 
 请记住，我们有两个 HDF5 数据集:输入子窗口和目标输出子窗口。我们的`HDF5DatasetGenerator`类旨在只处理一个 HDF5 文件，而不是两个。幸运的是，这很容易用我们的`super_res_generator`函数解决:
 
-```
+```py
 def super_res_generator(inputDataGen, targetDataGen):
 	# start an infinite loop for the training data
 	while True:
@@ -447,7 +447,7 @@ def super_res_generator(inputDataGen, targetDataGen):
 
 我们现在可以初始化我们的`HDF5DatasetGenerator`对象以及我们的模型和优化器:
 
-```
+```py
 # initialize the input images and target output images generators
 inputs = HDF5DatasetGenerator(config.INPUTS_DB, config.BATCH_SIZE)
 targets = HDF5DatasetGenerator(config.OUTPUTS_DB, config.BATCH_SIZE)
@@ -469,7 +469,7 @@ model.compile(loss="mse", optimizer=opt)
 
 我们现在准备训练我们的模型:
 
-```
+```py
 # train the model using our generators
 H = model.fit_generator(
 	super_res_generator(inputs.generator(), targets.generator()),
@@ -481,7 +481,7 @@ H = model.fit_generator(
 
 我们的最后一个代码块处理将训练好的模型保存到磁盘、绘制损失以及关闭 HDF5 数据集:
 
-```
+```py
 # save the model to file
 print("[INFO] serializing model...")
 model.save(config.MODEL_PATH, overwrite=True)
@@ -504,7 +504,7 @@ targets.close()
 
 训练 SRCNN 架构就像执行以下命令一样简单:
 
-```
+```py
 $ python train.py 
 [INFO] compiling model...
 Epoch 1/10
@@ -525,7 +525,7 @@ Epoch 10/10
 
 我们现在准备实现`resize.py`，这个脚本负责从低分辨率输入图像构建高分辨率输出图像。打开`resize.py`并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from conf import sr_config as config
 from tensorflow.keras.models import load_model
@@ -560,7 +560,7 @@ model = load_model(config.MODEL_PATH)
 
 接下来，让我们准备一下要放大的图像:
 
-```
+```py
 # load the input image, then grab the dimensions of the input image
 # and crop the image such that it tiles nicely
 print("[INFO] generating image...")
@@ -598,7 +598,7 @@ output = np.zeros(scaled.shape)
 
 我们现在可以应用我们的滑动窗口:
 
-```
+```py
 # slide a window from left-to-right and top-to-bottom
 for y in range(0, h - config.INPUT_DIM + 1, config.LABEL_SIZE):
 	for x in range(0, w - config.INPUT_DIM + 1, config.LABEL_SIZE):
@@ -622,7 +622,7 @@ for y in range(0, h - config.INPUT_DIM + 1, config.LABEL_SIZE):
 
 我们的最后一步是删除输出图像上由填充引起的任何黑色边框，然后将图像保存到磁盘:
 
-```
+```py
 # remove any of the black borders in the output image caused by the
 # padding, then clip any values that fall outside the range [0, 255]
 output = output[config.PAD:h - ((h % config.INPUT_DIM) + config.PAD),
@@ -639,7 +639,7 @@ cv2.imwrite(args["output"], output)
 
 现在我们已经(1)训练了我们的 SRCNN 并且(2)实现了`resize.py`，我们准备好对输入图像应用超分辨率。打开一个 shell 并执行以下命令:
 
-```
+```py
 $ python resize.py --image jemma.png --baseline baseline.png \
 	--output output.png
 [INFO] loading model...
@@ -664,7 +664,7 @@ $ python resize.py --image jemma.png --baseline baseline.png \
 
 **罗斯布鲁克，A.** “图像超分辨率”， *PyImageSearch* ，2022，【https://pyimg.co/jia4g】T4
 
-```
+```py
 @article{Rosebrock_2022_ISR,
   author = {Adrian Rosebrock},
   title = {Image Super Resolution},

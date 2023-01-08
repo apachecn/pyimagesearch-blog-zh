@@ -71,7 +71,7 @@ PKG 下载完成后，开始安装过程:
 
 现在 CUDA 工具包已经安装好了，您需要设置一些环境变量:
 
-```
+```py
 export PATH=/Developer/NVIDIA/CUDA-6.5/bin:$PATH
 export DYLD_LIBRARY_PATH=/Developer/NVIDIA/CUDA-6.5/lib:$DYLD_LIBRARY_PATH
 
@@ -83,7 +83,7 @@ export DYLD_LIBRARY_PATH=/Developer/NVIDIA/CUDA-6.5/lib:$DYLD_LIBRARY_PATH
 
 为了验证 CUDA 驱动程序确实安装正确，我执行了以下命令:
 
-```
+```py
 $ kextstat | grep -i cuda
 
 ```
@@ -104,7 +104,7 @@ $ kextstat | grep -i cuda
 
 现在，让我们继续安装 CUDA 示例，这样我们就可以确保 CUDA 工具包正常工作，驱动程序正常工作。安装示例只是一个简单的 shell 脚本，如果您已经重新加载了您的`.bash_profile`，那么您的`PATH`上应该有这个脚本。
 
-```
+```py
 $ cuda-install-samples-6.5.sh
 
 ```
@@ -115,7 +115,7 @@ $ cuda-install-samples-6.5.sh
 
 在那里，我用以下命令编译了`deviceQuery`和`deviceBandwith`示例:
 
-```
+```py
 $ make -C 1_Utilities/deviceQuery
 $ make -C 1_Utilities/bandwidthTest
 
@@ -155,7 +155,7 @@ CUDA 工具包安装完毕，CUDAMat 编译顺利，所有的 CUDAMat 测试都�
 
 我首先使用 CPU 获得了一个基线:
 
-```
+```py
 (deeplearning)annalee:deep-belief-network adrianrosebrock$ time python dbn.py 
 gnumpy: failed to import cudamat. Using npmat instead. No GPU will be used.
 [X] downloading data...
@@ -235,7 +235,7 @@ sys	0m7.856s
 
 如你所见，我收到了来自`gnumpy`(NumPy 的 GPU 优化版本)的警告，表明无法找到 CUDAMat，CPU 将用于训练:
 
-```
+```py
 gnumpy: failed to import cudamat. Using npmat instead. No GPU will be used.
 
 ```
@@ -248,7 +248,7 @@ gnumpy: failed to import cudamat. Using npmat instead. No GPU will be used.
 
 但是结果让我很困惑:
 
-```
+```py
 (deeplearning)annalee:deep-belief-network adrianrosebrock$ time python dbn.py 
 [X] downloading data...
 [DBN] fitting X.shape=(46900, 784)
@@ -334,7 +334,7 @@ sys	0m0.505s
 
 我对这场奇怪表演的唯一了解是这条`gnumpy`消息:
 
-```
+```py
 gnumpy: failed to use gpu_lock. Using board #0 without knowing whether it is in use or not.
 
 ```

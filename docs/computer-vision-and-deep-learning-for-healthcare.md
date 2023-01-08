@@ -219,7 +219,7 @@ AI 可以支持皮肤科医生针对一般皮肤和特定癌症做出临床决�
 
 **Mangla，P.** “医疗保健的计算机视觉和深度学习”， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva 和 R. Raha 编辑。，2023 年，【https://pyimg.co/h52u4 
 
-```
+```py
 @incollection{Mangla_2023_CVDLH,
   author = {Puneet Mangla},
   title = {Computer Vision and Deep Learning for Healthcare},

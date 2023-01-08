@@ -79,7 +79,7 @@
 
 继续抓取 ***【下载】*** 到今天的博文并解压代码。您将看到以下项目:
 
-```
+```py
 $ tree
 .
 └── gradient_tape_example.py
@@ -99,7 +99,7 @@ $ tree
 
 打开项目目录结构中的`gradient_tape_example.py`文件，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import BatchNormalization
@@ -125,7 +125,7 @@ import sys
 
 让我们继续使用 [TensorFlow/Keras 的顺序 API](https://pyimagesearch.com/2019/10/28/3-ways-to-create-a-keras-model-with-tensorflow-2-0-sequential-functional-and-model-subclassing/) 构建我们的模型:
 
-```
+```py
 def build_model(width, height, depth, classes):
 	# initialize the input shape and channels dimension to be
 	# "channels last" ordering
@@ -191,7 +191,7 @@ def build_model(width, height, depth, classes):
 
 让我们来研究**组件 2、3 和 4:**
 
-```
+```py
 def step(X, y):
 	# keep track of our gradients
 	with tf.GradientTape() as tape:
@@ -221,7 +221,7 @@ def step(X, y):
 
 定义了我们的`build_model`和`step`函数后，现在我们将准备数据:
 
-```
+```py
 # initialize the number of epochs to train for, batch size, and
 # initial learning rate
 EPOCHS = 25
@@ -256,7 +256,7 @@ testY = to_categorical(testY, 10)
 
 有了现成的数据，我们将构建我们的模型:
 
-```
+```py
 # build our model and initialize our optimizer
 print("[INFO] creating model...")
 model = build_model(28, 28, 1, 10)
@@ -269,7 +269,7 @@ opt = Adam(lr=INIT_LR, decay=INIT_LR / EPOCHS)
 
 我们现在准备好**用我们的 GradientTape 训练我们的模型:**
 
-```
+```py
 # compute the number of batch updates per epoch
 numUpdates = int(trainX.shape[0] / BS)
 
@@ -307,7 +307,7 @@ for epoch in range(0, EPOCHS):
 
 最后，我们将计算测试集的损失和准确性:
 
-```
+```py
 # in order to calculate accuracy using Keras' functions we first need
 # to compile the model
 model.compile(optimizer=opt, loss=categorical_crossentropy,
@@ -330,7 +330,7 @@ print("[INFO] test accuracy: {:.4f}".format(acc))
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ time python gradient_tape_example.py
 [INFO] loading MNIST dataset...
 [INFO] creating model...

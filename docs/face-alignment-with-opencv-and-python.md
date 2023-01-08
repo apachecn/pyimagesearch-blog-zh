@@ -51,7 +51,7 @@
 
 让我们从检查我们的`FaceAligner`实现和理解幕后发生的事情开始。
 
-```
+```py
 # import the necessary packages
 from .helpers import FACIAL_LANDMARKS_IDXS
 from .helpers import shape_to_np
@@ -94,7 +94,7 @@ class FaceAligner:
 
 这个函数有点长，所以我把它分成了 5 个代码块，使它更容易理解:
 
-```
+```py
     def align(self, image, gray, rect):
         # convert the landmark (x, y)-coordinates to a NumPy array
         shape = self.predictor(gray, rect)
@@ -132,7 +132,7 @@ class FaceAligner:
 
 要查看角度是如何计算的，请参考下面的代码块:
 
-```
+```py
         # compute the center of mass for each eye
         leftEyeCenter = leftEyePts.mean(axis=0).astype("int")
         rightEyeCenter = rightEyePts.mean(axis=0).astype("int")
@@ -158,7 +158,7 @@ class FaceAligner:
 
 在下面的代码块中，我们计算所需的右眼坐标(作为左眼位置的函数)，并计算新生成图像的比例。
 
-```
+```py
         # compute the desired right eye x-coordinate based on the
         # desired x-coordinate of the left eye
         desiredRightEyeX = 1.0 - self.desiredLeftEye[0]
@@ -188,7 +188,7 @@ class FaceAligner:
 
 现在我们有了旋转`angle`和`scale`，在计算仿射变换之前，我们需要采取一些步骤。这包括找到两眼之间的中点以及计算旋转矩阵并更新其平移分量:
 
-```
+```py
         # compute center (x, y)-coordinates (i.e., the median point)
         # between the two eyes in the input image
         eyesCenter = ((leftEyeCenter[0] + rightEyeCenter[0]) // 2,
@@ -229,7 +229,7 @@ class FaceAligner:
 
 我们现在可以应用仿射变换来对齐面部:
 
-```
+```py
         # apply the affine transformation
         (w, h) = (self.desiredFaceWidth, self.desiredFaceHeight)
         output = cv2.warpAffine(image, M, (w, h),
@@ -255,7 +255,7 @@ class FaceAligner:
 
 现在让我们用一个简单的驱动程序脚本来处理这个对齐类。打开一个新文件，命名为`align_faces.py`，让我们开始编码。
 
-```
+```py
 # import the necessary packages
 from imutils.face_utils import FaceAligner
 from imutils.face_utils import rect_to_bb
@@ -278,7 +278,7 @@ args = vars(ap.parse_args())
 
 如果您的系统上没有安装`imutils`和/或`dlib` [，请确保通过`pip`安装/升级它们:](https://pyimagesearch.com/2017/03/27/how-to-install-dlib/)
 
-```
+```py
 $ pip install --upgrade imutils
 $ pip install --upgrade dlib
 
@@ -293,7 +293,7 @@ $ pip install --upgrade dlib
 
 在下一个代码块中，我们初始化基于 HOG 的检测器([方向梯度直方图](https://pyimagesearch.com/2014/11/10/histogram-oriented-gradients-object-detection/))、面部标志预测器和面部对准器:
 
-```
+```py
 # initialize dlib's face detector (HOG-based) and then create
 # the facial landmark predictor and the face aligner
 detector = dlib.get_frontal_face_detector()
@@ -310,7 +310,7 @@ fa = FaceAligner(predictor, desiredFaceWidth=256)
 
 接下来，让我们加载我们的图像，并为人脸检测做准备:
 
-```
+```py
 # load the input image, resize it, and convert it to grayscale
 image = cv2.imread(args["image"])
 image = imutils.resize(image, width=800)
@@ -329,7 +329,7 @@ rects = detector(gray, 2)
 
 在下一个块中，我们迭代`rects`，对齐每个面，并显示原始和对齐的图像。
 
-```
+```py
 # loop over the face detections
 for rect in rects:
 	# extract the ROI of the *original* face, then align the face
@@ -367,7 +367,7 @@ for rect in rects:
 
 解压缩归档文件后，执行以下命令:
 
-```
+```py
 $ python align_faces.py \
 	--shape-predictor shape_predictor_68_face_landmarks.dat \
 	--image images/example_01.jpg
@@ -400,7 +400,7 @@ $ python align_faces.py \
 
 让我们试试第二个例子:
 
-```
+```py
 $ python align_faces.py \
 	--shape-predictor shape_predictor_68_face_landmarks.dat \
 	--image images/example_02.jpg
@@ -421,7 +421,7 @@ $ python align_faces.py \
 
 这里是第三个例子，这是我和我父亲去年春天烹饪了一批软壳蟹后的一个例子:
 
-```
+```py
 $ python align_faces.py \
 	--shape-predictor shape_predictor_68_face_landmarks.dat \
 	--image images/example_03.jpg
@@ -446,7 +446,7 @@ $ python align_faces.py \
 
 第四个例子是我祖父母最后一次去北卡罗来纳时的照片:
 
-```
+```py
 $ python align_faces.py \
 	--shape-predictor shape_predictor_68_face_landmarks.dat \
 	--image images/example_04.jpg
@@ -473,7 +473,7 @@ $ python align_faces.py \
 
 让我们做最后一个例子:
 
-```
+```py
 $ python align_faces.py \
 	--shape-predictor shape_predictor_68_face_landmarks.dat \
 	--image images/example_05.jpg

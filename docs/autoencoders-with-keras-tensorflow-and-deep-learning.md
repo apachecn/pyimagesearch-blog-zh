@@ -142,7 +142,7 @@ GANs 和自动编码器都是**生成模型**；然而，自动编码器本质�
 
 一定要抓取与博文相关的 ***【下载】*** 。从那里，提取。压缩并检查文件/文件夹布局:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── pyimagesearch
@@ -174,7 +174,7 @@ $ tree --dirsfirst
 
 打开项目结构中的`convautoencoder.py`文件，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.layers import BatchNormalization
 from tensorflow.keras.layers import Conv2D
@@ -213,7 +213,7 @@ class ConvAutoencoder:
 
 我们现在准备初始化输入，并开始向网络添加图层:
 
-```
+```py
 		# define the input to the encoder
 		inputs = Input(shape=inputShape)
 		x = inputs
@@ -244,7 +244,7 @@ class ConvAutoencoder:
 
 如果我们要对`encoder`做一个`print(encoder.summary())`，假设 *28×28* 单通道图像(`depth=1`)和`filters=(32, 64)`和`latentDim=16`，我们会得到如下结果:
 
-```
+```py
 Model: "encoder"
 _________________________________________________________________
 Layer (type)                 Output Shape              Param #
@@ -282,7 +282,7 @@ _________________________________________________________________
 
 接下来，让我们了解解码器模型如何获取这种潜在空间表示并重建原始输入图像:
 
-```
+```py
 		# start building the decoder model which will accept the
 		# output of the encoder as its inputs
 		latentInputs = Input(shape=(latentDim,))
@@ -309,7 +309,7 @@ _________________________________________________________________
 
 让我们完成自动编码器的创建:
 
-```
+```py
 		# apply a single CONV_TRANSPOSE layer used to recover the
 		# original depth of the image
 		x = Conv2DTranspose(depth, (3, 3), padding="same")(x)
@@ -335,7 +335,7 @@ _________________________________________________________________
 
 如果我们要在这里完成一个`print(decoder.summary())`操作，我们会得到如下结果:
 
-```
+```py
 Model: "decoder"
 _________________________________________________________________
 Layer (type)                 Output Shape              Param #
@@ -376,7 +376,7 @@ _________________________________________________________________
 
 `print(autoencoder.summary())`操作显示了编码器和解码器的组合特性:
 
-```
+```py
 Model: "autoencoder"
 _________________________________________________________________
 Layer (type)                 Output Shape              Param #
@@ -403,7 +403,7 @@ _________________________________________________________________
 
 打开项目目录结构中的`train_conv_autoencoder.py`，插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -442,7 +442,7 @@ args = vars(ap.parse_args())
 
 现在，我们将设置几个超参数并预处理我们的 MNIST 数据集:
 
-```
+```py
 # initialize the number of epochs to train for and batch size
 EPOCHS = 25
 BS = 32
@@ -465,7 +465,7 @@ testX = testX.astype("float32") / 255.0
 
 我们现在准备好**构建和训练我们的自动编码器:**
 
-```
+```py
 # construct our convolutional autoencoder
 print("[INFO] building autoencoder...")
 (encoder, decoder, autoencoder) = ConvAutoencoder.build(28, 28, 1)
@@ -488,7 +488,7 @@ H = autoencoder.fit(
 
 让我们继续绘制我们的培训历史:
 
-```
+```py
 # construct a plot that plots and saves the training history
 N = np.arange(0, EPOCHS)
 plt.style.use("ggplot")
@@ -504,7 +504,7 @@ plt.savefig(args["plot"])
 
 从那里，我们将对我们的测试集进行预测:
 
-```
+```py
 # use the convolutional autoencoder to make predictions on the
 # testing images, then initialize our list of output images
 print("[INFO] making predictions...")
@@ -547,7 +547,7 @@ cv2.imwrite(args["output"], outputs)
 
 确保你使用了这篇文章的 ***“下载”*** 部分来下载源代码——从那里你可以执行下面的命令:
 
-```
+```py
 $ python train_conv_autoencoder.py
 [INFO] loading MNIST dataset...
 [INFO] building autoencoder...

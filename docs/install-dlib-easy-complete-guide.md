@@ -37,7 +37,7 @@ dlib 的最新版本很特别。
 
 从那里，你需要安装 Homebrew，一个 macOS 的软件包管理器，类似于 Debian/Ubuntu 的`apt-get`:
 
-```
+```py
 $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 $ brew update
 
@@ -47,7 +47,7 @@ $ brew update
 
  **一旦安装了自制软件，你需要更新你的`PATH`来寻找自制软件的二进制文件、包和库。这可以通过使用编辑器(如 nano、vi 等)手动编辑文件来完成。或者简单地使用`echo`和重定向:
 
-```
+```py
 $ echo -e "\n# Homebrew" >> ~/.bash_profile
 $ echo "export PATH=/usr/local/bin:$PATH" >> ~/.bash_profile
 
@@ -55,14 +55,14 @@ $ echo "export PATH=/usr/local/bin:$PATH" >> ~/.bash_profile
 
 然后，您需要`source`这个`~/.bash_profile`文件来重新加载更改:
 
-```
+```py
 $ source ~/.bash_profile
 
 ```
 
 然后我们将安装`cmake`(一个用于构建、测试和打包软件的工具)以及 Python 2.7 和 Python 3:
 
-```
+```py
 $ brew install cmake
 $ brew install python python3
 
@@ -70,7 +70,7 @@ $ brew install python python3
 
 您可以使用`which`来验证 Python 2.7 和 Python 3 是否已经成功安装:
 
-```
+```py
 $ which python2
 /usr/local/bin/python2
 $ which python3
@@ -94,14 +94,14 @@ $ which python3
 
 如果您正在使用 Python 虚拟环境(如果您遵循了[我的任何 OpenCV 安装教程](https://pyimagesearch.com/opencv-tutorials-resources-guides/)，您可能正在使用它们)，您可以为 dlib 安装创建一个新的 Python 虚拟环境:
 
-```
+```py
 $ mkvirtualenv dlib_test -p python3
 
 ```
 
 或者访问一个现有的:
 
-```
+```py
 $ workon cv
 
 ```
@@ -110,7 +110,7 @@ $ workon cv
 
 从那里，我们可以安装 NumPy (dlib 唯一的 Python 依赖项),然后安装 dlib 库本身:
 
-```
+```py
 $ pip install numpy
 $ pip install dlib
 
@@ -120,7 +120,7 @@ $ pip install dlib
 
 从那里，启动 Python shell 并验证 dlib 的安装:
 
-```
+```py
 (dlib_test) DU481:~ admin$ python
 Python 3.6.4 (default, Jan  6 2018, 11:51:15) 
 [GCC 4.2.1 Compatible Apple LLVM 9.0.0 (clang-900.0.39.2)] on darwin
@@ -142,7 +142,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 首先，让我们安装所需的依赖项:
 
-```
+```py
 $ sudo apt-get update
 $ sudo apt-get install build-essential cmake
 $ sudo apt-get install libopenblas-dev liblapack-dev 
@@ -161,14 +161,14 @@ $ sudo apt-get install python3 python3-dev python3-pip
 
 如果您正在使用 Python 虚拟环境(如果您遵循了[我的任何 OpenCV 安装教程](https://pyimagesearch.com/opencv-tutorials-resources-guides/)，您可能正在使用它们)，您可以为 dlib 安装创建一个新的 Python 虚拟环境:
 
-```
+```py
 $ mkvirtualenv dlib_test -p python3
 
 ```
 
 或者访问一个现有的:
 
-```
+```py
 $ workon cv
 
 ```
@@ -177,7 +177,7 @@ $ workon cv
 
 然后，您可以在 Ubuntu 系统上安装 dlib:
 
-```
+```py
 $ pip install numpy
 $ pip install dlib
 
@@ -187,7 +187,7 @@ $ pip install dlib
 
 最后，打开 Python shell，通过导入`dlib`库来验证您在 Ubuntu 上的 dlib 安装:
 
-```
+```py
 (dlib_test) ubuntu@ip-172-31-12-187:~$ python
 Python 3.5.2 (default, Nov 23 2017, 16:37:01) 
 [GCC 5.4.0 20160609] on linux
@@ -215,7 +215,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 让我们开始在我们的 Raspberry Pi 上安装 dlib，确保我们已经满足了库/包的依赖性:
 
-```
+```py
 $ sudo apt-get update
 $ sudo apt-get install build-essential cmake
 $ sudo apt-get install libopenblas-dev liblapack-dev libatlas-base-dev
@@ -232,14 +232,14 @@ $ sudo apt-get install libx11-dev libgtk-3-dev
 
 如果您正在使用 Python 虚拟环境(如果您遵循了[我的任何 OpenCV 安装教程](https://pyimagesearch.com/opencv-tutorials-resources-guides/)，您可能正在使用它们)，您可以为 dlib 安装创建一个新的 Python 虚拟环境:
 
-```
+```py
 $ mkvirtualenv dlib_test -p python3
 
 ```
 
 或者访问一个现有的:
 
-```
+```py
 $ workon cv
 
 ```
@@ -248,7 +248,7 @@ $ workon cv
 
 然后我们可以在 Raspberry Pi 上安装 dlib:
 
-```
+```py
 $ pip install numpy
 $ pip install dlib
 
@@ -258,7 +258,7 @@ $ pip install dlib
 
 如果您决定使用 NEON 指令来优化 dlib 安装，请跳过通过`pip`安装 dlib，而是通过 source:
 
-```
+```py
 $ git clone https://github.com/davisking/dlib.git
 $ cd dlib
 $ python setup.py install --yes USE_NEON_INSTRUCTIONS
@@ -269,7 +269,7 @@ $ python setup.py install --yes USE_NEON_INSTRUCTIONS
 
 最后，打开一个 Python shell，通过导入`dlib`库来验证您在 Raspbian 上的 dlib 安装:
 
-```
+```py
 (dlib_test) pi@raspberrypi:~ $ python
 Python 3.5.3 (default, Jan 19 2017, 14:11:04) 
 [GCC 6.3.0 20170124] on linux
@@ -290,7 +290,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 作为在 Raspberry Pi 上使用 dlib 的最后一个例子，这里是我整理的一个简短的例子，我们在输入图像中检测面部标志:
 
-```
+```py
 # import the necessary packages
 from imutils import face_utils
 import dlib
@@ -339,7 +339,7 @@ cv2.waitKey(0)
 
 从那里，您可以发出以下命令来执行我们的示例脚本:
 
-```
+```py
 $ python facial_landmarks.py
 
 ```

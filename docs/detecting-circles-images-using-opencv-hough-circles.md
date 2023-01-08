@@ -28,7 +28,7 @@
 
 看看下面的函数签名:
 
-```
+```py
 cv2.HoughCircles(image, method, dp, minDist)
 
 ```
@@ -52,7 +52,7 @@ cv2.HoughCircles(image, method, dp, minDist)
 
 太好了。让我们跳到一些代码中:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -71,7 +71,7 @@ args = vars(ap.parse_args())
 
 让我们继续加载图像:
 
-```
+```py
 # load the image, clone it for output, and then convert it to grayscale
 image = cv2.imread(args["image"])
 output = image.copy()
@@ -85,7 +85,7 @@ gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 好了，该检测圆圈了:
 
-```
+```py
 # detect circles in the image
 circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1.2, 100)
 
@@ -125,7 +125,7 @@ if circles is not None:
 
 启动一个 shell，并执行以下命令:
 
-```
+```py
 $ python detect_circles.py --image images/simple.png
 
 ```
@@ -140,7 +140,7 @@ $ python detect_circles.py --image images/simple.png
 
 让我们转到别的事情上来:
 
-```
+```py
 $ python detect_circles.py --image images/soda.png
 
 ```

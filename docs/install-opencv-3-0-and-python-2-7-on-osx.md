@@ -48,7 +48,7 @@
 
 要安装家酿软件，只需进入[家酿软件网站](http://brew.sh/)，将*“安装家酿软件”*部分下的命令复制并粘贴到您的终端:
 
-```
+```py
 $ cd ~
 $ $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
@@ -58,7 +58,7 @@ $ $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/mas
 
 要更新 Homebrew，只需执行:
 
-```
+```py
 $ brew update
 
 ```
@@ -69,7 +69,7 @@ $ brew update
 
 让我们继续使用 Homebrew 来安装我们特定于用户的 Python 2.7 版本:
 
-```
+```py
 $ brew install python
 
 ```
@@ -80,7 +80,7 @@ $ brew install python
 
 在您最喜欢的编辑器中打开您的 `~/.bash_profile`文件(如果它不存在，**创建它**，并将下面几行添加到文件中:
 
-```
+```py
 # Homebrew
 export PATH=/usr/local/bin:$PATH
 
@@ -88,14 +88,14 @@ export PATH=/usr/local/bin:$PATH
 
 从那里，重新加载您的`~./bash_profile`文件以确保已经进行了更改:
 
-```
+```py
 $ source ~/.bash_profile
 
 ```
 
 作为健全性检查，让我们确认我们使用的是 Python 的自制版本，而不是系统版本:
 
-```
+```py
 $ which python
 /usr/local/bin/python
 
@@ -113,14 +113,14 @@ $ which python
 
 无论如何，要安装`virtualenv`和`virtualenvwrapper`，只需执行以下命令:
 
-```
+```py
 $ pip install virtualenv virtualenvwrapper
 
 ```
 
 同样，我们需要通过追加以下两行来更新我们的`~/.bash_profile`文件:
 
-```
+```py
 # Virtualenv/VirtualenvWrapper
 source /usr/local/bin/virtualenvwrapper.sh
 
@@ -128,14 +128,14 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 更新完`~/.bash_profile`文件后，我们需要重新加载它:
 
-```
+```py
 $ source ~/.bash_profile
 
 ```
 
 此时，`virtualenv`和`virtualenvwrapper`都已正确安装，因此我们可以创建我们的`cv`虚拟环境:
 
-```
+```py
 $ mkvirtualenv cv
 
 ```
@@ -146,7 +146,7 @@ $ mkvirtualenv cv
 
 现在我们可以开始安装一些 Python 包了。我们需要安装 [NumPy](http://www.numpy.org/) ，因为 OpenCV Python 绑定将图像表示为多维 NumPy 数组:
 
-```
+```py
 $ pip install numpy
 
 ```
@@ -157,21 +157,21 @@ $ pip install numpy
 
 首先，我们将使用 brew 安装所需的开发人员工具，例如出色的 [CMake](http://www.cmake.org/) 实用程序:
 
-```
+```py
 $ brew install cmake pkg-config
 
 ```
 
 在这里，我们将安装必要的映像 I/O 包。这些软件包允许您加载各种图像文件格式，如 JPEG、PNG、TIFF 等。
 
-```
+```py
 $ brew install jpeg libpng libtiff openexr
 
 ```
 
 最后，让我们安装用于优化 OpenCV 中各种操作的库(如果我们愿意的话):
 
-```
+```py
 $ brew install eigen tbb
 
 ```
@@ -182,7 +182,7 @@ $ brew install eigen tbb
 
 我们要做的第一件事是将目录切换到我们的主目录，然后从 GitHub 下拉 [OpenCV，并检查`3.0.0`版本:](https://github.com/Itseez/opencv)
 
-```
+```py
 $ cd ~
 $ git clone https://github.com/Itseez/opencv.git
 $ cd opencv
@@ -194,7 +194,7 @@ $ git checkout 3.0.0
 
 不像以前版本的 OpenCV(本质上)是自包含的，我们还需要从 GitHub 下载额外的 [opencv_contrib repo](https://github.com/itseez/opencv_contrib) 。包含 OpenCV 额外模块的`opencv_contrib` repo，例如特征检测、局部不变描述符(SIFT、SURF 等。)、自然图像中的文本检测、行描述符等等。
 
-```
+```py
 $ cd ~
 $ git clone https://github.com/Itseez/opencv_contrib
 $ cd opencv_contrib
@@ -210,7 +210,7 @@ $ git checkout 3.0.0
 
 让我们通过创建`build`目录来设置 OpenCV 构建:
 
-```
+```py
 $ cd ~/opencv
 $ mkdir build
 $ cd build
@@ -219,7 +219,7 @@ $ cd build
 
 我们将使用 CMake 来配置我们的构建:
 
-```
+```py
 $ cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local \
 	-D PYTHON2_PACKAGES_PATH=~/.virtualenvs/cv/lib/python2.7/site-packages \
 	-D PYTHON2_LIBRARY=/usr/local/Cellar/python/2.7.10/Frameworks/Python.framework/Versions/2.7/bin \
@@ -268,7 +268,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local \
 
 现在 CMake 已经正确配置了构建，我们可以编译 OpenCV:
 
-```
+```py
 $ make -j4
 
 ```
@@ -281,14 +281,14 @@ $ make -j4
 
 假设 OpenCV 编译无误，现在您可以将它安装在您的 OSX 系统上:
 
-```
+```py
 $ make install
 
 ```
 
 如果您得到一个与权限相关的错误消息(尽管这真的不应该发生)，您将需要以`sudo`的身份运行 install 命令:
 
-```
+```py
 $ sudo make install
 
 ```
@@ -297,7 +297,7 @@ $ sudo make install
 
 假设您已经做到了这一步，让我们执行一个健全性检查并确保安装了 OpenCV:
 
-```
+```py
 $ cd ~/.virtualenvs/cv/lib/python2.7/site-packages/
 $ ls -l cv2.so 
 -rwxr-xr-x  1 adrian  staff  2013052 Jun  5 15:20 cv2.so
@@ -310,7 +310,7 @@ $ ls -l cv2.so
 
 让我们通过启动 shell 并导入 OpenCV 来验证我们的安装:
 
-```
+```py
 (cv)annalee:~ adrianrosebrock$ python
 Python 2.7.8 (default, Jul 31 2014, 15:41:09) 
 [GCC 4.2.1 Compatible Apple LLVM 5.1 (clang-503.0.40)] on darwin
@@ -341,7 +341,7 @@ OpenCV 3.0 有许多更新和更改，但我个人最喜欢的可能是 Alcantar
 
 打开一个新文件，将其命名为`test_akaze.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from __future__ import print_function
 import cv2
@@ -366,7 +366,7 @@ cv2.waitKey(0)
 
 然后通过以下方式执行它:
 
-```
+```py
 $ python test_akaze.py
 keypoints: 762, descriptors: (762, 61)
 

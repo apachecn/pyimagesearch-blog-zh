@@ -108,7 +108,7 @@ iBUG 300-W 数据集用于[训练面部标志预测器](https://pyimagesearch.co
 
 pip 安装命令包括:
 
-```
+```py
 $ workon <env-name>
 $ pip install dlib
 $ pip install opencv-contrib-python
@@ -129,7 +129,7 @@ $ pip install scikit-learn
 
 我建议将 iBug 300-W 数据集放入与本教程下载相关的 zip 文件中，如下所示:
 
-```
+```py
 $ unzip tune-dlib-shape-predictor.zip
 ...
 $ cd tune-dlib-shape-predictor
@@ -141,7 +141,7 @@ $ tar -xvf ibug_300W_large_face_landmark_dataset.tar.gz
 
 或者(即，不点击上面的超链接)，在您的终端中使用`wget`直接下载数据集:
 
-```
+```py
 $ unzip tune-dlib-shape-predictor.zip
 ...
 $ cd tune-dlib-shape-predictor
@@ -157,7 +157,7 @@ $ tar -xvf ibug_300W_large_face_landmark_dataset.tar.gz
 
 假设您已经遵循了上一节中的说明，您的项目目录现在组织如下:
 
-```
+```py
 $ tree --dirsfirst --filelimit 15
 .
 ├── ibug_300W_large_face_landmark_dataset
@@ -224,7 +224,7 @@ $ tree --dirsfirst --filelimit 15
 
 在继续本教程的其余部分之前，您需要执行以下命令来准备我们的“仅供参考”的培训和测试 XML 文件:
 
-```
+```py
 $ python parse_xml.py \
 	--input ibug_300W_large_face_landmark_dataset/labels_ibug_300W_train.xml \
 	--output ibug_300W_large_face_landmark_dataset/labels_ibug_300W_train_eyes.xml
@@ -238,7 +238,7 @@ $ python parse_xml.py \
 
 要验证我们的新培训/测试文件是否已创建，请检查 iBUG-300W 根数据集目录中的`labels_ibug_300W_train_eyes.xml`和`labels_ibug_300W_test_eyes.xml`文件:
 
-```
+```py
 $ cd ibug_300W_large_face_landmark_dataset
 $ ls -lh *.xml    
 -rw-r--r--@ 1 adrian  staff    21M Aug 16  2014 labels_ibug_300W.xml
@@ -260,7 +260,7 @@ $ cd ..
 
 打开`config.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -276,7 +276,7 @@ TEST_PATH = os.path.join("ibug_300W_large_face_landmark_dataset",
 
 接下来，我们将定义一些用于调整 dlib 形状预测超参数的常数:
 
-```
+```py
 # define the path to the temporary model file
 TEMP_MODEL_PATH = "temp.dat"
 
@@ -332,7 +332,7 @@ MAX_TRIALS = 100
 
 要了解如何创建这样的脚本，打开`tune_predictor_hyperparams.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from sklearn.model_selection import ParameterGrid
@@ -356,7 +356,7 @@ import os
 
 现在让我们定义我们的函数来评估我们的**模型精度:**
 
-```
+```py
 def evaluate_model_acc(xmlPath, predPath):
 	# compute and return the error (lower is better) of the shape
 	# predictor over our testing path
@@ -368,7 +368,7 @@ def evaluate_model_acc(xmlPath, predPath):
 
 就像我们有一个评估模型精度的函数，我们也需要一个评估**模型推理速度的方法:**
 
-```
+```py
 def evaluate_model_speed(predictor, imagePath, tests=10):
 	# initialize the list of timings
 	timings = []
@@ -416,7 +416,7 @@ def evaluate_model_speed(predictor, imagePath, tests=10):
 
 让我们为超参数 CSV 文件定义一个列列表:
 
-```
+```py
 # define the columns of our output CSV file
 cols = [
 	"tree_depth",
@@ -456,7 +456,7 @@ cols = [
 
 然后，我们打开输出 CSV 文件并将`cols`写入磁盘:
 
-```
+```py
 # open the CSV file for writing and then write the columns as the
 # header of the CSV file
 csv = open(config.CSV_PATH, "w")
@@ -474,7 +474,7 @@ procs = config.PROCS if config.PROCS > 0 else procs
 
 下一个代码块初始化集合**超参数/选项**以及我们将探索的**对应值**:
 
-```
+```py
 # initialize the list of dlib shape predictor hyperparameters that
 # we'll be tuning over
 hyperparams = {
@@ -498,7 +498,7 @@ hyperparams = {
 
  *现在我们有了将要探索的`hyperparams`集合，我们需要构造这些选项的所有可能组合**——为此，我们将使用 scikit-learn 的`ParameterGrid`类:**
 
-```
+```py
 # construct the set of hyperparameter combinations and randomly
 # sample them as trying to test *all* of them would be
 # computationally prohibitive
@@ -518,7 +518,7 @@ print("[INFO] sampling {} of {} possible combinations".format(
 
 现在让我们继续循环我们的`sampledCombos`:
 
-```
+```py
 # loop over our hyperparameter combinations
 for (i, p) in enumerate(sampledCombos):
 	# log experiment number
@@ -552,7 +552,7 @@ for (i, p) in enumerate(sampledCombos):
 
 从这里开始，我们将**用 dlib:** 训练和评估我们的形状预测器
 
-```
+```py
 	# train the model using the current set of hyperparameters
 	start = time.time()
 	dlib.train_shape_predictor(config.TRAIN_PATH,
@@ -586,7 +586,7 @@ for (i, p) in enumerate(sampledCombos):
 
 接下来，我们将**将超参数选项和评估指标输出到 CSV 文件:**
 
-```
+```py
 	# build the row of data that will be written to our CSV file
 	row = [
 		p["tree_depth"],
@@ -636,7 +636,7 @@ csv.close()
 
 假设您已经完成了这些步骤中的每一步，现在您可以执行`tune_predictor_hyperparams.py`脚本:
 
-```
+```py
 $ python tune_predictor_hyperparams.py
 [INFO] sampling 100 of 6075 possible combinations
 [INFO] starting trial 1/100...
@@ -670,7 +670,7 @@ sys     338m44.848s
 
 脚本完成后，您的工作目录中应该有一个名为`trials.csv`的文件:
 
-```
+```py
 $ ls *.csv
 trials.csv
 
@@ -738,7 +738,7 @@ trials.csv
 
 打开该文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import multiprocessing
 import argparse
@@ -796,7 +796,7 @@ dlib.train_shape_predictor(args["training"], args["model"], options)
 
 打开终端并执行以下命令:
 
-```
+```py
 $ time python train_shape_predictor.py \
 	--training ibug_300W_large_face_landmark_dataset/labels_ibug_300W_train_eyes.xml \
 	--model optimal_eye_predictor.dat

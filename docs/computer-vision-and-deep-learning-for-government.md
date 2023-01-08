@@ -212,7 +212,7 @@ COVID 告诉我们，传染病对全球人口健康的威胁是巨大的。重�
 
 **Mangla，P.** “政府的计算机视觉和深度学习”， *PyImageSearch* ，P. Chugh，R. Raha，K. Kudriavtseva 和 S. Huot 编辑。，2022 年，【https://pyimg.co/gratl 
 
-```
+```py
 @incollection{Mangla_2022_Government,
   author = {Puneet Mangla},
   title = {Computer Vision and Deep Learning for Government},

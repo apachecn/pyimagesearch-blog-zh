@@ -36,7 +36,7 @@
 
 让我们从回顾本教程的目录结构开始:
 
-```
+```py
 |-- invoice.png
 |-- pa_license_plate.png
 |-- whitelist_blacklist.py
@@ -50,7 +50,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -75,7 +75,7 @@ $ pip install opencv-contrib-python
 
 我们现在将学习如何使用 Tesseract OCR 引擎将字符列入白名单和黑名单。打开项目目录结构中的`whitelist_blacklist.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 import pytesseract
 import argparse
@@ -103,7 +103,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们加载我们的图像并构建我们的宇宙魔方 OCR `options`:
 
-```
+```py
 # load the input image, swap channel ordering, and initialize our
 # Tesseract OCR options as an empty string
 image = cv2.imread(args["image"])
@@ -133,7 +133,7 @@ if len(args["blacklist"]) > 0:
 
 最后，我们对 PyTesseract 的`image_to_string`的调用执行 OCR:
 
-```
+```py
 # OCR the input image using Tesseract
 text = pytesseract.image_to_string(rgb, config=options)
 print(text)
@@ -145,7 +145,7 @@ print(text)
 
 我们现在已经准备好用 Tesseract 应用白名单和黑名单了。打开终端并执行以下命令:
 
-```
+```py
 $ python whitelist_blacklist.py --image pa_license_plate.png
 PENNSYLVANIA
 
@@ -156,7 +156,7 @@ visitPA.com
 
 正如终端输出所展示的，我们有一个宾夕法尼亚州的牌照(**图 2** )，除了车牌号码之间的星号(`*`)之外，所有内容都被正确地 OCR 识别了*——这个特殊的符号被错误地 OCR 识别了。利用一点领域知识，我们知道车牌不能包含一个`*`作为字符，所以一个简单的解决问题的方法是将**和`*`列入**的黑名单:*
 
-```
+```py
 $ python whitelist_blacklist.py --image pa_license_plate.png \
     --blacklist "*#"
 PENNSYLVANIA
@@ -175,7 +175,7 @@ visitPA.com
 
  *让我们试试另一个例子，这是一张发票，包括发票号、签发日期和到期日:
 
-```
+```py
 $ python whitelist_blacklist.py --image invoice.png
 Invoice Number 1785439
 Issue Date 2020-04-08
@@ -188,7 +188,7 @@ Due Date 2020-05-08
 
 现在假设我们只想过滤出*价格信息(即数字、美元符号和句点)，以及发票号和日期(数字和破折号):*
 
-```
+```py
 $ python whitelist_blacklist.py --image invoice.png \
     --whitelist "0123456789.-"
 1785439
@@ -202,7 +202,7 @@ $ python whitelist_blacklist.py --image invoice.png \
 
 如果需要，我们还可以*组合*白名单和黑名单:
 
-```
+```py
 $ python whitelist_blacklist.py --image invoice.png \
 	--whitelist "123456789.-" --blacklist "0"
 1785439

@@ -50,7 +50,7 @@
 
 让我们开始吧。打开一个新文件，命名为`extreme_points.py`，让我们开始编码:
 
-```
+```py
 # import the necessary packages
 import imutils
 import cv2
@@ -87,7 +87,7 @@ c = max(cnts, key=cv2.contourArea)
 
 在我们能够沿着一个轮廓找到极值点之前，重要的是理解一个轮廓仅仅是一个由 *(x，y)* 坐标组成的 NumPy 数组。因此，我们可以利用 NumPy 函数来帮助我们找到极值坐标。
 
-```
+```py
 # determine the most extreme points along the contour
 extLeft = tuple(c[c[:, :, 0].argmin()][0])
 extRight = tuple(c[c[:, :, 0].argmax()][0])
@@ -104,7 +104,7 @@ extBot = tuple(c[c[:, :, 1].argmax()][0])
 
 现在我们有了最北、最南、最东和最西的坐标，我们可以把它们画在我们的`image`上:
 
-```
+```py
 # draw the outline of the object, then draw each of the
 # extreme points, where the left-most is red, right-most
 # is green, top-most is blue, and bottom-most is teal
@@ -131,7 +131,7 @@ cv2.waitKey(0)
 
 要执行我们的脚本，请确保下载与本文相关的代码和图像(使用本教程底部的“下载”表单)，导航到您的代码目录，然后执行以下命令:
 
-```
+```py
 $ python extreme_points.py
 
 ```

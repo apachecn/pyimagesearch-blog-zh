@@ -66,7 +66,7 @@
 
 ### [**导入和设置**](#TOC)
 
-```
+```py
 import math
 import random
 from typing import List, Tuple, Union
@@ -88,7 +88,7 @@ from matplotlib import pyplot as plt
 *   这是一个私有方法，计算当前节点的子节点的全局导数。
 *   `_prev`:当前节点的子节点。
 
-```
+```py
 class Value(object):
     """
     We need to wrap the raw data into a class that will store the
@@ -127,7 +127,7 @@ class Value(object):
         return f"Value(data={self.data}, grad={self.grad})"
 ```
 
-```
+```py
 # Build a Value node
 raw_data = 5.0
 print(f"Raw Data(data={raw_data}, type={type(raw_data)}")
@@ -137,7 +137,7 @@ value_node = Value(data=raw_data)
 print(value_node)
 ```
 
-```
+```py
 >>> Raw Data(data=5.0, type=<class 'float'>
 >>> Value(data=5.0, grad=0.0)
 ```
@@ -182,7 +182,7 @@ and ![b](img/d64e1379360a21ccd8dc595db9b1d8ad.png "b"), as shown in **Figure 3**
 
 . Here we know that the expression can be simplified to ![c = 2a](img/570a09b67c5f388278dc1672657e4d28.png "c = 2a"), but our `_backward` for `__add__` does not know how to do this. The `__backward__` in `__add__` treats one ![a](img/64d3bff4db63ea2502cd130d8d9db723.png "a")as `self` and the other ![a](img/64d3bff4db63ea2502cd130d8d9db723.png "a")as `other`. If the gradients are not accumulated, we will see a discrepancy with the gradients.
 
-```
+```py
 def custom_addition(self, other: Union["Value", float]) -> "Value":
     """
     The addition operation for the Value class.
@@ -235,7 +235,7 @@ Value.__add__ = custom_addition
 Value.__radd__ = custom_reverse_addition
 ```
 
-```
+```py
 # Build a and b
 a = Value(data=5.0)
 b = Value(data=6.0)
@@ -244,11 +244,11 @@ b = Value(data=6.0)
 print(f"{a} + {b} => {a+b}")
 ```
 
-```
+```py
 >>> Value(data=5.0, grad=0.0) + Value(data=6.0, grad=0.0) => Value(data=11.0, grad=0.0)
 ```
 
-```
+```py
 # Add a and b
 c = a + b
 
@@ -262,7 +262,7 @@ print(f"a => {a}")
 print(f"b => {b}")
 ```
 
-```
+```py
 >>> c => Value(data=11.0, grad=11.0)
 >>> a => Value(data=5.0, grad=11.0)
 >>> b => Value(data=6.0, grad=11.0)
@@ -296,7 +296,7 @@ is already deduced for ![c](img/a0b01076dc0b1ee37de0d70233938435.png "c"). This 
 
 and ![b](img/d64e1379360a21ccd8dc595db9b1d8ad.png "b"), as shown in **Figure 6**.
 
-```
+```py
 def custom_multiplication(self, other: Union["Value", float]) -> "Value":
     """
     The multiplication operation for the Value class.
@@ -350,7 +350,7 @@ Value.__mul__ = custom_multiplication
 Value.__rmul__ = custom_reverse_multiplication
 ```
 
-```
+```py
 # Build a and b
 a = Value(data=5.0)
 b = Value(data=6.0)
@@ -359,11 +359,11 @@ b = Value(data=6.0)
 print(f"{a} * {b} => {a*b}")
 ```
 
-```
+```py
 >>> Value(data=5.0, grad=0.0) * Value(data=6.0, grad=0.0) => Value(data=30.0, grad=0.0)
 ```
 
-```
+```py
 # Multiply a and b
 c = a * b
 
@@ -377,7 +377,7 @@ print(f"a => {a}")
 print(f"b => {b}")
 ```
 
-```
+```py
 >>> c => Value(data=30.0, grad=11.0)
 >>> a => Value(data=5.0, grad=66.0)
 >>> b => Value(data=6.0, grad=55.0)
@@ -407,7 +407,7 @@ is already deduced for ![c](img/a0b01076dc0b1ee37de0d70233938435.png "c"). This 
 
 and ![b](img/d64e1379360a21ccd8dc595db9b1d8ad.png "b"), as shown in **Figure 9**.
 
-```
+```py
 def custom_power(self, other):
     """
     The power operation for the Value class.
@@ -441,7 +441,7 @@ def custom_power(self, other):
 Value.__pow__ = custom_power
 ```
 
-```
+```py
 # Build a
 a = Value(data=5.0)
 # For power operation we will use
@@ -453,11 +453,11 @@ b = 2.0
 print(f"{a} ** {b} => {a**b}")
 ```
 
-```
+```py
 >>> Value(data=5.0, grad=0.0) ** 2.0 => Value(data=25.0, grad=0.0)
 ```
 
-```
+```py
 # Raise a to the power of b
 c = a ** b
 
@@ -471,7 +471,7 @@ print(f"a => {a}")
 print(f"b => {b}")
 ```
 
-```
+```py
 >>> c => Value(data=25.0, grad=11.0)
 >>> a => Value(data=5.0, grad=110.0)
 >>> b => 2.0
@@ -485,7 +485,7 @@ print(f"b => {b}")
 
 这意味着否定的`_backward`将被处理，我们不需要明确地定义它。
 
-```
+```py
 def custom_negation(self):
     """
     Negation operation for the Value class.
@@ -502,7 +502,7 @@ def custom_negation(self):
 Value.__neg__ = custom_negation
 ```
 
-```
+```py
 # Build `a`
 a = Value(data=5.0)
 
@@ -510,11 +510,11 @@ a = Value(data=5.0)
 print(f"Negation of {a} => {(-a)}")
 ```
 
-```
+```py
 >>> Negation of Value(data=5.0, grad=0.0) => Value(data=-5.0, grad=0.0)
 ```
 
-```
+```py
 # Negate a
 c = -a
 
@@ -527,7 +527,7 @@ c._backward()
 print(f"a => {a}")
 ```
 
-```
+```py
 >>> c => Value(data=-5.0, grad=11.0)
 >>> a => Value(data=5.0, grad=-11.0)
 ```
@@ -540,7 +540,7 @@ print(f"a => {a}")
 
 这将帮助我们将`_backward`减法运算委托给加法和否定运算。
 
-```
+```py
 def custom_subtraction(self, other):
     """
     Subtraction operation for the Value class.
@@ -576,7 +576,7 @@ Value.__sub__ = custom_subtraction
 Value.__rsub__ = custom_reverse_subtraction
 ```
 
-```
+```py
 # Build a and b
 a = Value(data=5.0)
 b = Value(data=4.0)
@@ -585,11 +585,11 @@ b = Value(data=4.0)
 print(f"{a} - {b} => {(a-b)}")
 ```
 
-```
+```py
 >>> Value(data=5.0, grad=0.0) - Value(data=4.0, grad=0.0) => Value(data=1.0, grad=0.0)
 ```
 
-```
+```py
 # Subtract b from a
 c = a - b
 
@@ -603,7 +603,7 @@ print(f"a => {a}")
 print(f"b => {b}")
 ```
 
-```
+```py
 >>> c => Value(data=1.0, grad=11.0)
 >>> a => Value(data=5.0, grad=11.0)
 >>> b => Value(data=4.0, grad=0.0)
@@ -623,7 +623,7 @@ print(f"b => {b}")
 
 这将帮助我们将`_backward`除法运算委托给幂运算。
 
-```
+```py
 def custom_division(self, other):
     """
     Division operation for the Value class.
@@ -658,7 +658,7 @@ Value.__truediv__ = custom_division
 Value.__rtruediv__ = custom_reverse_division
 ```
 
-```
+```py
 # Build a and b
 a = Value(data=6.0)
 b = Value(data=3.0)
@@ -667,11 +667,11 @@ b = Value(data=3.0)
 print(f"{a} / {b} => {(a/b)}")
 ```
 
-```
+```py
 >>> Value(data=6.0, grad=0.0) / Value(data=3.0, grad=0.0) => Value(data=2.0, grad=0.0)
 ```
 
-```
+```py
 # Divide a with b
 c = a / b
 
@@ -685,7 +685,7 @@ print(f"a => {a}")
 print(f"b => {b}")
 ```
 
-```
+```py
 >>> c => Value(data=2.0, grad=11.0)
 >>> a => Value(data=6.0, grad=3.6666666666666665)
 >>> b => Value(data=3.0, grad=0.0)
@@ -699,7 +699,7 @@ print(f"b => {b}")
 
 在本节中，我们介绍非线性。ReLU 是**不是**一个原函数；我们需要为它构建函数和`_backward`函数。
 
-```
+```py
 def relu(self):
     """
     The ReLU activation function.
@@ -726,7 +726,7 @@ def relu(self):
 Value.relu = relu
 ```
 
-```
+```py
 # Build a
 a = Value(data=6.0)
 
@@ -735,12 +735,12 @@ print(f"ReLU ({a}) => {(a.relu())}")
 print(f"ReLU (-{a}) => {((-a).relu())}")
 ```
 
-```
+```py
 >>> ReLU (Value(data=6.0, grad=0.0)) => Value(data=6.0, grad=0.0)
 >>> ReLU (-Value(data=6.0, grad=0.0)) => Value(data=0, grad=0.0)
 ```
 
-```
+```py
 # Build a and b
 a = Value(3.0)
 b = Value(-3.0)
@@ -760,7 +760,7 @@ relu_b._backward()
 print(f"b => {b}")
 ```
 
-```
+```py
 >>> a => Value(data=3.0, grad=11.0)
 >>> b => Value(data=-3.0, grad=0.0)
 ```
@@ -779,7 +779,7 @@ print(f"b => {b}")
 *   将最后一个节点的`grad`设置为 1.0
 *   遍历拓扑排序的图，并应用每个原语的`_backward`方法。
 
-```
+```py
 def backward(self):
     """
     The backward pass of the backward propagation algorithm.
@@ -830,7 +830,7 @@ def backward(self):
 Value.backward = backward
 ```
 
-```
+```py
 # Now create an expression that uses a lot of
 # primitive operations
 a = Value(2.0)
@@ -854,7 +854,7 @@ for element in [a, b, c, d, e, f, g]:
     print(element)
 ```
 
-```
+```py
 >>> BEFORE backward
 >>> Value(data=2.0, grad=0.0)
 >>> Value(data=3.0, grad=0.0)
@@ -880,7 +880,7 @@ for element in [a, b, c, d, e, f, g]:
 
 这会创建一个中间节点，阻止渐变正确地流向子节点(记住，`_backward`不应该通过整个 DAG 反向传播渐变)。
 
-```
+```py
 # Solve the problem with subtraction
 a = Value(data=6.0)
 b = Value(data=3.0)
@@ -892,13 +892,13 @@ print(f"a => {a}")
 print(f"b => {b}")
 ```
 
-```
+```py
 c => Value(data=3.0, grad=1.0)
 a => Value(data=6.0, grad=1.0)
 b => Value(data=3.0, grad=-1.0)
 ```
 
-```
+```py
 # Solve the problem with division
 a = Value(data=6.0)
 b = Value(data=3.0)
@@ -910,7 +910,7 @@ print(f"a => {a}")
 print(f"b => {b}")
 ```
 
-```
+```py
 >>> c => Value(data=2.0, grad=1.0)
 >>> a => Value(data=6.0, grad=0.3333333333333333)
 >>> b => Value(data=3.0, grad=-0.6666666666666666)
@@ -933,7 +933,7 @@ print(f"b => {b}")
 *   `zero_grad`:用于将参数的所有梯度归零。
 *   `parameters`:该功能被构建为可被覆盖。这将最终为我们获得**神经元**、**层**和 **mlp** 的参数。
 
-```
+```py
 class Module(object):
     """
     The parent class for all neural network modules.
@@ -956,7 +956,7 @@ class Module(object):
 
 这是我们神经网络的单元，整个结构就是建立在这个单元上的。它有一个权重列表和一个偏好。神经元的功能如图**图 13** 所示。
 
-```
+```py
 class Neuron(Module):
     """
     A single neuron.
@@ -998,7 +998,7 @@ class Neuron(Module):
         return f"Neuron {self.name}(Number={len(self.weights)}, Non-Linearity={'ReLU' if self.is_nonlinear else 'None'})"
 ```
 
-```
+```py
 x = [2.0, 3.0]
 neuron = Neuron(number_inputs=2, name=1)
 print(neuron)
@@ -1006,7 +1006,7 @@ out = neuron(x)
 print(f"Output => {out}")
 ```
 
-```
+```py
 >>> Neuron 1(Number=2, Non-Linearity=ReLU)
 >>> Output => Value(data=2.3063230206881347, grad=0.0)
 ```
@@ -1017,7 +1017,7 @@ print(f"Output => {out}")
 
 一层由许多`Neuron`构成。
 
-```
+```py
 class Layer(Module):
     """
     A layer of neurons.
@@ -1050,7 +1050,7 @@ class Layer(Module):
         return f"Layer {self.name} \n{layer_str}\n"
 ```
 
-```
+```py
 x = [2.0, 3.0]
 layer = Layer(number_inputs=2, number_outputs=3, name=1)
 print(layer)
@@ -1058,7 +1058,7 @@ out = layer(x)
 print(f"Output => {out}")
 ```
 
-```
+```py
 >>> Layer 1 
 >>>     - Neuron 0(Number=2, Non-Linearity=ReLU)
 >>>     - Neuron 1(Number=2, Non-Linearity=ReLU)
@@ -1067,7 +1067,7 @@ print(f"Output => {out}")
 >>> Output => [Value(data=0, grad=0.0), Value(data=1.1705131190055296, grad=0.0), Value(data=3.0608608028649344, grad=0.0)]
 ```
 
-```
+```py
 x = [2.0, 3.0]
 layer = Layer(number_inputs=2, number_outputs=1, name=1)
 print(layer)
@@ -1075,7 +1075,7 @@ out = layer(x)
 print(f"Output => {out}")
 ```
 
-```
+```py
 >>> Layer 1 
 >>>     - Neuron 0(Number=2, Non-Linearity=ReLU)
 
@@ -1088,7 +1088,7 @@ print(f"Output => {out}")
 
 多层感知器(`MLP`)是由许多`Layer`组成的。
 
-```
+```py
 class MLP(Module):
     """
     The Multi-Layer Perceptron (MLP) class.
@@ -1131,7 +1131,7 @@ class MLP(Module):
         return f"MLP of \n{mlp_str}"
 ```
 
-```
+```py
 x = [2.0, 3.0]
 mlp = MLP(number_inputs=2, list_number_outputs=[3, 3, 1])
 print(mlp)
@@ -1139,7 +1139,7 @@ out = mlp(x)
 print(f"Output => {out}")
 ```
 
-```
+```py
 >>> MLP of 
 >>>   - Layer 0 
 >>>     - Neuron 0(Number=2, Non-Linearity=ReLU)
@@ -1163,7 +1163,7 @@ print(f"Output => {out}")
 
 在本节中，我们将创建一个小型数据集，并尝试了解如何使用我们的 MLP 对数据集进行建模。
 
-```
+```py
 # Build a dataset
 xs = [
     [0.5, 0.5, 0.70],
@@ -1173,7 +1173,7 @@ xs = [
 ys = [0.0, 1.0, 0.0]
 ```
 
-```
+```py
 # Build an MLP
 mlp = MLP(number_inputs=3, list_number_outputs=[3, 3, 1])
 ```
@@ -1184,7 +1184,7 @@ mlp = MLP(number_inputs=3, list_number_outputs=[3, 3, 1])
 *   我们有事实和预测。该函数计算两者之间的损耗。我们将优化我们的`mlp`，使损失为零。
 *   `update_mlp`:在这个函数中，我们用梯度信息更新`mlp`的参数(权重和偏差)。
 
-```
+```py
 def forward(mlp: "MLP", xs: List[List[float]]) -> List["Value"]:
     # Get the predictions upon forwarding the input data through
     # the mlp
@@ -1192,7 +1192,7 @@ def forward(mlp: "MLP", xs: List[List[float]]) -> List["Value"]:
     return ypred
 ```
 
-```
+```py
 def compute_loss(ys: List[int], ypred: List["Value"]) -> "Value":
     # Obtain the L2 distance of the prediction and ground truths
     loss = sum(
@@ -1201,7 +1201,7 @@ def compute_loss(ys: List[int], ypred: List["Value"]) -> "Value":
     return loss
 ```
 
-```
+```py
 def update_mlp(mlp: "MLP"):
     # Iterate over all the layers of the MLP
     for layer in mlp.layers:
@@ -1217,7 +1217,7 @@ def update_mlp(mlp: "MLP"):
             neuron.bias.data -= (1e-2 * neuron.bias.grad)
 ```
 
-```
+```py
 # Define the epochs for which we want to run the training process.
 epochs = 50
 
@@ -1241,7 +1241,7 @@ for idx in range(epochs):
     print(f"Epoch {idx}: Loss {loss.data: 0.2f}")
 ```
 
-```
+```py
 Epoch 0: Loss  0.95
 Epoch 1: Loss  0.89
 Epoch 2: Loss  0.81
@@ -1256,7 +1256,7 @@ Epoch 48: Loss  0.23
 Epoch 49: Loss  0.22
 ```
 
-```
+```py
 # Plot the loss
 plt.plot(loss_list)
 plt.grid()
@@ -1267,7 +1267,7 @@ plt.show()
 
 损失图如**图 14** 所示。
 
-```
+```py
 # Inference
 pred = mlp(xs[0])
 ygt = ys[0]
@@ -1276,7 +1276,7 @@ print(f"Prediction => {pred.data: 0.2f}")
 print(f"Ground Truth => {ygt: 0.2f}")
 ```
 
-```
+```py
 >>> Prediction =>  0.14
 >>> Ground Truth =>  0.00
 ```
@@ -1301,7 +1301,7 @@ print(f"Ground Truth => {ygt: 0.2f}")
 
 A. R. Gosthipaty 和 R. Raha。“自动微分第二部分:使用微图实现”， *PyImageSearch* ，P. Chugh，S. Huot，K. Kidriavsteva，A. Thanki，2022，[https://pyimg.co/ra6ow](https://pyimg.co/ra6ow)
 
-```
+```py
 @incollection{ARG-RR_2022_autodiff2,
   author = {Aritra Roy Gosthipaty and Ritwik Raha},
   title = {Automatic Differentiation Part 2: Implementation Using Micrograd},

@@ -102,7 +102,7 @@
 
 然后，您将看到以下目录结构:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── pyimagesearch
@@ -133,7 +133,7 @@ $ tree . --dirsfirst
 
 但是这一切都是从实现模型架构本身开始的。在`pyimagesearch`模块中打开`mlp.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Flatten
@@ -146,7 +146,7 @@ from tensorflow.keras.optimizers import Adam
 
 现在让我们定义我们的`get_mlp_model`函数，它负责接受我们想要测试的超参数，构建神经网络，并返回它:
 
-```
+```py
 def get_mlp_model(hiddenLayerOne=784, hiddenLayerTwo=256,
 	dropout=0.2, learnRate=0.01):
 	# initialize a sequential model and add layer to flatten the
@@ -166,7 +166,7 @@ def get_mlp_model(hiddenLayerOne=784, hiddenLayerTwo=256,
 
 让我们继续在下面的代码块中构建架构:
 
-```
+```py
 	# add two stacks of FC => RELU => DROPOUT
 	model.add(Dense(hiddenLayerOne, activation="relu",
 		input_shape=(784,)))
@@ -203,7 +203,7 @@ def get_mlp_model(hiddenLayerOne=784, hiddenLayerTwo=256,
 
 打开项目目录结构中的`train.py`文件，让我们开始工作:
 
-```
+```py
 # import tensorflow and fix the random seed for better reproducibility
 import tensorflow as tf
 tf.random.set_seed(42)
@@ -225,7 +225,7 @@ from tensorflow.keras.datasets import mnist
 
 从那里，我们加载 MNIST 数据集:
 
-```
+```py
 # load the MNIST dataset
 print("[INFO] downloading MNIST...")
 ((trainData, trainLabels), (testData, testLabels)) = mnist.load_data()
@@ -241,7 +241,7 @@ testData = testData.astype("float32") / 255.0
 
 现在让我们训练我们的基本前馈网络:
 
-```
+```py
 # initialize our model with the default hyperparameter values
 print("[INFO] initializing model...")
 model = get_mlp_model()
@@ -275,7 +275,7 @@ print("accuracy: {:.2f}%".format(accuracy * 100))
 
 从那里，打开一个 shell 并执行以下命令:
 
-```
+```py
 $ time python train.py
 Epoch 1/20
 7500/7500 [==============================] - 18s 2ms/step - loss: 0.8881 - accuracy: 0.7778 - val_loss: 0.4856 - val_accuracy: 0.9023
@@ -309,7 +309,7 @@ sys	2m25.608s
 
 我们从进口开始:
 
-```
+```py
 # import tensorflow and fix the random seed for better reproducibility
 import tensorflow as tf
 tf.random.set_seed(42)
@@ -332,7 +332,7 @@ from tensorflow.keras.datasets import mnist
 
 然后，我们可以继续从磁盘加载 MNIST 数据集并对其进行预处理:
 
-```
+```py
 # load the MNIST dataset
 print("[INFO] downloading MNIST...")
 ((trainData, trainLabels), (testData, testLabels)) = mnist.load_data()
@@ -344,7 +344,7 @@ testData = testData.astype("float32") / 255.0
 
 现在是时候构建我们的`KerasClassifier`对象了，这样我们可以用`get_mlp_model`构建一个模型，然后用`RandomizedSearchCV`调整超参数:
 
-```
+```py
 # wrap our model into a scikit-learn compatible classifier
 print("[INFO] initializing model...")
 model = KerasClassifier(build_fn=get_mlp_model, verbose=0)
@@ -387,7 +387,7 @@ grid = dict(
 
  **定义好`grid`超参数后，我们可以开始超参数调整过程:
 
-```
+```py
 # initialize a random search with a 3-fold cross-validation and then
 # start the hyperparameter search process
 print("[INFO] performing random search...")
@@ -410,7 +410,7 @@ print("[INFO] best score is {:.2f} using {}".format(bestScore,
 
 最后一步是获取`bestModel`并对其进行评估:
 
-```
+```py
 # extract the best model, make predictions on our data, and show a
 # classification report
 print("[INFO] evaluating the best model...")
@@ -431,7 +431,7 @@ print("accuracy: {:.2f}%".format(accuracy * 100))
 
 从那里，您可以执行以下命令:
 
-```
+```py
 $ time python random_search_mlp.py
 [INFO] downloading MNIST...
 [INFO] initializing model...

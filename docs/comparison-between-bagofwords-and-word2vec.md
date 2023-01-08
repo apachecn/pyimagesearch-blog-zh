@@ -63,7 +63,7 @@ Word2Vec 采用不同的方法来利用向量。在这里，我们考虑每个�
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -96,7 +96,7 @@ $ pip install opencv-contrib-python
 
 从这里，看一下目录结构:
 
-```
+```py
 !tree .
 .
 ├── datadf.csv
@@ -142,7 +142,7 @@ $ pip install opencv-contrib-python
 
 在`pyimagesearch`目录中，`config.py`脚本包含了我们项目的整个配置管道。
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -177,7 +177,7 @@ W2V_TSNE = os.path.join(OUTPUT_PATH, "TSNE_W2V")
 
 我们将继续讨论数据处理脚本`data_processing.py`。这个脚本包含了帮助我们管理数据的函数。
 
-```
+```py
 # import the necessary packages
 import re
 import tensorflow as tf
@@ -208,7 +208,7 @@ def preprocess(sentDf, stopWords, key="sentence"):
 
 我们用第 15 行**上的新句子(没有停用词)更新数据帧。**
 
-```
+```py
 def prepare_tokenizerBOW(df, topWords, sentKey="sentence", outputKey="sentiment"):
 	# prepare separate tokenizers for the data and labels
 	tokenizerData = tf.keras.preprocessing.text.Tokenizer(num_words=topWords,
@@ -235,7 +235,7 @@ def prepare_tokenizerBOW(df, topWords, sentKey="sentence", outputKey="sentiment"
 
 这个函数专门用于单词包体系结构，其中我们将为数据及其标签使用两个独立的标记化器。相应地，我们创建了两个记号赋予器，并把它们放在各自的文本中(**第 22-31 行**)。
 
-```
+```py
 def prepare_tokenizerW2V(df, topWords, sentKey="sentence", outputKey="sentiment"):
 	# prepare tokenizer for the Word2Vec data
 	tokenizerWord2Vec = tf.keras.preprocessing.text.Tokenizer(num_words=topWords,
@@ -265,7 +265,7 @@ def prepare_tokenizerW2V(df, topWords, sentKey="sentence", outputKey="sentiment"
 
 接下来，我们将定义单词袋模型的架构。让我们进入`BOWmodel.py`脚本。
 
-```
+```py
 #import the necessary packages
 import tensorflow as tf
 from tensorflow.keras.layers import Dense
@@ -304,7 +304,7 @@ def build_shallow_net(inputDims, numClasses):
 
 为了训练单词包架构，我们将进入`train_BOW.py`脚本。
 
-```
+```py
 # USAGE
 # python -W ignore train_BOW.py
 
@@ -338,7 +338,7 @@ processedDf = preprocess(dataDf, stopWords)
 
 这个脚本的第一步是创建`stopWords`列表。为此，我们将借助`nltk`包(**线 22 和 23** )。接下来，我们使用`csv`格式的输入文件初始化数据帧(**第 26 行**)。随后使用`preprocess`功能从输入句子中删除停用词(**第 29 行**)。
 
-```
+```py
 # store the number of classification heads
 numClasses = len(processedDf["sentiment"].unique())
 
@@ -379,7 +379,7 @@ history = BOWModel.fit(encodedDocs[:, 1:],
 
 在第**行第 47-49** 行，我们调整标签的索引用于训练。单词袋模型被初始化(**第 52-54 行**，并且该模型相应地在输入数据上被训练(**第 57-60 行**)。由于记号赋予器创建添加了未知单词记号作为它的第一个条目，我们已经考虑了除了从第 1 个索引开始而不是从第 0 个索引开始的所有单词。
 
-```
+```py
 # create output directory if it doesn't already exist
 if not os.path.exists(config.OUTPUT_PATH):
 	os.makedirs(config.OUTPUT_PATH)
@@ -428,7 +428,7 @@ plt.savefig(config.BOW_TSNE)
 
 现在我们将继续讨论`Word2Vec`模型。为了训练它，我们必须执行`train_Word2Vec.py`。
 
-```
+```py
 # USAGE
 # python -W ignore train_Word2Vec.py
 
@@ -462,7 +462,7 @@ processedDf = preprocess(dataDf, stopWords)
 
 正如单词包脚本中所做的，该脚本的第一步是创建`stopWords`列表。为此，我们将借助`nltk`包(**线 22 和 23** )。接下来，我们使用`csv`格式的输入文件初始化数据帧(**第 26 行**)。随后使用`preprocess`功能从输入句子中删除停用词(**第 29 行**)。
 
-```
+```py
 # store the number of classification heads
 numClasses = len(processedDf["sentiment"].unique())
 
@@ -492,7 +492,7 @@ lossList = list()
 
 对于 Word2Vec 架构，我们然后在第 42-47 行初始化上下文和中心单词矩阵。随后是`Adam`优化器和一个空的丢失列表初始化(**行 50 和 51** )。
 
-```
+```py
 # loop over the training epochs
 print("[INFO] Starting Word2Vec training...")
 for iter in tqdm(range(config.ITERATIONS)):
@@ -553,7 +553,7 @@ for iter in tqdm(range(config.ITERATIONS)):
 
 最后，一旦一个时期结束，`lossPerEpoch`变量被添加到损失列表中(**第 98 行**)。
 
-```
+```py
 # create output directory if it doesn't already exist
 if not os.path.exists(config.OUTPUT_PATH):
 	os.makedirs(config.OUTPUT_PATH)
@@ -598,7 +598,7 @@ plt.savefig(config.W2V_TSNE)
 
 让我们看看这两种体系结构的培训进展如何。
 
-```
+```py
 [nltk_data] Downloading package stopwords to /root/nltk_data...
 [nltk_data]   Package stopwords is already up-to-date!
 Epoch 1/30
@@ -624,7 +624,7 @@ Epoch 30/30
 
 损失下降得相当快。对于给定的数据集，我们的模型完美地过度拟合了它。
 
-```
+```py
 [nltk_data] Downloading package stopwords to /root/nltk_data...
 [nltk_data]   Package stopwords is already up-to-date!
 [INFO] Starting Word2Vec training...
@@ -671,7 +671,7 @@ Word2Vec 的损失，虽然比单词袋更困难(因为有更多的标签)，但
 
 **Chakraborty，D.** “词袋和 Word2Vec 之间的比较”， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva，R. Raha 和 A. Thanki 编辑。，2022 年，【https://pyimg.co/txq23 
 
-```
+```py
 @incollection{Chakraborty_2022_Comparison,
   author = {Devjyoti Chakraborty},
   title = {Comparison Between {BagofWords} and {Word2Vec}},

@@ -156,7 +156,7 @@ Darrah 等人也慷慨地允许我们将这些图像用于我们自己的教育(
 
 然后导航到项目目录，使用`tree`命令检查内容:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── dataset
@@ -196,7 +196,7 @@ $ tree --dirsfirst --filelimit 10
 
 打开`simplenet.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D
@@ -212,7 +212,7 @@ from tensorflow.keras import backend as K
 
 我们也进口 keras。后端将允许我们在定义`SimpleNet`类和`build`方法的下一个块中动态处理不同的输入形状:
 
-```
+```py
 class SimpleNet:
 	@staticmethod
 	def build(width, height, depth, classes, reg):
@@ -238,7 +238,7 @@ class SimpleNet:
 
 让我们开始向我们的网络添加层:
 
-```
+```py
 		# first set of CONV => RELU => POOL layers
 		model.add(Conv2D(64, (11, 11), input_shape=inputShape,
 			padding="same", kernel_regularizer=reg))
@@ -273,7 +273,7 @@ class SimpleNet:
 
 我们的最后一个`FC => RELU`块以 softmax 分类器结束:
 
-```
+```py
 		# first and only set of FC => RELU layers
 		model.add(Flatten())
 		model.add(Dense(512, kernel_regularizer=reg))
@@ -300,7 +300,7 @@ class SimpleNet:
 
 打开`train_network.py`并插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -341,7 +341,7 @@ import os
 
 让我们利用其中的一个。我们将使用`argparse`来解析我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -363,7 +363,7 @@ args = vars(ap.parse_args())
 
 现在我们已经解析了我们的命令行参数，让我们加载+预处理我们的图像数据并解析标签:
 
-```
+```py
 # grab the list of images in our dataset directory, then initialize
 # the list of data (i.e., images) and class images
 print("[INFO] loading images...")
@@ -393,7 +393,7 @@ for imagePath in imagePaths:
 
 循环的第一步是提取第 41 行上的类标签。让我们看看这在 Python Shell 中是如何工作的:
 
-```
+```py
 $ python
 >>> from imutils import paths
 >>> import os
@@ -417,7 +417,7 @@ $ python
 
 接下来，我们将重塑数据并对标签进行编码:
 
-```
+```py
 # convert the data into a NumPy array, then preprocess it by scaling
 # all pixel intensities to the range [0, 1]
 data = np.array(data, dtype="float") / 255.0
@@ -450,7 +450,7 @@ labels = to_categorical(labels, 2)
 
 让我们编译我们的模型:
 
-```
+```py
 # initialize the optimizer and model
 print("[INFO] compiling model...")
 opt = Adam(lr=1e-4, decay=1e-4 / args["epochs"])
@@ -471,7 +471,7 @@ model.compile(loss="binary_crossentropy", optimizer=opt,
 
 接下来是培训，然后是评估:
 
-```
+```py
 # train the network
 print("[INFO] training network for {} epochs...".format(
 	args["epochs"]))
@@ -491,7 +491,7 @@ print(classification_report(testY.argmax(axis=1),
 
 接下来，我们使用 matplotlib 生成一个训练图:
 
-```
+```py
 # plot the training loss and accuracy
 N = args["epochs"]
 plt.style.use("ggplot")
@@ -515,7 +515,7 @@ plt.savefig(args["plot"])
 
 最后，让我们可视化输出:
 
-```
+```py
 # randomly select a few testing images and then initialize the output
 # set of images
 idxs = np.arange(0, testY.shape[0])
@@ -571,7 +571,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端，导航到您下载并提取代码的位置，然后执行以下命令:
 
-```
+```py
 $ python train_network.py --dataset dataset
 Using TensorFlow backend.
 [INFO] loading images...

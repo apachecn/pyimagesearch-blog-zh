@@ -47,7 +47,7 @@
 
 例如，考虑以下可能的超参数列表:
 
-```
+```py
 parameters = [
 	{"kernel":
 		["linear"],
@@ -76,7 +76,7 @@ parameters = [
 
 幸运的是，这两个包都是 pip 可安装的:
 
-```
+```py
 $ pip install opencv-contrib-python
 $ pip install scikit-learn
 $ pip install scikit-image
@@ -128,7 +128,7 @@ $ pip install imutils
 
 从那里，解压缩档案文件，您应该会找到下面的项目目录:
 
-```
+```py
 $ tree . --dirsfirst --filelimit 10
 .
 ├── pyimagesearch
@@ -161,7 +161,7 @@ $ tree . --dirsfirst --filelimit 10
 
 说完了，打开你的项目目录结构的`pyimagesearch`模块中的`localbinarypatterns.py`文件，我们就可以开始了:
 
-```
+```py
 # import the necessary packages
 from skimage import feature
 import numpy as np
@@ -177,7 +177,7 @@ class LocalBinaryPatterns:
 
 接下来，我们定义我们的`describe`函数:
 
-```
+```py
 	def describe(self, image, eps=1e-7):
 		# compute the Local Binary Pattern representation
 		# of the image, and then use the LBP representation
@@ -210,7 +210,7 @@ class LocalBinaryPatterns:
 
 打开项目目录中的`train_model.py`文件，我们将开始:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.localbinarypatterns import LocalBinaryPatterns
 from sklearn.model_selection import GridSearchCV
@@ -234,7 +234,7 @@ import os
 
 接下来，我们有命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -246,7 +246,7 @@ args = vars(ap.parse_args())
 
 让我们获取图像路径并初始化 LBP 描述符:
 
-```
+```py
 # grab the image paths in the input dataset directory
 imagePaths = list(paths.list_images(args["dataset"]))
 
@@ -267,7 +267,7 @@ labels = []
 
 现在让我们填充`data`和`labels`:
 
-```
+```py
 # loop over the dataset of images
 for imagePath in imagePaths:
 	# load the image, convert it to grayscale, and quantify it
@@ -302,7 +302,7 @@ print("[INFO] constructing training/testing split...")
 
 在运行网格搜索之前，我们首先需要定义要搜索的超参数:
 
-```
+```py
 # construct the set of hyperparameters to tune
 parameters = [
 	{"kernel":
@@ -329,7 +329,7 @@ parameters = [
 
 现在让我们在超参数空间上运行网格搜索:
 
-```
+```py
 # tune the hyperparameters via a cross-validated grid search
 print("[INFO] tuning hyperparameters via grid search")
 grid = GridSearchCV(estimator=SVC(), param_grid=parameters, n_jobs=-1)
@@ -362,7 +362,7 @@ print("[INFO] grid search best parameters: {}".format(
 
 **从那里，我们对最佳模型进行全面评估:**
 
-```
+```py
 # grab the best model and evaluate it
 print("[INFO] evaluating...")
 model = grid.best_estimator_
@@ -384,7 +384,7 @@ print(classification_report(testY, predictions))
 
 从那里，您可以执行`train_model.py`脚本:
 
-```
+```py
 $ time python train_model.py --dataset texture_dataset
 [INFO] extracting features...
 [INFO] constructing training/testing split...

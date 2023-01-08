@@ -67,7 +67,7 @@
 
 幸运的是，两者都是 pip 可安装的:
 
-```
+```py
 $ pip install opencv-contrib-python
 $ pip install azure-cognitiveservices-vision-computervision
 ```
@@ -101,7 +101,7 @@ $ pip install azure-cognitiveservices-vision-computervision
 
 我们的 MCS OCR API 的目录结构类似于前面教程中的 Amazon Rekognition API 项目的结构:
 
-```
+```py
 |-- config
 |   |-- __init__.py
 │   |-- microsoft_cognitive_services.py
@@ -123,7 +123,7 @@ $ pip install azure-cognitiveservices-vision-computervision
 
 确保您已按照 [**获取您的 Microsoft 认知服务密钥**](#h3_obtaining) 获取您的 MCS API 订阅密钥。从那里，打开`microsoft_cognitive_services.py`文件并更新您的`SUBSCRPTION_KEY`:
 
-```
+```py
 # define our Microsoft Cognitive Services subscription key
 SUBSCRIPTION_KEY = "YOUR_SUBSCRIPTION_KEY"
 
@@ -143,7 +143,7 @@ ENDPOINT_URL = "YOUR_ENDPOINT_URL"
 
 打开项目目录结构中的`microsoft_ocr.py`脚本，插入以下代码:
 
-```
+```py
 # import the necessary packages
 from config import microsoft_cognitive_services as config
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
@@ -159,7 +159,7 @@ import cv2
 
 接下来，让我们定义`draw_ocr_results`，这是一个帮助函数，用于用 OCR 处理的文本注释我们的输出图像:
 
-```
+```py
 def draw_ocr_results(image, text, pts, color=(0, 255, 0)):
 	# unpack the points list
 	topLeft = pts[0]
@@ -194,7 +194,7 @@ def draw_ocr_results(image, text, pts, color=(0, 255, 0)):
 
 我们现在可以解析我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -211,7 +211,7 @@ image = cv2.imread(args["image"])
 
 现在让我们构造一个对 MCS API 的请求:
 
-```
+```py
 # initialize the client with endpoint URL and subscription key
 client = ComputerVisionClient(config.ENDPOINT_URL,
 	CognitiveServicesCredentials(config.SUBSCRIPTION_KEY))
@@ -230,7 +230,7 @@ operationID = operationLocation.split("/")[-1]
 
 我们现在必须等待并轮询来自 MCS API 的结果:
 
-```
+```py
 # continue to poll the Cognitive Services API for a response until
 # we get a response
 while True:
@@ -272,7 +272,7 @@ else:
 
 假设我们的 OCR 请求成功，现在让我们处理结果:
 
-```
+```py
 # make a copy of the input image for final output
 final = image.copy()
 
@@ -313,7 +313,7 @@ cv2.waitKey(0)
 
 现在让我们让 MCS OCR API 为我们工作。打开终端并执行以下命令:
 
-```
+```py
 $ python microsoft_ocr.py --image images/aircraft.png
 [INFO] making request to Microsoft Cognitive Services API...
 WARNING!
@@ -325,7 +325,7 @@ BLAST CAN CAUSE PHYSICAL INJURY
 
 让我们尝试一个不同的图像，这个图像包含几个具有挑战性的文本:
 
-```
+```py
 $ python microsoft_ocr.py --image images/challenging.png
 [INFO] making request to Microsoft Cognitive Services API...
 
@@ -349,7 +349,7 @@ STOP
 
 MCS OCR API 可以逐行 OCR 每个符号(**图 4** )。我们还可以为每条线计算旋转的文本边界框/多边形。
 
-```
+```py
 $ python microsoft_ocr.py --image images/park.png
 [INFO] making request to Microsoft Cognitive Services API...
 
@@ -362,7 +362,7 @@ BUT FOOT PRINTS
 
 最后一个例子包含交通标志:
 
-```
+```py
 $ python microsoft_ocr.py --image images/street_signs.png
 [INFO] making request to Microsoft Cognitive Services API...
 
@@ -387,7 +387,7 @@ ALL WAY
 
 ****罗斯布鲁克，A.**** “微软认知服务的文本检测和 OCR”， *PyImageSearch* ，D. Chakraborty，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva，R. Raha 和 A. Thanki 编辑。，2022 年，[https://pyimg.co/0r4mt](https://pyimg.co/0r4mt)
 
-```
+```py
 @incollection{Rosebrock_2022_OCR_MCS,
   author = {Adrian Rosebrock},
   title = {Text Detection and {OCR} with {M}icrosoft Cognitive Services},

@@ -77,7 +77,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -106,7 +106,7 @@ $ pip install opencv-contrib-python
 
 首先使用本教程的 ***【下载】*** 部分访问源代码和示例图像:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── grand_canyon.png
@@ -125,7 +125,7 @@ $ tree . --dirsfirst
 
 打开项目文件夹中的`image_arithmetic.py`文件，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -144,7 +144,7 @@ args = vars(ap.parse_args())
 
 还记得我上面怎么提到 OpenCV 和 NumPy 算术的区别吗？现在，我们将进一步探索它，并提供一个具体的示例来确保我们完全理解它:
 
-```
+```py
 # images are NumPy arrays stored as unsigned 8-bit integers (unit8)
 # with values in the range [0, 255]; when using the add/subtract
 # functions in OpenCV, these values will be *clipped* to this range,
@@ -166,7 +166,7 @@ print("min of 0: {}".format(subtracted))
 
 当我们执行这段代码时，我们可以在下面清单的第一行看到结果:
 
-```
+```py
 max of 255: [[255]]
 ```
 
@@ -176,7 +176,7 @@ max of 255: [[255]]
 
 按照我们的算术规则，减法应该返回值`-50`；然而 OpenCV 又一次为我们进行了裁剪。我们发现该值被削波为值`0`。我们下面的输出证实了这一点:
 
-```
+```py
 min of 0: [[0]]
 ```
 
@@ -186,7 +186,7 @@ min of 0: [[0]]
 
 现在让我们来探索一下:
 
-```
+```py
 # using NumPy arithmetic operations (rather than OpenCV operations)
 # will result in a modulo ("wrap around") instead of being clipped
 # to the range [0, 255]
@@ -202,7 +202,7 @@ print("wrap around: {}".format(subtracted))
 
 一旦达到`255`的值，NumPy 返回到零，然后再次开始向上计数，直到达到`100`步。您可以通过下面的第一行输出看到这一点:
 
-```
+```py
 wrap around: [44]
 ```
 
@@ -210,7 +210,7 @@ wrap around: [44]
 
 当使用`cv2.subtract`方法时，这个减法将被裁剪以返回一个值`0`；但是，我们知道 NumPy 执行的是模运算，而不是裁剪。相反，一旦在减法过程中达到了`0`，取模运算就会绕回并从`255`开始倒数——我们可以从下面的输出中验证这一点:
 
-```
+```py
 wrap around: [206]
 ```
 
@@ -221,7 +221,7 @@ wrap around: [206]
 
 既然我们已经探讨了 OpenCV 和 NumPy 中图像算法的注意事项，让我们在实际图像上执行算法并查看结果:
 
-```
+```py
 # load the original input image and display it to our screen
 image = cv2.imread(args["image"])
 cv2.imshow("Original", image)
@@ -231,7 +231,7 @@ cv2.imshow("Original", image)
 
 随着我们的图像从磁盘加载，让我们继续增加亮度:
 
-```
+```py
 # increasing the pixel intensities in our input image by 100 is
 # accomplished by constructing a NumPy array that has the *same
 # dimensions* as our input image, filling it with ones, multiplying
@@ -253,7 +253,7 @@ cv2.imshow("Lighter", added)
 
 现在让我们使用`cv2.subtract`来加深我们的图像:
 
-```
+```py
 # similarly, we can subtract 50 from all pixels in our image and make it
 # darker
 M = np.ones(image.shape, dtype="uint8") * 50
@@ -274,7 +274,7 @@ cv2.waitKey(0)
 
 从那里，打开一个 shell 并执行以下命令:
 
-```
+```py
 $ python image_arithmetic.py 
 max of 255: [[255]]
 min of 0: [[0]]

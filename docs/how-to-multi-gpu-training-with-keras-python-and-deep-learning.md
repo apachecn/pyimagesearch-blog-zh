@@ -78,7 +78,7 @@ MiniGoogLenet 中的 Inception 模块是由 [Szegedy 等人](https://arxiv.org/a
 
 打开一个新文件，将其命名为`train.py`，并插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 # (uncomment the lines below if you are using a headless server)
 # import matplotlib
@@ -108,7 +108,7 @@ import argparse
 
 现在让我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-o", "--output", required=True,
@@ -130,7 +130,7 @@ G = args["gpus"]
 
 从那里，我们初始化两个用于配置我们的训练过程的重要变量，然后定义一个基于多项式的学习率时间表函数:
 
-```
+```py
 # definine the total number of epochs to train for along with the
 # initial learning rate
 NUM_EPOCHS = 70
@@ -158,7 +158,7 @@ def poly_decay(epoch):
 
 接下来，我们将加载我们的训练+测试数据，并将图像数据从整数转换为浮点:
 
-```
+```py
 # load the training and testing data, converting the images from
 # integers to floats
 print("[INFO] loading CIFAR-10 data...")
@@ -169,7 +169,7 @@ testX = testX.astype("float")
 
 从那里，我们将[均值减法](http://ufldl.stanford.edu/wiki/index.php/Data_Preprocessing#Per-example_mean_subtraction)应用于数据:
 
-```
+```py
 # apply mean subtraction to the data
 mean = np.mean(trainX, axis=0)
 trainX -= mean
@@ -181,7 +181,7 @@ testX -= mean
 
 然后，我们执行“一键编码”，这是一种我在书中详细讨论的编码方案:
 
-```
+```py
 # convert the labels from integers to vectors
 lb = LabelBinarizer()
 trainY = lb.fit_transform(trainY)
@@ -192,7 +192,7 @@ testY = lb.transform(testY)
 
 接下来，我们创建一个数据增强器和一组回调函数:
 
-```
+```py
 # construct the image generator for data augmentation and construct
 # the set of callbacks
 aug = ImageDataGenerator(width_shift_range=0.1,
@@ -212,7 +212,7 @@ callbacks = [LearningRateScheduler(poly_decay)]
 
 接下来让我们检查 GPU 变量:
 
-```
+```py
 # check to see if we are compiling using just a single GPU
 if G <= 1:
 	print("[INFO] training with 1 GPU...")
@@ -223,7 +223,7 @@ if G <= 1:
 
 如果 GPU 计数小于或等于 1，我们通过`.build`函数(**第 73-76 行**)初始化`model`，否则我们将在训练期间并行化模型:
 
-```
+```py
 # otherwise, we are compiling using multiple GPUs
 else:
 	# disable eager execution
@@ -258,7 +258,7 @@ else:
 
 然后，我们可以编译我们的模型，并开始培训过程:
 
-```
+```py
 # initialize the optimizer and model
 print("[INFO] compiling model...")
 opt = SGD(lr=INIT_LR, momentum=0.9)
@@ -293,7 +293,7 @@ H = model.fit(
 
 现在，培训和测试已经完成，让我们绘制损失/准确性，以便我们可以可视化培训过程:
 
-```
+```py
 # grab the history object dictionary
 H = H.history
 
@@ -329,7 +329,7 @@ plt.close()
 
 让我们在一个*单 GPU* 上训练以获得基线:
 
-```
+```py
 $ python train.py --output single_gpu.png
 [INFO] loading CIFAR-10 data...
 [INFO] training with 1 GPU...
@@ -364,7 +364,7 @@ sys     11m52.143s
 
 然后，我执行以下命令，用我的四个 Titan X GPU***:***
 
-```
+```py
 $ python train.py --output multi_gpu.png --gpus 4
 [INFO] loading CIFAR-10 data...
 [INFO] training with 4 GPUs...

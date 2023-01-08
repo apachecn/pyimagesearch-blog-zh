@@ -39,7 +39,7 @@
 
 还记得`helpers.py`文件吗？重新打开并插入`sliding_window`功能:
 
-```
+```py
 # import the necessary packages
 import imutils
 
@@ -86,7 +86,7 @@ def sliding_window(image, stepSize, windowSize):
 
 为了看到滑动窗口的运行，我们必须为它写一个驱动脚本。创建一个新文件，命名为`sliding_window.py`，我们将完成这个例子:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.helpers import pyramid
 from pyimagesearch.helpers import sliding_window
@@ -113,7 +113,7 @@ image = cv2.imread(args["image"])
 
 现在，让我们继续结合我们的图像金字塔和滑动窗口:
 
-```
+```py
 # loop over the image pyramid
 for resized in pyramid(image, scale=1.5):
 	# loop over the sliding window for each layer of the pyramid
@@ -147,7 +147,7 @@ for resized in pyramid(image, scale=1.5):
 
 要查看我们的图像金字塔和滑动窗口的运行情况，请打开一个终端并执行以下命令:
 
-```
+```py
 $ python sliding_window.py --image images/adrian_florida.jpg
 
 ```
@@ -162,7 +162,7 @@ $ python sliding_window.py --image images/adrian_florida.jpg
 
 这是另一个不同图像的例子:
 
-```
+```py
 $ python sliding_window.py --image images/stick_of_truth.jpg.jpg
 
 ```

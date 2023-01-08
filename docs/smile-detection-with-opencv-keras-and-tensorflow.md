@@ -18,7 +18,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -55,7 +55,7 @@ $ pip install opencv-contrib-python
 
 构建我们的微笑检测器的第一步是在微笑数据集上训练 CNN，以区分微笑和不微笑的脸。为了完成这个任务，让我们创建一个名为`train_model.py`的新文件。从那里，插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
@@ -76,7 +76,7 @@ import os
 
 接下来，让我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -97,7 +97,7 @@ labels = []
 
 我们现在准备从磁盘加载 SMILES 数据集，并将其存储在内存中:
 
-```
+```py
 # loop over the input images
 for imagePath in sorted(list(paths.list_images(args["dataset"]))):
 	# load the image, pre-process it, and store it in the data list
@@ -126,7 +126,7 @@ for imagePath in sorted(list(paths.list_images(args["dataset"]))):
 
 因此，给定图像的路径:
 
-```
+```py
 SMILEs/positives/positives7/10007.jpg
 ```
 
@@ -134,7 +134,7 @@ SMILEs/positives/positives7/10007.jpg
 
 既然我们的`data`和`labels`已经构造好了，我们可以将原始像素强度缩放到范围`[0, 1]`，然后对`labels`应用一键编码:
 
-```
+```py
 # scale the raw pixel intensities to the range [0, 1]
 data = np.array(data, dtype="float") / 255.0
 labels = np.array(labels)
@@ -146,7 +146,7 @@ labels = to_categorical(le.transform(labels), 2)
 
 我们的下一个代码块通过计算类权重来处理我们的数据不平衡问题:
 
-```
+```py
 # calculate the total number of training images in each class and
 # initialize a dictionary to store the class weights
 classTotals = labels.sum(axis=0)
@@ -163,7 +163,7 @@ for i in range(0, len(classTotals)):
 
 既然我们已经计算了我们的类权重，我们可以继续将我们的数据划分为训练和测试部分，将 80%的数据用于训练，20%用于测试:
 
-```
+```py
 # partition the data into training and testing splits using 80% of
 # the data for training and the remaining 20% for testing
 (trainX, testX, trainY, testY) = train_test_split(data,
@@ -172,7 +172,7 @@ for i in range(0, len(classTotals)):
 
 最后，我们准备培训 LeNet:
 
-```
+```py
 # initialize the model
 print("[INFO] compiling model...")
 model = LeNet.build(width=28, height=28, depth=1, classes=2)
@@ -197,7 +197,7 @@ H = model.fit(trainX, trainY, validation_data=(testX, testY),
 
 一旦我们的网络经过训练，我们就可以对其进行评估，并将权重序列化到磁盘中:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(testX, batch_size=64)
@@ -211,7 +211,7 @@ model.save(args["model"])
 
 我们还将为我们的网络构建一条学习曲线，以便我们可以直观地了解性能:
 
-```
+```py
 # plot the training + testing loss and accuracy
 plt.style.use("ggplot")
 plt.figure()
@@ -228,7 +228,7 @@ plt.show()
 
 要训练我们的微笑检测器，请执行以下命令:
 
-```
+```py
 $ python train_model.py --dataset ../datasets/SMILEsmileD \
 	--model output/lenet.hdf5
 [INFO] compiling model...
@@ -265,7 +265,7 @@ avg / total       0.93      0.94      0.93      2633
 
 既然我们已经训练了我们的模型，下一步是构建 Python 脚本来访问我们的网络摄像头/视频文件，并对每一帧应用微笑检测。为了完成这一步，打开一个新文件，将其命名为`detect_smile.py`，然后我们开始工作。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.models import load_model
@@ -279,7 +279,7 @@ import cv2
 
 `detect_smile.py`脚本需要两个命令行参数，后跟第三个可选参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-c", "--cascade", required=True,
@@ -299,7 +299,7 @@ Haar 级联算法能够检测图像中的对象，而不管它们的位置和比
 
 在检测微笑之前，我们首先需要执行一些初始化:
 
-```
+```py
 # load the face detector cascade and smile detector CNN
 detector = cv2.CascadeClassifier(args["cascade"])
 model = load_model(args["model"])
@@ -317,7 +317,7 @@ else:
 
 现在，我们已经到达了应用程序的主要处理管道:
 
-```
+```py
 # keep looping
 while True:
 	# grab the current frame
@@ -341,7 +341,7 @@ while True:
 
 `.detectMultiScale`方法处理检测边界框( *x，y*)—`frame`中面部的坐标:
 
-```
+```py
 	# detect faces in the input frame, then clone the frame so that
 	# we can draw on it
 	rects = detector.detectMultiScale(gray, scaleFactor=1.1, 
@@ -357,7 +357,7 @@ while True:
 
 我们循环下面的每组边界框:
 
-```
+```py
 	# loop over the face bounding boxes
 	for (fX, fY, fW, fH) in rects:
 		# extract the ROI of the face from the grayscale image,
@@ -374,7 +374,7 @@ while True:
 
 `roi`经过预处理后，可以通过 LeNet 进行分类:
 
-```
+```py
 		# determine the probabilities of both "smiling" and "not
 		# smiling", then set the label accordingly
 		(notSmiling, smiling) = model.predict(roi)[0]
@@ -385,7 +385,7 @@ while True:
 
 一旦我们有了`label`，我们就可以画出它，以及相应的边框:
 
-```
+```py
 		# display the label and bounding box rectangle on the output
 		# frame
 		cv2.putText(frameClone, label, (fX, fY - 10),
@@ -396,7 +396,7 @@ while True:
 
 我们最后的代码块处理在屏幕上显示输出帧:
 
-```
+```py
 	# show our detected faces along with smiling/not smiling labels
 	cv2.imshow("Face", frameClone)
 
@@ -413,14 +413,14 @@ cv2.destroyAllWindows()
 
 要使用您的网络摄像头运行`detect_smile.py`，请执行以下命令:
 
-```
+```py
 $ python detect_smile.py --cascade haarcascade_frontalface_default.xml \
 	--model output/lenet.hdf5 
 ```
 
 如果您想使用视频文件，您可以更新您的命令以使用`--video`开关:
 
-```
+```py
 $ python detect_smile.py --cascade haarcascade_frontalface_default.xml \
 	--model output/lenet.hdf5 --video path/to/your/video.mov
 ```

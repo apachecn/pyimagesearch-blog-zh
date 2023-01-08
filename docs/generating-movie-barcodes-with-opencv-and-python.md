@@ -28,7 +28,7 @@
 
 在我们深入本教程之前，让我们先来讨论一下我们的项目/目录结构，具体如下:
 
-```
+```py
 |--- output/
 |--- videos/
 |--- count_frames.py
@@ -49,7 +49,7 @@
 
 除了 OpenCV，你还需要 [scikit-image](http://scikit-image.org/) 和 [imutils](https://github.com/jrosebr1/imutils) 。您可以使用`pip`安装两者:
 
-```
+```py
 $ pip install --upgrade scikit-image imutils
 
 ```
@@ -62,7 +62,7 @@ $ pip install --upgrade scikit-image imutils
 
 也就是说，你可以在下面找到`count_frames.py`的源代码:
 
-```
+```py
 # import the necessary packages
 from imutils.video import count_frames
 import argparse

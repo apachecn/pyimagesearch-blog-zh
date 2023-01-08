@@ -38,7 +38,7 @@
 
 本教程中的大多数(事实上，*所有*)步骤都将通过使用您的终端来完成。首先，打开你的命令行并更新`apt-get`包管理器来刷新和升级预安装的包/库:
 
-```
+```py
 $ sudo apt-get update
 $ sudo apt-get upgrade
 
@@ -46,7 +46,7 @@ $ sudo apt-get upgrade
 
 接下来，让我们安装一些开发人员工具:
 
-```
+```py
 $ sudo apt-get install build-essential cmake pkg-config
 
 ```
@@ -55,14 +55,14 @@ $ sudo apt-get install build-essential cmake pkg-config
 
 OpenCV 是一个图像处理和计算机视觉库。因此，OpenCV 需要能够从磁盘加载 JPEG、PNG、TIFF 等各种图像文件格式。为了从磁盘加载这些图像，OpenCV 实际上调用了其他图像 I/O 库，这些库实际上方便了加载和解码过程。我们在下面安装了必要的组件:
 
-```
+```py
 $ sudo apt-get install libjpeg8-dev libtiff5-dev libjasper-dev libpng12-dev
 
 ```
 
 好了，现在我们有了从磁盘加载图像的库，但是视频呢？使用以下命令安装用于处理视频流和访问摄像机帧的软件包:
 
-```
+```py
 $ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
 $ sudo apt-get install libxvidcore-dev libx264-dev
 
@@ -72,21 +72,21 @@ OpenCV 自带了一套非常有限的 GUI 工具。这些 GUI 工具允许我们
 
 在内部，处理 OpenCV GUI 操作的模块的名称是`highgui`。`highgui`模块依赖于 GTK 库，您应该使用以下命令安装它:
 
-```
+```py
 $ sudo apt-get install libgtk-3-dev
 
 ```
 
 接下来，我们安装用于优化 OpenCV 内部各种功能的库，例如矩阵运算:
 
-```
+```py
 $ sudo apt-get install libatlas-base-dev gfortran
 
 ```
 
 我们将通过安装 Python 2.7 和 Python 3.5 的 Python 开发头文件和库来结束步骤#1(这样您就可以同时拥有这两个版本):
 
-```
+```py
 $ sudo apt-get install python2.7-dev python3.5-dev
 
 ```
@@ -97,7 +97,7 @@ $ sudo apt-get install python2.7-dev python3.5-dev
 
 在本文发表时，OpenCV 的最新版本是`3.1.0`，我们下载了它的`.zip`，并使用以下命令将其解压缩:
 
-```
+```py
 $ cd ~
 $ wget -O opencv.zip https://github.com/Itseez/opencv/archive/3.1.0.zip
 $ unzip opencv.zip
@@ -108,7 +108,7 @@ $ unzip opencv.zip
 
 然而，我们还没有下载完源代码——我们还需要 [opencv_contrib](https://github.com/opencv/opencv_contrib) 库:
 
-```
+```py
 $ wget -O opencv_contrib.zip https://github.com/Itseez/opencv_contrib/archive/3.1.0.zip
 $ unzip opencv_contrib.zip
 
@@ -129,7 +129,7 @@ $ unzip opencv_contrib.zip
 
 我们现在准备开始为构建配置我们的 Python 开发环境。第一步是安装`pip`，一个 Python 包管理器:
 
-```
+```py
 $ cd ~
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python get-pip.py
@@ -146,7 +146,7 @@ $ sudo python get-pip.py
 
 让我再次重申，在 Python 社区中，利用某种虚拟环境是**的标准做法，所以我建议你也这样做:**
 
-```
+```py
 $ sudo pip install virtualenv virtualenvwrapper
 $ sudo rm -rf ~/get-pip.py ~/.cache/pip
 
@@ -154,7 +154,7 @@ $ sudo rm -rf ~/get-pip.py ~/.cache/pip
 
 一旦我们安装了`virtualenv`和`virtualenvwrapper`，我们需要更新我们的`~/.bashrc`文件，在文件的*底部*包含以下行:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 source /usr/local/bin/virtualenvwrapper.sh
@@ -167,7 +167,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 一个更简单的解决方案是使用`cat`命令，完全避免编辑器:
 
-```
+```py
 $ echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.bashrc
 $ echo "export WORKON_HOME=$HOME/.virtualenvs" >> ~/.bashrc
 $ echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
@@ -176,7 +176,7 @@ $ echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
 
 编辑完我们的`~/.bashrc`文件后，我们需要重新加载修改:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
@@ -193,14 +193,14 @@ $ source ~/.bashrc
 
 如果您决定使用 Python 2.7，请使用以下命令创建 Python 2.7 虚拟环境:
 
-```
+```py
 $ mkvirtualenv cv -p python2
 
 ```
 
 否则，使用此命令创建 Python 3 虚拟环境:
 
-```
+```py
 $ mkvirtualenv cv -p python3
 
 ```
@@ -213,7 +213,7 @@ $ mkvirtualenv cv -p python3
 
 如果你重启了你的 Ubuntu 系统；注销并重新登录；或者打开一个新的终端，您需要使用`workon`命令来重新访问您的`cv`虚拟环境。下面是一个`workon`命令的例子:
 
-```
+```py
 $ workon cv
 
 ```
@@ -236,7 +236,7 @@ $ workon cv
 
 在我们编译 OpenCV 之前的最后一步是安装 [NumPy](http://www.numpy.org/) ，一个用于数值处理的 Python 包。要安装 NumPy，请确保您处于`cv`虚拟环境中(否则 NumPy 将被安装到 Python 的*系统*版本中，而不是`cv`环境中)。从那里执行以下命令:
 
-```
+```py
 $ pip install numpy
 
 ```
@@ -247,14 +247,14 @@ $ pip install numpy
 
 但是在我们这样做之前，通过检查您的提示(您应该看到它前面的`(cv)`文本)，再次检查您是否在`cv`虚拟环境中，如果不是，使用`workon`命令:
 
-```
+```py
 $ workon cv
 
 ```
 
 确保您在`cv`虚拟环境中之后，我们可以使用 CMake 设置和配置我们的构建:
 
-```
+```py
 $ cd ~/opencv-3.1.0/
 $ mkdir build
 $ cd build
@@ -307,7 +307,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 假设 CMake 命令没有任何错误地退出，现在可以编译 OpenCV:
 
-```
+```py
 $ make -j4
 
 ```
@@ -316,7 +316,7 @@ $ make -j4
 
 使用多个进程可以让 OpenCV 编译得更快；然而，有时会遇到竞争条件，编译就会失败。如果没有*以前编译 OpenCV 的大量*经验，你真的无法判断这是不是真的，如果你真的遇到了错误，我的第一个建议是运行`make clean`刷新编译，然后只使用一个内核进行编译:
 
-```
+```py
 $ make clean
 $ make
 
@@ -330,7 +330,7 @@ $ make
 
 最后一步是在 Ubuntu 16.04 上实际*安装* OpenCV 3:
 
-```
+```py
 $ sudo make install
 $ sudo ldconfig
 
@@ -344,7 +344,7 @@ $ sudo ldconfig
 
 运行`sudo make install`之后，您的 OpenCV 3 的 Python 2.7 绑定现在应该位于`/usr/local/lib/python-2.7/site-packages/`中。您可以使用`ls`命令来验证这一点:
 
-```
+```py
 $ ls -l /usr/local/lib/python2.7/site-packages/
 total 1972
 -rw-r--r-- 1 root staff 2016608 Sep 15 09:11 cv2.so
@@ -355,7 +355,7 @@ total 1972
 
 最后一步是 [sym-link](https://en.wikipedia.org/wiki/Symbolic_link) 我们的 OpenCV `cv2.so`绑定到我们的`cv`Python 2.7 虚拟环境中:
 
-```
+```py
 $ cd ~/.virtualenvs/cv/lib/python2.7/site-packages/
 $ ln -s /usr/local/lib/python2.7/site-packages/cv2.so cv2.so
 
@@ -365,7 +365,7 @@ $ ln -s /usr/local/lib/python2.7/site-packages/cv2.so cv2.so
 
 运行`sudo make install`后，您的 OpenCV + Python 3 绑定应该位于`/usr/local/lib/python3.5/site-packages/`中。同样，您可以使用`ls`命令来验证这一点:
 
-```
+```py
 $ ls -l /usr/local/lib/python3.5/site-packages/
 total 1972
 -rw-r--r-- 1 root staff 2016816 Sep 13 17:24 cv2.cpython-35m-x86_64-linux-gnu.so
@@ -376,7 +376,7 @@ total 1972
 
 同样，我不知道为什么会发生这种情况，但这是一个非常简单的解决方法。我们需要做的就是重命名文件:
 
-```
+```py
 $ cd /usr/local/lib/python3.5/site-packages/
 $ sudo mv cv2.cpython-35m-x86_64-linux-gnu.so cv2.so
 
@@ -384,7 +384,7 @@ $ sudo mv cv2.cpython-35m-x86_64-linux-gnu.so cv2.so
 
 将`cv2.cpython-35m-x86_64-linux-gnu.so`重命名为简单的`cv2.so`后，我们可以将 OpenCV 绑定符号链接到 Python 3.5 的`cv`虚拟环境中:
 
-```
+```py
 $ cd ~/.virtualenvs/cv/lib/python3.5/site-packages/
 $ ln -s /usr/local/lib/python3.5/site-packages/cv2.so cv2.so
 
@@ -402,7 +402,7 @@ $ ln -s /usr/local/lib/python3.5/site-packages/cv2.so cv2.so
 
 我在下面演示了如何执行这些步骤:
 
-```
+```py
 $ cd ~
 $ workon cv
 $ python
@@ -428,7 +428,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 一旦安装了 OpenCV，您就可以删除`opencv-3.1.0`和`opencv_contrib-3.1.0`目录(以及它们相关的`.zip`文件):
 
-```
+```py
 $ cd ~
 $ rm -rf opencv-3.1.0 opencv_contrib-3.1.0 opencv.zip opencv_contrib.zip
 

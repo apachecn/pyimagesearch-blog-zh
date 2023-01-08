@@ -54,7 +54,7 @@ TensorFlow 为我们提供了**两种方法**，我们可以使用这两种方�
 
 这个方法最好通过代码来解释:
 
-```
+```py
 trainAug = Sequential([
 	preprocessing.Rescaling(scale=1.0 / 255),
 	preprocessing.RandomFlip("horizontal_and_vertical"),
@@ -73,7 +73,7 @@ trainAug = Sequential([
 
 然后，我们可以通过以下方式将数据扩充纳入我们的`tf.data`管道:
 
-```
+```py
 trainDS = tf.data.Dataset.from_tensor_slices((trainX, trainLabels))
 trainDS = (
 	trainDS
@@ -102,7 +102,7 @@ trainDS = (
 
 要使用 TensorFlow 操作应用数据扩充，我们首先需要定义一个接受输入图像的函数，然后应用我们的操作:
 
-```
+```py
 def augment_using_ops(images, labels):
 	images = tf.image.random_flip_left_right(images)
 	images = tf.image.random_flip_up_down(images)
@@ -121,7 +121,7 @@ def augment_using_ops(images, labels):
 
 我们可以将这个数据扩充例程合并到我们的`tf.data`管道中，如下所示:
 
-```
+```py
 ds = tf.data.Dataset.from_tensor_slices(imagePaths)
 ds = (ds
 	.shuffle(len(imagePaths), seed=42)
@@ -189,7 +189,7 @@ TensorFlow 的`preprocessing`模块实现了您日常所需的绝大多数数据
 
 首先访问本教程的 ***“下载”*** 部分，检索我们的 Python 脚本和示例数据集:
 
-```
+```py
 $ tree . --dirsfirst --filelimit 10
 .
 ├── dataset
@@ -237,7 +237,7 @@ $ tree . --dirsfirst --filelimit 10
 
 打开项目目录结构中的`load_and_visualize.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.layers.experimental import preprocessing
 from tensorflow.data import AUTOTUNE
@@ -254,7 +254,7 @@ import os
 
 接下来，我们有我们的`load_images`函数:
 
-```
+```py
 def load_images(imagePath):
 	# read the image from disk, decode it, convert the data type to
 	# floating point, and resize it
@@ -280,7 +280,7 @@ def load_images(imagePath):
 
 我们的下一个函数`augment_using_layers`，负责获取`Sequential`(使用`preprocessing`操作构建)的一个实例，然后应用它生成一组增强图像:
 
-```
+```py
 def augment_using_layers(images, labels, aug):
 	# pass a batch of images through our data augmentation pipeline
 	# and return the augmented images
@@ -302,7 +302,7 @@ def augment_using_layers(images, labels, aug):
 
 我们的最后一个函数`augment_using_ops`，使用`tf.image`模块中内置的 TensorFlow 函数应用数据扩充:
 
-```
+```py
 def augment_using_ops(images, labels):
 	# randomly flip the images horizontally, randomly flip the images
 	# vertically, and rotate the images by 90 degrees in the counter
@@ -333,7 +333,7 @@ def augment_using_ops(images, labels):
 
 让我们从解析命令行参数开始:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -353,7 +353,7 @@ args = vars(ap.parse_args())
 
 现在让我们为数据扩充准备我们的`tf.data`管道:
 
-```
+```py
 # set the batch size
 BATCH_SIZE = 8
 
@@ -382,7 +382,7 @@ ds = (ds
 
 接下来，让我们检查是否应该应用数据扩充:
 
-```
+```py
 # check if we should apply data augmentation
 if args["augment"]:
 	# check if we will be using layers to perform data augmentation
@@ -432,7 +432,7 @@ Keras 的`ImageDataGenerator`功能的用户在这里会有宾至如归的感觉
 
 现在，让我们最终确定我们的`tf.data`渠道:
 
-```
+```py
 # complete our data input pipeline
 ds = (ds
 	.prefetch(AUTOTUNE)
@@ -448,7 +448,7 @@ batch = next(iter(ds))
 
 这里的最后一步是可视化我们的输出:
 
-```
+```py
 # initialize a figure
 print("[INFO] visualizing the first batch of the dataset...")
 title = "With data augmentation {}".format(
@@ -491,7 +491,7 @@ plt.show()
 
 从那里，执行以下命令:
 
-```
+```py
 $ python load_and_visualize.py --dataset dataset/animals
 [INFO] loading the dataset...
 [INFO] visualizing the first batch of the dataset...
@@ -501,7 +501,7 @@ $ python load_and_visualize.py --dataset dataset/animals
 
 **现在，让我们使用“层”方法**(即`preprocessing`模块和`Sequential`类)来应用数据扩充。
 
-```
+```py
 $ python load_and_visualize.py --dataset dataset/animals \
 	--aug 1 --type layers
 [INFO] loading the dataset...
@@ -512,7 +512,7 @@ $ python load_and_visualize.py --dataset dataset/animals \
 
 **最后，让我们检查用于数据扩充的 TensorFlow 操作方法的输出**(即手动定义管道函数) **:**
 
-```
+```py
 $ python load_and_visualize.py --dataset dataset/animals \
 	--aug 1 --type ops
 [INFO] loading the dataset...
@@ -529,7 +529,7 @@ $ python load_and_visualize.py --dataset dataset/animals \
 
 在您的项目目录结构中打开`train_with_sequential.py`脚本，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.layers import Conv2D
 from tensorflow.keras.layers import Activation
@@ -552,7 +552,7 @@ import argparse
 
 接下来，我们有命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--plot", type=str, default="training_plot.png",
@@ -564,7 +564,7 @@ args = vars(ap.parse_args())
 
 接下来，我们继续设置超参数并加载 CIFAR-10 数据集。
 
-```
+```py
 # define training hyperparameters
 BATCH_SIZE = 64
 EPOCHS = 50
@@ -576,7 +576,7 @@ print("[INFO] loading training data...")
 
 现在我们已经准备好建立我们的数据扩充程序:
 
-```
+```py
 # initialize our sequential data augmentation pipeline for training
 trainAug = Sequential([
 	preprocessing.Rescaling(scale=1.0 / 255),
@@ -607,7 +607,7 @@ testAug = Sequential([
 
 处理好预处理和增强初始化后，让我们为我们的训练和测试数据构建一个`tf.data`管道:
 
-```
+```py
 # prepare the training data pipeline (notice how the augmentation
 # layers have been mapped)
 trainDS = tf.data.Dataset.from_tensor_slices((trainX, trainLabels))
@@ -641,7 +641,7 @@ testDS = (
 
 现在让我们实现一个基本的 CNN:
 
-```
+```py
 # initialize the model as a super basic CNN with only a single CONV
 # and RELU layer, followed by a FC and soft-max classifier
 print("[INFO] initializing model...")
@@ -658,7 +658,7 @@ model.add(Activation("softmax"))
 
 然后我们继续使用我们的`tf.data`管道训练我们的 CNN:
 
-```
+```py
 # compile the model
 print("[INFO] compiling model...")
 model.compile(loss="sparse_categorical_crossentropy",
@@ -682,7 +682,7 @@ print("[INFO] accuracy: {:.2f}%".format(accuracy * 100))
 
 我们的最终任务是生成一个训练历史图:
 
-```
+```py
 # plot the training loss and accuracy
 plt.style.use("ggplot")
 plt.figure()
@@ -707,7 +707,7 @@ plt.savefig(args["plot"])
 
 从那里，您可以执行培训脚本:
 
-```
+```py
 $ python train_with_sequential_aug.py
 [INFO] loading training data...
 [INFO] initializing model...

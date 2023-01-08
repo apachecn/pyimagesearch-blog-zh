@@ -66,7 +66,7 @@
 
 所有这些软件包都是 pip 可安装的:
 
-```
+```py
 $ pip install tensorflow # use "tensorflow-gpu" if you have a GPU
 $ pip install opencv-contrib-python
 $ pip install scikit-learn
@@ -103,7 +103,7 @@ $ pip install keras-tuner
 
 从那里，您将看到以下目录结构:
 
-```
+```py
 $ tree . --dirsfirst --filelimit 10
 .
 ├── output
@@ -143,7 +143,7 @@ $ tree . --dirsfirst --filelimit 10
 
 打开项目目录结构中的`config.py`文件，插入以下代码:
 
-```
+```py
 # define the path to our output directory
 OUTPUT_PATH = "output"
 
@@ -158,7 +158,7 @@ NUM_CLASSES = 10
 
 下面我们定义我们的训练变量:
 
-```
+```py
 # define the total number of epochs to train, batch size, and the
 # early stopping patience
 EPOCHS = 50
@@ -180,7 +180,7 @@ EARLY_STOPPING_PATIENCE = 5
 
 现在打开这个文件，让我们来看看:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -215,7 +215,7 @@ def save_plot(H, path):
 
 打开`pyimagesearch`模块内的`model.py`文件，让我们看看发生了什么:
 
-```
+```py
 # import the necessary packages
 from . import config
 from tensorflow.keras.models import Sequential
@@ -235,7 +235,7 @@ from tensorflow.keras.optimizers import Adam
 
 现在让我们构建我们的模型:
 
-```
+```py
 def build_model(hp):
 	# initialize the model along with the input shape and channel
 	# dimension
@@ -268,7 +268,7 @@ def build_model(hp):
 
 同样，我们对第二个 CONV => RELU = >池层集做同样的事情:
 
-```
+```py
 	# second CONV => RELU => POOL layer set
 	model.add(Conv2D(
 		hp.Int("conv_2", min_value=64, max_value=128, step=32),
@@ -282,7 +282,7 @@ def build_model(hp):
 
 我们将对完全连接的节点数量做类似的事情:
 
-```
+```py
 	# first (and only) set of FC => RELU layers
 	model.add(Flatten())
 	model.add(Dense(hp.Int("dense_units", min_value=256,
@@ -300,7 +300,7 @@ def build_model(hp):
 
 我们的下一个代码块使用了`hp.Choice`函数:
 
-```
+```py
 	# initialize the learning rate choices and optimizer
 	lr = hp.Choice("learning_rate",
 		values=[1e-1, 1e-2, 1e-3])
@@ -324,7 +324,7 @@ def build_model(hp):
 
 打开项目目录结构中的`train.py`文件，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from pyimagesearch.model import build_model
@@ -351,7 +351,7 @@ import cv2
 
 接下来是我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-t", "--tuner", required=True, type=str,
@@ -369,7 +369,7 @@ args = vars(ap.parse_args())
 
 在那里，从磁盘加载时尚 MNIST 数据集:
 
-```
+```py
 # load the Fashion MNIST dataset
 print("[INFO] loading Fashion MNIST...")
 ((trainX, trainY), (testX, testY)) = fashion_mnist.load_data()
@@ -397,7 +397,7 @@ labelNames = ["top", "trouser", "pullover", "dress", "coat",
 
 正如在这个脚本的导入部分提到的，我们将使用`EarlyStopping`来缩短运行不佳的超参数试验:
 
-```
+```py
 # initialize an early stopping callback to prevent the model from
 # overfitting/spending too much time training with minimal gains
 es = EarlyStopping(
@@ -412,7 +412,7 @@ es = EarlyStopping(
 
 下一步是初始化我们的超参数优化器:
 
-```
+```py
 # check if we will be using the hyperband tuner
 if args["tuner"] == "hyperband":
 	# instantiate the hyperband tuner object
@@ -431,7 +431,7 @@ if args["tuner"] == "hyperband":
 
 如果我们提供一个值`random`作为我们的`--tuner`命令行参数，那么我们将使用一个基本的随机超参数搜索:
 
-```
+```py
 # check if we will be using the random search tuner
 elif args["tuner"] == "random":
 	# instantiate the random search tuner object
@@ -447,7 +447,7 @@ elif args["tuner"] == "random":
 
 否则，我们将假设我们正在使用[贝叶斯优化](https://en.wikipedia.org/wiki/Hyperparameter_optimization#Bayesian_optimization):
 
-```
+```py
 # otherwise, we will be using the bayesian optimization tuner
 else:
 	# instantiate the bayesian optimization tuner object
@@ -463,7 +463,7 @@ else:
 
 一旦我们的超参数调谐器被实例化，我们可以搜索空间:
 
-```
+```py
 # perform the hyperparameter search
 print("[INFO] performing hyperparameter search...")
 tuner.search(
@@ -497,7 +497,7 @@ print("[INFO] optimal learning rate: {:.4f}".format(
 
 一旦我们有了最好的超参数，我们需要基于它们实例化一个新的`model`:
 
-```
+```py
 # build the best model and train it
 print("[INFO] training the best model...")
 model = tuner.hypermodel.build(bestHP)
@@ -531,7 +531,7 @@ utils.save_plot(H, args["plot"])
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ time python train.py --tuner hyperband --plot output/hyperband_plot.png
 [INFO] loading Fashion MNIST...
 [INFO] instantiating a hyperband tuner object..."
@@ -567,7 +567,7 @@ Keras 调谐器包通过运行几个“试验”来工作在这里，我们可�
 
 现在让我们跳到最后的审判:
 
-```
+```py
 Search: Running Trial #76
 
 Hyperparameter    |Value             |Best Value So Far   
@@ -593,7 +593,7 @@ Total elapsed time: 06h 34m 56s
 
 Hyperband 完成运行后，我们会看到终端上显示的最佳参数:
 
-```
+```py
 [INFO] optimal number of filters in conv_1 layer: 64
 [INFO] optimal number of filters in conv_2 layer: 128
 [INFO] optimal number of units in dense layer: 512
@@ -608,7 +608,7 @@ AlexNet、VGGNet、ResNet 和几乎所有其他流行的 CNN 架构都有这种�
 
 现在让我们用这些超参数来训练 CNN:
 
-```
+```py
 [INFO] training the best model...
 Epoch 1/50
 1875/1875 [==============================] - 69s 36ms/step - loss: 0.5655 - accuracy: 0.8089 - val_loss: 0.3147 - val_accuracy: 0.8873
@@ -652,7 +652,7 @@ sys     51m46.604s
 
 在那里，您可以执行以下命令:
 
-```
+```py
 $ time python train.py --tuner random --plot output/random_plot.png
 [INFO] loading Fashion MNIST...
 [INFO] instantiating a random search tuner object...
@@ -685,7 +685,7 @@ Total elapsed time: 00h 12m 08s
 
 到第 10 次试验时，我们的准确率有所提高，但没有使用 Hyperband 时的进步大:
 
-```
+```py
 Search: Running Trial #10
 
 Hyperparameter    |Value             |Best Value So Far   
@@ -714,7 +714,7 @@ Total elapsed time: 01h 47m 02s
 
 下面我们可以看到随机搜索找到的最佳超参数:
 
-```
+```py
 [INFO] optimal number of filters in conv_1 layer: 96
 [INFO] optimal number of filters in conv_2 layer: 64
 [INFO] optimal number of units in dense layer: 512
@@ -727,7 +727,7 @@ Total elapsed time: 01h 47m 02s
 
 经过培训后，我们达到了与 Hyperband 大致相同的验证准确度:
 
-```
+```py
 [INFO] training the best model...
 Epoch 1/50
 1875/1875 [==============================] - 64s 34ms/step - loss: 0.5682 - accuracy: 0.8157 - val_loss: 0.3227 - val_accuracy: 0.8861
@@ -767,7 +767,7 @@ sys     15m10.248s
 
 从这里开始，让我们尝试一下贝叶斯超参数优化:
 
-```
+```py
 $ time python train.py --tuner bayesian --plot output/bayesian_plot.png
 [INFO] loading Fashion MNIST...
 [INFO] instantiating a bayesian optimization tuner object...
@@ -800,7 +800,7 @@ Total elapsed time: 00h 11m 45s
 
 在最后的试验中，我们略微提高了精确度:
 
-```
+```py
 Search: Running Trial #10
 
 Hyperparameter    |Value             |Best Value So Far   
@@ -828,7 +828,7 @@ Total elapsed time: 01h 47m 01s
 
 通过贝叶斯优化找到的最佳超参数如下:
 
-```
+```py
 [INFO] optimal number of filters in conv_1 layer: 32
 [INFO] optimal number of filters in conv_2 layer: 96
 [INFO] optimal number of units in dense layer: 768
@@ -844,7 +844,7 @@ Total elapsed time: 01h 47m 01s
 
 现在让我们在这些超参数上训练我们的网络:
 
-```
+```py
 [INFO] training the best model...
 Epoch 1/50
 1875/1875 [==============================] - 49s 26ms/step - loss: 0.5764 - accuracy: 0.8164 - val_loss: 0.3823 - val_accuracy: 0.8779

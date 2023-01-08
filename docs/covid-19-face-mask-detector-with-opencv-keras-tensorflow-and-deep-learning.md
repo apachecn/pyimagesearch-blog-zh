@@ -119,7 +119,7 @@
 
 一旦您从本文的 ***【下载】*** 部分获取文件，您将看到以下目录结构:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── dataset
@@ -161,7 +161,7 @@ $ tree --dirsfirst --filelimit 10
 
 打开目录结构中的`train_mask_detector.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications import MobileNetV2
@@ -203,7 +203,7 @@ import os
 
 让我们继续解析一些从终端启动脚本所需的[命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -224,7 +224,7 @@ args = vars(ap.parse_args())
 
 我喜欢在一个地方定义我的深度学习超参数:
 
-```
+```py
 # initialize the initial learning rate, number of epochs to train for,
 # and batch size
 INIT_LR = 1e-4
@@ -232,7 +232,7 @@ EPOCHS = 20
 BS = 32
 ```
 
-```
+```py
 # grab the list of images in our dataset directory, then initialize
 # the list of data (i.e., images) and class images
 print("[INFO] loading images...")
@@ -271,7 +271,7 @@ labels = np.array(labels)
 
 我们的数据准备工作还没有完成。接下来，我们将对我们的`labels`进行编码，对我们的数据集进行分区，并为[数据扩充](https://pyimagesearch.com/2019/07/08/keras-imagedatagenerator-and-data-augmentation/)做准备:
 
-```
+```py
 # perform one-hot encoding on the labels
 lb = LabelBinarizer()
 labels = lb.fit_transform(labels)
@@ -295,7 +295,7 @@ aug = ImageDataGenerator(
 
 **第 67-69 行** one-hot 编码我们的类标签，这意味着我们的数据将采用以下格式:
 
-```
+```py
 $ python  train_mask_detector.py --dataset  dataset 
 [INFO] loading images...
 -> (trainX, testX, trainY, testY) = train_test_split(data, labels,
@@ -310,7 +310,7 @@ array([[1., 0.],
 (Pdb)
 ```
 
-```
+```py
 # load the MobileNetV2 network, ensuring the head FC layer sets are
 # left off
 baseModel = MobileNetV2(weights="imagenet", include_top=False,
@@ -345,7 +345,7 @@ for layer in baseModel.layers:
 
 准备好数据和用于微调的模型架构后，我们现在准备编译和训练我们的面罩检测器网络:
 
-```
+```py
 # compile our model
 print("[INFO] compiling model...")
 opt = Adam(lr=INIT_LR, decay=INIT_LR / EPOCHS)
@@ -364,7 +364,7 @@ H = model.fit(
 
 训练完成后，我们将在测试集上评估结果模型:
 
-```
+```py
 # make predictions on the testing set
 print("[INFO] evaluating network...")
 predIdxs = model.predict(testX, batch_size=BS)
@@ -384,7 +384,7 @@ model.save(args["model"], save_format="h5")
 
 我们的最后一步是绘制精度和损耗曲线:
 
-```
+```py
 # plot the training loss and accuracy
 N = EPOCHS
 plt.style.use("ggplot")
@@ -410,7 +410,7 @@ plt.savefig(args["plot"])
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python train_mask_detector.py --dataset dataset
 [INFO] loading images...
 [INFO] compiling model...
@@ -464,7 +464,7 @@ weighted avg       0.99      0.99      0.99       276
 
 打开目录结构中的`detect_mask_image.py`文件，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from tensorflow.keras.preprocessing.image import img_to_array
@@ -481,7 +481,7 @@ import os
 
 下一步是解析[命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -506,7 +506,7 @@ args = vars(ap.parse_args())
 
 接下来，我们将加载我们的人脸检测器和人脸面具分类器模型:
 
-```
+```py
 # load our serialized face detector model from disk
 print("[INFO] loading face detector model...")
 prototxtPath = os.path.sep.join([args["face"], "deploy.prototxt"])
@@ -521,7 +521,7 @@ model = load_model(args["model"])
 
 现在我们的深度学习模型已经在内存中，我们的下一步是加载和预处理输入图像:
 
-```
+```py
 # load the input image from disk, clone it, and grab the image spatial
 # dimensions
 image = cv2.imread(args["image"])
@@ -546,7 +546,7 @@ detections = net.forward()
 
 一旦我们知道了每张脸的预测位置，我们将确保在提取人脸之前它们满足`--confidence`阈值:
 
-```
+```py
 # loop over the detections
 for i in range(0, detections.shape[2]):
 	# extract the confidence (i.e., probability) associated with
@@ -569,7 +569,7 @@ for i in range(0, detections.shape[2]):
 
 接下来，我们将通过我们的 MaskNet 模型运行面部 ROI:
 
-```
+```py
 		# extract the face ROI, convert it from BGR to RGB channel
 		# ordering, resize it to 224x224, and preprocess it
 		face = image[startY:endY, startX:endX]
@@ -592,7 +592,7 @@ for i in range(0, detections.shape[2]):
 
 从这里，我们将注释和显示结果！
 
-```
+```py
 		# determine the class label and color we'll use to draw
 		# the bounding box and text
 		label = "Mask" if mask > withoutMask else "No Mask"
@@ -620,7 +620,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python detect_mask_image.py --image examples/example_01.png 
 [INFO] loading face detector model...
 [INFO] loading face mask detector model...
@@ -631,7 +631,7 @@ $ python detect_mask_image.py --image examples/example_01.png
 
 让我们尝试另一个图像，这是一个戴着面具的人*而不是*:
 
-```
+```py
 $ python detect_mask_image.py --image examples/example_02.png 
 [INFO] loading face detector model...
 [INFO] loading face mask detector model...
@@ -642,7 +642,7 @@ $ python detect_mask_image.py --image examples/example_02.png
 
 让我们尝试最后一张图片:
 
-```
+```py
 $ python detect_mask_image.py --image examples/example_03.png 
 [INFO] loading face detector model...
 [INFO] loading face mask detector model...
@@ -676,7 +676,7 @@ $ python detect_mask_image.py --image examples/example_03.png
 
 打开目录结构中的`detect_mask_video.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from tensorflow.keras.preprocessing.image import img_to_array
@@ -692,7 +692,7 @@ import os
 
 这个脚本的算法是相同的，但它是以这样一种方式拼凑起来的，以允许处理您的网络摄像头流的每一帧。
 
-```
+```py
 def detect_and_predict_mask(frame, faceNet, maskNet):
 	# grab the dimensions of the frame and then construct a blob
 	# from it
@@ -715,7 +715,7 @@ def detect_and_predict_mask(frame, faceNet, maskNet):
 
 此功能检测人脸，然后将我们的人脸遮罩分类器应用于每个人脸感兴趣区域。这样一个函数合并了我们的代码——如果您愿意，它甚至可以被移动到一个单独的 Python 文件中。
 
-```
+```py
 	# loop over the detections
 	for i in range(0, detections.shape[2]):
 		# extract the confidence (i.e., probability) associated with
@@ -740,7 +740,7 @@ def detect_and_predict_mask(frame, faceNet, maskNet):
 
 接下来，我们将面部 ROI 添加到两个相应的列表中:
 
-```
+```py
 			# extract the face ROI, convert it from BGR to RGB channel
 			# ordering, resize it to 224x224, and preprocess it
 			face = frame[startY:endY, startX:endX]
@@ -755,7 +755,7 @@ def detect_and_predict_mask(frame, faceNet, maskNet):
 			locs.append((startX, startY, endX, endY))
 ```
 
-```
+```py
 	# only make a predictions if at least one face was detected
 	if len(faces) > 0:
 		# for faster inference we'll make batch predictions on *all*
@@ -773,7 +773,7 @@ def detect_and_predict_mask(frame, faceNet, maskNet):
 
 接下来，我们将定义我们的[命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-f", "--face", type=str,
@@ -789,7 +789,7 @@ args = vars(ap.parse_args())
 
 我们的命令行参数包括:
 
-```
+```py
 # load our serialized face detector model from disk
 print("[INFO] loading face detector model...")
 prototxtPath = os.path.sep.join([args["face"], "deploy.prototxt"])
@@ -815,7 +815,7 @@ time.sleep(2.0)
 
 让我们继续循环流中的帧:
 
-```
+```py
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the threaded video stream and resize it
@@ -834,7 +834,7 @@ while True:
 
 让我们后处理(即，注释)新冠肺炎面罩检测结果:
 
-```
+```py
 	# loop over the detected face locations and their corresponding
 	# locations
 	for (box, pred) in zip(locs, preds):
@@ -865,7 +865,7 @@ while True:
 
 最后，我们显示结果并执行清理:
 
-```
+```py
 	# show the output frame
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
@@ -889,7 +889,7 @@ vs.stop()
 
 然后，您可以使用以下命令在实时视频流中启动遮罩检测器:
 
-```
+```py
 $ python detect_mask_video.py
 [INFO] loading face detector model...
 [INFO] loading face mask detector model...

@@ -107,7 +107,7 @@ scikit-learn 最常用的两种超参数方法是**网格搜索**和**随机搜�
 
 幸运的是，这两个包都是 pip 可安装的:
 
-```
+```py
 $ pip install scikit-learn
 $ pip install pandas
 ```
@@ -165,7 +165,7 @@ $ pip install pandas
 
 然后，您将看到以下文件:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── pyimagesearch
@@ -196,7 +196,7 @@ $ tree . --dirsfirst
 
 打开`pyimagesearch`模块中的`config.py`文件，您会发现如下代码:
 
-```
+```py
 # specify the path of our dataset
 CSV_PATH = "abalone_train.csv"
 
@@ -219,7 +219,7 @@ COLS = ["Length", "Diameter", "Height", "Whole weight",
 
 打开项目目录中的`train_svr.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from sklearn.preprocessing import StandardScaler
@@ -238,7 +238,7 @@ import pandas as pd
 
 说到这里，现在让我们从磁盘加载我们的鲍鱼 CSV 文件:
 
-```
+```py
 # load the dataset, separate the features and labels, and perform a
 # training and testing split using 85% of the data for training and
 # 15% for evaluation
@@ -258,7 +258,7 @@ dataY = dataset[dataset.columns[-1]]
 
 加载数据后，我们现在需要对其进行预处理:
 
-```
+```py
 # standardize the feature values by computing the mean, subtracting
 # the mean from the data points, and then dividing by the standard
 # deviation
@@ -273,7 +273,7 @@ testX = scaler.transform(testX)
 
 现在剩下的就是训练 SVR:
 
-```
+```py
 # train the model with *no* hyperparameter tuning
 print("[INFO] training our support vector regression model")
 model = SVR()
@@ -304,7 +304,7 @@ print("R2: {:.2f}".format(model.score(testX, testY)))
 
 然后，您可以执行`train_svr.py`脚本:
 
-```
+```py
 $ time python train_svr.py
 [INFO] loading data...
 [INFO] training our support vector regression model
@@ -328,7 +328,7 @@ sys	0m1.040s
 
 打开项目目录结构中的`train_svr_grid.py`文件，我们将使用 scikit-learn 实现网格搜索:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from sklearn.model_selection import RepeatedKFold
@@ -350,7 +350,7 @@ import pandas as pd
 
 我们现在可以从磁盘加载 CSV 文件并对其进行预处理:
 
-```
+```py
 # load the dataset, separate the features and labels, and perform a
 # training and testing split using 85% of the data for training and
 # 15% for evaluation
@@ -373,7 +373,7 @@ testX = scaler.transform(testX)
 
 接下来，我们可以初始化我们的回归模型和超参数搜索空间:
 
-```
+```py
 # initialize model and define the space of the hyperparameters to
 # perform the grid-search over
 model = SVR()
@@ -395,7 +395,7 @@ grid = dict(kernel=kernel, tol=tolerance, C=C)
 
 说到这里，让我们现在进行网格搜索:
 
-```
+```py
 # initialize a cross-validation fold and perform a grid-search to
 # tune the hyperparameters
 print("[INFO] grid searching over the hyperparameters...")
@@ -431,7 +431,7 @@ print("R2: {:.2f}".format(bestModel.score(testX, testY)))
 
 从那里，您可以执行以下命令:
 
-```
+```py
 $ time python train_svr_grid.py
 [INFO] loading data...
 [INFO] grid searching over the hyperparameters...
@@ -463,7 +463,7 @@ sys	0m37.268s
 
 打开`train_svr_random.py`文件，我们将开始:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from sklearn.model_selection import RandomizedSearchCV
@@ -479,7 +479,7 @@ import pandas as pd
 
 导入工作完成后，我们可以从磁盘加载鲍鱼 CSV 文件，然后使用`StandardScaler`对其进行预处理:
 
-```
+```py
 # load the dataset, separate the features and labels, and perform a
 # training and testing split using 85% of the data for training and
 # 15% for evaluation
@@ -500,7 +500,7 @@ testX = scaler.transform(testX)
 
 接下来，我们初始化我们的 SVR 模型，然后定义超参数的搜索空间:
 
-```
+```py
 # initialize model and define the space of the hyperparameters to
 # perform the randomized-search over
 model = SVR()
@@ -512,7 +512,7 @@ grid = dict(kernel=kernel, tol=tolerance, C=C)
 
 在那里，我们可以使用随机搜索来调整超参数:
 
-```
+```py
 # initialize a cross-validation fold and perform a randomized-search
 # to tune the hyperparameters
 print("[INFO] grid searching over the hyperparameters...")
@@ -542,7 +542,7 @@ print("R2: {:.2f}".format(bestModel.score(testX, testY)))
 
 然后，您可以执行`train_svr_random.py`脚本。
 
-```
+```py
 $ time python train_svr_random.py
 [INFO] loading data...
 [INFO] grid searching over the hyperparameters...

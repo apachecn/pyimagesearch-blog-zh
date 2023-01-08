@@ -58,7 +58,7 @@
 
 我们可以使用 OpenCV 和`cv2.matchTemplate`函数应用模板匹配:
 
-```
+```py
 result = cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED)
 ```
 
@@ -79,7 +79,7 @@ result = cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED)
 
 同样值得注意的是，如果您只想检测输入图像中特定*区域内的对象，您可以提供一个遮罩，如下所示:*
 
-```
+```py
 result = cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED, mask)
 ```
 
@@ -91,7 +91,7 @@ result = cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED, mask)
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -120,7 +120,7 @@ $ pip install opencv-contrib-python
 
 您的目录应该如下所示:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── images
@@ -145,7 +145,7 @@ $ tree . --dirsfirst
 
 打开目录结构中的`single_template_matching.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -168,7 +168,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们准备用于模板匹配的图像和模板:
 
-```
+```py
 # load the input image and template image from disk, then display
 # them on our screen
 print("[INFO] loading images...")
@@ -188,7 +188,7 @@ templateGray = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
 
 接下来，需要做的就是调用`cv2.matchTemplate`:
 
-```
+```py
 # perform template matching
 print("[INFO] performing template matching...")
 result = cv2.matchTemplate(imageGray, templateGray,
@@ -215,7 +215,7 @@ result = cv2.matchTemplate(imageGray, templateGray,
 
 一旦我们有了具有最大归一化相关系数(`maxLoc`)的位置的 *(x，y)* 坐标，我们就可以提取坐标并导出边界框坐标:
 
-```
+```py
 # determine the starting and ending (x, y)-coordinates of the
 # bounding box
 (startX, startY) = maxLoc
@@ -229,7 +229,7 @@ endY = startY + template.shape[0]
 
 最后一步是在`image`上绘制检测到的边界框:
 
-```
+```py
 # draw the bounding box on the image
 cv2.rectangle(image, (startX, startY), (endX, endY), (255, 0, 0), 3)
 
@@ -250,7 +250,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python single_template_matching.py --image images/coke_bottle.png \
 	--template images/coke_logo.png
 [INFO] loading images...
@@ -270,7 +270,7 @@ $ python single_template_matching.py --image images/coke_bottle.png \
 
 例如，让我们试试这个示例图像，但这次我稍微旋转了可口可乐瓶子，并缩小了瓶子:
 
-```
+```py
 $ python single_template_matching.py \
 	--image images/coke_bottle_rotated.png \
 	--template images/coke_logo.png
@@ -284,7 +284,7 @@ $ python single_template_matching.py \
 
  *在下面的示例中，我们正在处理一副牌，并试图检测方块 8 扑克牌上的“方块”符号:
 
-```
+```py
 $ python single_template_matching.py --image images/8_diamonds.png \
 	--template images/diamonds_template.png 
 [INFO] loading images...

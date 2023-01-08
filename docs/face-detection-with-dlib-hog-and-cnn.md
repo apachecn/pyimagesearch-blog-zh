@@ -55,7 +55,7 @@ Dlib 的 HOG +线性 SVM 人脸检测器快速高效。根据梯度方向直方�
 
 幸运的是，您可以通过 pip 安装 OpenCV 和 dlib:
 
-```
+```py
 $ pip install opencv-contrib-python
 $ pip install dlib
 ```
@@ -88,7 +88,7 @@ $ pip install dlib
 
 从这里，看一下目录结构:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── images
@@ -128,7 +128,7 @@ OpenCV 和 dlib 以不同的方式表示边界框:
 
 打开`pyimagesearch`模块中的`helpers.py`文件，让我们开始工作:
 
-```
+```py
 def convert_and_trim_bb(image, rect):
 	# extract the starting and ending (x, y)-coordinates of the
 	# bounding box
@@ -166,7 +166,7 @@ def convert_and_trim_bb(image, rect):
 
 打开项目目录结构中的`hog_face_detection.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.helpers import convert_and_trim_bb
 import argparse
@@ -182,7 +182,7 @@ import cv2
 
 接下来是我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", type=str, required=True,
@@ -205,7 +205,7 @@ args = vars(ap.parse_args())
 
 接下来我们从磁盘加载 dlib 的 HOG +线性 SVM 人脸检测器:
 
-```
+```py
 # load dlib's HOG + Linear SVM face detector
 print("[INFO] loading HOG + Linear SVM face detector...")
 detector = dlib.get_frontal_face_detector()
@@ -236,7 +236,7 @@ print("[INFO] face detection took {:.4f} seconds".format(end - start))
 
 现在让我们分析我们的边界框:
 
-```
+```py
 # convert the resulting dlib rectangle objects to bounding boxes,
 # then ensure the bounding boxes are all within the bounds of the
 # input image
@@ -264,7 +264,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端窗口并执行以下命令:
 
-```
+```py
 $ python hog_face_detection.py --image images/family.jpg
 [INFO] loading HOG + Linear SVM face detector...
 [INFO[ performing face detection with dlib...
@@ -281,7 +281,7 @@ $ python hog_face_detection.py --image images/family.jpg
 
 让我们尝试一个不同的图像:
 
-```
+```py
 $ python hog_face_detection.py --image images/avengers.jpg 
 [INFO] loading HOG + Linear SVM face detector...
 [INFO[ performing face detection with dlib...
@@ -296,7 +296,7 @@ $ python hog_face_detection.py --image images/avengers.jpg
 
 让我们来看最后一张照片，这张照片上的人脸更加密集:
 
-```
+```py
 $ python hog_face_detection.py --image images/concert.jpg 
 [INFO] loading HOG + Linear SVM face detector...
 [INFO[ performing face detection with dlib...
@@ -315,7 +315,7 @@ $ python hog_face_detection.py --image images/concert.jpg
 
 现在让我们来学习如何使用 dlib 的深度学习人脸检测器:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.helpers import convert_and_trim_bb
 import argparse
@@ -329,7 +329,7 @@ import cv2
 
 命令行参数类似，但是增加了一个参数(`--model`):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", type=str, required=True,
@@ -350,7 +350,7 @@ args = vars(ap.parse_args())
 
 考虑到我们的命令行参数，我们现在可以从磁盘加载 dlib 的深度学习人脸检测器:
 
-```
+```py
 # load dlib's CNN face detector
 print("[INFO] loading CNN face detector...")
 detector = dlib.cnn_face_detection_model_v1(args["model"])
@@ -375,7 +375,7 @@ print("[INFO] face detection took {:.4f} seconds".format(end - start))
 
 正如我们解析 HOG +线性 SVM 结果一样，我们在这里也需要这样做，但有一点需要注意:
 
-```
+```py
 # convert the resulting dlib rectangle objects to bounding boxes,
 # then ensure the bounding boxes are all within the bounds of the
 # input image
@@ -403,7 +403,7 @@ Dlib 的 HOG +线性 SVM 探测器返回一个`rectangle`物体列表；然而�
 
 从那里，您可以打开一个终端并执行以下命令:
 
-```
+```py
 $ python cnn_face_detection.py --image images/family.jpg 
 [INFO] loading CNN face detector...
 [INFO[ performing face detection with dlib...
@@ -414,7 +414,7 @@ $ python cnn_face_detection.py --image images/family.jpg
 
 让我们尝试另一个图像:
 
-```
+```py
 $ python cnn_face_detection.py --image images/avengers.jpg 
 [INFO] loading CNN face detector...
 [INFO[ performing face detection with dlib...
@@ -425,7 +425,7 @@ $ python cnn_face_detection.py --image images/avengers.jpg
 
 让我们看最后一张图片:
 
-```
+```py
 $ python cnn_face_detection.py --image images/concert.jpg 
 [INFO] loading CNN face detector...
 [INFO[ performing face detection with dlib...

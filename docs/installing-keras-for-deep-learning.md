@@ -42,21 +42,21 @@
 
 由于与冲突库版本相关的问题，我建议为基于 Keras 的项目专门创建一个虚拟环境:
 
-```
+```py
 $ mkvirtualenv keras -p python3
 
 ```
 
 这将创建一个名为`keras`的 Python 虚拟环境。任何时候您想要访问这个虚拟环境，只需使用`workon`命令，后跟虚拟环境的名称:
 
-```
+```py
 $ workon <virtual env name>
 
 ```
 
 在这种情况下，我们可以通过执行以下命令来访问`keras`虚拟环境:
 
-```
+```py
 $ workon keras
 
 ```
@@ -65,7 +65,7 @@ $ workon keras
 
 安装 Keras 是一件轻而易举的事情，它可以为我们完成所有的艰苦工作。首先，我们需要安装一些依赖项:
 
-```
+```py
 $ pip install numpy scipy
 $ pip install scikit-learn
 $ pip install pillow
@@ -75,21 +75,21 @@ $ pip install h5py
 
 我们还需要安装[张量流](https://www.tensorflow.org/)。您当然可以使用`pip`来安装 TensorFlow:
 
-```
+```py
 $ pip install tensorflow
 
 ```
 
 **已经[安装 CUDA 和 cuDNN](https://pyimagesearch.com/2017/09/27/setting-up-ubuntu-16-04-cuda-gpu-for-deep-learning-with-python/) 的 GPU 用户**可以安装带 pip 的 TensorFlow 的 GPU 版本:
 
-```
+```py
 $ pip install tensorflow-gpu
 
 ```
 
 从那里，我们也可以使用`pip`来安装 Keras:
 
-```
+```py
 $ pip install keras
 
 ```
@@ -100,7 +100,7 @@ Keras 完成安装后，您可以通过打开一个终端，访问`keras`虚拟�
 
 如果您想从`keras`虚拟环境中访问 OpenCV 绑定，您需要将`cv2.so`文件符号链接到`keras`的`site-packages`目录中:
 
-```
+```py
 $ ls /usr/local/lib/python3.6/site-packages/
 cv2.cpython-36m-x86_64-linux-gnu.so
 $ cd /usr/local/lib/python3.6/site-packages/
@@ -113,7 +113,7 @@ $ cd ~
 
 正如我在[上周的教程](https://pyimagesearch.com/2016/07/11/compiling-opencv-with-cuda-support/)中所详述的，编译安装 OpenCV 后，我的`cv2.so`绑定在`/usr/local/lib/python3.6/site-packages/cv2.cpython-36m-x86_64-linux-gnu.so`中被发现。根据您在自己的系统上安装 OpenCV 的方式，您的`cv2.so`绑定可能位于不同的位置。如果您不记得您的`cv2.so`绑定在哪里，或者如果您不再有您的 CMake 输出(哪个*指示了*绑定将被存储在哪里)，您可以使用`find`实用程序来帮助定位它们:
 
-```
+```py
 $ cd /
 $ sudo find . -name '*cv2*.so*'
 ./usr/local/lib/python3.6/site-packages/cv2.cpython-36m-x86_64-linux-gnu.so
@@ -127,7 +127,7 @@ $ sudo find . -name '*cv2*.so*'
 
 要验证 Keras 是否已经安装，请访问`keras`虚拟环境，打开一个 Python shell，并导入它:
 
-```
+```py
 $ workon keras
 $ python
 >>> import keras

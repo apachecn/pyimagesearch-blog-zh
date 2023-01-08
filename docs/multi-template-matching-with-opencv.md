@@ -43,7 +43,7 @@
 
 为了使用 OpenCV 和`cv2.matchTemplate`检测多个对象/模板，我们需要过滤由`cv2.matchTemplate`生成的`result`矩阵，如下所示:
 
-```
+```py
 result = cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED)
 (yCoords, xCoords) = np.where(result >= args["threshold"])
 ```
@@ -67,7 +67,7 @@ result = cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED)
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -94,7 +94,7 @@ $ pip install opencv-contrib-python
 
 解压代码档案后，您会发现以下目录:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── images
@@ -115,7 +115,7 @@ $ tree . --dirsfirst
 
 让我们开始吧:
 
-```
+```py
 # import the necessary pages
 from imutils.object_detection import non_max_suppression
 import numpy as np
@@ -129,7 +129,7 @@ import cv2
 
 从那里，我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", type=str, required=True,
@@ -149,7 +149,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们从磁盘加载我们的`image`和`template`:
 
-```
+```py
 # load the input image and template image from disk, then grab the
 # template image spatial dimensions
 print("[INFO] loading images...")
@@ -168,7 +168,7 @@ cv2.imshow("Template", template)
 
 下一步是执行模板匹配，就像我们上周做的一样:
 
-```
+```py
 # convert both the image and template to grayscale
 imageGray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 templateGray = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
@@ -185,7 +185,7 @@ result = cv2.matchTemplate(imageGray, templateGray,
 
 然而，由于我们想要检测*多个*物体，我们需要过滤我们的`result`矩阵并找到 ***所有的*** *(x，y)*-分数大于我们的`--threshold`的坐标:
 
-```
+```py
 # find all locations in the result map where the matched value is
 # greater than the threshold, then clone our original image so we
 # can draw on it
@@ -216,7 +216,7 @@ cv2.waitKey(0)
 
  *解决方案是应用非最大值抑制:
 
-```
+```py
 # initialize our list of rectangles
 rects = []
 
@@ -254,7 +254,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python multi_template_matching.py --image images/8_diamonds.png \
 	--template images/diamonds_template.png
 [INFO] loading images...

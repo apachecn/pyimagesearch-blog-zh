@@ -32,7 +32,7 @@
 
 幸运的是，使用 pip 安装这些包非常容易:
 
-```
+```py
 $ pip install torch torchvision
 $ pip install matplotlib
 $ pip install opencv-contrib-python
@@ -64,7 +64,7 @@ $ pip install imutils
 
 从那里，解压缩档案文件，您应该会找到下面的项目目录:
 
-```
+```py
 ├── build_dataset.py
 ├── builtin_dataset.py
 ├── flower_photos
@@ -91,7 +91,7 @@ $ pip install imutils
 
 请注意，在下载数据集之后，每个图像都将具有以下格式的路径，`folder_name/class_name/image_id.jpg`。例如，下面显示的是花卉数据集中一些图像的路径。
 
-```
+```py
 flower_photos/dandelion/8981828144_4b66b4edb6_n.jpg
 flower_photos/sunflowers/14244410747_22691ece4a_n.jpg
 flower_photos/roses/1666341535_99c6f7509f_n.jpg
@@ -104,7 +104,7 @@ flower_photos/sunflowers/3950020811_dab89bebc0_n.jpg
 
 首先，我们讨论存储教程中使用的配置和参数设置的`config.py`文件。
 
-```
+```py
 # specify path to the flowers and mnist dataset
 FLOWERS_DATASET_PATH = "flower_photos"
 MNIST_DATASET_PATH = "mnist"
@@ -134,7 +134,7 @@ VAL_SPLIT = 0.1
 
 打开项目目录结构中的`build_dataset.py`文件，让我们开始吧。
 
-```
+```py
 # USAGE
 # python build_dataset.py
 
@@ -148,7 +148,7 @@ import os
 
 我们从在第 5-9 行导入所需的包开始。
 
-```
+```py
 def copy_images(imagePaths, folder):
 	# check if the destination folder exists and if not create it
 	if not os.path.exists(folder):
@@ -188,7 +188,7 @@ def copy_images(imagePaths, folder):
 
 一旦我们定义了`copy_images`函数，我们就可以理解将数据集分成训练集和验证集所需的主要代码了。
 
-```
+```py
 # load all the image paths and randomly shuffle them
 print("[INFO] loading image paths...")
 imagePaths = list(paths.list_images(config.FLOWERS_DATASET_PATH))
@@ -223,7 +223,7 @@ copy_images(valPaths, config.VAL)
 
 这构建了我们的文件系统，如下所示。在这里，我们有单独的`train`和`val`文件夹，其中包括来自不同类的训练和验证图像，在它们各自的类文件夹中。
 
-```
+```py
 ├── train
 │   ├── daisy
 │   ├── dandelion
@@ -250,7 +250,7 @@ PyTorch 数据集提供了加载和存储带有相应标签的数据样本的功
 
 我们从导入所需的包开始。
 
-```
+```py
 # USAGE
 # python load_and_visualize.
 
@@ -272,7 +272,7 @@ import torch
 
 现在，我们定义`visualize_batch`函数，稍后它将使我们能够绘制和可视化来自训练和验证批次的样本图像。
 
-```
+```py
 def visualize_batch(batch, classes, dataset_type):
 	# initialize a figure
 	fig = plt.figure("{} batch".format(dataset_type),
@@ -317,7 +317,7 @@ def visualize_batch(batch, classes, dataset_type):
 
 我们现在将看看这是如何工作的，以及如何整合到我们的数据加载管道中。
 
-```
+```py
 # initialize our data augmentation functions
 resize = transforms.Resize(size=(config.INPUT_HEIGHT,
         config.INPUT_WIDTH))
@@ -334,7 +334,7 @@ rotate = transforms.RandomRotation(degrees=15)
 
 请注意，PyTorch 除了上面提到的以外，还提供了许多其他的图像转换。
 
-```
+```py
 # initialize our training and validation set data augmentation
 # pipeline
 trainTransforms = transforms.Compose([resize, hFlip, vFlip, rotate,
@@ -350,7 +350,7 @@ valTransforms = transforms.Compose([resize, transforms.ToTensor()])
 
 PyTorch 提供了一个内置的`ImageFolder`功能，它接受一个根文件夹，并自动从给定的根目录获取数据样本来创建数据集。注意`ImageFolder`期望图像以如下格式排列:
 
-```
+```py
 root/class_name_1/img_id.png
 root/class_name_2/img_id.png
 root/class_name_3/img_id.png
@@ -359,7 +359,7 @@ root/class_name_4/img_id.png
 
 这允许它识别所有唯一的类名，并将它们映射到整数类标签。此外，`ImageFolder`还接受我们在加载图像时想要应用到输入图像的变换(如前所述)。
 
-```
+```py
 # initialize the training and validation dataset
 print("[INFO] loading the training and validation dataset...")
 trainDataset = ImageFolder(root=config.TRAIN,
@@ -380,7 +380,7 @@ print("[INFO] validation dataset contains {} samples...".format(
 
 现在，我们准备为数据集创建一个数据加载器。
 
-```
+```py
 # create training and validation set dataloaders
 print("[INFO] creating training and validation set dataloaders...")
 trainDataLoader = DataLoader(trainDataset, 
@@ -398,7 +398,7 @@ PyTorch 数据加载器接受一个`batch_size`,这样它就可以将数据集�
 
 **第 68-70 行**返回两个 iterables(即`trainDataLoader`和`valDataLoader`)。
 
-```
+```py
 # grab a batch from both training and validation dataloader
 trainBatch = next(iter(trainDataLoader))
 valBatch = next(iter(valDataLoader))
@@ -425,7 +425,7 @@ visualize_batch(valBatch, valDataset.classes, "val")
 
 让我们首先打开项目目录中的`builtin_dataset.py`文件。
 
-```
+```py
 # USAGE
 # python builtin_dataset.py
 
@@ -443,7 +443,7 @@ import matplotlib.pyplot as plt
 
 我们其他值得注意的导入包括 PyTorch `DataLoader`类(**第 7 行**)、torchvision 的 transforms 模块(**第 8 行**)和用于可视化的 matplotlib 库(**第 9 行**)。
 
-```
+```py
 def visualize_batch(batch, classes, dataset_type):
 	# initialize a figure
 	fig = plt.figure("{} batch".format(dataset_type),
@@ -479,7 +479,7 @@ def visualize_batch(batch, classes, dataset_type):
 
 这个函数类似于我们之前在`load_and_visualize.py`文件中定义的`visualize_batch`函数。这里唯一的不同是在**第 33 行**，这里我们以`cmap="gray"`模式绘制图像，因为 MNIST 由单通道灰度图像组成，这与花卉数据集中的 3 通道 RGB 图像形成对比。
 
-```
+```py
 # define the transform
 transform = transforms.Compose([transforms.ToTensor()])
 
@@ -498,7 +498,7 @@ valDataset = MNIST(root=config.MNIST_DATASET_PATH, train=False,
 *   `download`:负责自动下载数据集
 *   `transforms`:应用于输入图像的图像变换
 
-```
+```py
 # create training and validation set dataloaders
 print("[INFO] creating training and validation set dataloaders...")
 trainDataLoader = DataLoader(trainDataset, 

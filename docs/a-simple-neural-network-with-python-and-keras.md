@@ -54,7 +54,7 @@ Keras 是一个超级强大、易于使用的 Python 库，用于构建神经网
 
 在目录中，让我们运行带有两个[命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/)的`tree`命令来列出我们的项目结构:
 
-```
+```py
 $ tree --filelimit 10 --dirsfirst
 .
 ├── kaggle_dogs_vs_cats
@@ -93,7 +93,7 @@ Kaggle Dogs vs. Cats 数据集在相关目录(`kaggle_dogs_vs_cats`)中。所有
 
 从那里，打开一个新文件，命名为`simple_neural_network.py`，我们将得到编码:
 
-```
+```py
 # import the necessary packages
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
@@ -114,7 +114,7 @@ import os
 
 我们还将使用 [imutils](https://github.com/jrosebr1/imutils) ，这是我个人的 OpenCV 便利函数库。如果您的系统上尚未安装`imutils`，您可以通过`pip`进行安装:
 
-```
+```py
 $ pip install imutils
 
 ```
@@ -123,7 +123,7 @@ $ pip install imutils
 
 这一次，让我们使用原始像素强度。为了实现这一点，我们定义了`image_to_feature_vector`函数，该函数接受一个输入`image`，并将其大小调整为一个固定的`size`，忽略纵横比:
 
-```
+```py
 def image_to_feature_vector(image, size=(32, 32)):
 	# resize the image to a fixed size, then flatten the image into
 	# a list of raw pixel intensities
@@ -137,7 +137,7 @@ def image_to_feature_vector(image, size=(32, 32)):
 
 下一个代码块处理对命令行参数的解析，并负责一些初始化工作:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -162,7 +162,7 @@ labels = []
 
 现在我们有了`imagePaths`，我们可以逐个循环它们，从磁盘加载它们，将图像转换成特征向量，并更新`data`和`labels`列表:
 
-```
+```py
 # loop over the input images
 for (i, imagePath) in enumerate(imagePaths):
 	# load the image and extract the class label (assuming that our
@@ -184,7 +184,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 `data`列表现在包含我们数据集中每个图像的展平的 *32 x 32 x 3 = 3，072-d* 表示。然而，在我们可以训练我们的神经网络之前，我们首先需要执行一些预处理:
 
-```
+```py
 # encode the labels, converting them from strings to integers
 le = LabelEncoder()
 labels = le.fit_transform(labels)
@@ -212,7 +212,7 @@ print("[INFO] constructing training/testing split...")
 
 我们现在准备使用 Keras 定义我们的神经网络:
 
-```
+```py
 # define the architecture of the network
 model = Sequential()
 model.add(Dense(768, input_dim=3072, init="uniform",
@@ -235,7 +235,7 @@ model.add(Activation("softmax"))
 
 下一步是使用[随机梯度下降](https://en.wikipedia.org/wiki/Stochastic_gradient_descent) (SGD)来训练我们的模型:
 
-```
+```py
 # train the model using SGD
 print("[INFO] compiling model...")
 sgd = SGD(lr=0.01)
@@ -254,7 +254,7 @@ model.fit(trainData, trainLabels, epochs=50, batch_size=128,
 
 最后的代码块根据测试数据评估我们的 Keras 神经网络:
 
-```
+```py
 # show the accuracy on the testing set
 print("[INFO] evaluating on testing set...")
 (loss, accuracy) = model.evaluate(testData, testLabels,
@@ -274,7 +274,7 @@ model.save(args["model"])
 
 以下命令可用于使用 Python 和 Keras 训练我们的神经网络:
 
-```
+```py
 $ python simple_neural_network.py --dataset kaggle_dogs_vs_cats \
     --model output/simple_neural_network.hdf5
 
@@ -302,7 +302,7 @@ $ python simple_neural_network.py --dataset kaggle_dogs_vs_cats \
 
 因此，让我们在您最喜欢的编辑器中创建一个名为`test_network.py`的新文件，并输入以下代码:
 
-```
+```py
 # import the necessary packages
 from __future__ import print_function
 from keras.models import load_model
@@ -343,7 +343,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们定义我们的类并从磁盘加载我们的序列化模型:
 
-```
+```py
 # initialize the class labels for the Kaggle dogs vs cats dataset
 CLASSES = ["cat", "dog"]
 
@@ -360,7 +360,7 @@ print("[INFO] testing on images in {}".format(args["test_images"]))
 
 让我们开始循环测试图像，并预测每个图像是猫科动物还是犬科动物:
 
-```
+```py
 # loop over our testing images
 for imagePath in paths.list_images(args["test_images"]):
 	# load the image, resize it to a fixed 32 x 32 pixels (ignoring
@@ -379,7 +379,7 @@ for imagePath in paths.list_images(args["test_images"]):
 
 从那里，让我们通过神经网络发送图像:
 
-```
+```py
 	# classify the image using our extracted features and pre-trained
 	# neural network
 	probs = model.predict(features)[0]
@@ -406,7 +406,7 @@ for imagePath in paths.list_images(args["test_images"]):
 
 当您提取文件后，要运行我们的`test_network.py`,我们只需在终端中执行它，并提供两个命令行参数:
 
-```
+```py
 $ python test_network.py --model output/simple_neural_network.hdf5 \
 	--test-images test_images
 Using TensorFlow backend.
@@ -423,7 +423,7 @@ Using TensorFlow backend.
 
 您是否看到了以下错误消息？
 
-```
+```py
 Using TensorFlow backend.
 usage: test_network.py [-h] -m MODEL -t TEST_IMAGES [-b BATCH_SIZE]
 test_network.py: error: the following arguments are required: -m/--model, -t/--test-images

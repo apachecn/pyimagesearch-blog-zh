@@ -46,7 +46,7 @@
 
 这个函数到底在做什么？就 Python 代码而言，它只是对数组求平方和:
 
-```
+```py
 penalty = 0
 
 for i in np.arange(0, W.shape[0]):
@@ -108,7 +108,7 @@ for i in np.arange(0, W.shape[0]):
 
 为了实际演示正则化，让我们编写一些 Python 代码，将其应用于我们的“Animals”数据集。打开一个新文件，将其命名为`regularization.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.linear_model import SGDClassifier
 from sklearn.preprocessing import LabelEncoder
@@ -130,7 +130,7 @@ import argparse
 
 接下来，我们可以解析我们的命令行参数并从磁盘中获取图像列表:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -144,7 +144,7 @@ imagePaths = list(paths.list_images(args["dataset"]))
 
 给定图像路径，我们将调整它们的大小为 32*×32 像素，将它们从磁盘加载到内存中，然后将它们展平为一个 3072 维的数组:*
 
-```
+```py
 # initialize the image preprocessor, load the dataset from disk,
 # and reshape the data matrix
 sp = SimplePreprocessor(32, 32)
@@ -155,7 +155,7 @@ data = data.reshape((data.shape[0], 3072))
 
 我们还将标签编码为整数，并执行训练测试分割，使用 75%的数据进行训练，剩余的 25%进行测试:
 
-```
+```py
 # encode the labels as integers
 le = LabelEncoder()
 labels = le.fit_transform(labels)
@@ -168,7 +168,7 @@ labels = le.fit_transform(labels)
 
 让我们在训练我们的`SGDClassifier`时应用一些不同类型的正则化:
 
-```
+```py
 # loop over our set of regularizers
 for r in (None, "l1", "l2"):
 	# train a SGD classifier using a softmax loss function and the
@@ -190,7 +190,7 @@ for r in (None, "l1", "l2"):
 
 要查看用各种正则化类型训练的 SGD 模型，只需执行以下命令:
 
-```
+```py
 $ python regularization.py --dataset dataset/animals
 [INFO] loading images...
 ...

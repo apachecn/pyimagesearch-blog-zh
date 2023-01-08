@@ -39,7 +39,7 @@
 
 同样，我将假设您刚刚取消了 Raspberry Pi 2/B+的装箱。打开终端，我们将从更新和升级已安装的软件包开始，然后更新 Raspberry Pi 固件:
 
-```
+```py
 $ sudo apt-get update
 $ sudo apt-get upgrade
 $ sudo rpi-update
@@ -50,7 +50,7 @@ $ sudo rpi-update
 
 安装所需的开发工具和软件包:
 
-```
+```py
 $ sudo apt-get install build-essential cmake pkg-config
 
 ```
@@ -67,7 +67,7 @@ $ sudo apt-get install build-essential cmake pkg-config
 
 安装必要的映像 I/O 包。这些软件包允许您加载各种图像文件格式，如 JPEG、PNG、TIFF 等。
 
-```
+```py
 $ sudo apt-get install libjpeg8-dev libtiff4-dev libjasper-dev libpng12-dev
 
 ```
@@ -82,7 +82,7 @@ $ sudo apt-get install libjpeg8-dev libtiff4-dev libjasper-dev libpng12-dev
 
 安装 GTK 开发库。该库用于构建图形用户界面(GUI ),并且是 OpenCV 的`highgui`库所必需的，OpenCV 允许您在屏幕上查看图像:
 
-```
+```py
 $ sudo apt-get install libgtk2.0-dev
 
 ```
@@ -97,7 +97,7 @@ $ sudo apt-get install libgtk2.0-dev
 
 安装必要的视频 I/O 包。这些包用于使用 OpenCV 加载视频文件:
 
-```
+```py
 $ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
 
 ```
@@ -112,7 +112,7 @@ $ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
 
 安装用于优化 OpenCV 中各种操作的库:
 
-```
+```py
 $ sudo apt-get install libatlas-base-dev gfortran
 
 ```
@@ -127,7 +127,7 @@ $ sudo apt-get install libatlas-base-dev gfortran
 
 安装`pip`:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python get-pip.py
 
@@ -143,7 +143,7 @@ $ sudo python get-pip.py
 
 安装`virtualenv`和`virtualenvwrapper`:
 
-```
+```py
 $ sudo pip install virtualenv virtualenvwrapper
 $ sudo rm -rf ~/.cache/pip
 
@@ -151,7 +151,7 @@ $ sudo rm -rf ~/.cache/pip
 
 然后，更新您的`~/.profile`文件以包含以下几行:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 source /usr/local/bin/virtualenvwrapper.sh
@@ -160,14 +160,14 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 重新加载您的`.profile`文件:
 
-```
+```py
 $ source ~/.profile
 
 ```
 
 创建您的计算机视觉虚拟环境:
 
-```
+```py
 $ mkvirtualenv cv
 
 ```
@@ -182,7 +182,7 @@ $ mkvirtualenv cv
 
 现在我们可以安装 Python 2.7 开发工具了:
 
-```
+```py
 $ sudo apt-get install python2.7-dev
 
 ```
@@ -191,7 +191,7 @@ $ sudo apt-get install python2.7-dev
 
 我们还需要安装 NumPy，因为 OpenCV Python 绑定将图像表示为多维 NumPy 数组:
 
-```
+```py
 $ pip install numpy
 
 ```
@@ -206,7 +206,7 @@ $ pip install numpy
 
 下载 OpenCV 并解压:
 
-```
+```py
 $ wget -O opencv-2.4.10.zip http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/2.4.10/opencv-2.4.10.zip/download
 $ unzip opencv-2.4.10.zip
 $ cd opencv-2.4.10
@@ -215,7 +215,7 @@ $ cd opencv-2.4.10
 
 设置版本:
 
-```
+```py
 $ mkdir build
 $ cd build
 $ cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D BUILD_NEW_PYTHON_SUPPORT=ON -D INSTALL_C_EXAMPLES=ON -D INSTALL_PYTHON_EXAMPLES=ON  -D BUILD_EXAMPLES=ON ..
@@ -230,7 +230,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D BUILD_
 
 编译 OpenCV:
 
-```
+```py
 $ make
 
 ```
@@ -245,7 +245,7 @@ $ make
 
 最后，我们可以安装 OpenCV:
 
-```
+```py
 $ sudo make install
 $ sudo ldconfig
 
@@ -263,7 +263,7 @@ $ sudo ldconfig
 
 但是为了在我们的`cv`虚拟环境中使用 OpenCV，我们首先需要将 OpenCV 符号链接到我们的`site-packages`目录中:
 
-```
+```py
 $ cd ~/.virtualenvs/cv/lib/python2.7/site-packages/
 $ ln -s /usr/local/lib/python2.7/site-packages/cv2.so cv2.so
 $ ln -s /usr/local/lib/python2.7/site-packages/cv.py cv.py
@@ -274,7 +274,7 @@ $ ln -s /usr/local/lib/python2.7/site-packages/cv.py cv.py
 
 最后，我们可以测试一下 OpenCV 和 Python 的安装:
 
-```
+```py
 $ workon cv
 $ python
 >>> import cv2

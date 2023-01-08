@@ -119,7 +119,7 @@ NVIDIA Jetson Nano 拥有 472GFLOPS 的计算能力。虽然它是一台非常�
 
 对于**选项 2** ，您必须首先确定您的 Jetson Nano 的用户名和 IP 地址。在您的 Nano 上，从应用程序启动器启动终端，并在提示符下输入以下命令:
 
-```
+```py
 $ whoami
 nvidia
 $ ifconfig
@@ -139,7 +139,7 @@ en0: flags=8863 mtu 1500
 
 然后，在一台 ***单独的*** 计算机上，如您的笔记本电脑/台式机，启动 SSH 连接，如下所示:
 
-```
+```py
 $ ssh nvidia@192.168.1.4
 ```
 
@@ -151,7 +151,7 @@ $ ssh nvidia@192.168.1.4
 
 首先，让我们将 Nano 设置为使用最大功率容量:
 
-```
+```py
 $ sudo nvpmodel -m 0
 $ sudo jetson_clocks
 ```
@@ -166,14 +166,14 @@ $ sudo jetson_clocks
 
 在你将 Nano 设置为最大功率后，继续移除 libre office——它会占用大量空间，我们不需要它来进行计算机视觉和深度学习:
 
-```
+```py
 $ sudo apt-get purge libreoffice*
 $ sudo apt-get clean
 ```
 
 接下来，让我们继续更新系统级软件包:
 
-```
+```py
 $ sudo apt-get update && sudo apt-get upgrade
 ```
 
@@ -183,7 +183,7 @@ $ sudo apt-get update && sudo apt-get upgrade
 
 我们需要安装的第一套软件包括一系列开发工具:
 
-```
+```py
 $ sudo apt-get install git cmake
 $ sudo apt-get install libatlas-base-dev gfortran
 $ sudo apt-get install libhdf5-serial-dev hdf5-tools
@@ -193,7 +193,7 @@ $ sudo apt-get install nano locate
 
 接下来，我们将安装 SciPy 先决条件(从 [NVIDIA 的 devtalk 论坛](https://devtalk.nvidia.com/default/topic/1066391/jetson-nano/keras-and-scipy-throwing-weird-errors-while-installing-on-jetson-nano-no-links-could-help-me-/post/5415052/#5415052)收集)和一个系统级 [Cython](https://pyimagesearch.com/2017/08/28/fast-optimized-for-pixel-loops-with-opencv-and-python/) 库:
 
-```
+```py
 $ sudo apt-get install libfreetype6-dev python3-setuptools
 $ sudo apt-get install protobuf-compiler libprotobuf-dev openssl
 $ sudo apt-get install libssl-dev libcurl4-openssl-dev
@@ -202,7 +202,7 @@ $ sudo apt-get install cython3
 
 我们还需要一些 XML 工具来处理 TensorFlow 对象检测(TFOD) API 项目:
 
-```
+```py
 $ sudo apt-get install libxml2-dev libxslt1-dev
 ```
 
@@ -212,14 +212,14 @@ $ sudo apt-get install libxml2-dev libxslt1-dev
 
 首先，下载并解压缩 CMake 更新:
 
-```
+```py
 $ wget http://www.cmake.org/files/v3.13/cmake-3.13.0.tar.gz
 $ tar xpvf cmake-3.13.0.tar.gz cmake-3.13.0/
 ```
 
 接下来，编译 CMake:
 
-```
+```py
 $ cd cmake-3.13.0/
 $ ./bootstrap --system-curl
 $ make -j4
@@ -227,7 +227,7 @@ $ make -j4
 
 最后，更新 bash 概要文件:
 
-```
+```py
 $ echo 'export PATH=/home/nvidia/cmake-3.13.0/bin/:$PATH' >> ~/.bashrc
 $ source ~/.bashrc
 ```
@@ -238,14 +238,14 @@ CMake 现在可以在您的系统上运行了。确保您没有删除个人文�
 
 现在，让我们在我们的系统上安装 OpenCV 依赖项，从构建和编译具有并行性的 OpenCV 所需的工具开始:
 
-```
+```py
 $ sudo apt-get install build-essential pkg-config
 $ sudo apt-get install libtbb2 libtbb-dev
 ```
 
 接下来，我们将安装一些编解码器和图像库:
 
-```
+```py
 $ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev
 $ sudo apt-get install libxvidcore-dev libavresample-dev
 $ sudo apt-get install libtiff-dev libjpeg-dev libpng-dev
@@ -253,14 +253,14 @@ $ sudo apt-get install libtiff-dev libjpeg-dev libpng-dev
 
 然后，我们将安装一系列 GUI 库:
 
-```
+```py
 $ sudo apt-get install python-tk libgtk-3-dev
 $ sudo apt-get install libcanberra-gtk-module libcanberra-gtk3-module
 ```
 
 最后，我们将安装 Video4Linux (V4L ),这样我们就可以使用 USB 网络摄像头，并为 FireWire 摄像头安装一个库:
 
-```
+```py
 $ sudo apt-get install libv4l-dev libdc1394-22-dev
 ```
 
@@ -278,7 +278,7 @@ $ sudo apt-get install libv4l-dev libdc1394-22-dev
 
 首先，我们将安装*事实上的* Python 包管理工具，pip:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python3 get-pip.py
 $ rm get-pip.py
@@ -286,19 +286,19 @@ $ rm get-pip.py
 
 然后我们将安装我最喜欢的管理虚拟环境的工具，`virtualenv`和`virtualenvwrapper`:
 
-```
+```py
 $ sudo pip install virtualenv virtualenvwrapper
 ```
 
 在您向 bash 概要文件添加信息之前,`virtualenvwrapper`工具并没有完全安装。继续使用`nano`编辑器打开您的`~/.bashrc`:
 
-```
+```py
 $ nano ~/.bashrc
 ```
 
 然后在文件的底部插入以下内容:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
@@ -307,7 +307,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 使用`nano`编辑器底部显示的快捷键保存并退出文件，然后加载 bash 概要文件以完成`virtualenvwrapper`安装:
 
-```
+```py
 $ source ~/.bashrc
 ```
 
@@ -329,7 +329,7 @@ $ source ~/.bashrc
 
 假设**步骤#8** 进展顺利，让我们**在我们的 Nano:** 上创建一个 Python 虚拟环境
 
-```
+```py
 $ mkvirtualenv py3cv4 -p python3
 ```
 
@@ -337,7 +337,7 @@ $ mkvirtualenv py3cv4 -p python3
 
 当您的环境准备就绪时，bash 提示符前面会有`(py3cv4)`。如果您的提示前面没有您的虚拟环境名称，您可以随时使用如下的`workon`命令:
 
-```
+```py
 $ workon py3cv4
 ```
 
@@ -357,7 +357,7 @@ $ workon py3cv4
 
 首先，下载并安装 protobuf 编译器的高效实现( [source](https://jkjung-avt.github.io/tf-trt-revisited/) ):
 
-```
+```py
 $ wget https://raw.githubusercontent.com/jkjung-avt/jetson_nano/master/install_protobuf-3.6.1.sh
 $ sudo chmod +x install_protobuf-3.6.1.sh
 $ ./install_protobuf-3.6.1.sh
@@ -367,7 +367,7 @@ $ ./install_protobuf-3.6.1.sh
 
 一旦`protobuf`安装到您的系统上，您需要将其安装到您的虚拟环境中:
 
-```
+```py
 $ workon py3cv4 # if you aren't inside the environment
 $ cd ~
 $ cp -r ~/src/protobuf-3.6.1/python/ .
@@ -387,31 +387,31 @@ $ python setup.py install --cpp_implementation
 
 首先，确保您在虚拟环境中:
 
-```
+```py
 $ workon py3cv4
 ```
 
 然后安装 NumPy 和 Cython:
 
-```
+```py
 $ pip install numpy cython
 ```
 
 您可能会遇到以下错误信息:
 
-```
+```py
 ERROR: Could not build wheels for numpy which use PEP 517 and cannot be installed directly.
 ```
 
 如果您看到该消息，请遵循以下附加步骤。首先，用超级用户权限安装 NumPy:
 
-```
+```py
 $ sudo pip install numpy
 ```
 
 然后，创建一个从系统的 NumPy 到虚拟环境站点包的符号链接。要做到这一点，您需要`numpy`的安装路径，可以通过发出 NumPy uninstall 命令找到，然后*和**取消**它*，如下所示:
 
-```
+```py
 $ sudo pip uninstall numpy
 Uninstalling numpy-1.18.1:
   Would remove:
@@ -426,7 +426,7 @@ Proceed (y/n)? n
 
 **注意，您应该在提示符下键入`n`,因为我们不想继续卸载 NumPy。**然后，记下安装路径(高亮显示)，并执行以下命令(根据需要替换路径):
 
-```
+```py
 $ cd ~/.virtualenvs/py3cv4/lib/python3.6/site-packages/
 $ ln -s ~/usr/local/lib/python3.6/dist-packages/numpy numpy
 $ cd ~
@@ -434,7 +434,7 @@ $ cd ~
 
 此时，NumPy 通过符号链接到您的虚拟环境中。我们应该快速测试它，因为 NumPy 在本教程的剩余部分是需要的。在终端中发出以下命令:
 
-```
+```py
 $ workon py3cv4
 $ python
 >>> import numpy
@@ -442,7 +442,7 @@ $ python
 
 现在已经安装了 NumPy，让我们安装 SciPy。我们需要 [SciPy v1.3.3 才能在 Nano](https://forums.developer.nvidia.com/t/scipy-not-getting-installed-on-jetson-nano-inspite-of-all-dependencies/110034) 上兼容 TensorFlow 1.13.1。因此，我们不能使用 pip。相反，我们将直接从 GitHub 获取一个版本(正如在 [DevTalk 链接](https://forums.developer.nvidia.com/t/scipy-not-getting-installed-on-jetson-nano-inspite-of-all-dependencies/110034)中向我们推荐的)并安装它:
 
-```
+```py
 $ wget https://github.com/scipy/scipy/releases/download/v1.3.3/scipy-1.3.3.tar.gz
 $ tar -xzvf scipy-1.3.3.tar.gz scipy-1.3.3
 $ cd scipy-1.3.3/
@@ -461,13 +461,13 @@ $ python setup.py install
 
 鉴于 Sayak 的专家解释，现在让我们继续安装 TF 1.13:
 
-```
+```py
 $ pip install --extra-index-url https://developer.download.nvidia.com/compute/redist/jp/v42 tensorflow-gpu==1.13.1+nv19.3
 ```
 
 现在让我们转到 Keras，我们可以通过 pip 简单地安装它:
 
-```
+```py
 $ pip install keras
 ```
 
@@ -483,26 +483,26 @@ NVIDIA 的`tf_trt_models`是 TFOD API 的包装器，它允许构建冻结图，
 
 同样，确保所有操作都发生在您的`py3cv4`虚拟环境中:
 
-```
+```py
 $ cd ~
 $ workon py3cv4
 ```
 
 首先，从 TensorFlow 克隆`models`存储库:
 
-```
+```py
 $ git clone https://github.com/tensorflow/models
 ```
 
 为了能够重现，您应该检查以下支持 TensorFlow 1.13.1 的提交:
 
-```
+```py
 $ cd models && git checkout -q b00783d
 ```
 
 在那里，安装 COCO API 以使用 COCO 数据集，特别是对象检测:
 
-```
+```py
 $ cd ~
 $ git clone https://github.com/cocodataset/cocoapi.git
 $ cd cocoapi/PythonAPI
@@ -511,20 +511,20 @@ $ python setup.py install
 
 下一步是编译 TFOD API 使用的 Protobuf 库。Protobuf 库使我们(以及 TFOD API)能够以一种与语言无关的方式序列化结构化数据:
 
-```
+```py
 $ cd ~/models/research/
 $ protoc object_detection/protos/*.proto --python_out=.
 ```
 
 从那里，让我们配置一个有用的脚本，我称之为`setup.sh`。每次在 Nano 上使用 TFOD API 进行部署时，都需要这个脚本。使用 Nano 编辑器创建这样一个文件:
 
-```
+```py
 $ nano ~/setup.sh
 ```
 
 在新文件中插入以下行:
 
-```
+```py
 #!/bin/sh
 
 export PYTHONPATH=$PYTHONPATH:/home/`whoami`/models/research:\
@@ -539,13 +539,13 @@ export PYTHONPATH=$PYTHONPATH:/home/`whoami`/models/research:\
 
 首先，确保您在`py3cv4`虚拟环境中工作:
 
-```
+```py
 $ workon py3cv4
 ```
 
 继续克隆 GitHub repo，并执行安装脚本:
 
-```
+```py
 $ cd ~
 $ git clone --recursive https://github.com/NVIDIA-Jetson/tf_trt_models.git
 $ cd tf_trt_models
@@ -566,7 +566,7 @@ CUDA 是 NVIDIA 的一套库，用于处理他们的 GPU。一些非深度学习
 
 我们将从源代码进行编译，所以首先让我们从 GitHub 下载 OpenCV 源代码:
 
-```
+```py
 $ cd ~
 $ wget -O opencv.zip https://github.com/opencv/opencv/archive/4.1.2.zip
 $ wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.1.2.zip
@@ -576,7 +576,7 @@ $ wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.
 
 为了方便起见，从那里提取文件并重命名目录:
 
-```
+```py
 $ unzip opencv.zip
 $ unzip opencv_contrib.zip
 $ mv opencv-4.1.2 opencv
@@ -585,13 +585,13 @@ $ mv opencv_contrib-4.1.2 opencv_contrib
 
 如果您的 Python 虚拟环境尚未激活，请继续激活它:
 
-```
+```py
 $ workon py3cv4
 ```
 
 并切换到 OpenCV 目录，然后创建并输入一个构建目录:
 
-```
+```py
 $ cd opencv
 $ mkdir build
 $ cd build
@@ -599,7 +599,7 @@ $ cd build
 
 当您在(1)`~/opencv/build`目录和(2)`py3cv4`虚拟环境中时，输入下一个 CMake 命令非常重要。现在花点时间来验证:
 
-```
+```py
 (py3cv4) $ pwd
 /home/nvidia/opencv/build
 ```
@@ -610,7 +610,7 @@ $ cd build
 
 如果您满足了这两个要求，现在就可以使用 CMake 编译准备工具了:
 
-```
+```py
 $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 	-D WITH_CUDA=ON \
 	-D CUDA_ARCH_PTX="" \
@@ -643,7 +643,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 如果您确实修复了一个问题，那么在再次运行 CMake 之前，您需要删除并重新创建您的构建目录:
 
-```
+```py
 $ cd ..
 $ rm -rf build
 $ mkdir build
@@ -653,7 +653,7 @@ $ cd build
 
 当您对 CMake 输出感到满意时，就该用 Make:
 
-```
+```py
 $ make -j4
 ```
 
@@ -665,13 +665,13 @@ $ make -j4
 
 从那里，我们需要完成安装。首先，运行安装命令:
 
-```
+```py
 $ sudo make install
 ```
 
 然后，我们需要创建一个从 OpenCV 的安装目录到虚拟环境的符号链接。符号链接就像一个指针，一个特殊的操作系统文件在你的计算机上从一个地方指向另一个地方(在这里是我们的 Nano)。现在让我们创建符号链接:
 
-```
+```py
 $ cd ~/.virtualenvs/py3cv4/lib/python3.6/site-packages/
 $ ln -s /usr/local/lib/python3.6/site-packages/cv2/python3.6/cv2.cpython-36m-aarch64-linux-gnu.so cv2.so
 ```
@@ -684,20 +684,20 @@ OpenCV 正式安装。在下一节中，我们将安装一些有用的库来补�
 
 继续并激活您的虚拟环境:
 
-```
+```py
 $ workon py3cv4
 ```
 
 然后安装以下用于机器学习、图像处理和绘图的软件包:
 
-```
+```py
 $ pip install matplotlib scikit-learn
 $ pip install pillow imutils scikit-image
 ```
 
 其次是[戴维斯·金的 dlib 库](https://pyimagesearch.com/2017/03/13/an-interview-with-davis-king-creator-of-the-dlib-toolkit/):
 
-```
+```py
 $ pip install dlib
 ```
 
@@ -705,13 +705,13 @@ $ pip install dlib
 
 现在继续安装 Flask，这是一个 Python 微型 web 服务器；还有 Jupyter，一个基于网络的 Python 环境:
 
-```
+```py
 $ pip install flask jupyter
 ```
 
 最后，为 TFOD API 安装我们的 XML 工具，并安装 progressbar 来跟踪需要很长时间的终端程序:
 
-```
+```py
 $ pip install lxml progressbar2
 ```
 
@@ -725,7 +725,7 @@ $ pip install lxml progressbar2
 
 要测试 TensorFlow 和 Keras，只需在 Python shell 中导入它们:
 
-```
+```py
 $ workon py3cv4
 $ python
 >>> import tensorflow
@@ -742,7 +742,7 @@ $ python
 
 为了测试 TFOD API，我们首先需要运行安装脚本:
 
-```
+```py
 $ cd ~
 $ source ./setup.sh
 ```
@@ -759,7 +759,7 @@ $ source ./setup.sh
 
 为了测试 OpenCV，我们将简单地将其导入 Python shell 并加载和显示一个图像:
 
-```
+```py
 $ workon py3cv4
 $ wget -O penguins.jpg http://pyimg.co/avp96
 $ python
@@ -793,7 +793,7 @@ $ python
 
 接下来，一定要抓取与这篇博文相关的 ***【下载】*** 作为测试脚本。现在让我们回顾一下`test_camera_nano.py`脚本:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 import imutils
@@ -822,7 +822,7 @@ time.sleep(2.0)
 
 接下来，我们将捕获并显示帧:
 
-```
+```py
 # loop over frames
 while True:
 	# grab the next frame
@@ -848,7 +848,7 @@ cv2.destroyAllWindows()
 
 要执行该脚本，只需输入以下命令:
 
-```
+```py
 $ workon py3cv4
 $ python test_camera_nano.py
 ```

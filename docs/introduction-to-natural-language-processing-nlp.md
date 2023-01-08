@@ -194,7 +194,7 @@ NLP 一度被认为过于昂贵，其研究被严重叫停。我们缺乏计算�
 
 **Chakraborty，D.** “自然语言处理(NLP)导论”， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva，R. Raha，A. Thanki 编辑。，2022 年，【https://pyimg.co/60xld 
 
-```
+```py
 @incollection{Chakraborty_2022_NLP,
   author = {Devjyoti Chakraborty},
   title = {Introduction to Natural Language Processing {(NLP)}},

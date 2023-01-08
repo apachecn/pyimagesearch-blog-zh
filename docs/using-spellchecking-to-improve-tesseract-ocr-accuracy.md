@@ -30,7 +30,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -55,7 +55,7 @@ $ pip install opencv-contrib-python
 
 我们的 OCR 拼写检查器的项目目录结构非常简单:
 
-```
+```py
 |-- comic_spelling.png
 |-- ocr_and_spellcheck.py
 ```
@@ -77,7 +77,7 @@ $ pip install opencv-contrib-python
 
 打开一个新文件，将其命名为`ocr_and_spellcheck.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from textblob import TextBlob
 import pytesseract
@@ -97,7 +97,7 @@ args = vars(ap.parse_args())
 
 接下来，我们可以从磁盘加载图像并对其进行 OCR:
 
-```
+```py
 # load the input image and convert it from BGR to RGB channel
 # ordering
 image = cv2.imread(args["image"])
@@ -119,7 +119,7 @@ print("\n")
 
 但是，可能会有拼写错误，例如用户在创建图像时拼写错误的文本，或者由于 Tesseract 错误地对一个或多个字符进行 OCR 而导致的“输入错误”——为了解决这个问题，我们需要利用`textblob`:
 
-```
+```py
 # apply spell checking to the OCR'd text
 tb = TextBlob(text)
 corrected = tb.correct()
@@ -138,7 +138,7 @@ print(corrected)
 
 打开终端并执行以下命令:
 
-```
+```py
 $ python ocr_and_spellcheck.py --image comic_spelling.png
 BEFORE SPELLCHECK
 =================
@@ -179,7 +179,7 @@ spell correctly?
 
 **罗斯布鲁克，**一**。**“使用拼写检查提高 Tesseract OCR 准确度”， *PyImageSearch* ，2021，[https://PyImageSearch . com/2021/11/29/Using-spell checking-to-improve-tessera CT-OCR-accuracy/](https://pyimagesearch.com/2021/11/29/using-spellchecking-to-improve-tesseract-ocr-accuracy/)
 
-```
+```py
 @article{Rosebrock_2021_Spellchecking,
   author = {Adrian Rosebrock},
   title = {Using spellchecking to improve {T}esseract {OCR} accuracy},

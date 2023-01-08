@@ -45,34 +45,34 @@
 
 要从 Kaggle 下载数据，您需要提供您的 Kaggle 凭据。你可以上传卡格尔。或者把你的 Kaggle 用户名和密钥放在笔记本里。我们选择了后者。
 
-```
+```py
 os.environ['KAGGLE_USERNAME']="enter-your-own-user-name" 
 os.environ['KAGGLE_KEY']="enter-your-own-user-name" 
 ```
 
 将数据下载并解压缩到名为`dataset`的目录中。
 
-```
+```py
 !kaggle datasets download -d splcher/animefacedataset -p dataset
 !unzip datasets/animefacedataset.zip -d datasets/
 ```
 
 下载并解压缩数据后，我们设置图像所在的目录。
 
-```
+```py
 anime_data_dir = "/content/datasets/images"
 ```
 
 然后，我们使用`image_dataset_from_directory`的 Keras utils 函数从目录中的图像创建一个`tf.data.Dataset`，它将用于稍后训练模型。我们指定了`64×64`的图像大小和`256`的批量大小。
 
-```
+```py
 train_images = tf.keras.utils.image_dataset_from_directory(
    anime_data_dir, label_mode=None, image_size=(64, 64), batch_size=256)
 ```
 
 让我们想象一个随机的训练图像。
 
-```
+```py
 image_batch = next(iter(train_images))
 random_index = np.random.choice(image_batch.shape[0])
 random_image = image_batch[random_index].numpy().astype("int32")
@@ -85,7 +85,7 @@ plt.show()
 
 和以前一样，我们将图像归一化到`[-1, 1]`的范围，因为生成器的最终层激活使用了`tanh`。最后，我们通过使用带有`lambda`函数的`tf.dataset`的`map`函数来应用规范化。
 
-```
+```py
 train_images = train_images.map(lambda x: (x - 127.5) / 127.5)
 ```
 
@@ -115,7 +115,7 @@ WGAN 发生器架构没有变化，与 DCGAN 相同。我们在`build_generator`
 
 WGAN 通过使用权重裁剪来实施 1-Lipschitz 约束，我们通过子类化`keras.constraints.Constraint`来实现权重裁剪。详细文件参考 Keras [层重量约束](https://keras.io/api/layers/constraints/.)。下面是我们如何创建`WeightClipping`类:
 
-```
+```py
 class WeightClipping(tf.keras.constraints.Constraint):
    def __init__(self, clip_value):
        self.clip_value = clip_value
@@ -129,13 +129,13 @@ class WeightClipping(tf.keras.constraints.Constraint):
 
 然后在`build_critic`函数中，我们用`WeightClipping`类创建了一个`[-0.01, 0.01]`的`constraint`。
 
-```
+```py
 constraint = WeightClipping(0.01)
 ```
 
 现在我们将`kernel_constraint = constraint`添加到评论家的所有`CONV2D`层中。例如:
 
-```
+```py
 model.add(layers.Conv2D(64, (4, 4), 
           padding="same", strides=(2, 2),
           kernel_constraint = constraint, 
@@ -146,13 +146,13 @@ model.add(layers.Conv2D(64, (4, 4),
 
 在 critic 的最后一层，我们将激活从`sigmoid`更新为`linear`。
 
-```
+```py
 model.add(layers.Dense(1, activation="linear"))
 ```
 
 请注意，在 Keras 中，`Dense`层默认有`linear`激活，所以我们可以省略`activation="linear"`部分，编写如下代码:
 
-```
+```py
 model.add(layers.Dense(1))
 ```
 
@@ -174,7 +174,7 @@ WGAN 的这一部分有一些变化:
 
 根据论文建议，我们更新评论家的频率是生成器的 5 倍。为了实现这一点，我们向`WGAN`类的`critic_extra_steps`到`__init__`传递了一个额外的参数。
 
-```
+```py
 def __init__(self, critic, generator, latent_dim, critic_extra_steps):
     ...
     self.c_extra_steps = critic_extra_steps
@@ -183,7 +183,7 @@ def __init__(self, critic, generator, latent_dim, critic_extra_steps):
 
 然后在`train_step()`中，我们使用一个`for`循环来应用额外的训练步骤。
 
-```
+```py
 for i in range(self.c_extra_steps):
          # Step 1\. Train the critic
          ...
@@ -205,7 +205,7 @@ for i in range(self.c_extra_steps):
 
 批评家和创造者的损失通过`model.compile`传递:
 
-```
+```py
 def compile(self, d_optimizer, g_optimizer, d_loss_fn, g_loss_fn):
 	super(WGAN, self).compile()
 	...
@@ -215,7 +215,7 @@ def compile(self, d_optimizer, g_optimizer, d_loss_fn, g_loss_fn):
 
 然后在`train_step`中，我们使用这些函数分别计算训练期间的临界损耗和发电机损耗。
 
-```
+```py
 def train_step(self, real_images):
 
 	for i in range(self.c_extra_steps):
@@ -233,7 +233,7 @@ def train_step(self, real_images):
 
 与 DCGAN 相同的代码，没有变化—覆盖 Keras `Callback`以在训练期间监控和可视化生成的图像。
 
-```
+```py
 class GANMonitor(keras.callbacks.Callback):
     def __init__():
     ...
@@ -249,7 +249,7 @@ class GANMonitor(keras.callbacks.Callback):
 
 我们将`wgan`模型与上面定义的 WGAN 类放在一起。请注意，根据 WGAN 文件，我们需要将评论家的额外培训步骤设置为`5`。
 
-```
+```py
 wgan = WGAN(critic=critic,
              generator=generator,
              latent_dim=LATENT_DIM,
@@ -260,7 +260,7 @@ wgan = WGAN(critic=critic,
 
 如前所述，WGAN 的主要变化是 Wasserstein loss 的用法。以下是如何计算评论家和发电机的 Wasserstein 损失——通过在 Keras 中定义自定义损失函数。
 
-```
+```py
 # Wasserstein loss for the critic
 def d_wasserstein_loss(pred_real, pred_fake):
    real_loss = tf.reduce_mean(pred_real)
@@ -276,7 +276,7 @@ def g_wasserstein_loss(pred_fake):
 
 现在我们用 RMSProp 优化器编译`wgan`模型，按照 WGAN 论文，学习率为 0.00005。
 
-```
+```py
 LR = 0.00005 # UPDATE for WGAN: learning rate per WGAN paper
 wgan.compile(
    d_optimizer = keras.optimizers.RMSprop(learning_rate=LR, clipvalue=1.0, decay=1e-8), # UPDATE for WGAN: use RMSProp instead of Adam
@@ -292,7 +292,7 @@ wgan.compile(
 
 现在我们干脆调用`model.fit()`来训练`wgan`模型！
 
-```
+```py
 NUM_EPOCHS = 50 # number of epochs
 wgan.fit(train_images, epochs=NUM_EPOCHS, callbacks=[GANMonitor(num_img=16, latent_dim=LATENT_DIM)])
 ```
@@ -315,7 +315,7 @@ wgan.fit(train_images, epochs=NUM_EPOCHS, callbacks=[GANMonitor(num_img=16, late
 
 梯度惩罚意味着惩罚具有大范数值的梯度，下面是我们在 Keras 中如何计算它:
 
-```
+```py
 def gradient_penalty(self, batch_size, real_images, fake_images):
     """ Calculates the gradient penalty.
 
@@ -344,7 +344,7 @@ def gradient_penalty(self, batch_size, real_images, fake_images):
 
 然后在`train_step`中，我们计算梯度惩罚，并将其添加到原始评论家损失中。注意惩罚权重(或系数λƛ)控制惩罚的大小，它被设置为每张 WGAN 纸 10。
 
-```
+```py
 gp = self.gradient_penalty(batch_size, real_images, fake_images)
 d_loss = self.d_loss_fn(pred_real, pred_fake) + gp * self.gp_weight
 ```
@@ -357,7 +357,7 @@ d_loss = self.d_loss_fn(pred_real, pred_fake) + gp * self.gp_weight
 
 DCGAN 使用 Adam 优化器，对于 WGAN，我们切换到 RMSProp 优化器。现在对于 WGAN-GP，我们切换回 Adam 优化器，按照 WGAN-GP 论文建议，学习率为 0.0002。
 
-```
+```py
 LR = 0.0002 # WGAN-GP paper recommends lr of 0.0002
 d_optimizer = keras.optimizers.Adam(learning_rate=LR, beta_1=0.5, beta_2=0.9) g_optimizer = keras.optimizers.Adam(learning_rate=LR, beta_1=0.5, beta_2=0.9)
 ```
@@ -376,7 +376,7 @@ WGAN 和 WGAN-GP 都提高了训练稳定性。权衡就是他们的训练收敛
 
 **梅纳德-里德，M.** 《有 WGAN 和 WGAN-GP 的动漫脸》， *PyImageSearch* ，2022，【https://pyimg.co/9avys】T4
 
-```
+```py
 @article{Maynard-Reid_2022_Anime_Faces,
   author = {Margaret Maynard-Reid},
   title = {Anime Faces with {WGAN} and {WGAN-GP}},

@@ -64,7 +64,7 @@ LeNet 很小，很容易理解——但也足够大，可以提供有趣的结�
 
 LeNet 架构由以下几层组成:
 
-```
+```py
 INPUT => CONV => RELU => POOL => CONV => RELU => POOL => FC => RELU => FC
 
 ```
@@ -79,7 +79,7 @@ INPUT => CONV => RELU => POOL => CONV => RELU => POOL => FC => RELU => FC
 
 在我们深入任何代码之前，让我们首先回顾一下我们的项目结构:
 
-```
+```py
 |--- output
 |--- pyimagesearch
 |    |--- __init__.py
@@ -108,7 +108,7 @@ INPUT => CONV => RELU => POOL => CONV => RELU => POOL => FC => RELU => FC
 
 否则，打开`lenet.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from keras.models import Sequential
 from keras.layers.convolutional import Conv2D
@@ -151,7 +151,7 @@ class LeNet:
 
 既然模型已经初始化，我们可以开始向它添加层:
 
-```
+```py
 		# define the first set of CONV => ACTIVATION => POOL layers
 		model.add(Conv2D(20, 5, padding="same",
 			input_shape=inputShape))
@@ -170,7 +170,7 @@ class LeNet:
 
 我们现在准备应用我们的第二套`CONV => RELU => POOL`层:
 
-```
+```py
 		# define the second set of CONV => ACTIVATION => POOL layers
 		model.add(Conv2D(50, 5, padding="same"))
 		model.add(Activation(activation))
@@ -184,7 +184,7 @@ class LeNet:
 
 接下来，我们来看 LeNet 架构的全连接层(通常称为“密集”层):
 
-```
+```py
 		# define the first FC => ACTIVATION layers
 		model.add(Flatten())
 		model.add(Dense(500))
@@ -208,7 +208,7 @@ class LeNet:
 
 我们的最后一个代码块处理加载一个预先存在的`weightsPath`(如果这样的文件存在)并将构建的模型返回给调用函数:
 
-```
+```py
 		# if a weights path is supplied (inicating that the model was
 		# pre-trained), then load the weights
 		if weightsPath is not None:
@@ -232,7 +232,7 @@ class LeNet:
 
 打开您的`lenet_mnist.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.cnn.networks.lenet import LeNet
 from sklearn.model_selection import train_test_split
@@ -268,7 +268,7 @@ args = vars(ap.parse_args())
 
 我们现在准备加载 MNIST 数据集，并将其划分为训练和测试部分:
 
-```
+```py
 # grab the MNIST dataset (if this is your first time running this
 # script, the download may take a minute -- the 55MB MNIST dataset
 # will be downloaded)
@@ -302,7 +302,7 @@ testData = testData.astype("float32") / 255.0
 
 下一步是处理我们的标签，以便它们可以用于分类交叉熵损失函数:
 
-```
+```py
 # transform the training and testing labels into vectors in the
 # range [0, classes] -- this generates a vector for each label,
 # where the index of the label is set to `1` and all other entries
@@ -327,7 +327,7 @@ model.compile(loss="categorical_crossentropy", optimizer=opt,
 
 在 MNIST 数据集的情况下，我们有 10 个类标签，因此每个标签现在被表示为一个 *10-d* 向量。例如，考虑培训标签*“3”*。在应用了`to_categorical`函数后，我们的向量现在看起来像这样:
 
-```
+```py
 [0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
 
 ```
@@ -338,7 +338,7 @@ model.compile(loss="categorical_crossentropy", optimizer=opt,
 
 我们现在准备好构建我们的`LeNet`架构，可选地从磁盘加载任何预训练的权重，然后训练我们的网络:
 
-```
+```py
 # only train and evaluate the model if we *are not* loading a
 # pre-existing model
 if args["load_model"] < 0:
@@ -362,7 +362,7 @@ if args["load_model"] < 0:
 
 接下来，我们检查是否应该将网络权重序列化到文件中，这样我们就可以运行`lenet_mnist.py`脚本*后续的*，而不必从头开始重新训练网络:
 
-```
+```py
 # check to see if the model should be saved to file
 if args["save_model"] > 0:
 	print("[INFO] dumping weights to file...")
@@ -372,7 +372,7 @@ if args["save_model"] > 0:
 
 我们的最后一个代码块处理从我们的测试集中随机选择几个数字，然后将它们通过我们训练过的 LeNet 网络进行分类:
 
-```
+```py
 # randomly select a few testing digits
 for i in np.random.choice(np.arange(0, len(testLabels)), size=(10,)):
 	# classify the digit
@@ -419,7 +419,7 @@ for i in np.random.choice(np.arange(0, len(testLabels)), size=(10,)):
 
 下载完`.zip`代码档案后，您可以通过执行以下命令在 MNIST 上训练 LeNet:
 
-```
+```py
 $ python lenet_mnist.py --save-model 1 --weights output/lenet_weights.hdf5
 
 ```
@@ -478,7 +478,7 @@ $ python lenet_mnist.py --save-model 1 --weights output/lenet_weights.hdf5
 
 要加载我们预先训练的 LeNet 模型，只需执行以下命令:
 
-```
+```py
 $ python lenet_mnist.py --load-model 1 --weights output/lenet_weights.hdf5
 
 ```

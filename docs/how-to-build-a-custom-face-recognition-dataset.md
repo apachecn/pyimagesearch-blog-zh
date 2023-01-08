@@ -67,7 +67,7 @@
 
 当你准备好了，打开`build_face_dataset.py`让我们一步步来:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 import argparse
@@ -84,7 +84,7 @@ import os
 
 您可以通过 pip 轻松安装或升级 [imutils](https://github.com/jrosebr1/imutils) :
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -93,7 +93,7 @@ $ pip install --upgrade imutils
 
 现在您的环境已经设置好了，让我们来讨论两个必需的[命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-c", "--cascade", required=True,
@@ -113,7 +113,7 @@ args = vars(ap.parse_args())
 
 让我们加载我们的脸哈尔级联和初始化我们的视频流:
 
-```
+```py
 # load OpenCV's Haar cascade for face detection from disk
 detector = cv2.CascadeClassifier(args["cascade"])
 
@@ -140,7 +140,7 @@ total = 0
 
 现在让我们逐帧循环视频流:
 
-```
+```py
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the threaded video stream, clone it, (just
@@ -182,7 +182,7 @@ while True:
 
 我们将在循环中采取的最后步骤是(1)在屏幕上显示帧，以及(2)处理按键:
 
-```
+```py
 	# show the output frame
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
@@ -212,7 +212,7 @@ while True:
 
 最后，我们将打印终端中存储的图像数量并执行清理:
 
-```
+```py
 # print the total faces saved and do a bit of cleanup
 print("[INFO] {} face images stored".format(total))
 print("[INFO] cleaning up...")
@@ -227,7 +227,7 @@ vs.stop()
 
 从那里，在您的终端中执行以下命令:
 
-```
+```py
 $ python build_face_dataset.py --cascade haarcascade_frontalface_default.xml \
 	--output dataset/adrian
 [INFO] starting video stream...

@@ -68,7 +68,7 @@
 
 打开一个新文件，将其命名为`faster_facial_landmarks.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 from imutils import face_utils
@@ -84,7 +84,7 @@ import cv2
 
 **imutils 包已经更新，可以处理*68 点和 5 点面部标志模型*。确保在您的环境中通过**进行升级
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -93,7 +93,7 @@ $ pip install --upgrade imutils
 
 接下来，让我们解析命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--shape-predictor", required=True,
@@ -108,7 +108,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们加载形状预测器并初始化我们的视频流:
 
-```
+```py
 # initialize dlib's face detector (HOG-based) and then create the
 # facial landmark predictor
 print("[INFO] loading facial landmark predictor...")
@@ -135,7 +135,7 @@ time.sleep(2.0)
 
 从那里，让我们循环帧，做一些工作:
 
-```
+```py
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the threaded video stream, resize it to
@@ -165,7 +165,7 @@ while True:
 
 接下来，让我们循环面部检测并绘制界标:
 
-```
+```py
 	# loop over the face detections
 	for rect in rects:
 		# compute the bounding box of the face and draw it on the
@@ -201,7 +201,7 @@ while True:
 
 让我们完成面部标志性的脚本:
 
-```
+```py
 	# show the frame
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
@@ -226,7 +226,7 @@ vs.stop()
 
 从那里，打开一个 shell 并执行以下命令:
 
-```
+```py
 $ python faster_facial_landmarks.py \
 	--shape-predictor shape_predictor_5_face_landmarks.dat
 

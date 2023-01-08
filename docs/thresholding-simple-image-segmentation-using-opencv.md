@@ -69,7 +69,7 @@
 
 让我们看看如何使用 OpenCV 执行简单的图像分割。打开您最喜欢的编辑器，创建一个名为`threshold.py`的文件，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -119,7 +119,7 @@ for (threshName, threshMethod) in methods:
 
 我们来看一些结果。打开您的终端，导航到我们的代码目录，并执行以下命令:
 
-```
+```py
 $ python threshold.py --image images/skateboard_decks.png --threshold 245
 
 ```

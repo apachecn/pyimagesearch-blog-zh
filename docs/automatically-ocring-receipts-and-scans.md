@@ -44,7 +44,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -73,7 +73,7 @@ $ pip install opencv-contrib-python
 
 从这里，看一下目录结构:
 
-```
+```py
 |-- scan_receipt.py
 |-- whole_foods.png
 ```
@@ -98,7 +98,7 @@ $ pip install opencv-contrib-python
 
 说完这些，让我们深入到实现中。打开项目目录结构中的`scan_receipt.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from imutils.perspective import four_point_transform
 import pytesseract
@@ -117,7 +117,7 @@ import re
 
 接下来，我们有命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -138,7 +138,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们从磁盘加载我们的`--input`图像，并检查它的空间维度:
 
-```
+```py
 # load the input image from disk, resize it, and compute the ratio
 # of the *new* width to the *old* width
 orig = cv2.imread(args["image"])
@@ -153,7 +153,7 @@ ratio = orig.shape[1] / float(image.shape[1])
 
 现在让我们开始将我们的图像处理流水线应用到`image`上:
 
-```
+```py
 # convert the image to grayscale, blur it slightly, and then apply
 # edge detection
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -176,7 +176,7 @@ if args["debug"] > 0:
 
 给定我们的边缘图，让我们检测`edged`图像中的轮廓并处理它们:
 
-```
+```py
 # find contours in the edge map and sort them by size in descending
 # order
 cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL,
@@ -191,7 +191,7 @@ cnts = sorted(cnts, key=cv2.contourArea, reverse=True)
 
 下面的代码块回答了这个问题:
 
-```
+```py
 # initialize a contour that corresponds to the receipt outline
 receiptCnt = None
 
@@ -228,7 +228,7 @@ if receiptCnt is None:
 
 找到收据轮廓后，让我们对图像应用透视变换:
 
-```
+```py
 # check to see if we should draw the contour of the receipt on the
 # image and then display it to our screen
 if args["debug"] > 0:
@@ -258,7 +258,7 @@ cv2.waitKey(0)
 
 给定收据的*自上而下*视图，我们现在可以对其进行 OCR:
 
-```
+```py
 # apply OCR to the receipt image by assuming column data, ensuring
 # the text is *concatenated across the row* (additionally, for your
 # own images you may need to apply additional processing to cleanup
@@ -285,7 +285,7 @@ print("\n")
 
 答案是利用正则表达式:
 
-```
+```py
 # define a regular expression that will match line items that include
 # a price component
 pricePattern = r'([0-9]+\.[0-9]+)'
@@ -321,7 +321,7 @@ for row in text.split("\n"):
 
 现在我们已经实现了我们的`scan_receipt.py`脚本，让我们把它投入工作。打开终端并执行以下命令:
 
-```
+```py
 $ python scan_receipt.py --image whole_foods.png
 [INFO] raw output:
 ==================
@@ -363,7 +363,7 @@ eee TAX .00 BAL 101.33
 
 答案是使用正则表达式，该表达式过滤具有类似于价格的数值的行，这些正则表达式的输出如下所示:
 
-```
+```py
 [INFO] price line items:
 ========================
 365 BACON LS NP 4.99

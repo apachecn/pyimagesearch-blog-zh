@@ -94,7 +94,7 @@ LetNet 架构是卷积神经网络的优秀“第一图像分类器”。最初�
 
 ***注意:**在运行代码之前，您需要使用本文的**“下载”**部分下载源代码+示例图片。出于完整性考虑，我在下面添加了代码，但是您需要确保您的目录结构与我的相匹配。*
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D
@@ -137,7 +137,7 @@ class LeNet:
 
 现在我们已经初始化了我们的模型，我们可以开始向它添加层:
 
-```
+```py
 		# first set of CONV => RELU => POOL layers
 		model.add(Conv2D(20, (5, 5), padding="same",
 			input_shape=inputShape))
@@ -154,7 +154,7 @@ class LeNet:
 
 让我们定义第二组`CONV => RELU => POOL`层:
 
-```
+```py
 		# second set of CONV => RELU => POOL layers
 		model.add(Conv2D(50, (5, 5), padding="same"))
 		model.add(Activation("relu"))
@@ -166,7 +166,7 @@ class LeNet:
 
 我们的最后一个代码块处理将卷展平为一组完全连接的层:
 
-```
+```py
 		# first (and only) set of FC => RELU layers
 		model.add(Flatten())
 		model.add(Dense(500))
@@ -199,7 +199,7 @@ class LeNet:
 
 打开一个新文件，将其命名为`train_network.py`，并插入以下代码(或者简单地跟随代码下载):
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -232,7 +232,7 @@ import os
 
 从那里，我们解析命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -251,7 +251,7 @@ args = vars(ap.parse_args())
 
 接下来，我们将设置一些训练变量，初始化列表，并收集图像路径:
 
-```
+```py
 # initialize the number of epochs to train for, initia learning rate,
 # and batch size
 EPOCHS = 25
@@ -278,7 +278,7 @@ random.shuffle(imagePaths)
 
 现在让我们对图像进行预处理:
 
-```
+```py
 # loop over the input images
 for imagePath in imagePaths:
 	# load the image, pre-process it, and store it in the data list
@@ -299,7 +299,7 @@ for imagePath in imagePaths:
 
 我们能够执行此类标签提取，因为我们的数据集目录结构是按以下方式组织的:
 
-```
+```py
 |--- images
 |    |--- not_santa
 |    |    |--- 00000000.jpg
@@ -325,13 +325,13 @@ for imagePath in imagePaths:
 
 因此，`imagePath`的一个例子是:
 
-```
+```py
 images/santa/00000384.jpg
 ```
 
 从`imagePath`中提取`label`后，结果是:
 
-```
+```py
 santa
 ```
 
@@ -339,7 +339,7 @@ santa
 
 接下来，我们将缩放图像并创建训练和测试分割:
 
-```
+```py
 # scale the raw pixel intensities to the range [0, 1]
 data = np.array(data, dtype="float") / 255.0
 labels = np.array(labels)
@@ -363,7 +363,7 @@ testY = to_categorical(testY, num_classes=2)
 
 随后，我们将执行一些数据扩充，使我们能够通过使用以下参数随机变换输入图像来生成“附加”训练数据:
 
-```
+```py
 # construct the image generator for data augmentation
 aug = ImageDataGenerator(rotation_range=30, width_shift_range=0.1,
 	height_shift_range=0.1, shear_range=0.2, zoom_range=0.2,
@@ -377,7 +377,7 @@ aug = ImageDataGenerator(rotation_range=30, width_shift_range=0.1,
 
 让我们继续使用深度学习和 Keras 来训练我们的图像分类器。
 
-```
+```py
 # initialize the model
 print("[INFO] compiling model...")
 model = LeNet.build(width=28, height=28, depth=3, classes=2)
@@ -413,7 +413,7 @@ model.save(args["model"], save_format="h5")
 
 最后，让我们绘制结果，看看我们的深度学习图像分类器的表现如何:
 
-```
+```py
 # plot the training loss and accuracy
 plt.style.use("ggplot")
 plt.figure()
@@ -436,7 +436,7 @@ plt.savefig(args["plot"])
 
 为了训练*非圣诞老人*网络(在使用本博文的 ***【下载】*** 部分下载代码+图片之后)，打开一个终端并执行以下命令:
 
-```
+```py
 $ python train_network.py --dataset images --model santa_not_santa.model
 Using TensorFlow backend.
 [INFO] loading images...
@@ -468,7 +468,7 @@ Epoch 25/25
 
 打开一个新文件，命名为`test_network.py`，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.models import load_model
@@ -483,7 +483,7 @@ import cv2
 
 接下来，我们将解析我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-m", "--model", required=True,
@@ -498,7 +498,7 @@ args = vars(ap.parse_args())
 
 从那里，我们将加载图像并对其进行预处理:
 
-```
+```py
 # load the image
 image = cv2.imread(args["image"])
 orig = image.copy()
@@ -521,7 +521,7 @@ image = np.expand_dims(image, axis=0)
 
 从那里，我们将加载*而非圣诞老人*图像分类器模型，并进行预测:
 
-```
+```py
 # load the trained convolutional neural network
 print("[INFO] loading network...")
 model = load_model(args["model"])
@@ -537,7 +537,7 @@ model = load_model(args["model"])
 
 最后，我们将使用我们的预测在`orig`图像副本上绘图，并将其显示到屏幕上:
 
-```
+```py
 # build the label
 label = "Santa" if santa > notSanta else "Not Santa"
 proba = santa if santa > notSanta else notSanta
@@ -564,7 +564,7 @@ cv2.waitKey(0)
 
 让我们试试我们的*不是圣诞老人*深度学习网络:
 
-```
+```py
 $ python test_network.py --model santa_not_santa.model \
 	--image examples/santa_01.png
 
@@ -574,7 +574,7 @@ $ python test_network.py --model santa_not_santa.model \
 
 让我们尝试另一个图像:
 
-```
+```py
 $ python test_network.py --model santa_not_santa.model \
 	--image examples/santa_02.png
 ```
@@ -583,7 +583,7 @@ $ python test_network.py --model santa_not_santa.model \
 
 现在，让我们对*不包含*圣诞老人的图像执行图像分类:
 
-```
+```py
 $ python test_network.py --model santa_not_santa.model \
 	--image examples/manhattan.png
 ```
@@ -594,7 +594,7 @@ $ python test_network.py --model santa_not_santa.model \
 
 说到夜晚和平安夜，这里有一张寒冷夜空的图片:
 
-```
+```py
 $ python test_network.py --model santa_not_santa.model \
 	--image examples/night_sky.png
 ```

@@ -73,7 +73,7 @@
 
 从那里，让我们使用`tree`命令来检查项目结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── images
@@ -111,7 +111,7 @@ $ tree --dirsfirst
 
 打开`bw2color_image.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -144,7 +144,7 @@ args = vars(ap.parse_args())
 
 让我们继续将我们的模型和聚类中心加载到内存中:
 
-```
+```py
 # load our serialized black and white colorizer model and cluster
 # center points from disk
 print("[INFO] loading model...")
@@ -171,7 +171,7 @@ net.getLayer(conv8).blobs = [np.full([1, 313], 2.606, dtype="float32")]
 
 现在让我们加载、缩放和转换我们的图像:
 
-```
+```py
 # load the input image from disk, scale the pixel intensities to the
 # range [0, 1], and then convert the image from the BGR to Lab color
 # space
@@ -190,7 +190,7 @@ lab = cv2.cvtColor(scaled, cv2.COLOR_BGR2LAB)
 
 让我们继续我们的预处理:
 
-```
+```py
 # resize the Lab image to 224x224 (the dimensions the colorization
 # network accepts), split channels, extract the 'L' channel, and then
 # perform mean centering
@@ -206,7 +206,7 @@ L -= 50
 
 现在我们可以通过网络把**输入 *L* 通道**传给**预测 *ab* 通道:**
 
-```
+```py
 # pass the L channel through the network which will *predict* the 'a'
 # and 'b' channel values
 'print("[INFO] colorizing image...")'
@@ -227,7 +227,7 @@ ab = cv2.resize(ab, (image.shape[1], image.shape[0]))
 
 现在是后处理的时候了。请继续听我说，我们实际上是在反向执行之前的一些步骤:
 
-```
+```py
 # grab the 'L' channel from the *original* input image (not the
 # resized one) and concatenate the original 'L' channel with the
 # predicted 'ab' channels
@@ -268,7 +268,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端，导航到您下载源代码的位置，并执行以下命令:
 
-```
+```py
 $ python bw2color_image.py \
 	--prototxt model/colorization_deploy_v2.prototxt \
 	--model model/colorization_release_v2.caffemodel \
@@ -288,7 +288,7 @@ $ python bw2color_image.py \
 
 让我们试试另一张图片，这是阿尔伯特·爱因斯坦的:
 
-```
+```py
 $ python bw2color_image.py \
 	--prototxt model/colorization_deploy_v2.prototxt \
 	--model model/colorization_release_v2.caffemodel \
@@ -308,7 +308,7 @@ $ python bw2color_image.py \
 
 这是另一个例子，这是马克·吐温的作品，他是我一直以来最喜欢的作家之一:
 
-```
+```py
 $ python bw2color_image.py \
 	--prototxt model/colorization_deploy_v2.prototxt \
 	--model model/colorization_release_v2.caffemodel \
@@ -326,7 +326,7 @@ $ python bw2color_image.py \
 
 最终的图像展示了 OpenCV 不太好的黑白图像彩色化:
 
-```
+```py
 $ python bw2color_image.py \
 	--prototxt model/colorization_deploy_v2.prototxt \
 	--model model/colorization_release_v2.caffemodel \
@@ -356,7 +356,7 @@ $ python bw2color_image.py \
 
 打开`bw2color_video.py`并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 import numpy as np
@@ -388,7 +388,7 @@ args = vars(ap.parse_args())
 
 现在让我们初始化我们的`VideoStream`:
 
-```
+```py
 # initialize a boolean used to indicate if either a webcam or input
 # video is being used
 webcam = not args.get("input", False)
@@ -410,7 +410,7 @@ else:
 
 从那里，我们将加载彩色深度学习模型和聚类中心(与我们在之前的脚本中所做的方式相同):
 
-```
+```py
 # load our serialized black and white colorizer model and cluster
 # center points from disk
 print("[INFO] loading model...")
@@ -428,7 +428,7 @@ net.getLayer(conv8).blobs = [np.full([1, 313], 2.606, dtype="float32")]
 
 现在我们将开始对输入帧进行无限循环。我们将在循环中直接处理帧:
 
-```
+```py
 # loop over frames from the video stream
 while True:
 	# grab the next frame and handle if we are reading from either
@@ -463,7 +463,7 @@ while True:
 
 现在让我们应用深度学习着色并对结果进行后处理:
 
-```
+```py
 	# pass the L channel through the network which will *predict* the
 	# 'a' and 'b' channel values
 	net.setInput(cv2.dnn.blobFromImage(L))
@@ -492,7 +492,7 @@ while True:
 
 如果您仔细阅读了上面的内容，您会记得我们接下来要做的就是显示结果:
 
-```
+```py
 	# show the original and final colorized frames
 	cv2.imshow("Original", frame)
 	cv2.imshow("Grayscale", cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY))
@@ -530,7 +530,7 @@ cv2.destroyAllWindows()
 
 从那里，打开一个终端，并执行以下命令，让彩色运行在您的网络摄像头:
 
-```
+```py
 $ python bw2color_video.py \
 	--prototxt model/colorization_deploy_v2.prototxt \
 	--model model/colorization_release_v2.caffemodel \
@@ -544,7 +544,7 @@ $ python bw2color_video.py \
 
 如果您想在视频文件上运行着色程序，您可以使用以下命令:
 
-```
+```py
 $ python bw2color_video.py \
 	--prototxt model/colorization_deploy_v2.prototxt \
 	--model model/colorization_release_v2.caffemodel \

@@ -37,7 +37,7 @@ Oscar 拿起一本我的书， *[实用 Python 和 OpenCV](https://pyimagesearch
 
 打开一个新文件，命名为`find_shapes.py`，然后我们开始工作。
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -66,7 +66,7 @@ image = cv2.imread(args["image"])
 
 使用`cv2.inRange`功能检测这些黑色形状实际上非常容易:
 
-```
+```py
 # find all the 'black' shapes in the image
 lower = np.array([0, 0, 0])
 upper = np.array([15, 15, 15])
@@ -92,7 +92,7 @@ shapeMask = cv2.inRange(image, lower, upper)
 
 下一步是检测`shapeMask`中的轮廓。这也很简单:
 
-```
+```py
 # find the contours in the mask
 cnts = cv2.findContours(shapeMask.copy(), cv2.RETR_EXTERNAL,
 	cv2.CHAIN_APPROX_SIMPLE)
@@ -121,7 +121,7 @@ for c in cnts:
 
 要执行该脚本，启动一个 shell，并发出以下命令:
 
-```
+```py
 $ python find_shapes.py --image shapes.png 
 I found 6 black shapes
 

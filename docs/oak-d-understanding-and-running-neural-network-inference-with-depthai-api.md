@@ -45,7 +45,7 @@
 
 幸运的是，OpenCV 和 DepthAI 都可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-python
 $ pip install depthai
 ```
@@ -77,7 +77,7 @@ $ pip install depthai
 
 从这里，看一下目录结构:
 
-```
+```py
 ├── main.py
 ├── models
 │   └── mobilenet-ssd_openvino_2021.4_6shave.blob
@@ -396,7 +396,7 @@ Connections:
 
 在我们开始实现之前，让我们检查一下项目的配置管道。我们将转到位于`pyimagesearch`目录中的`config.py`脚本。
 
-```
+```py
 # Set the color camera preview size and interleaved
 COLOR_CAMERA_PREVIEW_SIZE = 300, 300
 CAMERA_INTERLEAVED = False
@@ -440,7 +440,7 @@ TEXT_COLOR2 = (255, 255, 255)
 
 既然已经定义了配置管道，我们可以转到第一个实验的代码演练(即运行 OAK-D 的 RGB 彩色摄像机)。这个实验将帮助您了解如何创建彩色摄像机节点，以及如何通过`XLinkOut`节点在主机端显示摄像机画面。
 
-```
+```py
 # import the necessary packages
 import cv2
 import depthai as dai
@@ -484,7 +484,7 @@ def create_color_camera_pipeline():
 
 在第 30 行上，我们将管道返回到调用函数。
 
-```
+```py
 def color_camera(pipeline):
    # Connect to device and start pipeline
    with dai.Device(pipeline) as device:
@@ -524,7 +524,7 @@ def color_camera(pipeline):
 
 下面的实验是学习如何访问 OAK-D 的单声道摄像机(左和右)并在主机端显示提要。这将更容易理解，因为你已经完成了之前的实验。在这里，我们将创建两个摄像机节点和两个`XLinkOut`节点来显示单声道摄像机输入。
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 import depthai as dai
@@ -577,7 +577,7 @@ def create_mono_camera_pipeline():
 
 在**第 38 行**上，我们将管道返回到调用函数。
 
-```
+```py
 def mono_cameras_preview(pipeline):
     # connect to device and start pipeline
     with dai.Device(pipeline) as device:
@@ -635,7 +635,7 @@ def mono_cameras_preview(pipeline):
 
 在我们浏览对象检测代码之前，让我们回顾一下对象检测管道的实用程序。为此，我们将转到位于`pyimagesearch`目录中的`utils.py`脚本。
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 import numpy as np
@@ -703,7 +703,7 @@ def print_neural_network_layer_names(inNN):
 
 现在定义了助手方法，我们可以最终转移到对象检测推理实现(即位于`pyimagesearch`目录中的`object_detection_mobilenet.py`脚本)。
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from pyimagesearch.utils import print_neural_network_layer_names
@@ -786,7 +786,7 @@ def create_detection_pipeline():
 
 然后`pipeline`对象返回到**线 59** 上的调用函数。
 
-```
+```py
 def object_detection_mobilenet(pipeline):
     # connect to device and start pipeline
     with dai.Device(pipeline) as device:
@@ -918,7 +918,7 @@ def object_detection_mobilenet(pipeline):
 
 **Sharma，a .**“OAK-D:使用 DepthAI API 理解和运行神经网络推理”， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva，R. Raha 和 A. Thanki 编辑。，2022 年，【https://pyimg.co/8ynbk 
 
-```
+```py
 @incollection{Sharma_2022_OAK-D,
   author = {Aditya Sharma},
   title = {{OAK-D}: Understanding and Running Neural Network Inference with {DepthAI} {API}},

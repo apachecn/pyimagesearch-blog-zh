@@ -70,7 +70,7 @@ OpenCV 通过以下两个函数实现了基本直方图均衡和自适应直方�
 
 应用`cv2.equalizeHist`函数非常简单，只需将图像转换为灰度，然后对其调用`cv2.equalizeHist`:
 
-```
+```py
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 equalized = cv2.equalizeHist(gray)
 ```
@@ -83,7 +83,7 @@ equalized = cv2.equalizeHist(gray)
 
 这比听起来容易得多，只需要几行代码:
 
-```
+```py
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
 equalized = clahe.apply(gray)
@@ -102,7 +102,7 @@ equalized = clahe.apply(gray)
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -131,7 +131,7 @@ $ pip install opencv-contrib-python
 
 从那里，检查项目目录结构:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── images
@@ -157,7 +157,7 @@ $ tree . --dirsfirst
 
 打开项目文件夹中的`simple_equalization.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -175,7 +175,7 @@ args = vars(ap.parse_args())
 
 解析完命令行参数后，我们可以进入下一步:
 
-```
+```py
 # load the input image from disk and convert it to grayscale
 print("[INFO] loading input image...")
 image = cv2.imread(args["image"])
@@ -194,7 +194,7 @@ equalized = cv2.equalizeHist(gray)
 
 最后一步是显示我们的输出图像:
 
-```
+```py
 # show the original grayscale image and equalized image
 cv2.imshow("Input", gray)
 cv2.imshow("Histogram Equalization", equalized)
@@ -211,7 +211,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python simple_equalization.py --image images/moon.png
 [INFO] loading input image...
 [INFO] performing histogram equalization...
@@ -221,7 +221,7 @@ $ python simple_equalization.py --image images/moon.png
 
 让我们试试另一张照片，这张曝光不足的照片:
 
-```
+```py
 $ python simple_equalization.py --image images/dog.png
 [INFO] loading input image...
 [INFO] performing histogram equalization...
@@ -231,7 +231,7 @@ $ python simple_equalization.py --image images/dog.png
 
 下图突出显示了通过直方图均衡化进行全局对比度调整的局限性之一:
 
-```
+```py
 $ python simple_equalization.py --image images/boston.png
 [INFO] loading input image...
 [INFO] performing histogram equalization...
@@ -253,7 +253,7 @@ $ python simple_equalization.py --image images/boston.png
 
 打开项目目录结构中的`adaptive_equalization.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -278,7 +278,7 @@ args = vars(ap.parse_args())
 3.  `--tile`:CLAHE 的平铺网格尺寸。从概念上讲，我们在这里做的是将输入图像分成`tile x tile`个单元，然后对每个单元应用直方图均衡化(使用 CLAHE 提供的附加功能)。
 4.  现在让我们用 OpenCV 来应用 CLAHE:
 
-```
+```py
 # load the input image from disk and convert it to grayscale
 print("[INFO] loading input image...")
 image = cv2.imread(args["image"])
@@ -299,7 +299,7 @@ equalized = clahe.apply(gray)
 
 最后一步是在屏幕上显示输出图像:
 
-```
+```py
 # show the original grayscale image and CLAHE output image
 cv2.imshow("Input", gray)
 cv2.imshow("CLAHE", equalized)
@@ -316,7 +316,7 @@ cv2.waitKey(0)
 
 从那里，打开一个 shell 并执行以下命令:
 
-```
+```py
 $ python adaptive_equalization.py --image images/boston.png
 [INFO] loading input image...
 [INFO] applying CLAHE...

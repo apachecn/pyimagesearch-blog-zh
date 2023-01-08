@@ -119,7 +119,7 @@
 
 首先使用本教程的 ***【下载】*** 部分下载源代码和示例图像。从那里，让我们检查我们的项目目录结构。
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── pyimagesearch
@@ -146,7 +146,7 @@ $ tree --dirsfirst
 
 我在下面包含了这个 JSON 文件的前几行:
 
-```
+```py
 {
   "0": [
     "n01440764",
@@ -182,7 +182,7 @@ $ tree --dirsfirst
 1.  接受输入类标签
 2.  返回相应标签的整数类标签索引
 
-```
+```py
 # import necessary packages
 import json
 import os
@@ -195,7 +195,7 @@ def get_class_idx(label):
 
 现在让我们加载 JSON 文件的内容:
 
-```
+```py
 	# open the ImageNet class mappings file and load the mappings as
 	# a dictionary with the human-readable class label as the key and
 	# the integer index as the value
@@ -220,7 +220,7 @@ def get_class_idx(label):
 
 让我们从基本的图像分类脚本开始——打开项目目录结构中的`predict_normal.py`文件，并插入以下代码:
 
-```
+```py
 # import necessary packages
 from pyimagesearch.utils import get_class_idx
 from tensorflow.keras.applications import ResNet50
@@ -236,7 +236,7 @@ import cv2
 
 也就是说，如果你是 Keras 和 TensorFlow 的新手，我强烈建议你阅读我的 *[Keras 教程:如何入门 Keras、深度学习和 Python](https://pyimagesearch.com/2018/09/10/keras-tutorial-how-to-get-started-with-keras-deep-learning-and-python/)* 指南。此外，你可能想阅读我的书 *[用 Python 进行计算机视觉的深度学习](https://pyimagesearch.com/deep-learning-computer-vision-python-book/)* ，以更深入地了解如何训练你自己的定制神经网络。
 
-```
+```py
 def preprocess_image(image):
 	# swap color channels, preprocess the image, and add in a batch
 	# dimension
@@ -251,7 +251,7 @@ def preprocess_image(image):
 
 接下来，让我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -259,7 +259,7 @@ ap.add_argument("-i", "--image", required=True,
 args = vars(ap.parse_args())
 ```
 
-```
+```py
 # load image from disk and make a clone for annotation
 print("[INFO] loading image...")
 image = cv2.imread(args["image"])
@@ -270,7 +270,7 @@ output = imutils.resize(output, width=400)
 preprocessedImage = preprocess_image(image)
 ```
 
-```
+```py
 # load the pre-trained ResNet50 model
 print("[INFO] loading pre-trained ResNet50 model...")
 model = ResNet50(weights="imagenet")
@@ -281,7 +281,7 @@ predictions = model.predict(preprocessedImage)
 predictions = decode_predictions(predictions, top=3)[0]
 ```
 
-```
+```py
 # loop over the top three predictions
 for (i, (imagenetID, label, prob)) in enumerate(predictions):
 	# print the ImageNet class label ID of the top prediction to our
@@ -294,7 +294,7 @@ for (i, (imagenetID, label, prob)) in enumerate(predictions):
 	print("[INFO] {}. {}: {:.2f}%".format(i + 1, label, prob * 100))
 ```
 
-```
+```py
 # draw the top-most predicted label on the image along with the
 # confidence score
 text = "{}: {:.2f}%".format(predictions[0][1],
@@ -317,7 +317,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python predict_normal.py --image pig.jpg
 [INFO] loading image...
 [INFO] loading pre-trained ResNet50 model...
@@ -334,7 +334,7 @@ $ python predict_normal.py --image pig.jpg
 
 在我们的项目目录结构中打开`generate_basic_adversary.py`文件，并插入以下代码:
 
-```
+```py
 # import necessary packages
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.applications import ResNet50
@@ -353,7 +353,7 @@ import cv2
 
 就像我们的`predict_normal.py`脚本中有一个`preprocess_image`实用程序一样，我们也需要一个用于这个脚本的实用程序:
 
-```
+```py
 def preprocess_image(image):
 	# swap color channels, resize the input image, and add a batch
 	# dimension
@@ -365,14 +365,14 @@ def preprocess_image(image):
 	return image
 ```
 
-```
+```py
 def clip_eps(tensor, eps):
 	# clip the values of the tensor to a given range and return it
 	return tf.clip_by_value(tensor, clip_value_min=-eps,
 		clip_value_max=eps)
 ```
 
-```
+```py
 def generate_adversaries(model, baseImage, delta, classIdx, steps=50):
 	# iterate over the number of steps
 	for step in range(0, steps):
@@ -383,7 +383,7 @@ def generate_adversaries(model, baseImage, delta, classIdx, steps=50):
 			tape.watch(delta)
 ```
 
-```
+```py
 			# add our perturbation vector to the base image and
 			# preprocess the resulting image
 			adversary = preprocess_input(baseImage + delta)
@@ -414,7 +414,7 @@ def generate_adversaries(model, baseImage, delta, classIdx, steps=50):
 	return delta
 ```
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--input", required=True,
@@ -426,7 +426,7 @@ ap.add_argument("-c", "--class-idx", type=int, required=True,
 args = vars(ap.parse_args())
 ```
 
-```
+```py
 # define the epsilon and learning rate constants
 EPS = 2 / 255.0
 LR = 0.1
@@ -441,7 +441,7 @@ image = preprocess_image(image)
 
 然后我们在第 77 行**定义我们的学习率。**通过经验调整获得了一个值`LR = 0.1`—*在构建您自己的对立图像时，您可能需要更新这个值。*
 
-```
+```py
 # load the pre-trained ResNet50 model for running inference
 print("[INFO] loading pre-trained ResNet50 model...")
 model = ResNet50(weights="imagenet")
@@ -451,7 +451,7 @@ optimizer = Adam(learning_rate=LR)
 sccLoss = SparseCategoricalCrossentropy()
 ```
 
-```
+```py
 # create a tensor based off the input image and initialize the
 # perturbation vector (we will update this vector via training)
 baseImage = tf.constant(image, dtype=tf.float32)
@@ -483,7 +483,7 @@ cv2.imwrite(args["output"], adverImage)
 
 下一个代码块将解决这个问题:
 
-```
+```py
 # run inference with this adversarial example, parse the results,
 # and display the top-1 predicted result
 print("[INFO] running inference on the adversarial example...")
@@ -522,7 +522,7 @@ cv2.waitKey(0)
 
 从那里，您可以打开一个终端并执行以下命令:
 
-```
+```py
 $ python generate_basic_adversary.py --input pig.jpg --output adversarial.png --class-idx 341
 [INFO] loading image...
 [INFO] loading pre-trained ResNet50 model...

@@ -53,7 +53,7 @@
 
 当使用 Keras 和深度学习时，您可能会利用或遇到通过以下方式加载预训练网络的代码:
 
-```
+```py
 model = VGG16(weights="imagenet")
 
 ```
@@ -64,7 +64,7 @@ model = VGG16(weights="imagenet")
 
 执行迁移学习或微调时，您可以使用以下代码来删除全连接(FC)层头:
 
-```
+```py
 model = VGG16(weights="imagenet", include_top=False)
 
 ```
@@ -75,7 +75,7 @@ model = VGG16(weights="imagenet", include_top=False)
 
 最后，我们可以更新我们的代码以包含一个 input_tensor 维度:
 
-```
+```py
 model = VGG16(weights="imagenet", include_top=False,
 	input_tensor=Input(shape=(224, 224, 3)))
 
@@ -87,7 +87,7 @@ model = VGG16(weights="imagenet", include_top=False,
 
 这实际上只是对我们的模型初始化的简单更新:
 
-```
+```py
 model = VGG16(weights="imagenet", include_top=False,
 	input_tensor=Input(shape=(128, 128, 3)))
 
@@ -118,7 +118,7 @@ model = VGG16(weights="imagenet", include_top=False,
 
 例如，当使用 *48×48* 输入图像时，我收到了以下错误消息:
 
-```
+```py
 ValueError: Negative dimension size caused by subtracting 4 from 1 for 'average_pooling2d_1/AvgPool' (op: 'AvgPool') with input shapes: [?,1,1,512].
 
 ```
@@ -181,7 +181,7 @@ ValueError: Negative dimension size caused by subtracting 4 from 1 for 'average_
 
  **一旦你提取了。zip 存档，您可以使用`tree`命令检查项目结构:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── dogs_vs_cats_small
@@ -204,7 +204,7 @@ $ tree --dirsfirst --filelimit 10
 
 打开项目结构中的`train.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.layers import AveragePooling2D
@@ -239,7 +239,7 @@ import os
 
 现在让我们继续解析命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -260,7 +260,7 @@ args = vars(ap.parse_args())
 
 接下来，我们将加载并预处理我们的图像:
 
-```
+```py
 # grab the list of images in our dataset directory, then initialize
 # the list of data (i.e., images) and class images
 print("[INFO] loading images...")
@@ -295,7 +295,7 @@ VGG16 在 *224×224* px 图像上进行训练；不过，我想请**将您的注
 
 让我们继续一键编码我们的标签并拆分我们的数据:
 
-```
+```py
 # convert the data and labels to NumPy arrays
 data = np.array(data)
 labels = np.array(labels)
@@ -322,7 +322,7 @@ labels = to_categorical(labels)
 
 现在让我们初始化我们的数据增强生成器。我们还将为均值减法建立我们的 ImageNet 均值:
 
-```
+```py
 # initialize the training data augmentation object
 trainAug = ImageDataGenerator(
 	rotation_range=30,
@@ -356,7 +356,7 @@ valAug.mean = mean
 
 我们正在用 **VGG16** 进行迁移学习。现在让我们初始化基本模型:
 
-```
+```py
 # load VGG16, ensuring the head FC layer sets are left off, while at
 # the same time adjusting the size of the input image tensor to the
 # network
@@ -384,7 +384,7 @@ print(baseModel.summary())
 
 现在我们将通过安装一个新的头部并缝合到 CNN 上来进行手术:
 
-```
+```py
 # construct the head of the model that will be placed on top of the
 # the base model
 headModel = baseModel.output
@@ -413,7 +413,7 @@ for layer in baseModel.layers:
 
 我们现在准备用我们的数据来编译和训练模型:
 
-```
+```py
 # compile our model (this needs to be done after our setting our
 # layers to being non-trainable)
 print("[INFO] compiling model...")
@@ -444,7 +444,7 @@ H = model.fit(
 
 培训完成后，我们将评估网络并绘制培训历史:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(x=testX.astype("float32"), batch_size=32)
@@ -483,7 +483,7 @@ plt.savefig(args["plot"])
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python train.py --dataset dogs_vs_cats_small --epochs 25
 Using TensorFlow backend.
 [INFO] loading images...
@@ -550,7 +550,7 @@ Non-trainable params: 0
 
 一旦我们的模型构建完成，我们就可以对其进行微调:
 
-```
+```py
 _________________________________________________________________
 None
 [INFO] compiling model...

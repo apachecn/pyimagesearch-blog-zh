@@ -81,7 +81,7 @@
 
 滚动到本教程的 ***“下载”*** 部分，获取包含我们的代码和图像的`.zip`。这些文件组织如下:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── examples
@@ -98,7 +98,7 @@ $ tree --dirsfirst
 
 ### **用 OpenCV 和 Python 实现修复**
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -117,7 +117,7 @@ ap.add_argument("-r", "--radius", type=int, default=3,
 args = vars(ap.parse_args())
 ```
 
-```
+```py
 # initialize the inpainting algorithm to be the Telea et al. method
 flags = cv2.INPAINT_TELEA
 
@@ -127,7 +127,7 @@ if args["method"] == "ns":
 	flags = cv2.INPAINT_NS
 ```
 
-```
+```py
 # load the (1) input image (i.e., the image we're going to perform
 # inpainting on) and (2) the  mask which should have the same input
 # dimensions as the input image -- zero pixels correspond to areas
@@ -138,12 +138,12 @@ mask = cv2.imread(args["mask"])
 mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
 ```
 
-```
+```py
 # perform inpainting using OpenCV
 output = cv2.inpaint(image, mask, args["radius"], flags=flags)
 ```
 
-```
+```py
 # show the original input image, mask, and output image after
 # applying inpainting
 cv2.imshow("Image", image)
@@ -162,7 +162,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python opencv_inpainting.py --image examples/example01.png \
 	--mask examples/mask01.png
 ```
@@ -171,7 +171,7 @@ $ python opencv_inpainting.py --image examples/example01.png \
 
 我特意*给图片添加了文字*【阿德里安·乌兹在此】*，图片的蒙版显示在中间的*。**
 
-```
+```py
 $ python opencv_inpainting.py --image examples/example02.png \
 	--mask examples/mask02.png --method ns
 ```
@@ -182,7 +182,7 @@ $ python opencv_inpainting.py --image examples/example02.png \
 
 让我们尝试最后一张图片:
 
-```
+```py
 $ python opencv_inpainting.py --image examples/example03.png \
 	--mask examples/mask03.png
 ```

@@ -24,7 +24,7 @@ OpenCV 附带了一个预训练的 HOG +线性 SVM 模型，可用于在图像�
 
 如果你已经熟悉这个过程(或者如果你只是想看一些关于如何使用 OpenCV 进行行人检测的代码)，只需打开一个新文件，命名为`detect.py`，我们就会得到代码:
 
-```
+```py
 # import the necessary packages
 from __future__ import print_function
 from imutils.object_detection import non_max_suppression
@@ -49,14 +49,14 @@ hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
 
 如果您的 ***没有*** 安装`imutils`，让`pip`为您安装:
 
-```
+```py
 $ pip install imutils
 
 ```
 
 如果你 ***做*** 安装了`imutils`，你需要升级到最新版本( *v0.3.1* )，其中包括`non_max_suppression`功能的实现，以及其他一些小的更新:
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -75,7 +75,7 @@ $ pip install --upgrade imutils
 
 此时，我们的 OpenCV 行人检测器已完全加载，我们只需将其应用于一些图像:
 
-```
+```py
 # loop over the image paths
 for imagePath in paths.list_images(args["images"]):
 	# load the image and resize it to (1) reduce detection time
@@ -141,7 +141,7 @@ for imagePath in paths.list_images(args["images"]):
 
 要查看我们的行人检测脚本的运行情况，只需发出以下命令:
 
-```
+```py
 $ python detect.py --images images
 
 ```

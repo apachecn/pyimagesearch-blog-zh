@@ -100,7 +100,7 @@
 
 使用本指南的 ***“下载”*** 部分检索源代码。然后，您将看到以下目录:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── pyimagesearch
@@ -131,7 +131,7 @@ $ tree . --dirsfirst
 
 也就是说，我在下面列出了`SimpleCNN`的完整实现供您查看:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import BatchNormalization
@@ -146,7 +146,7 @@ from tensorflow.keras.layers import Dense
 
 然后我们可以创建`SimpleCNN`架构:
 
-```
+```py
 class SimpleCNN:
 	@staticmethod
 	def build(width, height, depth, classes):
@@ -193,7 +193,7 @@ class SimpleCNN:
 
 也就是说，如果你打开项目目录结构中的`fgsm.py`文件，你会发现下面的代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.losses import MSE
 import tensorflow as tf
@@ -248,7 +248,7 @@ def generate_image_adversary(model, image, label, eps=2 / 255.0):
 
 让我们从数据批处理生成器开始吧。在我们的项目结构中打开`datagen.py`文件，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from .fgsm import generate_image_adversary
 from sklearn.utils import shuffle
@@ -263,7 +263,7 @@ import numpy as np
 
 下面是我们的`generate_adversarial_batch`函数的定义，我们在上周实现了[:](https://pyimagesearch.com/2021/03/08/defending-against-adversarial-image-attacks-with-keras-and-tensorflow/)
 
-```
+```py
 def generate_adversarial_batch(model, total, images, labels, dims,
 	eps=0.01):
 	# unpack the image dimensions into convenience variables
@@ -309,7 +309,7 @@ def generate_adversarial_batch(model, total, images, labels, dims,
 
 然而，这个帖子的目标是**包含*正常图像*和敌对图像**的混合训练。因此，我们需要实现第二个助手函数:
 
-```
+```py
 def generate_mixed_adverserial_batch(model, total, images, labels,
 	dims, eps=0.01, split=0.5):
 	# unpack the image dimensions into convenience variables
@@ -339,7 +339,7 @@ def generate_mixed_adverserial_batch(model, total, images, labels,
 
 现在让我们深入了解数据生成器本身:
 
-```
+```py
 	# we're constructing a data generator so we need to loop
 	# indefinitely
 	while True:
@@ -365,7 +365,7 @@ def generate_mixed_adverserial_batch(model, total, images, labels,
 
 我们现在可以循环这些`idxs`:
 
-```
+```py
 		# loop over the indexes
 		for i in idxs:
 			# grab the current image and label, then use that data to
@@ -402,7 +402,7 @@ def generate_mixed_adverserial_batch(model, total, images, labels,
 
 打开项目结构中的`train_mixed_adverserial_defense.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.simplecnn import SimpleCNN
 from pyimagesearch.datagen import generate_mixed_adverserial_batch
@@ -421,7 +421,7 @@ import numpy as np
 
  *我们将在 MNIST 数据集上训练`SimpleCNN`，现在让我们加载并预处理它:
 
-```
+```py
 # load MNIST dataset and scale the pixel values to the range [0, 1]
 print("[INFO] loading MNIST dataset...")
 (trainX, trainY), (testX, testY) = mnist.load_data()
@@ -445,7 +445,7 @@ testY = to_categorical(testY, 10)
 
 我们现在可以编译我们的模型了:
 
-```
+```py
 # initialize our optimizer and model
 print("[INFO] compiling model...")
 opt = Adam(lr=1e-3)
@@ -466,7 +466,7 @@ model.fit(trainX, trainY,
 
 培训后，下一步是评估模型:
 
-```
+```py
 # make predictions on the testing set for the model trained on
 # non-adversarial images
 (loss, acc) = model.evaluate(x=testX, y=testY, verbose=0)
@@ -498,7 +498,7 @@ print("[INFO] loss: {:.4f}, acc: {:.4f}\n".format(loss, acc))
 
 下面的代码块完成了这项任务:
 
-```
+```py
 # lower the learning rate and re-compile the model (such that we can
 # fine-tune it on the mixed batches of normal images and dynamically
 # generated adversarial images)
@@ -530,7 +530,7 @@ model.fit(
 
 让我们进行最后一轮评估:
 
-```
+```py
 # now that our model is fine-tuned we should evaluate it on the test
 # set (i.e., non-adversarial) again to see if performance has degraded
 (loss, acc) = model.evaluate(x=testX, y=testY, verbose=0)
@@ -558,7 +558,7 @@ print("[INFO] loss: {:.4f}, acc: {:.4f}".format(loss, acc))
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ time python train_mixed_adversarial_defense.py
 [INFO] loading MNIST dataset...
 [INFO] compiling model...
@@ -584,7 +584,7 @@ Epoch 20/20
 
 现在，让我们看看当我们用[快速梯度符号方法](https://pyimagesearch.com/2021/03/01/adversarial-attacks-with-fgsm-fast-gradient-sign-method/)生成一组对立图像时会发生什么:
 
-```
+```py
 [INFO] generating adversarial examples with FGSM...
 
 [INFO] adversarial testing images:
@@ -595,7 +595,7 @@ Epoch 20/20
 
 我们现在要做的是降低学习率，重新编译模型，然后使用数据生成器进行微调，数据生成器包括*和*原始训练图像*和*动态生成的对抗图像:
 
-```
+```py
 [INFO] re-compiling model...
 [INFO] creating mixed data generator...
 [INFO] fine-tuning network on dynamic mixed data...
@@ -618,7 +618,7 @@ Epoch 10/10
 
 当我们将其应用于最终测试图像时，我们会得出以下结论:
 
-```
+```py
 [INFO] normal testing images *after* fine-tuning:
 [INFO] loss: 0.0315, acc: 0.9906
 

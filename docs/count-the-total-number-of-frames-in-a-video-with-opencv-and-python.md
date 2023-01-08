@@ -55,7 +55,7 @@
 
 现在让我们来看看这个函数是如何在 imutils 中实现的:
 
-```
+```py
 # import the necessary packages
 from ..convenience import is_cv3
 import cv2
@@ -86,7 +86,7 @@ def count_frames(path, override=False):
 
 否则，让我们看看方法#1 实际上是如何实现的:
 
-```
+```py
 	# otherwise, let's try the fast way first
 	else:
 		# lets try to determine the number of frames in a video
@@ -131,7 +131,7 @@ def count_frames(path, override=False):
 
 我们已经看到了在视频中计算帧数的快速有效的方法——现在让我们来看看称为`count_frames_manual`的较慢的方法。
 
-```
+```py
 # import the necessary packages
 from ..convenience import is_cv3
 import cv2
@@ -214,21 +214,21 @@ def count_frames_manual(video):
 
 首先，确保您已经安装了 [imutils 库](https://github.com/jrosebr1/imutils):
 
-```
+```py
 $ pip install imutils
 
 ```
 
 否则，如果您已经安装了`imutils`，您应该更新到最新版本( *> v0.3.9* ):
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
 
 从这里，让我们创建名为`frame_counter.py`的驱动程序脚本:
 
-```
+```py
 # import the necessary packages
 from imutils.video import count_frames
 import argparse
@@ -251,7 +251,7 @@ args = vars(ap.parse_args())
 
 然后我们调用`count_frames`并将结果显示在屏幕上:
 
-```
+```py
 # count the total number of frames in the video file
 override = False if args["override"] < 0 else True
 total = count_frames(args["video"], override=override)

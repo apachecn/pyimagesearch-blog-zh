@@ -83,7 +83,7 @@ Creating a Convolutional Neural Network using Keras to recognize a Bulbasaur stu
 
 今天的项目有几个移动部分，为了帮助我们理解项目，让我们先回顾一下项目的目录结构:
 
-```
+```py
 ├── dataset
 │   ├── bulbasaur [234 entries]
 │   ├── charmander [238 entries]
@@ -143,7 +143,7 @@ Creating a Convolutional Neural Network using Keras to recognize a Bulbasaur stu
 
 让我们继续实现`SmallerVGGNet`，我们的小版本 VGGNet。在`pyimagesearch`模块中创建一个名为`smallervggnet.py`的新文件，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import BatchNormalization
@@ -163,7 +163,7 @@ from tensorflow.keras import backend as K
 
 从那里，我们定义了我们的`SmallerVGGNet`类:
 
-```
+```py
 class SmallerVGGNet:
 	@staticmethod
 	def build(width, height, depth, classes):
@@ -194,7 +194,7 @@ class SmallerVGGNet:
 
 现在，让我们开始添加层到我们的模型:
 
-```
+```py
 		# CONV => RELU => POOL
 		model.add(Conv2D(32, (3, 3), padding="same",
 			input_shape=inputShape))
@@ -215,7 +215,7 @@ class SmallerVGGNet:
 
 在应用另一个`POOL`层之前，我们将添加`(CONV => RELU) * 2`层:
 
-```
+```py
 		# (CONV => RELU) * 2 => POOL
 		model.add(Conv2D(64, (3, 3), padding="same"))
 		model.add(Activation("relu"))
@@ -239,7 +239,7 @@ class SmallerVGGNet:
 
 再来补充一组`(CONV => RELU) * 2 => POOL`:
 
-```
+```py
 		# (CONV => RELU) * 2 => POOL
 		model.add(Conv2D(128, (3, 3), padding="same"))
 		model.add(Activation("relu"))
@@ -256,7 +256,7 @@ class SmallerVGGNet:
 
 最后，我们有一组`FC => RELU`层和一个 softmax 分类器:
 
-```
+```py
 		# first (and only) set of FC => RELU layers
 		model.add(Flatten())
 		model.add(Dense(1024))
@@ -287,7 +287,7 @@ class SmallerVGGNet:
 
 打开一个新文件，将其命名为`train.py`，并插入以下代码，我们将在其中导入所需的包和库:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -328,7 +328,7 @@ import os
 
 这个博客的读者熟悉[我自己的 imutils 包](https://github.com/jrosebr1/imutils)。如果您没有安装/更新它，您可以通过以下方式安装:
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -337,7 +337,7 @@ $ pip install --upgrade imutils
 
 从那里，让我们解析我们的[命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -364,7 +364,7 @@ args = vars(ap.parse_args())
 
 现在我们已经处理了命令行参数，让我们初始化一些重要的变量:
 
-```
+```py
 # initialize the number of epochs to train for, initial learning rate,
 # batch size, and image dimensions
 EPOCHS = 100
@@ -397,7 +397,7 @@ random.shuffle(imagePaths)
 
 从这里开始，我们将循环遍历这些`imagePaths`:
 
-```
+```py
 # loop over the input images
 for imagePath in imagePaths:
 	# load the image, pre-process it, and store it in the data list
@@ -425,7 +425,7 @@ for imagePath in imagePaths:
 
 考虑这样一个事实，我们*特意*创建了我们数据集目录结构，使其具有以下格式:
 
-```
+```py
 dataset/{CLASS_LABEL}/{FILENAME}.jpg
 
 ```
@@ -436,7 +436,7 @@ dataset/{CLASS_LABEL}/{FILENAME}.jpg
 
 让我们继续前进。下一个代码块中发生了一些事情—额外的预处理、二进制化标签和数据分区:
 
-```
+```py
 # scale the raw pixel intensities to the range [0, 1]
 data = np.array(data, dtype="float") / 255.0
 labels = np.array(labels)
@@ -462,7 +462,7 @@ labels = lb.fit_transform(labels)
 
 接下来，让我们创建我们的图像数据增强对象:
 
-```
+```py
 # construct the image generator for data augmentation
 aug = ImageDataGenerator(rotation_range=25, width_shift_range=0.1,
 	height_shift_range=0.1, shear_range=0.2, zoom_range=0.2,
@@ -478,7 +478,7 @@ aug = ImageDataGenerator(rotation_range=25, width_shift_range=0.1,
 
 接下来，让我们编译模型并开始培训:
 
-```
+```py
 # initialize the model
 print("[INFO] compiling model...")
 model = SmallerVGGNet.build(width=IMAGE_DIMS[1], height=IMAGE_DIMS[0],
@@ -514,7 +514,7 @@ H = model.fit(
 
 一旦我们的 Keras CNN 完成训练，我们将希望保存(1)模型和(2)标签二值化器，因为当我们在训练/测试集之外的图像上测试网络时，我们需要从磁盘加载它们:
 
-```
+```py
 # save the model to disk
 print("[INFO] serializing network...")
 model.save(args["model"], save_format="h5")
@@ -533,7 +533,7 @@ f.close()
 
 最后，我们可以绘制我们的训练和损失准确性:
 
-```
+```py
 # plot the training loss and accuracy
 plt.style.use("ggplot")
 plt.figure()
@@ -562,7 +562,7 @@ plt.savefig(args["plot"])
 
 然后执行以下命令来训练模式；在确保正确提供[命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/)的同时:
 
-```
+```py
 $ python train.py --dataset dataset --model pokedex.model --labelbin lb.pickle
 Using TensorFlow backend.
 [INFO] loading images...
@@ -606,7 +606,7 @@ Epoch 100/100
 
 现在我们的 CNN 已经训练好了，我们需要实现一个脚本来对不属于我们训练或验证/测试集的图像进行分类。打开一个新文件，将其命名为`classify.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.models import load_model
@@ -623,7 +623,7 @@ import os
 
 接下来，让我们解析命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-m", "--model", required=True,
@@ -646,7 +646,7 @@ args = vars(ap.parse_args())
 
 接下来，我们将加载并预处理图像:
 
-```
+```py
 # load the image
 image = cv2.imread(args["image"])
 output = image.copy()
@@ -665,7 +665,7 @@ image = np.expand_dims(image, axis=0)
 
 从那里，让我们加载模型+标签二值化器，然后对图像进行分类:
 
-```
+```py
 # load the trained convolutional neural network and the label
 # binarizer
 print("[INFO] loading network...")
@@ -686,7 +686,7 @@ label = lb.classes_[idx]
 
 剩余的代码块用于显示目的:
 
-```
+```py
 # we'll mark our prediction as "correct" of the input image filename
 # contains the predicted label text (obviously this makes the
 # assumption that you have named your testing image files this way)
@@ -723,7 +723,7 @@ cv2.waitKey(0)
 
 一旦你下载并解压了这个项目的根目录下的存档文件，从小火龙的图片开始。注意，为了运行脚本，我们提供了三个命令行参数:
 
-```
+```py
 $ python classify.py --model pokedex.model --labelbin lb.pickle \
 	--image examples/charmander_counter.png
 Using TensorFlow backend.
@@ -739,7 +739,7 @@ Using TensorFlow backend.
 
 现在让我们用忠诚而凶猛的[妙蛙种子](https://bulbapedia.bulbagarden.net/wiki/Bulbasaur_(Pok%C3%A9mon))填充口袋妖怪来质疑我们的模型:
 
-```
+```py
 $ python classify.py --model pokedex.model --labelbin lb.pickle \
 	--image examples/bulbasaur_plush.png
 Using TensorFlow backend.
@@ -755,7 +755,7 @@ Using TensorFlow backend.
 
 让我们试试一个玩具动作人偶 [Mewtwo](https://bulbapedia.bulbagarden.net/wiki/Mewtwo_(Pok%C3%A9mon)) (一个基因工程口袋妖怪):
 
-```
+```py
 $ python classify.py --model pokedex.model --labelbin lb.pickle \
 	--image examples/mewtwo_toy.png
 Using TensorFlow backend.
@@ -771,7 +771,7 @@ Using TensorFlow backend.
 
 如果 Pokedex 不能识别臭名昭著的[皮卡丘](https://bulbapedia.bulbagarden.net/wiki/Pikachu_(Pok%C3%A9mon))，它会是什么样的例子呢:
 
-```
+```py
 $ python classify.py --model pokedex.model --labelbin lb.pickle \
 	--image examples/pikachu_toy.png
 Using TensorFlow backend.
@@ -787,7 +787,7 @@ Using TensorFlow backend.
 
 让我们试试可爱的杰尼龟口袋妖怪:
 
-```
+```py
 $ python classify.py --model pokedex.model --labelbin lb.pickle \
 	--image examples/squirtle_plush.png
 Using TensorFlow backend.
@@ -803,7 +803,7 @@ Using TensorFlow backend.
 
 最后但同样重要的是，让我们再次对我的火尾小火龙进行分类。这次他害羞了，被我的监视器遮住了一部分。
 
-```
+```py
 $ python classify.py --model pokedex.model --labelbin lb.pickle \
 	--image examples/charmander_hidden.png
 Using TensorFlow backend.

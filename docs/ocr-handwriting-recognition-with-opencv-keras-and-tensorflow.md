@@ -90,7 +90,7 @@
 
 在里面，您会发现以下内容:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 └── ocr-handwriting-recognition
@@ -128,7 +128,7 @@ $ tree --dirsfirst --filelimit 10
 
 让我们打开`ocr_handwriting.py`并查看它，从导入和[命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/)开始:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import load_model
 from imutils.contours import sort_contours
@@ -148,7 +148,7 @@ args = vars(ap.parse_args())
 
 接下来，我们将加载我们在上周的教程中开发的自定义手写 OCR 模型:
 
-```
+```py
 # load the handwriting OCR model
 print("[INFO] loading handwriting OCR model...")
 model = load_model(args["model"])
@@ -160,7 +160,7 @@ Keras 和 TensorFlow 的`load_model`实用程序使加载我们的序列化手�
 
 因为我们已经从磁盘加载了模型，所以让我们抓取图像，对其进行预处理，并找到角色轮廓:
 
-```
+```py
 # load the input image from disk, convert it to grayscale, and blur
 # it to reduce noise
 image = cv2.imread(args["image"])
@@ -184,7 +184,7 @@ chars = []
 
 我们的下一步将涉及一个大的轮廓处理循环。让我们更详细地分析一下，以便更容易理解:
 
-```
+```py
 # loop over the contours
 for c in cnts:
 	# compute the bounding box of the contour
@@ -229,7 +229,7 @@ for c in cnts:
 
 但是等等！在我们继续从**第 40 行**开始的循环之前，我们需要填充这些 ROI 并将其添加到`chars`列表中:
 
-```
+```py
 		# re-grab the image dimensions (now that its been resized)
 		# and then determine how much we need to pad the width and
 		# height such that our image will be 32x32
@@ -254,7 +254,7 @@ for c in cnts:
 
 完成提取和准备的字符集后，我们可以**执行 OCR:**
 
-```
+```py
 # extract the bounding box locations and padded characters
 boxes = [b[1] for b in chars]
 chars = np.array([c[0] for c in chars], dtype="float32")
@@ -270,7 +270,7 @@ labelNames = [l for l in labelNames]
 
 我们快完成了！是时候看看我们的劳动成果了。为了查看我们的手写识别结果是否符合我们的预期，让我们将它们可视化并显示出来:
 
-```
+```py
 # loop over the predictions and bounding box locations together
 for (pred, (x, y, w, h)) in zip(preds, boxes):
 	# find the index of the label with the largest corresponding
@@ -304,7 +304,7 @@ for (pred, (x, y, w, h)) in zip(preds, boxes):
 
 打开终端并执行以下命令:
 
-```
+```py
 $ python ocr_handwriting.py --model handwriting.model --image images/hello_world.png
 [INFO] loading handwriting OCR model...
 [INFO] H - 92.48%
@@ -329,7 +329,7 @@ $ python ocr_handwriting.py --model handwriting.model --image images/hello_world
 
 下一个例子包含我的母校的手写姓名和邮政编码，这所学校位于 UMBC 巴尔的摩县的马里兰大学:
 
-```
+```py
 $ python ocr_handwriting.py --model handwriting.model --image images/umbc_zipcode.png 
 [INFO] loading handwriting OCR model...
 [INFO] U - 34.76%
@@ -349,7 +349,7 @@ $ python ocr_handwriting.py --model handwriting.model --image images/umbc_zipcod
 
 让我们检查最后一个例子。此图片包含 UMBC 的完整地址:
 
-```
+```py
 $ python ocr_handwriting.py --model handwriting.model --image images/umbc_address.png 
 [INFO] loading handwriting OCR model...
 [INFO] B - 97.71%

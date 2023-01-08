@@ -87,7 +87,7 @@ as well as the output ![y](img/1308649485b87d470e3ba53ff87b8970.png "y"). The ge
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -120,7 +120,7 @@ $ pip install opencv-contrib-python
 
 从这里，看一下目录结构:
 
-```
+```py
 !tree .
 .
 ├── inference.py
@@ -160,7 +160,7 @@ $ pip install opencv-contrib-python
 
 `pyimagesearch`目录中的`config.py`脚本包含了这个项目的整个配置管道。
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -210,7 +210,7 @@ GRID_IMAGE_PATH = os.path.join(BASE_IMAGE_PATH, "grid.png")
 
 gan 严重依赖于数据。因此，拥有强大的数据管道非常重要。让我们看看`data_preprocess.py`脚本中的数据管道。
 
-```
+```py
 # import the necessary packages
 import tensorflow as tf
 
@@ -246,7 +246,7 @@ def load_image(imageFile):
 
 有了创建的对，我们将张量转换成`float32`格式，并将像素带到从`0`到`255``-1`到`1`的范围内(**第 21 行和第 22 行**)。
 
-```
+```py
 def random_jitter(inputMask, realImage, height, width):
 	# upscale the images for cropping purposes
 	inputMask = tf.image.resize(inputMask, [height, width],
@@ -262,7 +262,7 @@ Pix2Pix 的作者谈到了发电机输入中随机噪声的重要性。注意在
 
 为了确保泛化，我们需要在输入中加入一些随机噪声。我们通过简单地将输入图像调整到更高的分辨率(**第 29-32 行**)然后使用`random_jitter`函数将它们缩小(在我们加载数据之前)来实现。
 
-```
+```py
 class ReadTrainExample(object):
 	def __init__(self, imageHeight, imageWidth):
 		self.imageHeight = imageHeight
@@ -292,7 +292,7 @@ class ReadTrainExample(object):
 
 然后，我们将图像调整为`(256, 256, 3)`，以适应我们的项目管道(**第 51-54 行**)。
 
-```
+```py
 class ReadTestExample(object):
 	def __init__(self, imageHeight, imageWidth):
 		self.imageHeight = imageHeight
@@ -314,7 +314,7 @@ class ReadTestExample(object):
 
 像`read_train_example`一样，我们专门为测试数据集创建了`ReadTestExample`类(**第 59 行**)。类的内容保持不变，除了我们没有应用任何增加和调整图像大小以适应项目管道(**第 59-75 行**)。
 
-```
+```py
 def load_dataset(path, batchSize, height, width, train=False):
 	# check if this is the training dataset
 	if train:
@@ -353,7 +353,7 @@ def load_dataset(path, batchSize, height, width, train=False):
 
 对于 Pix2Pix 架构，我们需要定义一个 U-Net 生成器和一个补丁 GAN 鉴别器。让我们进入`Pix2PixGAN.py`脚本。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.layers import BatchNormalization
 from tensorflow.keras.layers import Conv2DTranspose
@@ -445,7 +445,7 @@ class Pix2Pix(object):
 
 最后的输出层是一个`Conv2D`层，将输出带到`256, 256, 3` ( **线 73** )。
 
-```
+```py
 	def discriminator(self):
 		# initialize input layer according to PatchGAN
 		inputMask = Input(shape=[self.imageHeight, self.imageWidth, 3], 
@@ -493,7 +493,7 @@ class Pix2Pix(object):
 
 Pix2Pix GAN 训练过程与普通 GAN 略有不同。所以让我们进入`Pix2PixTraining.py`脚本。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras import Model
 import tensorflow as tf
@@ -523,7 +523,7 @@ class Pix2PixTraining(Model):
 
 下一个函数是`compile`，它包含生成器优化器、鉴别器优化器和损失函数(**第 12 行**)。该函数创建参数的对应类变量(**第 16-21 行**)。
 
-```
+```py
 	def train_step(self, inputs):
 		# grab the input mask and corresponding real images
 		(inputMask, realImages) = inputs
@@ -546,7 +546,7 @@ class Pix2PixTraining(Model):
 
 接下来，我们将输入遮罩和真实目标图像通过补丁 GAN 鉴别器，并将其存储为`discRealOutput` ( **第 33 行和第 34 行**)。类似地，我们将输入掩码和假图像一起通过补丁 GAN，并将输出存储为`discFakeOutput` ( **行 35 和 36** )。
 
-```
+```py
 			# compute the adversarial loss for the generator
 			misleadingImageLabels = tf.ones_like(discFakeOutput) 
 			ganLoss = self.bceLoss(misleadingImageLabels, discFakeOutput)
@@ -601,7 +601,7 @@ class Pix2PixTraining(Model):
 
 有了我们的架构和培训管道，我们只需要正确地执行这两个脚本。让我们进入`train_pix2pix.py`脚本。
 
-```
+```py
 # USAGE
 # python train_pix2pix.py 
 
@@ -651,7 +651,7 @@ testDs = load_dataset(path=path, train=False,
 
 在**的第 39-41 行**，我们使用之前在`data_processing.py`脚本中创建的`load_dataset`函数构建测试数据集。
 
-```
+```py
 # initialize the generator and discriminator network
 print("[INFO] initializing the generator and discriminator...")
 pix2pixObject = Pix2Pix(imageHeight=config.IMAGE_HEIGHT,
@@ -710,7 +710,7 @@ pix2pixModel.generator.save(genPath)
 
 为了评估生成器的预测，我们将构建一个推理脚本。让我们进入`inference.py`脚本。
 
-```
+```py
 # USAGE
 # python inference.py 
 
@@ -747,7 +747,7 @@ testDs = load_dataset(path=path, train=False,
 
 回显训练脚本，我们使用 tensorflow 和 pathlib ( **第 20-32 行)**中的`get_file`函数，以与构建训练数据集相同的方式构建测试数据集。
 
-```
+```py
 # get the first batch of testing images
 (inputMask, realImage) = next(iter(testDs))
 
@@ -772,7 +772,7 @@ print("[INFO] saving the predictions...")
 
 输入的测试图像然后被用于进行预测(**行 46** )。为了绘制这些图像，我们定义了一个支线剧情(**第 50 行和第 51 行**)。
 
-```
+```py
 # plot the predicted images 
 for (ax, inp, pred, tar) in zip(axes, inputMask,
 	p2pGenPred, realImage):
@@ -806,7 +806,7 @@ fig.savefig(config.GRID_IMAGE_PATH)
 
 在我们看到训练结果之前，让我们快速浏览一下`train_monitor.py`脚本。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.preprocessing.image import array_to_img
 from tensorflow.keras.callbacks import Callback
@@ -837,7 +837,7 @@ def get_train_monitor(testDs, imagePath, batchSize, epochInterval):
 
 当历元达到可以被`epochInterval`值整除的某些点时，我们将显示来自生成器的预测(**第 19 行**)。为了绘制这些结果，我们将在第 21 行**和第 22 行**创建一个支线剧情。
 
-```
+```py
 				# plot the predicted images 
 				for (ax, inp, pred, tgt) in zip(axes, tInputMask,
 					tPix2pixGenPred, tRealImage):
@@ -871,7 +871,7 @@ def get_train_monitor(testDs, imagePath, batchSize, epochInterval):
 
 我们来分析一下培训损失。
 
-```
+```py
 [INFO] training pix2pix...
 Epoch 1/150
 100/100 [==============================] - 62s 493ms/step - dLoss: 0.7812 - gLoss: 4.8063
@@ -922,7 +922,7 @@ Epoch 150/150
 
 **Chakraborty，D.** “使用 Pix2Pix 的图像翻译”， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva，R. Raha 和 A. Thanki 编辑。，2022 年，【https://pyimg.co/ma1qi 
 
-```
+```py
 @incollection{Chakraborty_2022_ImageTransPix2Pix,
   author = {Devjyoti Chakraborty},
   title = {Image Translation with Pix2Pix},

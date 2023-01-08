@@ -17,7 +17,7 @@
 
 首先，打开一个新文件，将其命名为`keras_mnist.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import classification_report
@@ -39,7 +39,7 @@ import argparse
 
 让我们继续解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-o", "--output", required=True,
@@ -51,7 +51,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们加载完整的 MNIST 数据集:
 
-```
+```py
 # grab the MNIST dataset (if this is your first time using this
 # dataset then the 11MB download may take a minute)
 print("[INFO] accessing MNIST...")
@@ -76,7 +76,7 @@ MNIST 数据集中的每幅图像都表示为 *28×28×1* 像素图像。为了�
 
 给定训练和测试分割，我们现在可以编码我们的标签:
 
-```
+```py
 # convert the labels from integers to vectors
 lb = LabelBinarizer()
 trainY = lb.fit_transform(trainY)
@@ -89,7 +89,7 @@ MNIST 数据集中的每个数据点都有一个范围为*【0，9】*的整数�
 
 例如，考虑标签`3`，我们希望对其进行二进制化/一键编码——标签`3`现在变成:
 
-```
+```py
 [0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
 ```
 
@@ -97,7 +97,7 @@ MNIST 数据集中的每个数据点都有一个范围为*【0，9】*的整数�
 
 下面是第二个例子，这次标签`1`被二进制化:
 
-```
+```py
 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
 ```
 
@@ -105,7 +105,7 @@ MNIST 数据集中的每个数据点都有一个范围为*【0，9】*的整数�
 
 我在下面的清单中包含了每个数字的独热编码表示，*0-9*:
 
-```
+```py
 0: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 1: [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
 2: [0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
@@ -124,7 +124,7 @@ MNIST 数据集中的每个数据点都有一个范围为*【0，9】*的整数�
 
 接下来，让我们定义我们的网络架构:
 
-```
+```py
 # define the 784-256-128-10 architecture using Keras
 model = Sequential()
 model.add(Dense(256, input_shape=(784,), activation="sigmoid"))
@@ -138,7 +138,7 @@ model.add(Dense(10, activation="softmax"))
 
 让我们继续训练我们的网络:
 
-```
+```py
 # train the model using SGD
 print("[INFO] training network...")
 sgd = SGD(0.01)
@@ -158,7 +158,7 @@ H = model.fit(trainX, trainY, validation_data=(testX, testY),
 
 一旦网络完成训练，我们将需要根据测试数据对其进行评估，以获得我们的最终分类:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(testX, batch_size=128)
@@ -173,7 +173,7 @@ print(classification_report(testY.argmax(axis=1),
 
 我们的最终代码块处理随时间绘制训练损失、训练精度、验证损失和验证精度:
 
-```
+```py
 # plot the training loss and accuracy
 plt.style.use("ggplot")
 plt.figure()
@@ -190,7 +190,7 @@ plt.savefig(args["output"])
 
 然后根据`--output`命令行参数将该图保存到磁盘。要在 MNIST 上训练我们的全连接层网络，只需执行以下命令:
 
-```
+```py
 $ python keras_mnist.py --output output/keras_mnist.png
 [INFO] loading MNIST (full) dataset...
 [INFO] training network...
@@ -245,7 +245,7 @@ CIFAR-10 比 MNIST 数据集要硬得多。挑战来自于物体呈现方式的�
 
 让我们开始吧。打开一个新文件，将其命名为`keras_cifar10.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import classification_report
@@ -262,7 +262,7 @@ import argparse
 
 接下来，我们可以分析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-o", "--output", required=True,
@@ -274,7 +274,7 @@ args = vars(ap.parse_args())
 
 让我们继续加载 CIFAR-10 数据集:
 
-```
+```py
 # load the training and testing data, scale it into the range [0, 1],
 # then reshape the design matrix
 print("[INFO] loading CIFAR-10 data...")
@@ -295,7 +295,7 @@ testX = testX.reshape((testX.shape[0], 3072))
 
 既然已经从磁盘加载了 CIFAR-10 数据集，让我们再次将类标签整数二进制化为向量，然后初始化类标签的实际*名称*的列表:
 
-```
+```py
 # convert the labels from integers to vectors
 lb = LabelBinarizer()
 trainY = lb.fit_transform(trainY)
@@ -308,7 +308,7 @@ labelNames = ["airplane", "automobile", "bird", "cat", "deer",
 
 现在是时候定义网络架构了:
 
-```
+```py
 # define the 3072-1024-512-10 architecture using Keras
 model = Sequential()
 model.add(Dense(1024, input_shape=(3072,), activation="relu"))
@@ -322,7 +322,7 @@ model.add(Dense(10, activation="softmax"))
 
 既然已经定义了网络的架构，我们就可以训练它了:
 
-```
+```py
 # train the model using SGD
 print("[INFO] training network...")
 sgd = SGD(0.01)
@@ -336,7 +336,7 @@ H = model.fit(trainX, trainY, validation_data=(testX, testY),
 
 一旦训练好网络，我们可以使用`classification_report`对其进行评估，以获得对模型性能的更详细的回顾:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(testX, batch_size=32)
@@ -346,7 +346,7 @@ print(classification_report(testY.argmax(axis=1),
 
 最后，我们还将绘制一段时间内的损耗/精度图:
 
-```
+```py
 # plot the training loss and accuracy
 plt.style.use("ggplot")
 plt.figure()
@@ -363,7 +363,7 @@ plt.savefig(args["output"])
 
 要在 CIFAR-10 上训练我们的网络，请打开一个终端并执行以下命令:
 
-```
+```py
 $ python keras_cifar10.py --output output/keras_cifar10.png
 [INFO] training network...
 Train on 50000 samples, validate on 10000 samples

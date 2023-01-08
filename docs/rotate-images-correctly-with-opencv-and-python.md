@@ -78,7 +78,7 @@
 
 打开一个新文件，将其命名为`rotate_simple.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -97,14 +97,14 @@ args = vars(ap.parse_args())
 
 如果你还没有安装我的 OpenCV 便利功能系列 [imutils](https://github.com/jrosebr1/imutils) ，你现在就可以安装了:
 
-```
+```py
 $ pip install imutils
 
 ```
 
 如果您已经在安装了`imutils`，请确保您已经升级到最新版本:
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -113,7 +113,7 @@ $ pip install --upgrade imutils
 
 让我们继续实际旋转我们的图像:
 
-```
+```py
 # load the image from disk
 image = cv2.imread(args["image"])
 
@@ -144,7 +144,7 @@ for angle in np.arange(0, 360, 15):
 
 要查看这个脚本的运行，请务必使用本文的 ***“下载”*** 部分下载源代码，然后执行下面的命令:
 
-```
+```py
 $ python rotate_simple.py --image images/saratoga.jpg
 
 ```
@@ -211,7 +211,7 @@ and ![\beta = scale * sin \theta](img/71da2daf54564ade2ebc4eb5b362249d.png "\bet
 
 答案在 imutils 的[便利. py 中的`rotate_bound`函数里面:](https://github.com/jrosebr1/imutils/blob/master/imutils/convenience.py#L41)
 
-```
+```py
 def rotate_bound(image, angle):
     # grab the dimensions of the image and then determine the
     # center
@@ -270,7 +270,7 @@ def rotate_bound(image, angle):
 
 首先，打开一个新文件，命名为`rotate_pills.py`。然后，插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -291,7 +291,7 @@ args = vars(ap.parse_args())
 
 接下来，我们从磁盘加载药丸图像，并通过将其转换为灰度、模糊和检测边缘对其进行预处理:
 
-```
+```py
 # load the image from disk, convert it to grayscale, blur it,
 # and apply edge detection to reveal the outline of the pill
 image = cv2.imread(args["image"])
@@ -309,7 +309,7 @@ edged = cv2.Canny(gray, 20, 100)
 
 药丸的轮廓清晰可见，因此让我们应用轮廓检测来找到药丸的轮廓:
 
-```
+```py
 # find contours in the edge map
 cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL,
 	cv2.CHAIN_APPROX_SIMPLE)
@@ -319,7 +319,7 @@ cnts = imutils.grab_contours(cnts)
 
 我们现在准备从图像中提取药丸 ROI:
 
-```
+```py
 # ensure at least one contour was found
 if len(cnts) > 0:
 	# grab the largest contour, then draw a mask for the pill
@@ -353,7 +353,7 @@ if len(cnts) > 0:
 
 现在，让我们继续对`imageROI`应用`imutils.rotate`和`imutils.rotate_bound`函数，就像我们在上面的简单例子中所做的一样:
 
-```
+```py
 	# loop over the rotation angles
 	for angle in np.arange(0, 360, 15):
 		rotated = imutils.rotate(imageROI, angle)
@@ -371,7 +371,7 @@ if len(cnts) > 0:
 
 使用下面的 ***“下载”*** 部分将源代码下载到本教程后，您可以执行以下命令来查看输出:
 
-```
+```py
 $ python rotate_pills.py --image images/pill_01.png
 
 ```

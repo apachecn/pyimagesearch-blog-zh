@@ -54,7 +54,7 @@
 
 让我们开始这个例子。创建一个新文件，将其命名为`helpers.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import imutils
 
@@ -80,7 +80,7 @@ def pyramid(image, scale=1.5, minSize=(30, 30)):
 
 我们从导入`imutils`包开始，它包含了一些常用的图像处理功能，如调整大小、旋转、平移等。你可以在这里 了解更多`imutils`套餐 [。也可以从我的](https://pyimagesearch.com/2015/02/02/just-open-sourced-personal-imutils-package-series-opencv-convenience-functions/) [GitHub](https://github.com/jrosebr1/imutils) 上抢下来。该软件包也可通过 pip 安装:
 
-```
+```py
 $ pip install imutils
 
 ```
@@ -107,7 +107,7 @@ $ pip install imutils
 
 以下是如何使用 scikit-image 中的`pyramid_gaussian`功能的示例:
 
-```
+```py
 # METHOD #2: Resizing + Gaussian smoothing.
 for (i, resized) in enumerate(pyramid_gaussian(image, downscale=2)):
 	# if the image is too small, break from the loop
@@ -126,7 +126,7 @@ for (i, resized) in enumerate(pyramid_gaussian(image, downscale=2)):
 
 现在我们已经定义了两个方法，让我们创建一个驱动脚本来执行我们的代码。创建一个新文件，命名为`pyramid.py`，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.helpers import pyramid
 from skimage.transform import pyramid_gaussian
@@ -180,7 +180,7 @@ for (i, resized) in enumerate(pyramid_gaussian(image, downscale=2)):
 
 要查看我们的脚本运行情况，请打开一个终端，将目录切换到您的代码所在的位置，然后执行以下命令:
 
-```
+```py
 $ python pyramid.py --image images/adrian_florida.jpg --scale 1.5
 
 ```
@@ -203,7 +203,7 @@ scikit-image 金字塔生成了 4 层，因为它在每层将图像缩小了 50%
 
 现在，让我们将比例因子改为`3.0`，看看结果如何变化:
 
-```
+```py
 $ python pyramid.py --image images/adrian_florida.jpg --scale 1.5
 
 ```

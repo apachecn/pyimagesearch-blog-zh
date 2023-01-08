@@ -29,7 +29,7 @@
 
 打开您最喜欢的编辑器，创建一个名为`detect_color.py`的文件:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -57,7 +57,7 @@ image = cv2.imread(args["image"])
 
 让我们继续定义这个颜色列表:
 
-```
+```py
 # define the list of boundaries
 boundaries = [
 	([17, 15, 100], [50, 56, 200]),
@@ -78,7 +78,7 @@ boundaries = [
 
 让我们来看看:
 
-```
+```py
 # loop over the boundaries
 for (lower, upper) in boundaries:
 	# create NumPy arrays from the boundaries
@@ -114,7 +114,7 @@ for (lower, upper) in boundaries:
 
 让我们继续运行我们的脚本:
 
-```
+```py
 $ python detect_color.py --image pokemon_games.png
 
 ```

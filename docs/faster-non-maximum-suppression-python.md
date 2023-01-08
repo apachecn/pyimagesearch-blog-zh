@@ -41,7 +41,7 @@
 
 否则，在您喜欢的编辑器中打开一个新文件，将其命名为`nms.py`，让我们开始创建一个更快的非最大抑制实现:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 

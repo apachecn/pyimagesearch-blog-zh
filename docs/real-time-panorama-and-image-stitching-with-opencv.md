@@ -61,7 +61,7 @@
 
 在我们开始之前，让我们看一下我们的项目结构:
 
-```
+```py
 |--- pyimagesearch
 |    |---- __init__.py
 |    |--- basicmotiondetector.py
@@ -94,7 +94,7 @@
 
 下面我提供了对`Sticher`类的相关更新，以便于缓存单应矩阵:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import imutils
@@ -113,7 +113,7 @@ class Stitcher:
 
 我们还需要更新`stitch`方法，以便在计算完单应矩阵后缓存它:
 
-```
+```py
 	def stitch(self, images, ratio=0.75, reprojThresh=4.0):
 		# unpack the images
 		(imageB, imageA) = images
@@ -158,7 +158,7 @@ class Stitcher:
 
 既然我们的`Stitcher`类已经更新，让我们继续到`realtime_stitching.py`驱动程序脚本:
 
-```
+```py
 # import the necessary packages
 from __future__ import print_function
 from pyimagesearch.basicmotiondetector import BasicMotionDetector
@@ -182,14 +182,14 @@ time.sleep(2.0)
 
 如果您的系统上还没有安装`imutils`，您可以使用以下命令安装它:
 
-```
+```py
 $ pip install imutils
 
 ```
 
 如果您已经安装了它，请确保您已经升级到了最新版本(该版本为`video`子模块添加了 Python 3 支持):
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -198,7 +198,7 @@ $ pip install --upgrade imutils
 
 如果您想使用*两个 USB 摄像头*，您只需将流初始化更新为:
 
-```
+```py
 leftStream = VideoStream(src=0).start()
 rightStream = VideoStream(src=1).start()
 
@@ -212,7 +212,7 @@ rightStream = VideoStream(src=1).start()
 
 现在，让我们初始化图像拼接器和运动检测器:
 
-```
+```py
 # initialize the image stitcher, motion detector, and total
 # number of frames read
 stitcher = Stitcher()
@@ -223,7 +223,7 @@ total = 0
 
 现在我们进入驱动程序脚本的主循环，在这里我们无限循环遍历帧，直到被指示退出程序:
 
-```
+```py
 # loop over frames from the video streams
 while True:
 	# grab the frames from their respective video streams
@@ -261,7 +261,7 @@ while True:
 
 然而，在我们能够检测任何运动之前，我们首先需要允许运动检测器“运行”一段时间，以获得背景模型的精确运行平均值:
 
-```
+```py
 	# only process the panorama for motion if a nice average has
 	# been built up
 	if total > 32 and len(locs) > 0:
@@ -293,7 +293,7 @@ while True:
 
 最后，最后一步是在 panorama 上绘制时间戳并显示输出图像:
 
-```
+```py
 	# increment the total number of frames read and draw the 
 	# timestamp on the image
 	total += 1
@@ -326,7 +326,7 @@ rightStream.stop()
 
 要执行我们的脚本，只需发出以下命令:
 
-```
+```py
 $ python realtime_stitching.py
 
 ```

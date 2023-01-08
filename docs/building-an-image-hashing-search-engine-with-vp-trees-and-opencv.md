@@ -244,7 +244,7 @@ VP-Trees 需要`O(n log n)`来构建，但是一旦我们构建了它，一个�
 
 你可以从他们的[官方网页](http://www.vision.caltech.edu/Image_Datasets/Caltech101/)下载加州理工 101 数据集，或者你可以使用下面的`wget`命令:
 
-```
+```py
 $ wget http://www.vision.caltech.edu/Image_Datasets/Caltech101/101_ObjectCategories.tar.gz
 $ tar xvzf 101_ObjectCategories.tar.gz
 
@@ -254,7 +254,7 @@ $ tar xvzf 101_ObjectCategories.tar.gz
 
 让我们检查一下我们的项目结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── pyimagesearch
@@ -298,7 +298,7 @@ $ tree --dirsfirst
 
 它看起来会像这样:
 
-```
+```py
 # setup pip, virtualenv, and virtualenvwrapper (using the "pip install OpenCV" instructions)
 $ workon <env_name>
 $ pip install numpy
@@ -316,7 +316,7 @@ $ pip install vptree
 
 打开项目结构中的`hashing.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import cv2
@@ -351,7 +351,7 @@ def dhash(image, hashSize=8):
 
 接下来，我们来看看`convert_hash`函数:
 
-```
+```py
 def convert_hash(h):
 	# convert the hash to NumPy's 64-bit float and then back to
 	# Python's built in int
@@ -369,7 +369,7 @@ def convert_hash(h):
 
 然后我们有了最后一个助手方法`hamming`，它用于计算两个整数之间的汉明距离:
 
-```
+```py
 def hamming(a, b):
 	# compute and return the Hamming distance between the integers
 	return bin(int(a) ^ int(b)).count("1")
@@ -390,7 +390,7 @@ def hamming(a, b):
 
 打开`index_images.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.hashing import convert_hash
 from pyimagesearch.hashing import hamming
@@ -423,7 +423,7 @@ args = vars(ap.parse_args())
 
 现在让我们计算所有图像的哈希:
 
-```
+```py
 # grab the paths to the input images and initialize the dictionary
 # of hashes
 imagePaths = list(paths.list_images(args["images"]))
@@ -459,7 +459,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 从这里开始，我们构建我们的 VP 树:
 
-```
+```py
 # build the VP-Tree
 print("[INFO] building VP-Tree...")
 points = list(hashes.keys())
@@ -473,7 +473,7 @@ tree = vptree.VPTree(points, hamming)
 
 随着我们的`hashes`字典的填充和 VP-Tree 的构建，我们现在将它们作为`.pickle`文件序列化到磁盘:
 
-```
+```py
 # serialize the VP-Tree to disk
 print("[INFO] serializing VP-Tree...")
 f = open(args["tree"], "wb")
@@ -498,7 +498,7 @@ f.close()
 
 从那里，打开一个终端并发出以下命令:
 
-```
+```py
 $ time python index_images.py --images 101_ObjectCategories \
 	--tree vptree.pickle --hashes hashes.pickle
 [INFO] processing image 1/9144
@@ -526,7 +526,7 @@ sys		0m1.386s
 
 运行脚本后检查项目目录，我们会发现两个`.pickle`文件:
 
-```
+```py
 $ ls -l *.pickle
 -rw-r--r--  1 adrianrosebrock  796620 Aug 22 07:53 hashes.pickle
 -rw-r--r--  1 adrianrosebrock  707926 Aug 22 07:53 vptree.pickle
@@ -547,7 +547,7 @@ $ ls -l *.pickle
 
 现在让我们实现我们的图像哈希搜索器——打开`search.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.hashing import convert_hash
 from pyimagesearch.hashing import dhash
@@ -583,7 +583,7 @@ args = vars(ap.parse_args())
 
  *接下来，我们将(1)加载我们的 VP-Tree + hashes 字典，以及(2)计算我们的`--query`图像的散列:
 
-```
+```py
 # load the VP-Tree and hashes dictionary
 print("[INFO] loading VP-Tree and hashes...")
 tree = pickle.loads(open(args["tree"], "rb").read())
@@ -607,7 +607,7 @@ queryHash = convert_hash(queryHash)
 
 此时，是时候**使用我们的 VP 树:**执行搜索了
 
-```
+```py
 # perform the search
 print("[INFO] performing search...")
 start = time.time()
@@ -624,7 +624,7 @@ print("[INFO] search took {} seconds".format(end - start))
 
 最后，我们将循环遍历`results`并显示它们中的每一个:
 
-```
+```py
 # loop over the results
 for (d, h) in results:
 	# grab all image paths in our dataset with the same hash
@@ -659,7 +659,7 @@ for (d, h) in results:
 
 完成上述所有步骤后，打开终端并执行以下命令:
 
-```
+```py
 python search.py --tree vptree.pickle --hashes hashes.pickle \
 	--query queries/buddha.jpg
 [INFO] loading VP-Tree and hashes...
@@ -681,7 +681,7 @@ python search.py --tree vptree.pickle --hashes hashes.pickle \
 
 让我们再试一次，这次用一张斑点狗的图片:
 
-```
+```py
 $ python search.py --tree vptree.pickle --hashes hashes.pickle \
 	--query queries/dalmation.jpg 
 [INFO] loading VP-Tree and hashes...
@@ -699,7 +699,7 @@ $ python search.py --tree vptree.pickle --hashes hashes.pickle \
 
 下一个例子是手风琴:
 
-```
+```py
 $ python search.py --tree vptree.pickle --hashes hashes.pickle \
 	--query queries/accordion.jpg 
 [INFO] loading VP-Tree and hashes...
@@ -723,7 +723,7 @@ $ python search.py --tree vptree.pickle --hashes hashes.pickle \
 
 让我们试一试:
 
-```
+```py
 $ python search.py --tree vptree.pickle --hashes hashes.pickle \
 	--query queries/accordion_modified1.jpg 
 [INFO] loading VP-Tree and hashes...
@@ -745,7 +745,7 @@ $ python search.py --tree vptree.pickle --hashes hashes.pickle \
 
 接下来，让我们尝试第二个查询，**这个*比第一个***修改得更多
 
-```
+```py
 $ python search.py --tree vptree.pickle --hashes hashes.pickle \
 	--query queries/accordion_modified2.jpg 
 [INFO] loading VP-Tree and hashes...

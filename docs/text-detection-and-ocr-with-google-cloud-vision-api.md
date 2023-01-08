@@ -72,7 +72,7 @@
 
 幸运的是，两者都是 pip 可安装的:
 
-```
+```py
 $ pip install opencv-contrib-python
 $ pip install --upgrade google-cloud-vision
 ```
@@ -106,7 +106,7 @@ $ pip install --upgrade google-cloud-vision
 
 让我们检查一下 Google Cloud Vision API OCR 项目的项目目录结构:
 
-```
+```py
 |-- images
 |   |-- aircraft.png
 |   |-- challenging.png
@@ -133,7 +133,7 @@ $ pip install --upgrade google-cloud-vision
 
 让我们开始吧:
 
-```
+```py
 # import the necessary packages
 from google.oauth2 import service_account
 from google.cloud import vision
@@ -146,7 +146,7 @@ import io
 
 接下来，我们有`draw_ocr_results`，一个用来注释输出图像的便利函数:
 
-```
+```py
 def draw_ocr_results(image, text, rect, color=(0, 255, 0)):
 	# unpacking the bounding box rectangle and draw a bounding box
 	# surrounding the text along with the OCR'd text itself
@@ -172,7 +172,7 @@ def draw_ocr_results(image, text, rect, color=(0, 255, 0)):
 
 让我们检查一下我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -189,7 +189,7 @@ args = vars(ap.parse_args())
 
 是时候连接到谷歌云视觉 API 了:
 
-```
+```py
 # create the client interface to access the Google Cloud Vision API
 credentials = service_account.Credentials.from_service_account_file(
 	filename=args["client"],
@@ -208,7 +208,7 @@ with io.open(args["image"], "rb") as f:
 
 现在让我们将`byteImage`提交给 API:
 
-```
+```py
 # create an image object from the binary file and then make a request
 # to the Google Cloud Vision API to OCR the input image
 print("[INFO] making request to Google Cloud Vision API...")
@@ -229,7 +229,7 @@ if response.error.message:
 
 否则，我们可以处理 OCR 步骤的结果:
 
-```
+```py
 # read the image again, this time in OpenCV format and make a copy of
 # the input image for final output
 image = cv2.imread(args["image"])
@@ -255,7 +255,7 @@ for text in response.text_annotations[1::]:
 
 最后一步是在`output`和`final`图像上绘制 OCR 结果:
 
-```
+```py
 	# draw the output OCR line-by-line
 	output = image.copy()
 	output = draw_ocr_results(output, ocr, rect)
@@ -279,7 +279,7 @@ cv2.waitKey(0)
 
 现在让我们将 Google Cloud Vision API 投入使用吧！打开终端并执行以下命令:
 
-```
+```py
 $ python google_ocr.py --image images/aircraft.png --client client_id.json
 [INFO] making request to Google Cloud Vision API...
 WARNING!
@@ -299,7 +299,7 @@ INJURY
 
 让我们尝试一个更具挑战性的图像，您可以在**图 3** 中看到:
 
-```
+```py
 $ python google_ocr.py --image images/challenging.png --client client_id.json
 [INFO] making request to Google Cloud Vision API...
 LITTER
@@ -318,7 +318,7 @@ STOP
 
 让我们看最后一张图片，这是一个街道标志:
 
-```
+```py
 $ python google_ocr.py --image images/street_signs.png --client client_id.json
 [INFO] making request to Google Cloud Vision API...
 Old
@@ -353,7 +353,7 @@ WAY
 
 **Rosebrock，A.** “使用谷歌云视觉 API 的文本检测和 OCR”， *PyImageSearch* ，D. Chakraborty，P. Chugh。A. R. Gosthipaty、S. Huot、K. Kidriavsteva、R. Raha 和 A. Thanki 编辑。，2022 年，【https://pyimg.co/evzxr 
 
-```
+```py
 ***@incollection{Rosebrock_2022_OCR_GCV,
   author = {Adrian Rosebrock},
   title = {Text Detection and {OCR} with {G}oogle Cloud Vision {API}},

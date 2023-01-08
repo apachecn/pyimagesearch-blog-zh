@@ -28,7 +28,7 @@
 
 事实上，现在用 Python 和 Keras 在 ImageNet 数据集上预先训练的卷积神经网络对图像进行分类就像这三行代码一样简单:
 
-```
+```py
 model = VGG16(weights="imagenet")
 preds = model.predict(preprocess_input(image))
 print(decode_predictions(preds))
@@ -69,7 +69,7 @@ print(decode_predictions(preds))
 
 Keras 库将使用 PIL/Pillow 来完成一些辅助功能(比如从磁盘加载图像)。您可以使用以下命令安装 [Pillow](https://python-pillow.org/) ，这是 PIL 的一个更加 Python 友好的分支:
 
-```
+```py
 $ pip install pillow
 
 ```
@@ -78,7 +78,7 @@ $ pip install pillow
 
 您可以通过执行以下命令来检查您的 Keras 版本:
 
-```
+```py
 $ python
 Python 3.6.3 (default, Oct  4 2017, 06:09:15) 
 [GCC 4.2.1 Compatible Apple LLVM 9.0.0 (clang-900.0.37)] on darwin
@@ -105,7 +105,7 @@ Using TensorFlow backend.
 
 首先，打开一个新文件，将其命名为`test_imagenet.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from keras.preprocessing import image as image_utils
 from keras.applications.imagenet_utils import decode_predictions
@@ -133,7 +133,7 @@ orig = cv2.imread(args["image"])
 
 然后，我们在第 18 行的**中加载 OpenCV 格式的图像。这一步并不是严格要求的，因为 Keras 提供了加载图像的辅助函数(我将在下一个代码块中演示)，但是这两个函数的工作方式有所不同，所以如果您打算对图像应用任何类型的 OpenCV 函数，我建议通过`cv2.imread`加载图像，然后再通过 Keras 辅助函数加载。一旦您在操作 NumPy 数组和交换通道方面有了更多的经验，您就可以避免额外的 I/O 开销，但是目前，让我们保持简单。**
 
-```
+```py
 # load the input image using the Keras helper utility while ensuring
 # that the image is resized to 224x224 pxiels, the required input
 # dimensions for the network -- then convert the PIL image to a
@@ -150,7 +150,7 @@ image = image_utils.img_to_array(image)
 
 接下来，让我们预处理我们的图像:
 
-```
+```py
 # our image is now represented by a NumPy array of shape (224, 224, 3),
 # assuming TensorFlow "channels last" ordering of course, but we need
 # to expand the dimensions to be (1, 3, 224, 224) so we can pass it
@@ -173,7 +173,7 @@ image = preprocess_input(image)
 
 最后，我们可以加载我们的 Keras 网络并对图像进行分类:
 
-```
+```py
 # load the VGG16 network pre-trained on the ImageNet dataset
 print("[INFO] loading network...")
 model = VGG16(weights="imagenet")
@@ -233,7 +233,7 @@ cv2.waitKey(0)
 
 要开始，请执行以下命令:
 
-```
+```py
 $ python test_imagenet.py --image images/dog_beagle.png
 
 ```
@@ -252,7 +252,7 @@ $ python test_imagenet.py --image images/dog_beagle.png
 
 让我们尝试另一个图像，这是一个啤酒杯:
 
-```
+```py
 $ python test_imagenet.py --image images/beer.png
 
 ```
@@ -263,7 +263,7 @@ $ python test_imagenet.py --image images/beer.png
 
 下图是一只棕熊:
 
-```
+```py
 $ python test_imagenet.py --image images/brown_bear.png
 
 ```
@@ -274,7 +274,7 @@ $ python test_imagenet.py --image images/brown_bear.png
 
 我拍了下面这张键盘的照片，用 Python 和 Keras 测试了 ImageNet 网络:
 
-```
+```py
 $ python test_imagenet.py --image images/keyboard.png
 
 ```
@@ -285,7 +285,7 @@ $ python test_imagenet.py --image images/keyboard.png
 
 然后，当我为这篇博客写代码时，我拍了一张显示器的照片。有趣的是，网络将这张图片归类为“台式电脑”，这是有道理的，因为显示器是图片的主要主题:
 
-```
+```py
 $ python test_imagenet.py --image images/monitor.png
 
 ```
@@ -296,7 +296,7 @@ $ python test_imagenet.py --image images/monitor.png
 
 下一张照片是一架航天飞机:
 
-```
+```py
 $ python test_imagenet.py --image images/space_shuttle.png
 
 ```
@@ -307,7 +307,7 @@ $ python test_imagenet.py --image images/space_shuttle.png
 
 最后一张照片是一只蒸螃蟹，具体来说是一只蓝色螃蟹。
 
-```
+```py
 $ python test_imagenet.py --image images/steamed_crab.png
 
 ```

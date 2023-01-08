@@ -109,7 +109,7 @@
 
 打开一个新文件，命名为`convolutions.py`，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from skimage.exposure import rescale_intensity
 import numpy as np
@@ -120,14 +120,14 @@ import cv2
 
 我们从第 2-5 行的**开始，导入我们需要的 Python 包。你应该已经在你的系统上安装了 NumPy 和 OpenCV，但是你可能没有安装 [scikit-image](http://scikit-image.org/) 。要安装 scikit-image，只需使用`pip`:**
 
-```
+```py
 $ pip install -U scikit-image
 
 ```
 
 接下来，我们可以开始定义我们的自定义`convolve`方法:
 
-```
+```py
 def convolve(image, kernel):
 	# grab the spatial dimensions of the image, along with
 	# the spatial dimensions of the kernel
@@ -160,7 +160,7 @@ def convolve(image, kernel):
 
 我们现在准备将实际卷积应用于我们的图像:
 
-```
+```py
 	# loop over the input image, "sliding" the kernel across
 	# each (x, y)-coordinate from left-to-right and top to
 	# bottom
@@ -192,7 +192,7 @@ def convolve(image, kernel):
 
 我们现在可以完成我们的`convolve`方法了:
 
-```
+```py
 	# rescale the output image to be in the range [0, 255]
 	output = rescale_intensity(output, in_range=(0, 255))
 	output = (output * 255).astype("uint8")
@@ -210,7 +210,7 @@ def convolve(image, kernel):
 
 现在我们已经定义了我们的`convolve`函数，让我们继续脚本的驱动程序部分。我们程序的这一部分将处理命令行参数的解析，定义一系列我们将应用于图像的内核，然后显示输出结果:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -237,7 +237,7 @@ sharpen = np.array((
 
 让我们再定义几个内核:
 
-```
+```py
 # construct the Laplacian kernel used to detect edge-like
 # regions of an image
 laplacian = np.array((
@@ -267,7 +267,7 @@ sobelY = np.array((
 
 给定所有这些内核，我们将它们集合成一组元组，称为“内核库”:
 
-```
+```py
 # construct the kernel bank, a list of kernels we're going
 # to apply using both our custom `convole` function and
 # OpenCV's `filter2D` function
@@ -284,7 +284,7 @@ kernelBank = (
 
 最后，我们准备将我们的`kernelBank`应用到我们的`--input`图像:
 
-```
+```py
 # load the input image and convert it to grayscale
 image = cv2.imread(args["image"])
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -325,7 +325,7 @@ for (kernelName, kernel) in kernelBank:
 
 要运行我们的脚本，只需发出以下命令:
 
-```
+```py
 $ python convolutions.py --image 3d_pokemon.png
 
 ```

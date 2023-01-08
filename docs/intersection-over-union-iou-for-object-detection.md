@@ -139,7 +139,7 @@ Jason 有兴趣在他的最后一年项目中使用 [HOG +线性 SVM 框架](htt
 
 也就是说，打开一个新文件，命名为`intersection_over_union.py`，让我们开始编码:
 
-```
+```py
 # import the necessary packages
 from collections import namedtuple
 import numpy as np
@@ -162,7 +162,7 @@ Detection = namedtuple("Detection", ["image_path", "gt", "pred"])
 
 让我们继续定义`bb_intersection_over_union`函数，顾名思义，它负责计算两个边界框之间的交集:
 
-```
+```py
 def bb_intersection_over_union(boxA, boxB):
 	# determine the (x, y)-coordinates of the intersection rectangle
 	xA = max(boxA[0], boxB[0])
@@ -202,7 +202,7 @@ def bb_intersection_over_union(boxA, boxB):
 
 既然我们的联合交集方法已经完成，我们需要为我们的五个示例图像定义地面实况和预测边界框坐标:
 
-```
+```py
 # define the list of example detections
 examples = [
 	Detection("image_0002.jpg", [39, 63, 203, 112], [54, 66, 198, 114]),
@@ -219,7 +219,7 @@ examples = [
 
 我们现在准备评估我们的预测:
 
-```
+```py
 # loop over the example detections
 for detection in examples:
 	# load the image
@@ -262,7 +262,7 @@ for detection in examples:
 
 解压缩归档文件后，执行以下命令:
 
-```
+```py
 $ python intersection_over_union.py
 
 ```

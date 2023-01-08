@@ -68,21 +68,21 @@ ARM 工程师还在我们的 Raspberry Pi 3 使用的芯片中内置了浮点优
 
 第一步是运行并扩展您的文件系统:
 
-```
+```py
 $ sudo raspi-config
 
 ```
 
 然后重启你的 Raspberry Pi:
 
-```
+```py
 $ sudo reboot
 
 ```
 
 从那里，删除 Wolfram Engine 和 LibreOffice，在您的 Raspberry Pi 上回收大约 1GB 的空间:
 
-```
+```py
 $ sudo apt-get purge wolfram-engine
 $ sudo apt-get purge libreoffice*
 $ sudo apt-get clean
@@ -94,7 +94,7 @@ $ sudo apt-get autoremove
 
 以下命令将更新和升级任何现有的包，然后安装 OpenCV 的依赖项、I/O 库和优化包:
 
-```
+```py
 $ sudo apt-get update && sudo apt-get upgrade
 $ sudo apt-get install build-essential cmake pkg-config
 $ sudo apt-get install libjpeg-dev libtiff5-dev libjasper-dev libpng12-dev
@@ -115,7 +115,7 @@ $ sudo apt-get install python2.7-dev python3-dev
 
 接下来，下载 [opencv](https://github.com/opencv/opencv) 和 [opencv_contrib](https://github.com/opencv/opencv_contrib) 库的 OpenCV 源代码，然后解包:
 
-```
+```py
 $ cd ~
 $ wget -O opencv.zip https://github.com/opencv/opencv/archive/3.4.7.zip
 $ unzip opencv.zip
@@ -134,7 +134,7 @@ $ unzip opencv_contrib.zip
 
 您可以使用以下命令安装 pip、 [virtualenv](https://virtualenv.pypa.io/en/latest/) 和 [virtualenvwrapper](https://virtualenvwrapper.readthedocs.org/en/latest/) :
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python get-pip.py
 $ sudo python3 get-pip.py
@@ -145,7 +145,7 @@ $ sudo rm -rf ~/.cache/pip
 
 一旦`virtualenv`和`virtualenvwrapper`都安装好了，打开你的`~/.bashrc`，使用你最喜欢的基于终端的文本编辑器，如`vim`、`emacs`或`nano`，将下面几行添加到文件的*底部*:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
@@ -155,7 +155,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 从那里，重新加载您的`~/.bashrc`文件，将更改应用到您当前的 bash 会话:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
@@ -164,7 +164,7 @@ $ source ~/.bashrc
 
 接下来，创建 Python 3 虚拟环境:
 
-```
+```py
 $ mkvirtualenv cv -p python3
 
 ```
@@ -175,7 +175,7 @@ $ mkvirtualenv cv -p python3
 
 最后，将 NumPy 安装到 Python 虚拟环境中:
 
-```
+```py
 $ pip install numpy
 
 ```
@@ -186,14 +186,14 @@ $ pip install numpy
 
 使用`workon`命令确保您处于`cv`虚拟环境中:
 
-```
+```py
 $ workon cv
 
 ```
 
 并从那里配置您的构建:
 
-```
+```py
 $ cd ~/opencv-3.4.7/
 $ mkdir build
 $ cd build
@@ -232,7 +232,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 打开您的`/etc/dphys-swapfile`文件，然后编辑`CONF_SWAPSIZE`变量:
 
-```
+```py
 # set size to absolute value, leaving empty (default) then uses computed value
 #   you most likely don't want this, unless you have an special disk situation
 # CONF_SWAPSIZE=100
@@ -246,7 +246,7 @@ CONF_SWAPSIZE=1024
 
 从那里，重新启动交换服务:
 
-```
+```py
 $ sudo /etc/init.d/dphys-swapfile stop
 $ sudo /etc/init.d/dphys-swapfile start
 
@@ -256,7 +256,7 @@ $ sudo /etc/init.d/dphys-swapfile start
 
 现在我们已经更新了交换空间大小，开始使用所有四个内核进行优化的 OpenCV 编译:
 
-```
+```py
 $ make -j4
 
 ```
@@ -267,7 +267,7 @@ $ make -j4
 
 假设 OpenCV 编译没有错误(如我上面的截图所示)，您可以在您的 Raspberry Pi 上安装您的 OpenCV 优化版本:
 
-```
+```py
 $ sudo make install
 $ sudo ldconfig
 
@@ -282,7 +282,7 @@ $ sudo ldconfig
 
 如果您为 Python 3 编译了 ***OpenCV，那么您需要发出以下命令来将`cv2.so`绑定符号链接到您的`cv`虚拟环境中:***
 
-```
+```py
 $ cd /usr/local/lib/python3.5/site-packages/
 $ sudo mv cv2.cpython-35m-arm-linux-gnueabihf.so cv2.so
 $ cd ~/.virtualenvs/cv/lib/python3.5/site-packages/
@@ -294,7 +294,7 @@ $ ln -s /usr/local/lib/python3.5/site-packages/cv2.so cv2.so
 
 如果您转而编译了用于 Python 2.7 的 **OpenCV，您可以使用这些命令将您的`cv2.so`文件符号链接到`cv`虚拟环境:**
 
-```
+```py
 $ cd ~/.virtualenvs/cv/lib/python2.7/site-packages/
 $ ln -s /usr/local/lib/python2.7/site-packages/cv2.so cv2.so
 
@@ -304,7 +304,7 @@ $ ln -s /usr/local/lib/python2.7/site-packages/cv2.so cv2.so
 
 作为快速检查，访问`cv`虚拟环境，启动 Python shell 并尝试导入 OpenCV 库:
 
-```
+```py
 $ source ~/.profile
 $ workon cv
 $ python
@@ -327,7 +327,7 @@ $ python
 
 从那里，启动一个 shell 并执行以下命令:
 
-```
+```py
 $ python pi_deep_learning.py --prototxt models/bvlc_googlenet.prototxt \
 	--model models/bvlc_googlenet.caffemodel --labels synset_words.txt \
 	--image images/barbershop.png
@@ -349,7 +349,7 @@ $ python pi_deep_learning.py --prototxt models/bvlc_googlenet.prototxt \
 
 让我们试试 SqueezeNet:
 
-```
+```py
 $ python pi_deep_learning.py --prototxt models/squeezenet_v1.0.prototxt \
 	--model models/squeezenet_v1.0.caffemodel --labels synset_words.txt \
 	--image images/barbershop.png

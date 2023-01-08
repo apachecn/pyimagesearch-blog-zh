@@ -66,7 +66,7 @@
 
 如果你想跟随今天的教程，找到 ***“下载”*** 部分并获取代码和图像存档。使用你最喜欢的解压工具解压文件。从那里，打开文件夹，您将看到以下内容:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── pyimagesearch
@@ -100,7 +100,7 @@ $ tree --dirsfirst
 
 打开一个新文件，将其命名为`ocr_form.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.alignment import align_images
 from collections import namedtuple
@@ -110,14 +110,14 @@ import imutils
 import cv2
 ```
 
-```
+```py
 def cleanup_text(text):
 	# strip out non-ASCII text so we can draw the text on the image
 	# using OpenCV
 	return "".join([c if ord(c) < 128 else "" for c in text]).strip()
 ```
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -133,7 +133,7 @@ args = vars(ap.parse_args())
 
 相反，为了保持本教程的轻量级，我已经为我们关心的每个字段手动定义了`OCR_Locations`。好处是我们能够给每个字段一个名称，并指定精确的 *(x，y)*-坐标作为字段的边界。现在让我们在**步骤#1** 中定义文本字段的位置:
 
-```
+```py
 # create a named tuple which we can use to create locations of the
 # input document which we wish to OCR
 OCRLocation = namedtuple("OCRLocation", ["id", "bbox",
@@ -169,7 +169,7 @@ OCR_LOCATIONS = [
 
 **第 28-45 行**定义了官方 2020 IRS W-4 税表的 ***八个*字段，如图**图 9:****
 
-```
+```py
 # load the input image and template from disk
 print("[INFO] loading images...")
 image = cv2.imread(args["image"])
@@ -180,7 +180,7 @@ print("[INFO] aligning images...")
 aligned = align_images(image, template)
 ```
 
-```
+```py
 $ convert /path/to/taxes/2020/forms/form_w4.pdf ./form_w4.png
 ```
 
@@ -194,7 +194,7 @@ ImageMagick 足够智能，能够根据文件扩展名和文件本身识别出�
 
 下一步(**步骤#4** )是循环遍历我们的每个`OCR_LOCATIONS`和**应用光学字符识别到每个文本字段**使用宇宙魔方和宇宙魔方的力量:
 
-```
+```py
 # initialize a results list to store the document OCR parsing results
 print("[INFO] OCR'ing document...")
 parsingResults = []
@@ -212,7 +212,7 @@ for loc in OCR_LOCATIONS:
 
 首先，我们初始化`parsingResults`列表来存储每个文本字段的 OCR 结果(**第 58 行**)。从那里，我们继续循环每个`OCR_LOCATIONS`(从**行 61** 开始)，这是我们之前手动定义的。
 
-```
+```py
 	# break the text into lines and loop over them
 	for line in text.split("\n"):
 		# if the line is empty, ignore it
@@ -238,7 +238,7 @@ for loc in OCR_LOCATIONS:
 
 我们快到了，坚持住！让我们继续后处理我们的`parsingResults`来清理它们:
 
-```
+```py
 # initialize a dictionary to store our final OCR results
 results = {}
 
@@ -273,7 +273,7 @@ for (loc, line) in parsingResults:
 
 我们终于准备好执行**步骤# 5**——可视化我们的 OCR `results`:
 
-```
+```py
 # loop over the results
 for (locID, result) in results.items():
 	# unpack the result tuple
@@ -301,7 +301,7 @@ for (locID, result) in results.items():
 			cv2.FONT_HERSHEY_SIMPLEX, 1.8, (0, 0, 255), 5)
 ```
 
-```
+```py
 # show the input and output images, resizing it such that they fit
 # on our screen
 cv2.imshow("Input", imutils.resize(image, width=700))
@@ -321,7 +321,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python ocr_form.py --image scans/scan_01.jpg --template form_w4.png
 [INFO] loading images...
 [INFO] aligning images...
@@ -375,7 +375,7 @@ employee_ein
 
 让我们尝试另一个示例图像，这次视角略有不同:
 
-```
+```py
 $ python ocr_form.py --image scans/scan_02.jpg --template form_w4.png
 [INFO] loading images...
 [INFO] aligning images...

@@ -74,7 +74,7 @@
 
 “不正确”这个词用在这里是不恰当的，但我需要引起你的注意。你去装 RPi 的时候。GPIO 还是 GPIO Zero，我敢打赌你用的是`apt-get`。您的命令可能是这样的:
 
-```
+```py
 $ sudo apt-get install python-rpi.gpio python-gpiozero
 
 ```
@@ -111,7 +111,7 @@ $ sudo apt-get install python-rpi.gpio python-gpiozero
 
 我们去拿 RPi 吧。GPIO 和 GPIO zero 安装在我们的 Python 虚拟环境中。首先，使用`workon`命令进入 Python 虚拟环境:
 
-```
+```py
 $ workon <virtual environment name>
 
 ```
@@ -128,7 +128,7 @@ $ workon <virtual environment name>
 
 从那里，我们可以让`pip`安装 RPi。我们的 GPIO 和 GPIO Zero:
 
-```
+```py
 $ pip install RPi.GPIO
 $ pip install gpiozero
 
@@ -136,7 +136,7 @@ $ pip install gpiozero
 
 最后，让我们测试安装并确保我们可以导入 RPi。GPIO、GPIO Zero 和 OpenCV 一起:
 
-```
+```py
 $ python
 >>> import RPi.GPIO
 >>> import gpiozero
@@ -169,7 +169,7 @@ $ python
 
 打开一个新文件，将其命名为`gpio_demo.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import RPi.GPIO as GPIO
 import time
@@ -208,14 +208,14 @@ GPIO.cleanup()
 
 要执行`gpio_demo.py`，使用`workon`命令确保您在`cv`虚拟环境中(或者您用来存储 OpenCV 绑定+ GPIO 库的任何虚拟环境中):
 
-```
+```py
 $ workon cv
 
 ```
 
 然后我们可以运行`gpio_demo.py`脚本:
 
-```
+```py
 $ python gpio_demo.py
 
 ```
@@ -234,7 +234,7 @@ $ python gpio_demo.py
 
 第一种选择是在我们的 Python 虚拟环境中使用`sudo`命令*，就像这样:*
 
-```
+```py
 $ sudo python gpio_demo.py
 
 ```
@@ -243,7 +243,7 @@ $ sudo python gpio_demo.py
 
 第二个选项是启动一个根 shell，访问我们的 Python 虚拟环境，然后执行脚本:
 
-```
+```py
 $ sudo /bin/bash
 $ source /home/pi/.profile
 $ workon cv
@@ -261,7 +261,7 @@ $ python gpio_demo.py
 
 既然我们已经研究了 RPi。GPIO，让我们重新创建同一个 Python 脚本，但是这次使用 GPIO Zero 库。打开一个不同的文件，将其命名为`gpiozero_demo.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from gpiozero import TrafficHat
 import time
@@ -296,7 +296,7 @@ for light in lights:
 
 就像 RPi 一样。GPIO 示例，我们首先需要访问我们的 Python 虚拟环境，然后执行我们的脚本:
 
-```
+```py
 $ workon cv
 $ python gpiozero_demo.py
 

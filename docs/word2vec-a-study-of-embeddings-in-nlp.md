@@ -112,7 +112,7 @@ CBOW 是一种给定相邻单词，确定中心单词的技术。如果我们的
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 $ pip install tensorflow
 ```
@@ -146,7 +146,7 @@ $ pip install tensorflow
 
 从这里，看一下目录结构:
 
-```
+```py
 !tree .
 .
 ├── data.txt
@@ -189,7 +189,7 @@ $ pip install tensorflow
 
 在`pyimagesearch`目录中，`config.py`脚本存放了我们项目的配置管道。
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -224,7 +224,7 @@ CBOW_TSNE = os.path.join(OUTPUT_PATH, "tsne_cbow")
 
 然而，要应用 Word2Vec 算法，我们需要正确地处理数据。这涉及到符号化。`pyimagesearch`目录中的`create_vocabulary.py`脚本将帮助我们构建项目的词汇表。
 
-```
+```py
 # import the necessary packages
 import tensorflow as tf
 
@@ -256,7 +256,7 @@ def tokenize_data(data):
 
 我们将从 CBOW 实现开始。在父目录中，`train_CBOW.py`脚本包含完整的 CBOW 实现。
 
-```
+```py
 # USAGE
 # python -W ignore train_CBOW.py
 
@@ -285,7 +285,7 @@ textData = "".join(lines)
 
 为了解决这个问题，我们简单地使用`"".join`函数，将所有的行连接成一个字符串。
 
-```
+```py
 # tokenize the text data and store the vocabulary, the size of the
 # tokenized text, and the tokenized text
 (vocab, tokenizedTextSize, tokenizedText) = tokenize_data(
@@ -319,7 +319,7 @@ centerVectorMatrix = tf.Variable(
 
 现在，是时候创建我们的嵌入空间了。如前所述，我们将使用两个不同的矩阵，一个用于上下文单词表示，一个用于中心单词表示。每个单词都会用两个空格表示(**第 41-46 行**)。
 
-```
+```py
 # initialize the optimizer and create an empty list to log the loss
 optimizer = tf.optimizers.Adam()
 lossList = list()
@@ -342,7 +342,7 @@ for iter in tqdm(range(config.ITERATIONS)):
 
 随后在第 59-61 行上初始化用于 CBOW 考虑的窗口。
 
-```
+```py
    # initialize the gradient tape
     with tf.GradientTape() as tape:     
       # initialize the context vector
@@ -398,7 +398,7 @@ for iter in tqdm(range(config.ITERATIONS)):
 
 一旦超出时期，我们就用每个时期计算的损失来更新损失列表(**行 99** )。
 
-```
+```py
 # create output directory if it doesn't already exist
 if not os.path.exists(config.OUTPUT_PATH):
   os.makedirs(config.OUTPUT_PATH)
@@ -413,7 +413,7 @@ plt.savefig(config.CBOW_LOSS)
 
 如果输出文件夹还不存在，我们将创建它(**行 102 和 103** )。每个历元的损失被标绘并保存在输出文件夹中(**第 106-110 行**)。
 
-```
+```py
 # apply dimensional reductionality using tsne for the representation matrices
 tsneEmbed = (
   TSNE(n_components=2)
@@ -453,7 +453,7 @@ plt.savefig(config.CBOW_TSNE)
 
 正如我们前面所解释的，Skip-Gram 是一个输入得到多个输出的地方。让我们转到`train_SkipGram.py`脚本来完成我们的 Skip-Gram 实现。
 
-```
+```py
 # USAGE
 # python -W ignore train_skipgram.py
 
@@ -486,7 +486,7 @@ textData = "".join(lines)
 
 最初的步骤类似于我们在 CBOW 实现中所做的。在将文本数据提供给`tokenize_data`函数之前，我们准备好文本数据，并获得词汇、文本大小和返回的标记化文本(**第 20-28 行**)。
 
-```
+```py
 # map the vocab words to individual indices and map the indices to
 # the words in vocab
 vocabToIndex = {
@@ -508,7 +508,7 @@ centerVectorMatrix = tf.Variable(
 
 下一步是创建到词汇和文本的索引映射，这是重复的(**第 32-38 行**)。然后我们创建两个嵌入空间，我们将在**第 41-46 行**使用。
 
-```
+```py
 # initialize the optimizer and create an empty list to log the loss
 optimizer = tf.optimizers.Adam()
 lossList = list()
@@ -531,7 +531,7 @@ for iter in tqdm(range(config.ITERATIONS)):
 
 随后在**行 59-61** 上初始化窗口跳过程序考虑。
 
-```
+```py
     # initialize the gradient tape
     with tf.GradientTape() as tape: 
       # initialize the context loss
@@ -583,7 +583,7 @@ for iter in tqdm(range(config.ITERATIONS)):
 
 然后根据损失计算梯度，并应用于两个嵌入空间(**行 93-99** )。每个时期的损失然后被存储在**线 101** 上。
 
-```
+```py
 # create output directory if it doesn't already exist
 if not os.path.exists(config.OUTPUT_PATH):
   os.makedirs(config.OUTPUT_PATH)
@@ -598,7 +598,7 @@ plt.savefig(config.SKIPGRAM_LOSS)
 
 如果输出文件夹还不存在，我们将创建它(**行 104 和 105** )。每个历元的损失被标绘并保存在输出文件夹中(**第 108-112 行**)。
 
-```
+```py
 # apply dimensional reductionality using tsne for the
 # representation matrices
 tsneEmbed = (
@@ -659,7 +659,7 @@ Word2Vec 本质上是理解 NLP 中表征学习的一个重要里程碑。它提
 
 **Chakraborty，d .**“word 2 vec:自然语言处理中的嵌入研究”， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva，R. Raha，A. Thanki 编辑。，2022 年，【https://pyimg.co/2fb0z 
 
-```
+```py
 @incollection{Chakraborty_2022_Word2Vec,
   author = {Devjyoti Chakraborty},
   title = {{Word2Vec}: A Study of Embeddings in {NLP}},

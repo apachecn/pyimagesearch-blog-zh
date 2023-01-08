@@ -77,7 +77,7 @@
 
 我们的项目结构如下:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── dataset [129 entries]
@@ -118,7 +118,7 @@ $ tree --dirsfirst
 
 要查看这个过程是如何执行的，创建一个名为`encode_faces.py`的文件，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils import paths
 import face_recognition
@@ -156,7 +156,7 @@ args = vars(ap.parse_args())
 
  *让我们获取输入数据集中所有图像的路径:
 
-```
+```py
 # grab the paths to the input images in our dataset, then initialize
 # out data list (which we'll soon populate)
 print("[INFO] quantifying faces...")
@@ -171,7 +171,7 @@ data = []
 
 让我们开始循环所有的`imagePaths`:
 
-```
+```py
 # loop over the image paths
 for (i, imagePath) in enumerate(imagePaths):
 	# load the input image and convert it from RGB (OpenCV ordering)
@@ -188,7 +188,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 现在图像已经被处理了，让我们检测所有的脸并且抓取它们的边界框坐标:
 
-```
+```py
 	# detect the (x, y)-coordinates of the bounding boxes
 	# corresponding to each face in the input image
 	boxes = face_recognition.face_locations(rgb,
@@ -202,7 +202,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 让我们来看看这个剧本的“精髓”。在下一个模块中，我们将计算面部编码:
 
-```
+```py
 	# compute the facial embedding for the face
 	encodings = face_recognition.face_encodings(rgb, boxes)
 
@@ -226,7 +226,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 为了结束这个脚本，我们只需将数据列表写入一个序列化的 pickle 文件:
 
-```
+```py
 # dump the facial encodings data to disk
 print("[INFO] serializing encodings...")
 f = open(args["encodings"], "wb")
@@ -245,7 +245,7 @@ f.close()
 
 从那里，使用两个命令行参数，执行脚本来编码著名足球运动员的脸，如下所示:
 
-```
+```py
 $ python encode_faces.py --dataset dataset --encodings encodings.pickle
 [INFO] quantifying faces...
 [INFO] processing image 1/129
@@ -298,7 +298,7 @@ DBSCAN 还自然地处理异常值，如果它们落在“最近的邻居”距�
 
 打开一个新文件，将其命名为`cluster_faces.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.cluster import DBSCAN
 from imutils import build_montages
@@ -330,7 +330,7 @@ DBSCAN 内置于 scikit-learn 中。我们在第 2 行的**上导入 DBSCAN 实�
 
 让我们加载面部嵌入数据:
 
-```
+```py
 # load the serialized face encodings + bounding box locations from
 # disk, then extract the set of encodings to so we can cluster on
 # them
@@ -349,7 +349,7 @@ encodings = [d["encoding"] for d in data]
 
 现在我们可以在下一个代码块中聚集`encodings`:
 
-```
+```py
 # cluster the embeddings
 print("[INFO] clustering...")
 clt = DBSCAN(metric="euclidean", n_jobs=args["jobs"])
@@ -378,7 +378,7 @@ print("[INFO] # unique faces: {}".format(numUniqueFaces))
 
 我们通过循环所有独特的`labelIDs`来开始这个过程:
 
-```
+```py
 # loop over the unique face integers
 for labelID in labelIDs:
 	# find all indexes into the `data` array that belong to the
@@ -398,7 +398,7 @@ for labelID in labelIDs:
 
 `faces`列表将包括面部图像本身(**第 46 行**)。我们需要另一个循环来填充这个列表:
 
-```
+```py
 	# loop over the sampled indexes
 	for i in idxs:
 		# load the input image and extract the face ROI
@@ -422,7 +422,7 @@ for labelID in labelIDs:
 
 为了完成我们的顶级循环，让我们构建蒙太奇并将其显示到屏幕上:
 
-```
+```py
 	# create a montage using 96x96 "tiles" with 5 rows and 5 columns
 	montage = build_montages(faces, (96, 96), (5, 5))[0]
 
@@ -446,7 +446,7 @@ for labelID in labelIDs:
 
 这个脚本只需要一个[命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/)——编码文件的路径。要为足球运动员执行面部聚类，只需在终端中输入以下命令:
 
-```
+```py
 $ python cluster_faces.py --encodings encodings.pickle
 [INFO] loading encodings...
 [INFO] clustering...

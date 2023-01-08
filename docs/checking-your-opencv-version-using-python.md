@@ -16,7 +16,7 @@
 
 OpenCV 版本包含在一个特殊的`cv2.__version__`变量中，您可以这样访问它:
 
-```
+```py
 $ python
 >>> import cv2
 >>> cv2.__version__
@@ -26,7 +26,7 @@ $ python
 
 `cv2.__version__`变量只是一个字符串，你可以把它分成主要版本和次要版本:
 
-```
+```py
 >>> (major, minor, _) = cv2.__version__.split(".")
 >>> major
 '3'
@@ -39,7 +39,7 @@ $ python
 
 下面可以看到我的`is_cv2`、`is_cv3`、`check_opencv_version`功能:
 
-```
+```py
 def is_cv2():
     # if we are using OpenCV 2, then our cv2.__version__ will start
     # with '2.'
@@ -70,14 +70,14 @@ def check_opencv_version(major, lib=None):
 
 同样，这些函数已经包含在 [imutils](https://github.com/jrosebr1/imutils) 包中，您可以使用 pip 来安装:
 
-```
+```py
 $ pip install imutils
 
 ```
 
 如果您已经安装了`imutils`，您可以通过以下方式升级到最新版本:
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -94,7 +94,7 @@ $ pip install --upgrade imutils
 
 为了检测图像中的轮廓，我们需要使用`cv2.findContours`功能。然而，正如我们所知，`cv2.findContours`的返回签名在 OpenCV 的版本 3 和 2.4 之间略有变化(`cv2.findContours`的 OpenCV 3 版本在元组中返回一个额外的值)，因此我们需要在调用`cv2.findContours`之前对 OpenCV 版本进行检查，以确保我们的脚本不会出错。让我们来看看如何进行这项检查:
 
-```
+```py
 # import the necessary packages
 from __future__ import print_function
 import imutils

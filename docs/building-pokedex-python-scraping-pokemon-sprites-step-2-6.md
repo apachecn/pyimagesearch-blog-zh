@@ -28,7 +28,7 @@
 
 不过我稍微作弊了一下，把网页的相关部分复制粘贴成了明文文件。以下是一些 HTML 的示例:
 
-```
+```py
 <span class="infocard"><span class="infocard-img"><i class="pki" data-sprite="pkiAll n2"></i></span><span class="infocard-data"><a href="/sprites/ivysaur" class="ent-name">Ivysaur</a></span></span>
 <span class="infocard"><span class="infocard-img"><i class="pki" data-sprite="pkiAll n3"></i></span><span class="infocard-data"><a href="/sprites/venusaur" class="ent-name">Venusaur</a></span></span>
 <span class="infocard"><span class="infocard-img"><i class="pki" data-sprite="pkiAll n4"></i></span><span class="infocard-data"><a href="/sprites/charmander" class="ent-name">Charmander</a></span></span>
@@ -53,7 +53,7 @@
 
 我非常喜欢大量的例子和代码，所以让我们直接进入主题，想想我们该怎么做:
 
-```
+```py
 # import the necessary packages
 from bs4 import BeautifulSoup
 import argparse
@@ -73,7 +73,7 @@ args = vars(ap.parse_args())
 
 要安装 Beautiful soup，只需使用 pip:
 
-```
+```py
 $ pip install beautifulsoup4
 
 ```
@@ -82,7 +82,7 @@ $ pip install beautifulsoup4
 
 现在，让我们从 HTML 文件中提取口袋妖怪的名字:
 
-```
+```py
 # construct the soup and initialize the list of pokemon
 # names
 soup = BeautifulSoup(open(args["pokemon_list"]).read())
@@ -99,7 +99,7 @@ for link in soup.findAll("a"):
 
 然后，我们开始循环第 20 行上的所有链接元素。这些链接的 href 属性指向一个特定的口袋妖怪。但是，我们不需要跟踪每个链接。相反，我们只是获取元素的内部文本。这段文字包含了我们的口袋妖怪的名字。
 
-```
+```py
 # loop over the pokemon names
 for name in names:
 	# initialize the parsed name as just the lowercase
@@ -136,7 +136,7 @@ for name in names:
 
 现在，我们终于可以下载口袋妖怪精灵了:
 
-```
+```py
 	# construct the URL to download the sprite
 	print "[x] downloading %s" % (name)
 	url = "http://img.pokemondb.net/sprites/red-blue/normal/%s.png" % (parsedName)
@@ -166,7 +166,7 @@ for name in names:
 
 现在我们的代码已经完成，我们可以通过发出以下命令来执行我们的抓取:
 
-```
+```py
 $ python parse_and_download.py --pokemon-list pokemon_list.html --sprites sprites
 
 ```

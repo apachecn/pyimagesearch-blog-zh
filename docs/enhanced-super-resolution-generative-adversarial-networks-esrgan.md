@@ -69,7 +69,7 @@ ESRGAN 背后的核心理念不仅是提高结果，而且使流程更加高效�
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -102,7 +102,7 @@ $ pip install opencv-contrib-python
 
 从这里，看一下目录结构:
 
-```
+```py
 !tree .
 .
 ├── create_tfrecords.py
@@ -145,7 +145,7 @@ $ pip install opencv-contrib-python
 
 位于`pyimagesearch`目录中的`config.py`脚本包含了整个项目所需的几个参数和路径。将配置变量分开是一个很好的编码实践。为此，让我们转向`config.py`剧本。
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -169,7 +169,7 @@ SCALING_FACTOR = 4
 
 我们的高分辨率输出图像将具有尺寸`96 x 96 x 3`，而我们的输入低分辨率图像将具有尺寸`24 x 24 x 3` ( **行 13 和 14** )。相应地，在**线 15** 上`SCALING_FACTOR`被设置为`4`。
 
-```
+```py
 # GAN model specs
 FEATURE_MAPS = 64
 RESIDUAL_BLOCKS = 16
@@ -197,7 +197,7 @@ DIV2K_PATH = os.path.join(BASE_DATA_PATH, "div2k")
 
 设置`BASE_DATA_PATH`来定义存储数据集的。`DIV2K_PATH`引用了`DIV2K`数据集(**第 32 和 33 行**)。 [`div2k`](https://data.vision.ee.ethz.ch/cvl/DIV2K/) 数据集非常适合辅助图像超分辨率研究，因为它包含各种高分辨率图像。
 
-```
+```py
 # define the path to the tfrecords for GPU training
 GPU_BASE_TFR_PATH = "tfrecord"
 GPU_DIV2K_TFR_TRAIN_PATH = os.path.join(GPU_BASE_TFR_PATH, "train")
@@ -243,7 +243,7 @@ GRID_IMAGE_PATH = os.path.join(BASE_OUTPUT_PATH, "grid.png")
 
 训练 GANs 需要大量的计算能力和数据。为了确保我们有足够的数据，我们将采用几种数据扩充技术。让我们看看位于`pyimagesearch`目录中的`data_preprocess.py`脚本中的那些。
 
-```
+```py
 # import the necessary packages
 from tensorflow.io import FixedLenFeature
 from tensorflow.io import parse_single_example
@@ -295,7 +295,7 @@ def random_crop(lrImage, hrImage, hrCropSize=96, scale=4):
 
 使用这些值，我们裁剪出低分辨率图像及其对应的高分辨率图像，并返回它们(**第 28-34 行**)
 
-```
+```py
 def get_center_crop(lrImage, hrImage, hrCropSize=96, scale=4):
 	# calculate the low resolution image crop size and image shape
 	lrCropSize = hrCropSize // scale
@@ -332,7 +332,7 @@ def get_center_crop(lrImage, hrImage, hrCropSize=96, scale=4):
 
 为了获得相应的高分辨率中心点，将 lr 中心点乘以比例因子(**第 46 和 47 行**)。
 
-```
+```py
 def random_flip(lrImage, hrImage):
 	# calculate a random chance for flip
 	flipProb = tf.random.uniform(shape=(), maxval=1)
@@ -348,7 +348,7 @@ def random_flip(lrImage, hrImage):
 
 基于使用`tf.random.uniform`的翻转概率值，我们翻转我们的图像并返回它们(**第 60-66 行**)。
 
-```
+```py
 def random_rotate(lrImage, hrImage):
 	# randomly generate the number of 90 degree rotations
 	n = tf.random.uniform(shape=(), maxval=4, dtype=tf.int32)
@@ -365,7 +365,7 @@ def random_rotate(lrImage, hrImage):
 
 变量`n`生成一个值，这个值稍后将帮助应用于我们的图像集的旋转量(**第 70-77 行**)。
 
-```
+```py
 def read_train_example(example):
 	# get the feature template and  parse a single image according to
 	# the feature template
@@ -398,7 +398,7 @@ def read_train_example(example):
 
 现在，我们在 lr-hr 集合上应用数据扩充函数(**第 93-95 行**)。然后，我们将 lr-hr 图像重塑回它们需要的尺寸**(第 98-102 行**)。
 
-```
+```py
 def read_test_example(example):
 	# get the feature template and  parse a single image according to
 	# the feature template
@@ -425,7 +425,7 @@ def read_test_example(example):
 
 我们为推断图像创建一个类似于`read_train_example`的函数，称为`read_test_example`，它接受一个 lr-hr 图像集(**行 104** )。除了数据扩充过程(**第 107-125 行**)之外，重复前面函数中所做的一切。
 
-```
+```py
 def load_dataset(filenames, batchSize, train=False):
 	# get the TFRecords from the filenames
 	dataset = tf.data.TFRecordDataset(filenames, 
@@ -468,7 +468,7 @@ def load_dataset(filenames, batchSize, train=False):
 
 我们的下一个目的地是位于`pyimagesearch`目录中的`esrgan.py`脚本。该脚本包含完整的 ESRGAN 架构。我们已经讨论了 ESRGAN 带来的变化，现在让我们一个一个地来看一下。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.layers import BatchNormalization
 from tensorflow.keras.layers import GlobalAvgPool2D
@@ -509,7 +509,7 @@ class ESRGAN(object):
 
 处理后的输入然后通过一个`Conv2D`层，接着是一个`LeakyReLU`激活功能(**行 23 和 24** )。这些层的参数已经在`config.py`中定义过了。
 
-```
+```py
 		# construct the residual in residual block
 		x = Conv2D(featureMaps, 3, padding="same")(xIn)
 		x1 = LeakyReLU(leakyAlpha)(x)
@@ -538,7 +538,7 @@ class ESRGAN(object):
 
 添加跳过连接后，使用**线 43** 上的`residualScalar`变量缩放输出。
 
-```
+```py
 		# create a number of residual in residual blocks
 		for blockId in range(residualBlocks-1):
 			x = Conv2D(featureMaps, 3, padding="same")(xSkip)
@@ -560,7 +560,7 @@ class ESRGAN(object):
 
 现在，块重复是使用`for`循环的自动化。根据指定的剩余块数量，将添加块层(**第 46-61 行**)。
 
-```
+```py
 		# process the residual output with a conv kernel
 		x = Conv2D(featureMaps, 3, padding="same")(xSkip)
 		x = Add()([xIn, x])
@@ -597,7 +597,7 @@ class ESRGAN(object):
 
 随着**线 83** 上发电机的初始化，我们的 ESRGAN 发电机侧要求完成。
 
-```
+```py
 	@staticmethod
 	def discriminator(featureMaps, leakyAlpha, discBlocks):
 		# initialize the input layer and process it with conv kernel
@@ -627,7 +627,7 @@ class ESRGAN(object):
 
 尽管我们已经为生成器放弃了批处理规范化层，但我们将把它们用于鉴别器。下一组图层是一个`Conv` → `BN` → `LeakyReLU`的组合(**第 98-100 行**)。
 
-```
+```py
 		# create a downsample conv kernel config
 		downConvConf = {
 			"strides": 2,
@@ -649,7 +649,7 @@ class ESRGAN(object):
 
 在第**行第 103-106** 行，我们创建一个下采样卷积模板配置。然后在**线 109-118** 上的自动鉴别器模块中使用。
 
-```
+```py
 		# process the feature maps with global average pooling
 		x = GlobalAvgPool2D()(x)
 		x = LeakyReLU(leakyAlpha)(x)
@@ -674,7 +674,7 @@ class ESRGAN(object):
 
 架构完成后，是时候转到位于`pyimagesearch`目录中的`esrgan_training.py`脚本了。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras import Model
 from tensorflow import concat
@@ -702,7 +702,7 @@ class ESRGANTraining(Model):
 
 在这个函数中，我们为参数创建相应的类变量(**第 16-19 行**)。这些变量将在后面用于类函数。
 
-```
+```py
 	def compile(self, gOptimizer, dOptimizer, bceLoss, mseLoss):
 		super().compile()
 		# initialize the optimizers for the generator 
@@ -719,7 +719,7 @@ class ESRGANTraining(Model):
 
 该函数初始化发生器和鉴别器的优化器和损失函数(**第 25-30 行**)。
 
-```
+```py
 	def train_step(self, images):
 		# grab the low and high resolution images
 		(lrImages, hrImages) = images
@@ -746,7 +746,7 @@ class ESRGANTraining(Model):
 
 在**行** **39** 处，我们从生成器中得到一批假的超分辨率图像。这些与真实的超分辨率图像连接，并且相应地创建标签(**行** **47-49** )。
 
-```
+```py
 		# train the discriminator with relativistic error
 		with GradientTape() as tape:
 			# get the raw predictions and divide them into
@@ -787,7 +787,7 @@ class ESRGANTraining(Model):
 
 鉴别器训练结束后，我们现在生成生成器训练所需的误导标签(**第 80 行**)。
 
-```
+```py
 		# train the generator (note that we should *not* update
 		# the weights of the discriminator)
 		with GradientTape() as tape:
@@ -853,7 +853,7 @@ class ESRGANTraining(Model):
 
 我们使用了一些实用程序脚本来帮助我们的培训。第一个是保存我们在训练中使用的损失的脚本。为此，让我们转到`pyimagesearch`目录中的`losses.py`脚本。
 
-```
+```py
 # import necessary packages
 from tensorflow.keras.losses import MeanSquaredError
 from tensorflow.keras.losses import BinaryCrossentropy
@@ -882,7 +882,7 @@ class Losses:
 
 二进制交叉熵损失对象定义在**行 13** ，损失计算在**行 14** 。然后在整批中调整损耗(**第 17 行**)。
 
-```
+```py
 	def mse_loss(self, real, pred):
 		# compute mean squared error loss without reduction
 		MSE = MeanSquaredError(reduction=Reduction.NONE)
@@ -899,7 +899,7 @@ class Losses:
 
 我们的`losses.py`脚本到此结束。我们接下来进入`utils.py`脚本，它将帮助我们更好地评估 GAN 生成的图像。为此，接下来让我们进入`utils.py`剧本。
 
-```
+```py
 # import the necessary packages
 from . import config
 from matplotlib.pyplot import subplots
@@ -958,7 +958,7 @@ def zoom_into_images(image, imageTitle):
 
 我们最后的实用程序脚本是`vgg.py`脚本，它初始化了我们感知损失的 VGG 模型。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.applications import VGG19
 from tensorflow.keras import Model
@@ -985,7 +985,7 @@ class VGG:
 
 现在我们所有的积木都准备好了。我们只需要按照正确的顺序来执行它们，以便进行适当的 GAN 训练。为了实现这一点，我们进入`train_esrgan.py`脚本。
 
-```
+```py
 # USAGE
 # python train_esrgan.py --device gpu
 # python train_esrgan.py --device tpu
@@ -1020,7 +1020,7 @@ args = vars(ap.parse_args())
 
 这里的第一个任务是定义一个参数解析器，以便用户可以选择是使用 TPU 还是 GPU 来完成 GAN 训练(**第 26-30 行**)。正如我们已经提到的，我们已经使用 TPU 和 GPU 训练了 GAN 来评估效率。
 
-```
+```py
 # check if we are using TPU, if so, initialize the TPU strategy
 if args["device"] == "tpu":
 	# initialize the TPUs
@@ -1072,7 +1072,7 @@ print(f"[INFO] number of accelerators: {strategy.num_replicas_in_sync}...")
 
 如果给出了任何其他选择，脚本会自己退出(**第 64-67 行**)。
 
-```
+```py
 # grab train TFRecord filenames
 print("[INFO] grabbing the train TFRecords...")
 trainTfr = glob(tfrTrainPath +"/*.tfrec")
@@ -1108,7 +1108,7 @@ with strategy.scope():
 
 首先，我们将初始化预训练的生成器。为此，我们首先调用策略范围上下文管理器来初始化第 82-95 行上的损失和生成器。接着在**线 99 和 100** 上训练发电机。
 
-```
+```py
 # check whether output model directory exists, if it doesn't, then
 # create it
 if args["device"] == "gpu" and not os.path.exists(config.BASE_OUTPUT_PATH):
@@ -1171,7 +1171,7 @@ esrgan.generator.save(genPath)
 
 随着我们的 ESRGAN 培训的完成，我们现在可以评估我们的 ESRGAN 在结果方面表现如何。为此，让我们看看位于核心目录中的`inference.py`脚本。
 
-```
+```py
 # USAGE
 # python inference.py --device gpu
 # python inference.py --device tpu
@@ -1201,7 +1201,7 @@ args = vars(ap.parse_args())
 
 根据我们用于训练的设备，我们需要提供相同的设备来初始化模型并相应地加载所需的权重。为此，我们构建了一个参数解析器，它接受用户的设备选择(**第 21-25 行**)。
 
-```
+```py
 # check if we are using TPU, if so, initialize the strategy
 # accordingly
 if args["device"] == "tpu":
@@ -1243,7 +1243,7 @@ else:
 
 如果给出了任何其他输入，脚本会自行退出(**第 54-57 行**)。
 
-```
+```py
 # get the dataset
 print("[INFO] loading the test dataset...")
 testTfr = glob(tfrTestPath + "/*.tfrec")
@@ -1269,7 +1269,7 @@ with strategy.scope():
 
 接下来，预训练的 GAN 和完全训练的 ESRGAN 被初始化并加载到**线 71 和 72** 上。然后低分辨率图像通过这些 gan 进行预测(**线 76 和 77** )。
 
-```
+```py
 # plot the respective predictions
 print("[INFO] plotting the ESRGAN predictions...")
 (fig, axes) = subplots(nrows=config.INFER_BATCH_SIZE, ncols=4,
@@ -1338,7 +1338,7 @@ GANs 一直给我们留下深刻的印象，直到今天，新的域名都在使
 
 **Chakraborty，D.** “增强的超分辨率生成对抗网络(ESRGAN)， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva，R. Raha，A. Thanki 编辑。，2022 年，【https://pyimg.co/jt2cb 
 
-```
+```py
 @incollection{Chakraborty_2022_ESRGAN,
   author = {Devjyoti Chakraborty},
   title = {Enhanced Super-Resolution Generative Adversarial Networks {(ESRGAN)}},

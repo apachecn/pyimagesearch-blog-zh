@@ -29,7 +29,7 @@
 
 使用 Python 编程语言时，您不可避免地会遇到类似这样的错误:
 
-```
+```py
 AttributeError: 'NoneType' object has no attribute ‘something’
 
 ```
@@ -42,7 +42,7 @@ AttributeError: 'NoneType' object has no attribute ‘something’
 
 下面是一个从 Python shell 生成`NoneType`错误的例子:
 
-```
+```py
 >>> foo = None
 >>> foo.bar = True
 Traceback (most recent call last):
@@ -74,7 +74,7 @@ AttributeError: 'NoneType' object has no attribute 'bar'
 
 下面是一个尝试从磁盘加载不存在的映像的示例:
 
-```
+```py
 $ python
 >>> import cv2
 >>> path = "path/to/image/that/does/not/exist.png"
@@ -94,7 +94,7 @@ AttributeError: 'NoneType' object has no attribute 'shape'
 
 下面是一个错误消息的例子，当从磁盘加载一个不存在的映像，然后立即调用 OpenCV 函数时，您可能会看到这个错误消息:
 
-```
+```py
 >>> import cv2
 >>> path = "path/to/image/that/does/not/exist.png"
 >>> image = cv2.imread(path)
@@ -161,7 +161,7 @@ cv2.error: /tmp/opencv20150906-42178-3d0iam/opencv-2.4.12/modules/imgproc/src/co
 
  *打开一个新文件，将其命名为`display_image.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -213,7 +213,7 @@ cv2.waitKey(0)
 
 回到示例，让我们检查我的本地目录的内容:
 
-```
+```py
 $ ls -l
 total 800
 -rw-r--r--  1 adrianrosebrock  staff     541 Dec 21 08:45 display_image.py
@@ -228,7 +228,7 @@ total 800
 
 如果我执行以下命令，我将看到屏幕上显示的`jemma.png`图像，以及图像尺寸的信息:
 
-```
+```py
 $ python display_image.py --image jemma.png
 w: 376, h: 500, d: 3
 
@@ -240,7 +240,7 @@ w: 376, h: 500, d: 3
 
 然而，让我们试着加载一个*不存在*的图像路径:
 
-```
+```py
 $ python display_image.py --image i_dont_exist.png
 Traceback (most recent call last):
   File "display_image.py", line 17, in <module>

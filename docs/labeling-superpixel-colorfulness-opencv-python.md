@@ -30,7 +30,7 @@
 
 让我们从在您最喜欢的编辑器或 IDE 中打开一个新文件开始，将其命名为`colorful_regions.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from skimage.exposure import rescale_intensity
 from skimage.segmentation import slic
@@ -48,7 +48,7 @@ import cv2
 
 接下来，我们将定义我们的色彩度度量函数，从[上一篇文章](https://pyimagesearch.com/2017/06/05/computing-image-colorfulness-with-opencv-and-python/)开始，我们对它做了一个小的修改:
 
-```
+```py
 def segment_colorfulness(image, mask):
 	# split the image into its respective RGB components, then mask
 	# each of the individual RGB channels so we can compute
@@ -89,7 +89,7 @@ def segment_colorfulness(image, mask):
 
 既然已经定义了关键的 colorfulness 函数，下一步就是解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -107,7 +107,7 @@ args = vars(ap.parse_args())
 
 现在是时候将图像加载到内存中，为我们的可视化分配空间，并计算 SLIC 超像素分割:
 
-```
+```py
 # load the image in OpenCV format so we can draw on it later, then
 # allocate memory for the superpixel colorfulness visualization
 orig = cv2.imread(args["image"])
@@ -138,7 +138,7 @@ segments = slic(img_as_float(image), n_segments=args["segments"],
 
 现在让我们计算每个超像素的色彩:
 
-```
+```py
 # loop over each of the unique superpixels
 for v in np.unique(segments):
 	# construct a mask for the segment so we can compute image
@@ -169,7 +169,7 @@ for v in np.unique(segments):
 
 自然，我们希望看到我们的结果，所以让我们继续为输入图像中最/最不鲜艳的区域构建一个透明的叠加可视化:
 
-```
+```py
 # scale the visualization image from an unrestricted floating point
 # to unsigned 8-bit integer array so we can use it with OpenCV and
 # display it to our screen
@@ -190,7 +190,7 @@ cv2.addWeighted(overlay, alpha, output, 1 - alpha, 0, output)
 
 最后，让我们在屏幕上显示图像，并结束这个脚本:
 
-```
+```py
 # show the output images
 cv2.imshow("Input", orig)
 cv2.imshow("Visualization", vis)
@@ -209,7 +209,7 @@ cv2.waitKey(0)
 
 让我们看看 Python 脚本的运行情况——打开一个终端，`workon`您的虚拟环境(如果您正在使用的话)(强烈推荐),并输入以下命令:
 
-```
+```py
 $ python colorful_regions.py --image images/example_01.jpg
 
 ```
@@ -230,7 +230,7 @@ $ python colorful_regions.py --image images/example_01.jpg
 
 下面这张照片是我在波士顿的照片，站在标志性的 Citgo 标志前俯瞰肯莫尔广场:
 
-```
+```py
 $ python colorful_regions.py --image images/example_02.jpg
 
 ```
@@ -243,7 +243,7 @@ $ python colorful_regions.py --image images/example_02.jpg
 
 最后，这里有一张来自彩虹点的照片，彩虹点是[布莱斯峡谷的最高海拔:](https://en.wikipedia.org/wiki/Bryce_Canyon_National_Park)
 
-```
+```py
 $ python colorful_regions.py --image images/example_03.jpg
 
 ```

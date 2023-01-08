@@ -85,7 +85,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -118,7 +118,7 @@ $ pip install opencv-contrib-python
 
 让我们检查一下简单的项目结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── gray8_vs_gray16.py
@@ -140,7 +140,7 @@ $ tree --dirsfirst
 
 打开项目目录结构中的`gray8_vs_gray16.py`文件，插入以下代码导入 NumPy 和 OpenCV 库:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import cv2
@@ -148,7 +148,7 @@ import cv2
 
 首先，我们将开始打开 gray16 热图像:
 
-```
+```py
 # open the gray16 image
 gray16_image = cv2.imread("lighter_gray16_image.tiff", cv2.IMREAD_ANYDEPTH)
 ```
@@ -157,7 +157,7 @@ gray16_image = cv2.imread("lighter_gray16_image.tiff", cv2.IMREAD_ANYDEPTH)
 
 然后，我们将它转换成灰色图像，以便能够正确处理和可视化:
 
-```
+```py
 # convert the gray16 image into a gray8
 gray8_image = np.zeros((120, 160), dtype=np.uint8)
 gray8_image = cv2.normalize(gray16_image, gray8_image, 0, 255, cv2.NORM_MINMAX)
@@ -168,7 +168,7 @@ gray8_image = np.uint8(gray8_image)
 
 我们使用我们最喜欢的 OpenCV colormap ***** 为 gray8 图像着色，以获得不同的热调色板:
 
-```
+```py
 # color the gray8 image using OpenCV colormaps
 inferno_palette = cv2.applyColorMap(gray8_image, cv2.COLORMAP_INFERNO)
 jet_palette = cv2.applyColorMap(gray8_image, cv2.COLORMAP_JET)
@@ -179,7 +179,7 @@ viridis_palette = cv2.applyColorMap(gray8_image, cv2.COLORMAP_VIRIDIS)
 
 最后，我们展示结果:
 
-```
+```py
 # show the different thermal color palettes
 cv2.imshow("gray8", gray8_image)
 cv2.imshow("inferno", inferno_palette)
@@ -222,7 +222,7 @@ cv2.waitKey(0)
 
 打开`measure_image_temperature.py`文件，导入 NumPy 和 OpenCV 库:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import cv2
@@ -230,7 +230,7 @@ import cv2
 
 打开 gray16 热像，`lighter_gray16_image.tiff`如前一节:
 
-```
+```py
 # open the gray16 image
 gray16_image = cv2.imread("lighter_gray16_image.tiff ", cv2.IMREAD_ANYDEPTH)
 ```
@@ -239,7 +239,7 @@ gray16_image = cv2.imread("lighter_gray16_image.tiff ", cv2.IMREAD_ANYDEPTH)
 
 我们将测量所需像素的温度值。先说火焰中间的一个热值。由于 **RGMVision ThermalCAM 1** 提供`160x120`图像，我们可以选择例如`x, y = (90, 40)`值，如图**图 4** 所示。
 
-```
+```py
 # get the first gray16 value
 
 # pixel coordinates
@@ -251,7 +251,7 @@ pixel_flame_gray16 = gray16_image [y, x]
 
 现在，我们可以应用等式(1 ),得到以°C 或°F 为单位的温度值:
 
-```
+```py
 # calculate temperature value in ° C
 pixel_flame_gray16 = (pixel_flame_gray16 / 100) - 273.15
 
@@ -263,7 +263,7 @@ pixel_flame_gray16 = (pixel_flame_gray16 / 100) * 9 / 5 - 459.67
 
 最后，我们显示灰度 16 和灰度 8 图像中的值:
 
-```
+```py
 # convert the gray16 image into a gray8 to show the result
 gray8_image = np.zeros((120,160), dtype=np.uint8)
 gray8_image = cv2.normalize(gray16_image, gray8_image, 0, 255, cv2.NORM_MINMAX)
@@ -293,7 +293,7 @@ cv2.waitKey(0)
 
 如果我们想验证这个值是否有意义，我们可以获得一个不同的温度点，在这种情况下，一个更冷的温度点:点燃打火机的手。
 
-```
+```py
 # get the second gray16 value
 
 # pixel coordinates
@@ -323,7 +323,7 @@ y = 100
 
 打开`measure_video_temperature.py`并导入 NumPy、OpenCV、OS 和 argparse 库:
 
-```
+```py
 # import the necessary packages
 import cv2
 import numpy as np
@@ -333,7 +333,7 @@ import argparse
 
 如果您熟悉 PyImageSearch 教程，那么您已经知道 argparse Python 库。我们用它在运行时给程序提供额外的信息(例如，命令行参数)。在这种情况下，我们将使用它来指定我们的热视频路径:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", required=True, help="path of the video sequence")
@@ -342,7 +342,7 @@ args = vars(ap.parse_args())
 
 下面的代码向您展示了如何实现一个鼠标指针来轻松显示所选像素的温度，而不是选择一个固定点:
 
-```
+```py
 # create mouse global coordinates
 x_mouse = 0
 y_mouse = 0                 
@@ -372,7 +372,7 @@ cv2.setMouseCallback('gray8', mouse_events)
 
 我们建议您查看使用 Python 和 OpenCV 捕获鼠标点击事件的[教程，以更深入地了解鼠标捕获事件。](https://www.pyimagesearch.com/2015/03/09/capturing-mouse-click-events-with-python-and-opencv/)
 
-```
+```py
 # loop over the thermal video frames
 for image in sorted(os.listdir(args["video"])):
 
@@ -427,7 +427,7 @@ for image in sorted(os.listdir(args["video"])):
 
 打开`measure_camera_video_temperature.py`并导入 NumPy 和 OpenCV 库:
 
-```
+```py
 # import the necessary packages
 import cv2
 import numpy as np
@@ -435,7 +435,7 @@ import numpy as np
 
 按照上面的**“从热视频测量温度”**部分定义鼠标事件功能:
 
-```
+```py
 # create mouse global coordinates
 x_mouse = 0
 y_mouse = 0                 
@@ -455,7 +455,7 @@ def mouse_events(event, x, y, flags, param):
 
 设置热感摄像机指数和分辨率，在我们的例子中，`160x120`:
 
-```
+```py
 # set up the thermal camera index (thermal_camera = cv2.VideoCapture(0, cv2.CAP_DSHOW) on Windows OS)
 thermal_camera = cv2.VideoCapture(0)
 
@@ -470,7 +470,7 @@ thermal_camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 120)
 
 将热感摄像机设置为 gray16 源，并接收 raw 格式的数据。
 
-```
+```py
 # set up the thermal camera to get the gray16 stream and raw data
 thermal_camera.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter.fourcc('Y','1','6',' '))
 thermal_camera.set(cv2.CAP_PROP_CONVERT_RGB, 0)
@@ -480,7 +480,7 @@ thermal_camera.set(cv2.CAP_PROP_CONVERT_RGB, 0)
 
 设置鼠标事件并准备热帧显示(**行 33-35** ):
 
-```
+```py
 # set up mouse events and prepare the thermal frame display
 grabbed, frame_thermal = thermal_camera.read()
 cv2.imshow('gray8', frame_thermal)
@@ -489,7 +489,7 @@ cv2.setMouseCallback('gray8', mouse_events)
 
 循环热摄像机帧，计算灰度 16 温度值(**第 38-63 行**)。
 
-```
+```py
 # loop over the thermal camera frames
 while True:
 
@@ -549,7 +549,7 @@ cv2.destroyAllWindows()
 
 **Garcia-Martin，R.** “热视觉:使用 Python 和 OpenCV 从图像中测量第一个温度”， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva 和 R. Raha 编辑。，2022 年，【https://pyimg.co/mns3e 
 
-```
+```py
 @incollection{Garcia-Martin_2022_Measuring,
   author = {Raul Garcia-Martin},
   title = {Thermal Vision: Measuring Your First Temperature from an Image with {P}ython and {OpenCV}},

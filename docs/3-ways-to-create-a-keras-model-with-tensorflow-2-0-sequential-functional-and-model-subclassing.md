@@ -26,7 +26,7 @@ Keras 和 TensorFlow 2.0 为您提供了三种方法来实现您自己的神经�
 
 继续使用本教程的 ***“下载”*** 部分获取这篇文章的源代码。然后提取文件并使用`tree`命令检查目录内容:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── output
@@ -71,7 +71,7 @@ $ tree --dirsfirst
 
 打开项目结构中的`models.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Model
 from tensorflow.keras.models import Sequential
@@ -92,7 +92,7 @@ from tensorflow.keras.layers import concatenate
 
 为了实现我们的顺序模型，我们需要第 3 行的**导入。现在让我们继续创建**序列模型**:**
 
-```
+```py
 def shallownet_sequential(width, height, depth, classes):
 	# initialize the model along with the input shape to be
 	# "channels last" ordering
@@ -171,7 +171,7 @@ Keras 的函数式 API 易于使用，通常受到使用 Keras 深度学习库�
 
 作为将我们的“乐高模块”拼凑在一起的一个例子，现在让我们开始实现 MiniGoogLeNet:
 
-```
+```py
 def minigooglenet_functional(width, height, depth, classes):
 	def conv_module(x, K, kX, kY, stride, chanDim, padding="same"):
 		# define a CONV => BN => RELU pattern
@@ -206,7 +206,7 @@ def minigooglenet_functional(width, height, depth, classes):
 
 让我们创建由两个卷积模块组成的`inception_module`:
 
-```
+```py
 	def inception_module(x, numK1x1, numK3x3, chanDim):
 		# define two CONV modules, then concatenate across the
 		# channel dimension
@@ -232,7 +232,7 @@ def minigooglenet_functional(width, height, depth, classes):
 
 最后，我们将实现我们的`downsample_module`:
 
-```
+```py
 	def downsample_module(x, K, chanDim):
 		# define the CONV module and POOL, then concatenate
 		# across the channel dimensions
@@ -257,7 +257,7 @@ def minigooglenet_functional(width, height, depth, classes):
 
 定义了我们的每个模块后，我们现在可以使用它们来**构建使用功能 API 的整个 MiniGoogLeNet 架构:**
 
-```
+```py
 	# initialize the input shape to be "channels last" and the
 	# channels dimension itself
 	inputShape = (height, width, depth)
@@ -337,7 +337,7 @@ def minigooglenet_functional(width, height, depth, classes):
 
 让我们看一个实现 MiniVGGNet 的简单例子，它是一个顺序模型，但是被转换成了一个**模型子类:**
 
-```
+```py
 class MiniVGGNetModel(Model):
 	def __init__(self, classes, chanDim=-1):
 		# call the parent constructor
@@ -392,7 +392,7 @@ class MiniVGGNetModel(Model):
 
 一旦定义了我们的 Keras 层和自定义实现层，我们就可以在用于执行前向传递的`call`函数中定义网络拓扑/图形:
 
-```
+```py
 	def call(self, inputs):
 		# build the first (CONV => RELU) * 2 => POOL layer set
 		x = self.conv1A(inputs)
@@ -438,7 +438,7 @@ class MiniVGGNetModel(Model):
 
 答案就在`train.py`里面——我们来看看:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -475,7 +475,7 @@ import argparse
 
 从这里开始，我们将继续解析[命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-m", "--model", type=str, default="sequential",
@@ -494,7 +494,7 @@ args = vars(ap.parse_args())
 
 从这里，我们将(1)初始化一些超参数，(2)准备我们的数据，以及(3)构造我们的数据扩充对象:
 
-```
+```py
 # initialize the initial learning rate, batch size, and number of
 # epochs to train for
 INIT_LR = 1e-2
@@ -534,7 +534,7 @@ aug = ImageDataGenerator(rotation_range=18, zoom_range=0.15,
 
 **脚本的核心在下一个代码块中，我们在这里实例化我们的模型:**
 
-```
+```py
 # check to see if we are using a Keras Sequential model
 if args["model"] == "sequential":
 	# instantiate a Keras Sequential model
@@ -559,7 +559,7 @@ elif args["model"] == "class":
 
 从那里，我们准备好编译模型并适合我们的数据:
 
-```
+```py
 # initialize the optimizer and compile the model
 opt = SGD(lr=INIT_LR, momentum=0.9, decay=INIT_LR / NUM_EPOCHS)
 print("[INFO] training network...")
@@ -582,7 +582,7 @@ H = model.fit_generator(
 
 最后，我们将评估我们的模型并绘制培训历史:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(testX, batch_size=BATCH_SIZE)
@@ -621,7 +621,7 @@ plt.savefig(args["plot"])
 
 从那里，打开一个终端并执行以下命令来训练和评估顺序模型:
 
-```
+```py
 $ python train.py --model sequential --plot output/sequential.png
 [INFO] loading CIFAR-10 dataset...
 [INFO] using sequential model...
@@ -675,7 +675,7 @@ weighted avg       0.59      0.57      0.55     10000
 
 有了源代码后，执行以下命令来训练我们的功能模型:
 
-```
+```py
 $ python train.py --model functional --plot output/functional.png
 [INFO] loading CIFAR-10 dataset...
 [INFO] using functional model...
@@ -731,7 +731,7 @@ weighted avg       0.87      0.86      0.86     10000
 
 要查看 Keras 模型子类化的运行情况，请确保您已经使用了本指南的 ***“下载”*** 部分来获取代码——从那里您可以执行以下命令:
 
-```
+```py
 $ python train.py --model class --plot output/class.png
 [INFO] loading CIFAR-10 dataset...
 [INFO] using model sub-classing...

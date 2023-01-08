@@ -52,7 +52,7 @@ Tomasz 是这方面无所不知的权威，他向我推荐了 MATLAB 中的两�
 
 打开一个文件，将其命名为`nms.py`，让我们开始在 Python 中实现 Felzenszwalb 等人的非最大值抑制方法:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 
@@ -94,7 +94,7 @@ def non_max_suppression_slow(boxes, overlapThresh):
 
  *现在，让我们进入非极大值抑制函数的核心部分:
 
-```
+```py
 	# keep looping while some indexes still remain in the indexes
 	# list
 	while len(idxs) > 0:
@@ -117,7 +117,7 @@ def non_max_suppression_slow(boxes, overlapThresh):
 
 是时候计算重叠率并确定我们可以忽略哪些边界框了:
 
-```
+```py
 		# loop over all indexes in the indexes list
 		for pos in xrange(0, last):
 			# grab the current index
@@ -169,7 +169,7 @@ def non_max_suppression_slow(boxes, overlapThresh):
 
 让我们继续创建一个驱动程序，这样我们就可以执行这段代码并看到它的运行。打开一个新文件，将其命名为`nms_slow.py`，并添加以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.nms import non_max_suppression_slow
 import numpy as np
@@ -237,7 +237,7 @@ for (imagePath, boundingBoxes) in images:
 
 要查看 Felzenszwalb 等人的非最大抑制方法，请从本页底部下载本文的源代码和附带图像，导航到源代码目录，并发出以下命令:
 
-```
+```py
 $ python nms_slow.py
 
 ```

@@ -87,7 +87,7 @@ ResNet 等最新架构的模型大小超过 100MB。VGGNet 超过 550MB。AlexNe
 
 首先，创建一个名为`pi_deep_learning.py`的新文件，并插入以下源代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -100,7 +100,7 @@ import cv2
 
 从那里，我们需要解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -124,7 +124,7 @@ args = vars(ap.parse_args())
 
 接下来，我们将从磁盘加载类标签和输入图像:
 
-```
+```py
 # load the class labels from disk
 rows = open(args["labels"]).read().strip().split("\n")
 classes = [r[r.find(" ") + 1:].split(",")[0] for r in rows]
@@ -142,7 +142,7 @@ image = cv2.imread(args["image"])
 
 现在，我们将利用 OpenCV 3.3 的深度神经网络(DNN)模块将`image`转换为`blob`，并从磁盘加载模型:
 
-```
+```py
 # our CNN requires fixed spatial dimensions for our input image(s)
 # so we need to ensure it is resized to 227x227 pixels while
 # performing mean subtraction (104, 117, 123) to normalize the input;
@@ -168,7 +168,7 @@ net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
 
 现在，我们准备通过网络传递图像，并查看预测:
 
-```
+```py
 # set the blob as input to the network and perform a forward-pass to
 # obtain our output classification
 net.setInput(blob)
@@ -190,7 +190,7 @@ idxs = np.argsort(preds[0])[::-1][:5]
 
 剩余的行(1)在图像上绘制最高预测类标签和相应的概率，(2)将前五个结果和概率打印到终端，以及(3)将图像显示到屏幕:
 
-```
+```py
 # loop over the top-5 predictions and display them
 for (i, idx) in enumerate(idxs):
 	# draw the top prediction on the input image
@@ -236,7 +236,7 @@ cv2.waitKey(0)
 
 从输出中我们可以看到，GoogLeNet 在 **1.7 秒**内正确地将图像分类为*“理发店*:
 
-```
+```py
 $ python pi_deep_learning.py --prototxt models/bvlc_googlenet.prototxt \
 	--model models/bvlc_googlenet.caffemodel --labels synset_words.txt \
 	--image images/barbershop.png
@@ -252,7 +252,7 @@ $ python pi_deep_learning.py --prototxt models/bvlc_googlenet.prototxt \
 
 让我们试试 SqueezeNet:
 
-```
+```py
 $ python pi_deep_learning.py --prototxt models/squeezenet_v1.0.prototxt \
 	--model models/squeezenet_v1.0.caffemodel --labels synset_words.txt \
 	--image images/barbershop.png 
@@ -274,7 +274,7 @@ SqueezeNet 也正确地将图像分类为*【理发店】* …
 
 让我们用 SqueezeNet 试试另一个例子:
 
-```
+```py
 $ python pi_deep_learning.py --prototxt models/squeezenet_v1.0.prototxt \
 	--model models/squeezenet_v1.0.caffemodel --labels synset_words.txt \
 	--image images/cobra.png 
@@ -294,7 +294,7 @@ $ python pi_deep_learning.py --prototxt models/squeezenet_v1.0.prototxt \
 
 然而，尽管 SqueezeNet 速度明显更快，但不如 GoogLeNet 准确:
 
-```
+```py
 $ python pi_deep_learning.py --prototxt models/squeezenet_v1.0.prototxt \
 	--model models/squeezenet_v1.0.caffemodel --labels synset_words.txt \
 	--image images/jellyfish.png 
@@ -316,7 +316,7 @@ $ python pi_deep_learning.py --prototxt models/squeezenet_v1.0.prototxt \
 
 另一方面，GoogLeNet 正确地将*“水母*”报告为第一预测(牺牲了处理时间):
 
-```
+```py
 $ python pi_deep_learning.py --prototxt models/bvlc_googlenet.prototxt \
 	--model models/bvlc_googlenet.caffemodel --labels synset_words.txt \
 	--image images/jellyfish.png

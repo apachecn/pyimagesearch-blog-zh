@@ -184,7 +184,7 @@
 
 **Mangla，P.** “用于物流的计算机视觉和深度学习”， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva 和 R. Raha 编辑。，2022 年，【https://pyimg.co/ux28n 
 
-```
+```py
 @incollection{Mangla_2022_CVDLL,
   author = {Puneet Mangla},
   title = {Computer Vision and Deep Learning for Logistics},

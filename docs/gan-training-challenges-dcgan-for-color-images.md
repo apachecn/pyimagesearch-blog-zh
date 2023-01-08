@@ -30,27 +30,27 @@
 
 要从 Kaggle 下载数据，您需要提供您的 Kaggle 凭据。您可以将 Kaggle json 文件上传到 Colab，或者将您的 Kaggle 用户名和密钥放在笔记本中。我们选择了后者。
 
-```
+```py
 os.environ['KAGGLE_USERNAME']="enter-your-own-user-name" 
 os.environ['KAGGLE_KEY']="enter-your-own-user-name" 
 ```
 
 下载并解压到一个名为`dataset`的目录。
 
-```
+```py
 !kaggle datasets download -d dqmonn/zalando-store-crawl -p datasets
 !unzip datasets/zalando-store-crawl.zip -d datasets/
 ```
 
 下载并解压缩数据后，我们设置数据所在的目录。
 
-```
+```py
 zalando_data_dir = "/content/datasets/zalando/zalando/zalando"
 ```
 
 然后，我们使用 Keras' `image_dataset_from_directory`从目录中的图像创建一个`tf.data.Dataset`，它将在稍后用于训练模型。最后，我们指定了`64×64`的图像大小和`32`的批量大小。
 
-```
+```py
 train_images = tf.keras.utils.image_dataset_from_directory(
    zalando_data_dir, label_mode=None, image_size=(64, 64), batch_size=32)
 ```
@@ -59,7 +59,7 @@ train_images = tf.keras.utils.image_dataset_from_directory(
 
 和以前一样，我们将图像归一化到`[-1, 1]`的范围，因为生成器的最终层激活使用了`tanh`。最后，我们通过使用`tf.dataset`的`map`函数和`lambda`函数来应用规范化。
 
-```
+```py
 train_images = train_images.map(lambda x: (x - 127.5) / 127.5)
 ```
 
@@ -90,7 +90,7 @@ train_images = train_images.map(lambda x: (x - 127.5) / 127.5)
 
 我们再次通过子类`keras.Model`定义 DCGAN 模型架构，并覆盖`train_step`来定义定制的训练循环。代码中唯一的细微变化是对真正的标签应用单侧标签平滑。
 
-```
+```py
      real_labels = tf.ones((batch_size, 1))
      real_labels += 0.05 * tf.random.uniform(tf.shape(real_labels))
 ```
@@ -101,7 +101,7 @@ train_images = train_images.map(lambda x: (x - 127.5) / 127.5)
 
 没有变化的相同代码—覆盖 Keras 回调以在训练期间监视和可视化生成的图像。
 
-```
+```py
 class GANMonitor(keras.callbacks.Callback):
     def __init__():
     ...
@@ -115,13 +115,13 @@ class GANMonitor(keras.callbacks.Callback):
 
 这里我们将 dcgan 模型和 DCGAN 类放在一起:
 
-```
+```py
 dcgan = DCGAN(discriminator=discriminator, generator=generator, latent_dim=LATENT_DIM)
 ```
 
 编译 dcgan 模型，主要变化是学习率。在这里，我将鉴别器学习率设置为`0.0001`，将发电机学习率设置为`0.0003`。这是为了确保鉴别器不会超过发生器的功率。
 
-```
+```py
 D_LR = 0.0001 # discriminator learning rate
 G_LR = 0.0003 # generator learning rate
 
@@ -134,7 +134,7 @@ dcgan.compile(
 
 现在我们干脆调用`model.fit()`来训练`dcgan`模型！
 
-```
+```py
 NUM_EPOCHS = 50 # number of epochs
 dcgan.fit(train_images, epochs=NUM_EPOCHS, 
 callbacks=[GANMonitor(num_img=16, latent_dim=LATENT_DIM)])
@@ -199,7 +199,7 @@ gan 很难训练，以下是一些众所周知的挑战:
 
 **Maynard-Reid，m .**“GAN 训练挑战:用于彩色图像的 DCGAN”， *PyImageSearch* ，2021，[https://PyImageSearch . com/2021/12/13/GAN-Training-Challenges-DCGAN-for-Color-Images/](https://pyimagesearch.com/2021/12/13/gan-training-challenges-dcgan-for-color-images/)
 
-```
+```py
 @article{Maynard-Reid_2021_GAN_Training,
   author = {Margaret Maynard-Reid},
   title = {{GAN} Training Challenges: {DCGAN} for Color Images},

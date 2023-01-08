@@ -41,7 +41,7 @@ IPython 笔记本确实很棒。玩起来很有趣。因为这是一台 IPython 
 
 正如我提到的，简单是`bat-country`的目标之一。假设您已经在系统上安装了 Caffe 和`bat-country`,只需 3 行 Python 代码就可以生成一个深度梦境/幻觉图像:
 
-```
+```py
 # we can't stop here...
 bc = BatCountry("caffe/models/bvlc_googlenet")
 image = bc.dream(np.float32(Image.open("/path/to/image.jpg")))
@@ -51,7 +51,7 @@ bc.cleanup()
 
 执行完这段代码后，您可以获取由`dream`方法返回的`image`,并将其写入文件:
 
-```
+```py
 result = Image.fromarray(np.uint8(image))
 result.save("/path/to/output.jpg")
 
@@ -73,7 +73,7 @@ bat-country 软件包要求在你的系统上已经安装了 Caffe，一个来�
 
 这里要做的一个重要步骤是更新您的`$PYTHONPATH`以包含您的 Caffe 安装目录:
 
-```
+```py
 export PYTHONPATH=/path/to/caffe/python:$PYTHONPATH
 
 ```
@@ -88,14 +88,14 @@ Caffe 在 CPU 上开箱即可正常工作。但是如果你真的想让 Caffe �
 
 `$CAFFE_ROOT`目录是您的 Caffe 安装的基础目录:
 
-```
+```py
 export CAFEE_ROOT=/path/to/caffe
 
 ```
 
 下面是我的`$CAFFE_ROOT`的样子:
 
-```
+```py
 export CAFFE_ROOT=/home/ubuntu/libraries/caffe
 
 ```
@@ -106,7 +106,7 @@ export CAFFE_ROOT=/home/ubuntu/libraries/caffe
 
 你需要一个预先训练好的模型来生成深度梦境图像。让我们继续使用 Google 在其博客文章中使用的 GoogLeNet 模型。Caffe 包提供了一个为您下载模型的脚本:
 
-```
+```py
 $ cd $CAFFE_ROOT
 $ ./scripts/download_model_binary.py models/bvlc_googlenet/
 
@@ -116,14 +116,14 @@ $ ./scripts/download_model_binary.py models/bvlc_googlenet/
 
 这个`bat-country`包安装起来非常简单。最简单的方法是使用 pip:
 
-```
+```py
 $ pip install bat-country
 
 ```
 
 但是如果你想做一些黑客工作，你也可以从 GitHub 下载[源码:](https://github.com/jrosebr1/bat-country)
 
-```
+```py
 $ git clone https://github.com/jrosebr1/bat-country.git
 $ cd bat-country
 ... do some hacking ...
@@ -141,7 +141,7 @@ $ python setup.py install
 
 现在，假设您想要覆盖标准梯度上升函数，以最大化给定图层的 L2 范数激活。您需要做的就是向`dream`方法提供您的自定义函数。下面是一个简单的例子，它覆盖了渐变上升函数的默认行为，使用了较小的`step`和较大的`jitter`:
 
-```
+```py
 def custom_step(net, step_size=1.25, end="inception_4c/output",
 	jitter=48, clip=True):
 	src = net.blobs["data"]
@@ -171,7 +171,7 @@ image = bc.dream(np.float32(Image.open("image.jpg")),
 
 您还可以通过将自定义的`preprocess_fn`和`deprocess_fn`传递给`dream`来覆盖默认的`preprocess`和`deprocess`函数:
 
-```
+```py
 def custom_preprocess(net, img):
 	# do something interesting here...
 	pass
@@ -187,7 +187,7 @@ image = bc.dream(np.float32(Image.open("image.jpg")),
 
 最后，bat-country 还支持可视化网络的每个倍频程、迭代和层:
 
-```
+```py
 bc = BatCountry(args.base_model)
 (image, visualizations) = bc.dream(np.float32(Image.open(args.image)),
 	end=args.layer, visualize=True)

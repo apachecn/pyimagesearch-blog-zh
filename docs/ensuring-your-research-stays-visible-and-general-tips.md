@@ -193,7 +193,7 @@
 
 **Mangla，P.** “确保你的研究保持可见性和一般提示”， *PyImageSearch* ，P. Chugh，R. Raha，K. Kudriavtseva 和 S. Huot 编辑。，2022 年，【https://pyimg.co/kfguv 
 
-```
+```py
 @incollection{Mangla_2022_Ensuring_Research,
   author = {Puneet Mangla},
   title = {Ensuring Your Research Stays Visible and General Tips},

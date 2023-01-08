@@ -38,7 +38,7 @@
 
 在我们开始编码之前，确保您的系统上安装了 [imutils Python 包](https://github.com/jrosebr1/imutils):
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -47,7 +47,7 @@ $ pip install --upgrade imutils
 
 打开一个新文件，命名为`center_of_shape.py`，我们将得到代码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import imutils
@@ -82,7 +82,7 @@ thresh = cv2.threshold(blurred, 60, 255, cv2.THRESH_BINARY)[1]
 
 下一步是使用轮廓检测找到这些白色区域的位置:
 
-```
+```py
 # find contours in the thresholded image
 cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
 	cv2.CHAIN_APPROX_SIMPLE)
@@ -94,7 +94,7 @@ cnts = imutils.grab_contours(cnts)
 
 我们现在准备处理每个轮廓:
 
-```
+```py
 # loop over the contours
 for c in cnts:
 	# compute the center of the contour
@@ -128,7 +128,7 @@ for c in cnts:
 
 要执行我们的脚本，只需打开一个终端并执行以下命令:
 
-```
+```py
 $ python center_of_shape.py --image shapes_and_colors.png
 
 ```

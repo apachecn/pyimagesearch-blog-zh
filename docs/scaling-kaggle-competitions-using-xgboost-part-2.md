@@ -170,7 +170,7 @@ AdaBoost(自适应增强)的正式定义是“将弱学习器的输出组合成�
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -199,7 +199,7 @@ $ pip install opencv-contrib-python
 
 今天，我们将处理[美国房地产数据集](https://www.kaggle.com/datasets/ahmedshahriarsakib/usa-real-estate-dataset)。让我们从为我们的项目导入必要的包开始。
 
-```
+```py
 # import the necessary packages
 import pandas as pd
 import xgboost as xgb
@@ -209,7 +209,7 @@ from sklearn.model_selection import train_test_split
 
 在我们的进口中，我们有`pandas`、`xgboost`，以及来自`scikit-learn`的一些实用函数，如**行 2-5** 上的`mean_squared_error`和`train_test_split`。
 
-```
+```py
 # load the data in the form of a csv
 estData =   pd.read_csv("/content/realtor-data.csv")
 
@@ -235,7 +235,7 @@ X = estData.drop(["price"], axis=1).select_dtypes(exclude=['object'])
 
 我们的下一步是初始化和训练 XGBoost 模型。
 
-```
+```py
 # create the train test split
 xTrain, xTest, yTrain, yTest = train_test_split(X, y)
 
@@ -267,7 +267,7 @@ impFeat = pd.DataFrame(xgbModel.feature_importances_.reshape(1, -1), columns=X.c
 
 我们的下一步是看看我们的模型在看不见的测试数据上表现如何。
 
-```
+```py
 # get predictions on test data
 yPred = xgbModel.predict(xTest)
 
@@ -300,7 +300,7 @@ xgbModel.score(xTest, yTest)
 
 **Martinez，H.** “使用 XGBoost 扩展 Kaggle 竞赛:第 2 部分”， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva，R. Raha 和 A. Thanki 编辑。，2022 年，【https://pyimg.co/2wiy7 
 
-```
+```py
 @incollection{Martinez_2022_XGBoost2,
   author = {Hector Martinez},
   title = {Scaling {Kaggle} Competitions Using {XGBoost}: Part 2},

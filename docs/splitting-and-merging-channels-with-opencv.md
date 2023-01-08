@@ -35,7 +35,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -60,7 +60,7 @@ $ pip install opencv-contrib-python
 
 让我们从回顾我们的项目目录结构开始。请务必使用本教程的 ***【下载】*** 部分下载源代码和示例图像:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── adrian.png
@@ -98,7 +98,7 @@ $ tree . --dirsfirst
 
  **现在我们已经可视化了我们的通道，让我们检查一些代码来完成这个任务:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -117,7 +117,7 @@ args = vars(ap.parse_args())
 
 现在让我们加载这个图像，并把它分成各自的通道:
 
-```
+```py
 # load the input image and grab each channel -- note how OpenCV
 # represents images as NumPy arrays with channels in Blue, Green,
 # Red ordering rather than Red, Green, Blue
@@ -139,7 +139,7 @@ cv2.waitKey(0)
 
 我们还可以使用`cv2.merge`功能将通道重新合并在一起:
 
-```
+```py
 # merge the image back together again
 merged = cv2.merge([B, G, R])
 cv2.imshow("Merged", merged)
@@ -159,7 +159,7 @@ cv2.destroyAllWindows()
 
 但是，让我们研究一下代码，看看如何构造这种表示:
 
-```
+```py
 # visualize each channel in color
 zeros = np.zeros(image.shape[:2], dtype="uint8")
 cv2.imshow("Red", cv2.merge([zeros, zeros, R]))
@@ -184,7 +184,7 @@ cv2.waitKey(0)
 
 让我们执行我们的`opencv_channels.py`脚本来分割每个单独的通道并可视化它们:
 
-```
+```py
 $ python opencv_channels.py
 ```
 
@@ -192,7 +192,7 @@ $ python opencv_channels.py
 
 如果您希望向`opencv_channels.py`脚本提供不同的图像，您需要做的就是提供`--image`命令行参数:
 
-```
+```py
 $ python opencv_channels.py --image adrian.png
 ```
 

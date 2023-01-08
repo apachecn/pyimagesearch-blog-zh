@@ -63,7 +63,7 @@ ZBar 库将与 OpenCV 一起用于扫描和解码条形码和 QR 码。
 
 安装 ZBar for Ubuntu 可以通过以下命令完成:
 
-```
+```py
 $ sudo apt-get install libzbar0
 
 ```
@@ -72,7 +72,7 @@ $ sudo apt-get install libzbar0
 
 使用 brew 安装 ZBar for macOS 同样简单(假设您安装了 Homebrew):
 
-```
+```py
 $ brew install zbar
 
 ```
@@ -88,7 +88,7 @@ $ brew install zbar
 
 我选择创建一个新的、隔离的 Python 3 虚拟环境，并遵循链接在[本页](https://pyimagesearch.com/opencv-tutorials-resources-guides/)的 Ubuntu(或 macOS，取决于我使用的机器)OpenCV 安装说明。在遵循这些说明时，我所做的唯一改变是将我的环境命名为`barcode`:
 
-```
+```py
 $ mkvirtualenv barcode -p python3
 
 ```
@@ -99,7 +99,7 @@ $ mkvirtualenv barcode -p python3
 
 现在我的机器上有了一个名为`barcode`的 Python 3 虚拟环境，我激活了`barcode`环境(您的可能有不同的名称)并安装了`pyzbar`:
 
-```
+```py
 $ workon barcode
 $ pip install pyzbar
 
@@ -107,7 +107,7 @@ $ pip install pyzbar
 
 如果您没有使用 Python 虚拟环境，您可以:
 
-```
+```py
 $ pip install pyzbar
 
 ```
@@ -124,7 +124,7 @@ $ pip install pyzbar
 
 打开一个新文件，将其命名为`barcode_scanner_image.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyzbar import pyzbar
 import argparse
@@ -150,7 +150,7 @@ args = vars(ap.parse_args())
 
 现在，让我们使用输入图像并让`pyzbar`工作:
 
-```
+```py
 # load the input image
 image = cv2.imread(args["image"])
 
@@ -165,7 +165,7 @@ barcodes = pyzbar.decode(image)
 
 我们还没有完成——现在我们需要解析包含在`barcodes`变量中的信息:
 
-```
+```py
 # loop over the detected barcodes
 for barcode in barcodes:
 	# extract the bounding box location of the barcode and draw the
@@ -206,7 +206,7 @@ cv2.waitKey(0)
 
 从那里，打开您的终端并执行以下命令:
 
-```
+```py
 $ python barcode_scanner_image.py --image barcode_example.png
 [INFO] Found QRCODE barcode: {"author": "Adrian", "site": "PyImageSearch"}
 [INFO] Found QRCODE barcode: https://pyimagesearch.com/
@@ -227,7 +227,7 @@ $ python barcode_scanner_image.py --image barcode_example.png
 
 要找到答案，打开一个新文件，将其命名为`barcode_scanner_video.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 from pyzbar import pyzbar
@@ -251,7 +251,7 @@ args = vars(ap.parse_args())
 
 我们还将使用`VideoStream`以高效、线程化的方式处理视频帧的捕获。你可以[在这里](https://pyimagesearch.com/2016/01/04/unifying-picamera-and-cv2-videocapture-into-a-single-class-with-opencv/)了解更多关于视频流课程的信息。如果您的系统上没有安装`imutils`，只需使用以下命令:
 
-```
+```py
 $ pip install imutils
 
 ```
@@ -260,7 +260,7 @@ $ pip install imutils
 
 从那里，让我们初始化我们的视频流，并打开我们的 CSV 文件:
 
-```
+```py
 # initialize the video stream and allow the camera sensor to warm up
 print("[INFO] starting video stream...")
 # vs = VideoStream(src=0).start()
@@ -300,7 +300,7 @@ found = set()
 
 让我们开始捕捉+处理帧:
 
-```
+```py
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the threaded video stream and resize it to
@@ -319,7 +319,7 @@ while True:
 
 让我们继续循环检测到的`barcodes`:
 
-```
+```py
 	# loop over the detected barcodes
 	for barcode in barcodes:
 		# extract the bounding box location of the barcode and draw
@@ -357,7 +357,7 @@ while True:
 
 在实时条形码扫描器脚本的其余行中，我们显示帧，检查是否按下了退出键，并执行清理:
 
-```
+```py
 	# show the output frame
 	cv2.imshow("Barcode Scanner", frame)
 	key = cv2.waitKey(1) & 0xFF
@@ -403,7 +403,7 @@ vs.stop()
 
 从那里，在您的 Pi 上打开一个终端，使用以下命令启动应用程序(这一步您需要一个键盘/鼠标，但之后您可以断开连接并让应用程序运行):
 
-```
+```py
 $ python barcode_scanner_video.py
 [INFO] starting video stream...
 

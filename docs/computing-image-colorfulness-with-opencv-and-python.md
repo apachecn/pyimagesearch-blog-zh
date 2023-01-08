@@ -88,7 +88,7 @@ is the difference of the Red channel and the Green channel. In the second equati
 
 首先打开您最喜欢的文本编辑器或 IDE，创建一个名为`colorfulness.py`的新文件，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils import build_montages
 from imutils import paths
@@ -103,7 +103,7 @@ import cv2
 
 如果您的系统上没有安装`imutils`(在撰写本文时， *v0.4.3* ，那么请确保您通过`pip`安装/升级它:
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -112,7 +112,7 @@ $ pip install --upgrade imutils
 
 接下来，我们将定义一个新函数，`image_colorfullness`:
 
-```
+```py
 def image_colorfulness(image):
 	# split the image into its respective RGB components
 	(B, G, R) = cv2.split(image.astype("float"))
@@ -158,7 +158,7 @@ def image_colorfulness(image):
 
 既然我们的 image `image_colorfulness`度量已经定义，我们可以解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--images", required=True,
@@ -171,7 +171,7 @@ args = vars(ap.parse_args())
 
 现在，让我们遍历数据集中的每个图像，并计算相应的色彩度度量:
 
-```
+```py
 # initialize the results list
 print("[INFO] computing colorfulness metric for dataset...")
 results = []
@@ -219,7 +219,7 @@ for imagePath in paths.list_images(args["images"]):
 
 现在让我们着手处理这三项任务:
 
-```
+```py
 # sort the results with more colorful images at the front of the
 # list, then build the lists of the *most colorful* and *least
 # colorful* images
@@ -238,7 +238,7 @@ leastColor = [r[0] for r in results[-25:]][::-1]
 
 现在，我们可以使用我们上周学过的的`build_montages`函数来可视化`mostColor`和`leastColor`图像。
 
-```
+```py
 # construct the montages for the two sets of images
 mostColorMontage = build_montages(mostColor, (128, 128), (5, 5))
 leastColorMontage = build_montages(leastColor, (128, 128), (5, 5))
@@ -249,7 +249,7 @@ leastColorMontage = build_montages(leastColor, (128, 128), (5, 5))
 
 现在我们已经组装好了蒙太奇，我们将在屏幕上显示每个蒙太奇。
 
-```
+```py
 # display the images
 cv2.imshow("Most Colorful", mostColorMontage[0])
 cv2.imshow("Least Colorful", leastColorMontage[0])
@@ -269,7 +269,7 @@ cv2.waitKey(0)
 
 要运行该脚本，启动终端并执行以下命令:
 
-```
+```py
 $ python colorfulness.py --images ukbench_sample
 
 ```

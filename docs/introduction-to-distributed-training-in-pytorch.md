@@ -46,7 +46,7 @@
 
 幸运的是，上面提到的所有包都是 pip-installable！
 
-```
+```py
 $ pip install torch
 $ pip install torchvision
 $ pip install imutils
@@ -72,7 +72,7 @@ $ pip install matplotlib
 
 在进入项目之前，让我们回顾一下项目结构。
 
-```
+```py
 $ tree -d .
 .
 ├── distributed_inference.py
@@ -107,7 +107,7 @@ $ tree -d .
 
 为了开始我们的实现，让我们从`config.py`开始，这个脚本将包含端到端训练和推理管道的配置。这些值将在整个项目中使用。
 
-```
+```py
 # import the necessary packages
 import torch
 import os
@@ -126,7 +126,7 @@ TEST = os.path.join(BASE_PATH, "evaluation")
 
 我们定义了一个到原始数据集的路径(**行 6** )和一个基本路径(**行 9** )来存储修改后的数据集。在**第 12-14 行**上，我们使用`os.path.join`函数为修改后的数据集定义了单独的训练、验证和测试路径。
 
-```
+```py
 # initialize the list of class label names
 CLASSES = ["Bread", "Dairy_product", "Dessert", "Egg", "Fried_food",
     "Meat", "Noodles/Pasta", "Rice", "Seafood", "Soup",
@@ -140,7 +140,7 @@ IMAGE_SIZE = 224
 
 在**第 17-19 行**，我们定义了我们的目标类。我们正在选择 11 个类，我们的数据集将被分组到这些类中。在**第 22-24 行**上，我们为我们的 **ImageNet** 输入指定平均值、标准偏差和图像大小值。请注意，平均值和标准偏差各有 3 个值。每个值分别代表*通道方向、高度方向、*和*宽度方向*的平均值和标准偏差。图像尺寸被设置为``224 × 224`` 以匹配 **ImageNet** 模型的可接受的通用输入尺寸。
 
-```
+```py
 # set the device to be used for training and evaluation
 DEVICE = torch.device("cuda")
 
@@ -161,7 +161,7 @@ MODEL_PATH = os.path.join("output", "food_classifier.pth")
 
 对于我们的下一个任务，我们将进入`create_dataloaders.py`脚本。
 
-```
+```py
 # import the necessary packages
 from . import config
 from torch.utils.data import DataLoader
@@ -204,7 +204,7 @@ def get_dataloader(rootDir, transforms, bs, shuffle=True):
 
 所以，让我们跳进我们的`prepare_dataset.py`脚本，并编码出来！
 
-```
+```py
 # USAGE
 # python prepare_dataset.py
 
@@ -222,7 +222,7 @@ def copy_images(rootDir, destiDir):
 
 我们首先定义一个函数`copy_images` ( **第 10 行**)，它有两个参数:图像所在的根目录和自定义数据集将被复制到的目标目录。然后，在**的第 12 行**，我们使用`paths.list_images`函数生成根目录中所有图像的列表。这将在以后复制文件时使用。
 
-```
+```py
       # loop over the image paths
 	for imagePath in imagePaths:
 		# extract class label from the filename
@@ -243,7 +243,7 @@ def copy_images(rootDir, destiDir):
 
 我们开始遍历第 16 行的**图像列表。首先，我们通过分隔前面的路径名(**第 18 行**)挑出文件的确切名称，然后我们通过`filename.split("_")[0])`识别文件的标签，并将其作为索引馈送给`config.CLASSES`。在第一次循环中，该函数创建目录路径(**第 25 行和第 26 行**)。最后，我们构建当前图像的路径，并使用 [`shutil`](https://docs.python.org/3/library/shutil.html) 包将图像复制到目标路径。**
 
-```
+```py
 	# calculate the total number of images in the destination
 	# directory and print it
 	currentTotal = list(paths.list_images(destiDir))
@@ -263,7 +263,7 @@ copy_images(os.path.join(config.DATA_PATH, "evaluation"), config.TEST)
 
 既然我们的数据集创建已经完成，是时候进入`food_classifier.py`脚本并定义我们的分类器了。
 
-```
+```py
 # import the necessary packages
 from torch.cuda.amp import autocast
 from torch import nn
@@ -286,7 +286,7 @@ class FoodClassifier(nn.Module):
 
 第 7 行上的`super`方法将允许访问基类的方法。然后，在第**行第 10** 行，我们将基本模型初始化为构造函数(`__init__`)中传递的`baseModel`参数。然后我们创建一个单独的分类输出层(**第 11 行**)，带有 **11 个输出**，每个输出代表我们之前定义的一个类。最后，由于我们使用了自己的分类层，我们用`nn.Identity`替换了`baseModel`的内置分类层，这只是一个占位符层。因此，`baseModel`的内置分类器将正好反映其分类层之前的卷积模块的输出。
 
-```
+```py
 	# we decorate the *forward()* method with *autocast()* to enable 
 	# mixed-precision training in a distributed manner
 	@autocast()
@@ -306,7 +306,7 @@ class FoodClassifier(nn.Module):
 
 我们的下一个目的地是`train_distributed.py`，在那里我们将进行模型训练，并学习如何使用多个 GPU！
 
-```
+```py
 # USAGE
 # python train_distributed.py
 
@@ -336,7 +336,7 @@ print(f"[INFO] using a batch size of {BATCH_SIZE}...")
 
 `torch.cuda.device_count()`函数(**第 20 行**)将列出我们系统中兼容 CUDA 的 GPU 数量。这将用于确定我们的全局批量大小(**行 24** )，即`config.LOCAL_BATCH_SIZE * NUM_GPU`。这是因为如果我们的全局批量大小是``B`` ，并且我们有``N`` 兼容 CUDA 的 GPU，那么每个 GPU 都会处理批量大小`B/N`的数据。例如，对于全局批量``12`` 和``2`` 兼容 CUDA 的 GPU，每个 GPU 都会评估批量``6`` 的数据。
 
-```
+```py
 # define augmentation pipelines
 trainTansform = transforms.Compose([
 	transforms.RandomResizedCrop(config.IMAGE_SIZE),
@@ -366,7 +366,7 @@ testTransform = transforms.Compose([
 
 我们再次使用`torchvision.transforms`进行测试转换(**第 35-39 行**，但是我们没有添加额外的扩充。相反，我们通过在`create_dataloaders`脚本中创建的`get_dataloader`函数传递这些实例，并分别获得训练、验证和测试数据集和数据加载器(**第 42-47 行**)。
 
-```
+```py
 # load up the DenseNet121 model
 baseModel = densenet121(pretrained=True)
 
@@ -383,7 +383,7 @@ model = model.to(config.DEVICE)
 
 我们选择`densenet121`作为我们的基础模型来覆盖我们模型架构的大部分( **Line 50** )。然后我们在`densenet121`层上循环，并将`batch_norm`层设置为不可训练(行 54-56 )。这样做是为了避免由于批次大小不同而导致的批次标准化不稳定的问题。一旦完成，我们将`densenet121`发送给`FoodClassifier`类，并初始化我们的定制模型( **Line 59** )。最后，我们将模型加载到我们的设备上(**第 60 行**)。
 
-```
+```py
 # if we have more than one GPU then parallelize the model
 if NUM_GPU > 1:
 	model = nn.DataParallel(model)
@@ -410,7 +410,7 @@ H = {"train_loss": [], "train_acc": [], "val_loss": [],
 
 在**第 76 行和第 77 行**，我们为训练和验证批次计算每个时期的步骤。第 80**行和第 81** 行的`H`变量将是我们的训练历史字典，包含训练损失、训练精度、验证损失和验证精度等值。
 
-```
+```py
 # loop over epochs
 print("[INFO] training the network...")
 startTime = time.time()
@@ -462,7 +462,7 @@ for e in tqdm(range(config.EPOCHS)):
 
 **第 118-120 行**更新我们的损失并校正预测值，同时在一次完整的训练通过后更新我们的 LR 调度器(**第 123 行**)。
 
-```
+```py
 	# switch off autograd
 	with torch.no_grad():
 		# set the model in evaluation mode
@@ -496,7 +496,7 @@ for e in tqdm(range(config.EPOCHS)):
 
 一旦脱离循环，我们计算训练和验证损失和预测的分批平均值(**行 146-151** )。
 
-```
+```py
 	# update our training history
 	H["train_loss"].append(avgTrainLoss)
 	H["train_acc"].append(trainCorrect)
@@ -520,7 +520,7 @@ print("[INFO] total time taken to train the model: {:.2f}s".format(
 
 一旦在循环之外，我们使用**行 167** 上的`time.time()`函数记录时间，看看我们的模型执行得有多快。
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 with torch.no_grad():
@@ -550,7 +550,7 @@ print(classification_report(testDS.targets, preds,
 
 在几个方便的工具[](https://scikit-learn.org/stable/)**中，scikit-learn`classification_report`为我们提供了评估我们的模型的工具，其中`classification_report`提供了我们的模型给出的预测的完整的分类概述(**第 190 和 191 行**)。**
 
-```
+```py
 [INFO] evaluating network...
                precision    recall  f1-score   support
 
@@ -573,7 +573,7 @@ Dairy_product       0.87      0.84      0.86       148
 
 我们的模型的完整分类报告应该是这样的，让我们对我们的模型比其他模型预测得更好/更差的类别有一个全面的了解。
 
-```
+```py
 # plot the training loss and accuracy
 plt.style.use("ggplot")
 plt.figure()
@@ -597,7 +597,7 @@ torch.save(model.module.state_dict(), config.MODEL_PATH)
 
 在执行训练脚本之前，我们需要运行`prepare_dataset.py`脚本。
 
-```
+```py
 $ python prepare_dataset.py
 [INFO] copying images...
 [INFO] total images found: 9866...
@@ -610,7 +610,7 @@ $ python prepare_dataset.py
 
 一旦这个脚本运行完毕，我们就可以继续执行`train_distributed.py`脚本了。
 
-```
+```py
 $ python train_distributed.py
 [INFO] number of GPUs found: 4...
 [INFO] using a batch size of 512...
@@ -649,7 +649,7 @@ Val loss: 0.318986, Val accuracy: 0.9105
 
 虽然我们已经在测试集上评估了模型，但是我们将创建一个单独的脚本`distributed_inference.py`，其中我们将逐个单独评估测试图像，而不是一次评估一整批。
 
-```
+```py
 # USAGE
 # python distributed_inference.py
 
@@ -681,7 +681,7 @@ testTransform = transforms.Compose([
 
 在初始化迭代器之前，我们设置了这些脚本的初始需求。这些包括设置由 CUDA GPUs 数量决定的批量大小(**第 15-19 行**)和为我们的测试数据集初始化一个`torchvision.transforms`实例(**第 23-27 行**)。
 
-```
+```py
 # calculate the inverse mean and standard deviation
 invMean = [-m/s for (m, s) in zip(config.MEAN, config.STD)]
 invStd = [1/s for s in config.STD]
@@ -709,7 +709,7 @@ model.load_state_dict(torch.load(config.MODEL_PATH))
 
 注意，我们已经在`train_distributed.py`中保存了训练好的模型状态。接下来，我们将像在训练脚本中一样初始化模型(**第 41-44 行**)，并使用`model.load_state_dict`函数将训练好的模型权重插入到初始化的模型(**第 47 行**)。
 
-```
+```py
 # if we have more than one GPU then parallelize the model
 if NUM_GPU > 1:
 	model = nn.DataParallel(model)
@@ -728,7 +728,7 @@ fig = plt.figure("Results", figsize=(10, 10 * NUM_GPU))
 
 我们使用`nn.DataParallel`重复并行化模型，并将模型设置为评估模式(**第 50-55 行**)。因为我们将处理单个数据点，所以我们不需要遍历整个测试数据集。相反，我们将使用`next(iter(loader))` ( **第 58 行和第 59 行**)抓取一批测试数据。您可以运行此功能(直到发生器用完批次)来随机化批次选择。
 
-```
+```py
 # switch off autograd
 with torch.no_grad():
 	# send the images to the device

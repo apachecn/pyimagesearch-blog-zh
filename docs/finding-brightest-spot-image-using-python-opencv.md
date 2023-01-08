@@ -59,7 +59,7 @@
 
 打开你喜欢的编辑器，创建一个名为`bright.py`的新文件，让我们开始吧。
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -92,7 +92,7 @@ gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 现在，让我们继续应用“可能方法”来检测图像中最亮的点:
 
-```
+```py
 # perform a naive attempt to find the (x, y) coordinates of
 # the area of the image with the largest intensity value
 (minVal, maxVal, minLoc, maxLoc) = cv2.minMaxLoc(gray)
@@ -123,7 +123,7 @@ cv2.imshow("Naive", image)
 
 让我们来看看如何做到这一点:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -182,7 +182,7 @@ cv2.waitKey(0)
 
 启动终端并执行以下命令:
 
-```
+```py
 $ python bright.py --image retina.png --radius 41
 
 ```
@@ -201,7 +201,7 @@ $ python bright.py --image retina.png --radius 41
 
 但是，请注意，当您发出以下命令时，如果我将一个亮点添加到该图像的顶部中间部分，会发生什么情况:
 
-```
+```py
 $ python bright.py --image images/retina-noise.png --radius 41
 
 ```

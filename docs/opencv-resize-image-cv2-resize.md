@@ -54,7 +54,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -83,7 +83,7 @@ $ pip install opencv-contrib-python
 
 从这里开始，项目文件夹应该如下所示:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── adrian.png
@@ -102,7 +102,7 @@ $ tree . --dirsfirst
 
 但是在我们深入细节之前，让我们先来看一个例子:
 
-```
+```py
 # import the necessary packages
 import argparse
 import imutils
@@ -121,7 +121,7 @@ args = vars(ap.parse_args())
 
 现在让我们从磁盘加载这个图像:
 
-```
+```py
 # load the original input image and display it on our screen
 image = cv2.imread(args["image"])
 cv2.imshow("Original", image)
@@ -155,7 +155,7 @@ cv2.imshow("Resized (Width)", resized)
 
 在我们研究的例子中，我们只通过指定宽度来调整图像的大小。但是如果我们想通过设置高度来调整图像的大小呢？所需要的只是改变用于保持纵横比的调整大小比率的计算:
 
-```
+```py
 # let's resize the image to have a height of 50 pixels, again keeping
 # in mind the aspect ratio
 r = 50.0 / image.shape[0]
@@ -179,7 +179,7 @@ cv2.waitKey(0)
 
 相反，我们可以使用`imutils.resize`函数，它自动为我们处理计算和维护纵横比:
 
-```
+```py
 # calculating the ratio each and every time we want to resize an
 # image is a real pain, so let's use the imutils convenience
 # function which will *automatically* maintain our aspect ratio
@@ -195,7 +195,7 @@ cv2.waitKey(0)
 
 当然，我们也可以通过改变函数调用来调整图像的高度:
 
-```
+```py
 resized = imutils.resize(image, height=75)
 ```
 
@@ -225,7 +225,7 @@ resized = imutils.resize(image, height=75)
 
 现在我们已经讨论了 OpenCV 提供的插值方法，让我们编写一些代码来测试它们:
 
-```
+```py
 # construct the list of interpolation methods in OpenCV
 methods = [
 	("cv2.INTER_NEAREST", cv2.INTER_NEAREST),
@@ -277,7 +277,7 @@ for (name, method) in methods:
 
 我们已经在前面的章节中回顾了我们的`opencv_resize.py`脚本的结果，但是如果您想通过您的终端执行这个脚本，只需使用下面的命令:
 
-```
+```py
 $ python opencv_resize.py 
 [INFO] cv2.INTER_NEAREST
 [INFO] cv2.INTER_LINEAR

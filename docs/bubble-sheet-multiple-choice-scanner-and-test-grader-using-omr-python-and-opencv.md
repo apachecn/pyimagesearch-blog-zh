@@ -74,7 +74,7 @@
 
 首先，打开一个新文件，命名为`test_grader.py`，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from imutils.perspective import four_point_transform
 from imutils import contours
@@ -99,7 +99,7 @@ ANSWER_KEY = {0: 1, 1: 4, 2: 0, 3: 3, 4: 1}
 
 你应该已经在你的系统上安装了 OpenCV 和 Numpy，但是你*可能*没有最新版本的 [imutils](https://github.com/jrosebr1/imutils) ，这是我的一套方便的函数，可以使执行基本的图像处理操作更加容易。要安装`imutils`(或升级到最新版本)，只需执行以下命令:
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -122,7 +122,7 @@ $ pip install --upgrade imutils
 
 接下来，让我们预处理我们的输入图像:
 
-```
+```py
 # load the image, convert it to grayscale, blur it
 # slightly, then find edges
 image = cv2.imread(args["image"])
@@ -146,7 +146,7 @@ edged = cv2.Canny(blurred, 75, 200)
 
 在我们的下一步中，获取文档的轮廓*极其重要*,因为我们将使用它作为标记对检查应用透视变换，从而获取文档的俯视鸟瞰图:
 
-```
+```py
 # find contours in the edge map, then initialize
 # the contour that corresponds to the document
 cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL,
@@ -196,7 +196,7 @@ if len(cnts) > 0:
 
 既然我们已经使用轮廓找到了检查的轮廓，我们可以应用透视变换来获得文档的自上而下的鸟瞰图:
 
-```
+```py
 # apply a four point perspective transform to both the
 # original image and grayscale image to obtain a top-down
 # birds eye view of the paper
@@ -226,7 +226,7 @@ warped = four_point_transform(gray, docCnt.reshape(4, 2))
 
 该步骤从*二值化*开始，或者从图像的*背景*中对*前景*进行阈值分割/分割的过程:
 
-```
+```py
 # apply Otsu's thresholding method to binarize the warped
 # piece of paper
 thresh = cv2.threshold(warped, 0, 255,
@@ -244,7 +244,7 @@ thresh = cv2.threshold(warped, 0, 255,
 
 这种二值化将允许我们再次应用轮廓提取技术来找到检查中的每个气泡:
 
-```
+```py
 # find contours in the thresholded image, then initialize
 # the list of contours that correspond to questions
 cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
@@ -290,7 +290,7 @@ for c in cnts:
 
 我们现在可以进入 OMR 系统的“分级”部分:
 
-```
+```py
 # sort the question contours top-to-bottom, then initialize
 # the total number of correct answers
 questionCnts = contours.sort_contours(questionCnts,
@@ -326,7 +326,7 @@ for (q, i) in enumerate(np.arange(0, len(questionCnts), 5)):
 
 我们可以通过使用我们的`thresh`图像并计算每个气泡区域中非零像素(即*前景像素*)的数量来实现这一点:
 
-```
+```py
 	# loop over the sorted contours
 	for (j, c) in enumerate(cnts):
 		# construct a mask that reveals only the current
@@ -362,7 +362,7 @@ for (q, i) in enumerate(np.arange(0, len(questionCnts), 5)):
 
 下一个代码块处理在`ANSWER_KEY`中查找正确答案，更新任何相关的簿记员变量，最后在我们的图像上绘制标记的气泡:
 
-```
+```py
 	# initialize the contour color and the index of the
 	# *correct* answer
 	color = (0, 0, 255)
@@ -386,7 +386,7 @@ for (q, i) in enumerate(np.arange(0, len(questionCnts), 5)):
 
 最后，我们的最后一个代码块处理考试评分并在屏幕上显示结果:
 
-```
+```py
 # grab the test taker
 score = (correct / 5.0) * 100
 print("[INFO] score: {:.2f}%".format(score))
@@ -436,7 +436,7 @@ cv2.waitKey(0)
 
 我们已经在这篇文章的前面看到了`test_01.png`作为我们的例子，所以让我们试试`test_02.png`:
 
-```
+```py
 $ python test_grader.py --image images/test_02.png
 
 ```
@@ -451,7 +451,7 @@ $ python test_grader.py --image images/test_02.png
 
 让我们尝试另一个图像:
 
-```
+```py
 $ python test_grader.py --image images/test_03.png
 
 ```
@@ -464,7 +464,7 @@ $ python test_grader.py --image images/test_03.png
 
 在这个特殊的例子中，读者只需沿着对角线标记所有答案:
 
-```
+```py
 $ python test_grader.py --image images/test_04.png
 
 ```
@@ -477,7 +477,7 @@ $ python test_grader.py --image images/test_04.png
 
 让我们看最后一个例子:
 
-```
+```py
 $ python test_grader.py --image images/test_05.png
 
 ```

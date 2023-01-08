@@ -160,7 +160,7 @@ Victor 和他的团队需要一种方法来自动检测人脸，确定他们的�
 
 这两个教程都将帮助你为你的系统配置这篇博文**所需的所有软件，只有一个例外**。您还需要通过以下方式将``progressbar2`` 软件包安装到您的虚拟环境中:
 
-```
+```py
 $ workon dl4cv
 $ pip install progressbar2
 ```
@@ -171,7 +171,7 @@ $ pip install progressbar2
 
 请务必从 ***“下载”*** 部分获取今天教程的文件。我们的项目组织如下:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── models
@@ -210,7 +210,7 @@ $ tree --dirsfirst
 
 打开项目目录结构中的`config.py`文件，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -256,7 +256,7 @@ CAMO_MODEL = os.path.sep.join(["models", "camo_detector",
 
 打开`pyimagesearch`模块中的`helpers.py`文件，在输入图像中插入以下用于**检测人脸和预测年龄**的代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import cv2
@@ -273,7 +273,7 @@ def detect_and_predict_age(image, faceNet, ageNet, minConf=0.5):
 
 让我们继续执行*面部检测:*
 
-```
+```py
 	# grab the dimensions of the image and then construct a blob
 	# from it
 	(h, w) = image.shape[:2]
@@ -285,7 +285,7 @@ def detect_and_predict_age(image, faceNet, ageNet, minConf=0.5):
 	detections = faceNet.forward()
 ```
 
-```
+```py
 	# loop over the detections
 	for i in range(0, detections.shape[2]):
 		# extract the confidence (i.e., probability) associated with
@@ -315,7 +315,7 @@ def detect_and_predict_age(image, faceNet, ageNet, minConf=0.5):
 
 为了完成我们的*人脸检测和年龄预测*辅助工具，我们将*执行人脸预测:*
 
-```
+```py
 			# construct a blob from *just* the face ROI
 			faceBlob = cv2.dnn.blobFromImage(face, 1.0, (227, 227),
 				(78.4263377603, 87.7689143744, 114.895847746),
@@ -342,7 +342,7 @@ def detect_and_predict_age(image, faceNet, ageNet, minConf=0.5):
 	return results
 ```
 
-```
+```py
 def detect_camo(image, camoNet):
 	# initialize (1) the class labels the camo detector can predict
 	# and (2) the ImageNet means (in RGB order)
@@ -368,7 +368,7 @@ def detect_camo(image, camoNet):
 	return (CLASS_LABELS[i], preds[i])
 ```
 
-```
+```py
 def anonymize_face_pixelate(image, blocks=3):
 	# divide the input image into NxN blocks
 	(h, w) = image.shape[:2]
@@ -405,7 +405,7 @@ def anonymize_face_pixelate(image, blocks=3):
 
 打开`process_dataset.py`脚本，插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.helpers import detect_and_predict_age
 from pyimagesearch.helpers import detect_camo
@@ -426,7 +426,7 @@ ap.add_argument("-o", "--output", required=True,
 args = vars(ap.parse_args())
 ```
 
-```
+```py
 # initialize a dictionary that will store output file pointers for
 # our age and camo predictions, respectively
 FILES = {}
@@ -444,7 +444,7 @@ for k in ("ages", "camo"):
 
 此时，我们将初始化三个深度学习模型:
 
-```
+```py
 # load our serialized face detector, age detector, and camo detector
 # from disk
 print("[INFO] loading trained models...")
@@ -465,7 +465,7 @@ pbar = progressbar.ProgressBar(maxval=len(imagePaths),
 
 我们现在进入数据集处理脚本的核心。我们将开始循环所有图像以检测面部，预测年龄，并确定是否存在伪装:
 
-```
+```py
 # loop over the image paths
 for (i, imagePath) in enumerate(imagePaths):
 	# load the image from disk
@@ -485,7 +485,7 @@ for (i, imagePath) in enumerate(imagePaths):
 	camoResults = detect_camo(image, camoNet)
 ```
 
-```
+```py
 	# loop over the age detection results
 	for r in ageResults:
 		# the output row for the ages CSV consists of (1) the image
@@ -500,7 +500,7 @@ for (i, imagePath) in enumerate(imagePaths):
 		FILES["ages"].flush()
 ```
 
-```
+```py
 	# check to see if our camouflage predictor was triggered
 	if camoResults[0] == "camouflage_clothes":
 		# the output row for the camo CSV consists of (1) the image
@@ -513,7 +513,7 @@ for (i, imagePath) in enumerate(imagePaths):
 		FILES["camo"].flush()
 ```
 
-```
+```py
 	# update the progress bar
 	pbar.update(i)
 
@@ -534,7 +534,7 @@ for f in FILES.values():
 
 ### **处理我们的潜在儿童兵数据集**
 
-```
+```py
 $ time python process_dataset.py --dataset VictorGevers_Dataset --output output
 [INFO] loading trained models...
 [INFO] processing 56037 images
@@ -554,14 +554,14 @@ sys   306m23.741s
 
  *脚本执行完毕后，我的`output`目录中有两个 CSV 文件:
 
-```
+```py
 $ ls output/
 ages.csv	camo.csv
 ```
 
 以下是`ages.csv`的输出示例:
 
-```
+```py
 $ tail output/ages.csv 
 rBIABl3RztuAVy6gAAMSpLwFcC0051.png,661,1079,1081,1873,(48-53),0.6324904
 rBIABl3RzuuAbzmlAAUsBPfvHNA217.png,546,122,1081,1014,(8-12),0.59567857
@@ -583,7 +583,7 @@ rBIABl3RzzeAb1lkAAdmVBqVDho181.png,258,994,826,2542,(15-20),0.3086191
 
 下面是来自`camo.csv`的输出示例:
 
-```
+```py
 $ tail output/camo.csv 
 rBIABl3RY-2AYS0RAAaPGGXk-_A001.png,0.9579516
 rBIABl3Ra4GAScPBAABEYEkNOcQ818.png,0.995684
@@ -616,7 +616,7 @@ rBIABl3RzxeAGI5XAAfg5J_Svmc027.png,0.98626024
 
 现在让我们来看看`parse_results.py`:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.helpers import anonymize_face_pixelate
 import numpy as np
@@ -633,7 +633,7 @@ ap.add_argument("-c", "--camo", required=True,
 args = vars(ap.parse_args())
 ```
 
-```
+```py
 # load the contents of the ages and camo CSV files
 ageRows = open(args["ages"]).read().strip().split("\n")
 camoRows = open(args["camo"]).read().strip().split("\n")
@@ -644,7 +644,7 @@ ages = {}
 camo = {}
 ```
 
-```
+```py
 # loop over the age rows
 for row in ageRows:
 	# parse the row
@@ -665,7 +665,7 @@ for row in ageRows:
 	ages[imagePath] = l
 ```
 
-```
+```py
 # loop over the camo rows
 for row in camoRows:
 	# parse the row
@@ -678,7 +678,7 @@ for row in camoRows:
 	camo[imagePath] = camoProb
 ```
 
-```
+```py
 # find all image paths that exist in *BOTH* the age dictionary and
 # camo dictionary
 inter = sorted(set(ages.keys()).intersection(camo.keys()))
@@ -707,7 +707,7 @@ for imagePath in inter:
 
 让我们循环一下这张图片的年龄预测:
 
-```
+```py
 	# loop over the age predictions for this particular image
 	for (bbox, age, ageProb) in ages[imagePath]:
 		# extract the bounding box coordinates of the face detection
@@ -737,7 +737,7 @@ for imagePath in inter:
 
 让我们更进一步，在图像的左上角标注伪装的概率:
 
-```
+```py
 	# draw the camouflage prediction probability on the image
 	label = "camo: {:.2f}%".format(camo[imagePath] * 100)
 	cv2.rectangle(image, (0, 0), (300, 40), (0, 0, 0), -1)
@@ -755,7 +755,7 @@ for imagePath in inter:
 
 为了执行这个脚本，我使用了以下命令:
 
-```
+```py
 $ python parse_results.py --ages output/ages.csv --camo output/camo.csv
 ```
 

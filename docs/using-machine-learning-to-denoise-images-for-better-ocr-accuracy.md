@@ -73,7 +73,7 @@
 
 为了使这个例子更具体，再次考虑图 2 中的**、**，这里我们有下面的`5 x 5`、*、*来自噪声图像的网格像素值:
 
-```
+```py
 [[247 227 242 253 237]
  [244 228 225 212 219]
  [223 218 252 222 221]
@@ -83,7 +83,7 @@
 
 然后，我们将其展平成一个由`5 x 5 = 25-d` 值组成的列表:
 
-```
+```py
 [247 227 242 253 237 244 228 225 212 219 223 218 252 222 221 242 244 228
  240 230 217 233 237 243 252]
 ```
@@ -94,7 +94,7 @@
 
 现在，让我们假设我们的黄金标准/目标图像中有以下`5 x 5` 窗口:
 
-```
+```py
 [[0 0 0 0 0]
  [0 0 0 0 1]
  [0 0 1 1 1]
@@ -106,7 +106,7 @@
 
 将整个示例放在一起，我们可以将以下视为样本训练数据点:
 
-```
+```py
 trainX = [[247 227 242 253 237 244 228 225 212 219 223 218 252 222 221 242 244 228
  240 230 217 233 237 243 252]]
 trainY = [[1]]
@@ -122,7 +122,7 @@ trainY = [[1]]
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -151,7 +151,7 @@ $ pip install opencv-contrib-python
 
 在我们继续之前，让我们熟悉一下这些文件:
 
-```
+```py
 |-- pyimagesearch
 |   |-- __init__.py
 |   |-- denoising
@@ -203,7 +203,7 @@ $ pip install opencv-contrib-python
 
 实现降噪文档的第一步是创建配置文件。打开项目目录结构的`config`子目录下的`denoise_config.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -223,7 +223,7 @@ CLEANED_PATH = os.path.sep.join([BASE_PATH, "train_cleaned"])
 
 让我们继续定义配置文件:
 
-```
+```py
 # define the path to our output features CSV file then initialize
 # the sampling probability for a given row
 FEATURES_PATH = "features.csv"
@@ -256,7 +256,7 @@ MODEL_PATH = "denoiser.pickle"
 
 在`pyimagesearch`的`denoising`子模块中打开`helpers.py`文件，让我们开始定义我们的`blur_and_threshold`功能:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import cv2
@@ -283,7 +283,7 @@ def blur_and_threshold(image, eps=1e-7):
 
 这里的最后一步是执行最小-最大缩放:
 
-```
+```py
 	# apply min/max scaling to bring the pixel intensities to the
 	# range [0, 1]
 	minVal = np.min(foreground)
@@ -308,7 +308,7 @@ def blur_and_threshold(image, eps=1e-7):
 
 现在让我们开始实施:
 
-```
+```py
 # import the necessary packages
 from config import denoise_config as config
 from pyimagesearch.denoising import blur_and_threshold
@@ -322,7 +322,7 @@ import cv2
 
 下面的代码块获取我们的`TRAIN_PATH`(噪声图像)和`CLEANED_PATH`(我们的 RFR 将学习预测的干净图像)中所有图像的路径:
 
-```
+```py
 # grab the paths to our training images
 trainPaths = sorted(list(paths.list_images(config.TRAIN_PATH)))
 cleanedPaths = sorted(list(paths.list_images(config.CLEANED_PATH)))
@@ -340,7 +340,7 @@ pbar = progressbar.ProgressBar(maxval=len(trainPaths),
 
 现在让我们开始循环这些图像组合:
 
-```
+```py
 # zip our training paths together, then open the output CSV file for
 # writing
 imagePaths = zip(trainPaths, cleanedPaths)
@@ -364,7 +364,7 @@ for (i, (trainPath, cleanedPath)) in enumerate(imagePaths):
 
 接下来，我们需要在每个方向用 2 像素的边框填充`trainImage`和`cleanImage`:
 
-```
+```py
 	# apply 2x2 padding to both images, replicating the pixels along
 	# the border/boundary
 	trainImage = cv2.copyMakeBorder(trainImage, 2, 2, 2, 2,
@@ -389,7 +389,7 @@ for (i, (trainPath, cleanedPath)) in enumerate(imagePaths):
 
 对我们的图像进行预处理后，我们现在可以在图像上滑动一个`5 x 5` 窗口:
 
-```
+```py
 	# slide a 5x5 window across the images
 	for y in range(0, trainImage.shape[0]):
 		for x in range(0, trainImage.shape[1]):
@@ -411,7 +411,7 @@ for (i, (trainPath, cleanedPath)) in enumerate(imagePaths):
 
 接下来，我们构建我们的特征向量，并将该行保存到 CSV 文件中:
 
-```
+```py
 			# our features will be the flattened 5x5=25 raw pixels
 			# from the noisy ROI while the target prediction will
 			# be the center pixel in the 5x5 window
@@ -451,7 +451,7 @@ csv.close()
 
 我们现在准备运行我们的特征提取器。首先，打开一个终端，然后执行`build_features.py`脚本:
 
-```
+```py
 $ python build_features.py
 Creating Features: 100% |#########################| Time:  0:01:05
 ```
@@ -460,7 +460,7 @@ Creating Features: 100% |#########################| Time:  0:01:05
 
 检查我的项目目录结构，您现在可以看到结果 CSV 文件的特性:
 
-```
+```py
 $ ls -l *.csv
 adrianrosebrock  staff  273968497 Oct 23 06:21 features.csv
 ```
@@ -477,7 +477,7 @@ adrianrosebrock  staff  273968497 Oct 23 06:21 features.csv
 
 让我们开始检查代码:
 
-```
+```py
 # import the necessary packages
 from config import denoise_config as config
 from sklearn.ensemble import RandomForestRegressor
@@ -497,7 +497,7 @@ import pickle
 
 让我们继续从磁盘加载我们的 CSV 文件:
 
-```
+```py
 # initialize lists to hold our features and target predicted values
 print("[INFO] loading dataset...")
 features = []
@@ -524,7 +524,7 @@ for row in open(config.FEATURES_PATH):
 
 将 CSV 文件加载到内存中后，我们可以构建我们的训练和测试分割:
 
-```
+```py
 # convert the features and targets to NumPy arrays
 features = np.array(features, dtype="float")
 target = np.array(targets, dtype="float")
@@ -539,7 +539,7 @@ target = np.array(targets, dtype="float")
 
 最后，我们可以训练我们的 RFR:
 
-```
+```py
 # train a random forest regressor on our data
 print("[INFO] training model...")
 model = RandomForestRegressor(n_estimators=10)
@@ -567,7 +567,7 @@ f.close()
 
 随着我们的`train_denoiser.py`脚本的实现，我们现在准备训练我们的自动图像降噪器！首先，打开一个 shell，然后执行`train_denoiser.py`脚本:
 
-```
+```py
 $ time python train_denoiser.py
 [INFO] loading dataset...
 [INFO] training model...
@@ -583,7 +583,7 @@ sys     0m0.894s
 
 检查我们的项目目录结构，您会看到 RFR 模型已经被序列化到磁盘上，名为`denoiser.pickle`:
 
-```
+```py
 $ ls -l *.pickle
 adrianrosebrock  staff  77733392 Oct 23 denoiser.pickle
 ```
@@ -596,7 +596,7 @@ adrianrosebrock  staff  77733392 Oct 23 denoiser.pickle
 
 现在打开`denoise_document.py`，我们将看到这个过程是如何完成的:
 
-```
+```py
 # import the necessary packages
 from config import denoise_config as config
 from pyimagesearch.denoising import blur_and_threshold
@@ -609,7 +609,7 @@ import cv2
 
 **第 2-8 行**处理导入我们需要的 Python 包。然后我们继续解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-t", "--testing", required=True,
@@ -626,7 +626,7 @@ args = vars(ap.parse_args())
 
 说到我们的去噪模型，让我们从磁盘加载序列化模型:
 
-```
+```py
 # load our document denoiser from disk
 model = pickle.loads(open(config.MODEL_PATH, "rb").read())
 
@@ -641,7 +641,7 @@ imagePaths = imagePaths[:args["sample"]]
 
 让我们循环一遍`imagePaths`的样本:
 
-```
+```py
 # loop over the sampled image paths
 for imagePath in imagePaths:
 	# load the image, convert it to grayscale, and clone it
@@ -665,7 +665,7 @@ for imagePath in imagePaths:
 
 现在我们需要循环处理过的`image`并提取每个 `5 x 5` 像素邻域的 ***:***
 
-```
+```py
 	# initialize a list to store our ROI features (i.e., 5x5 pixel
 	# neighborhoods)
 	roiFeatures = []
@@ -697,7 +697,7 @@ for imagePath in imagePaths:
 
 然后我们可以对这些`roiFeatures`进行预测，得到最终的清洁图像:
 
-```
+```py
 	# use the ROI features to predict the pixels of our new denoised
 	# image
 	pixels = model.predict(roiFeatures)
@@ -726,7 +726,7 @@ for imagePath in imagePaths:
 
 要查看我们的`denoise_document.py`脚本的运行情况，请打开一个终端并执行以下命令:
 
-```
+```py
 $ python denoise_document.py --testing denoising-dirty-documents/test
 [INFO] processing denoising-dirty-documents/test/133.png
 [INFO] processing denoising-dirty-documents/test/160.png

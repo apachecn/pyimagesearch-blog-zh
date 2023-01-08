@@ -83,7 +83,7 @@ OCR 的应用可能有点棘手，但我们有很多选择:
 
 一旦您的环境启动并运行，您将需要本教程的另一个包。你需要安装 [py-sudoku](https://pypi.org/project/py-sudoku/) ，我们将使用这个库来帮助我们解决数独难题:
 
-```
+```py
 $ pip install py-sudoku
 ```
 
@@ -91,7 +91,7 @@ $ pip install py-sudoku
 
 花点时间从本教程的 ***“下载”*** 部分抓取今天的文件。从那里，提取归档文件，并检查内容:
 
-```
+```py
 $ tree --dirsfirst 
 .
 ├── output
@@ -125,7 +125,7 @@ $ tree --dirsfirst
 
 但是在我们可以用 OpenCV 解决数独难题之前，我们首先需要实现一个神经网络架构，它将处理数独难题板上的 OCR 数字——给定这些信息，解决实际的难题将变得微不足道。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D
@@ -136,7 +136,7 @@ from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import Dropout
 ```
 
-```
+```py
 class SudokuNet:
 	@staticmethod
 	def build(width, height, depth, classes):
@@ -152,7 +152,7 @@ class SudokuNet:
 *   `depth`:MNIST 数字图像通道(`1`灰度通道)
 *   ``classes`` :数字位数 *0-9* ( `10`位数)
 
-```
+```py
 		# first set of CONV => RELU => POOL layers
 		model.add(Conv2D(32, (5, 5), padding="same",
 			input_shape=inputShape))
@@ -192,7 +192,7 @@ class SudokuNet:
 
 ### **用 Keras 和 TensorFlow 实现我们的数独数字训练脚本**
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.models import SudokuNet
 from tensorflow.keras.optimizers import Adam
@@ -210,7 +210,7 @@ args = vars(ap.parse_args())
 
 我们从少量导入开始我们的训练脚本。最值得注意的是，我们正在导入`SudokuNet`(在上一节中讨论过)和`mnist`数据集。手写数字的 MNIST 数据集内置在 TensorFlow/Keras' `datasets`模块中，将根据需要缓存到您的机器上。
 
-```
+```py
 # initialize the initial learning rate, number of epochs to train
 # for, and batch size
 INIT_LR = 1e-3
@@ -246,7 +246,7 @@ testLabels = le.transform(testLabels)
 *   将数据缩放到范围*【0，1】*(**第 30 行和第 31 行**)
 *   一键编码标签(**第 34-36 行**)
 
-```
+```py
 # initialize the optimizer and model
 print("[INFO] compiling model...")
 opt = Adam(lr=INIT_LR)
@@ -264,7 +264,7 @@ H = model.fit(
 	verbose=1)
 ```
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(testData)
@@ -280,7 +280,7 @@ model.save(args["model"], save_format="h5")
 
 ### **用 Keras 和 TensorFlow 训练我们的数独数字识别器**
 
-```
+```py
 $ python train_digit_classifier.py --model output/digit_classifier.h5
 [INFO] accessing MNIST...
 [INFO] compiling model...
@@ -320,7 +320,7 @@ weighted avg       0.99      0.99      0.99     10000
 [INFO] serializing digit model...
 ```
 
-```
+```py
 $ ls -lh output
 total 2824
 -rw-r--r--@ 1 adrian  staff   1.4M Jun  7 07:38 digit_classifier.h5
@@ -345,7 +345,7 @@ total 2824
 *   ``find_puzzle`` :从输入图像中定位并提取数独拼图板
 *   ``extract_digit`` :检查数独拼图板上的每个单元格，并从单元格中提取数字(前提是有数字)
 
-```
+```py
 # import the necessary packages
 from imutils.perspective import four_point_transform
 from skimage.segmentation import clear_border
@@ -362,7 +362,7 @@ def find_puzzle(image, debug=False):
 *   ``image`` :一张数独拼图的照片。
 *   ``debug`` :可选布尔值，表示是否显示中间步骤，以便您可以更好地可视化我们的计算机视觉管道中正在发生的事情。如果你遇到任何问题，我建议设置`debug=True`并使用你的计算机视觉知识来消除任何错误。
 
-```
+```py
 	# apply adaptive thresholding and then invert the threshold map
 	thresh = cv2.adaptiveThreshold(blurred, 255,
 		cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
@@ -377,7 +377,7 @@ def find_puzzle(image, debug=False):
 
 二进制自适应阈值操作允许我们将灰度像素锁定在*【0，255】*像素范围的两端。在这种情况下，我们都应用了二进制阈值，然后反转结果，如下面的**图 5** 所示:
 
-```
+```py
 	# find contours in the thresholded image and sort them by size in
 	# descending order
 	cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
@@ -408,7 +408,7 @@ def find_puzzle(image, debug=False):
 
 有可能数独网格的轮廓没有找到。既然如此，我们来举个`Exception`:
 
-```
+```py
 	# if the puzzle contour is empty then our script could not find
 	# the outline of the Sudoku puzzle so raise an error
 	if puzzleCnt is None:
@@ -428,7 +428,7 @@ def find_puzzle(image, debug=False):
 
 有了拼图的轮廓(手指交叉)，我们就可以对图像进行倾斜校正，从而获得拼图的俯视图:
 
-```
+```py
 	# apply a four point perspective transform to both the original
 	# image and grayscale image to obtain a top-down bird's eye view
 	# of the puzzle
@@ -459,7 +459,7 @@ def find_puzzle(image, debug=False):
 
 继续上一节我们停止的地方，让我们再次打开`puzzle.py`文件并开始工作:
 
-```
+```py
 def extract_digit(cell, debug=False):
 	# apply automatic thresholding to the cell and then clear any
 	# connected borders that touch the border of the cell
@@ -477,7 +477,7 @@ def extract_digit(cell, debug=False):
 
 让我们看看能否找到手指轮廓:
 
-```
+```py
 	# find contours in the thresholded cell
 	cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
 		cv2.CHAIN_APPROX_SIMPLE)
@@ -494,7 +494,7 @@ def extract_digit(cell, debug=False):
 	cv2.drawContours(mask, [c], -1, 255, -1)
 ```
 
-```
+```py
 	# compute the percentage of masked pixels relative to the total
 	# area of the image
 	(h, w) = thresh.shape
@@ -532,7 +532,7 @@ def extract_digit(cell, debug=False):
 
 打开`solve_sudoku_puzzle.py`文件，让我们完成数独求解器项目:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.sudoku import extract_digit
 from pyimagesearch.sudoku import find_puzzle
@@ -559,7 +559,7 @@ args = vars(ap.parse_args())
 
 既然我们现在配备了导入和我们的`args`字典，让我们从磁盘加载我们的(1)数字分类器`model`和(2)输入`--image`:
 
-```
+```py
 # load the digit classifier from disk
 print("[INFO] loading digit classifier...")
 model = load_model(args["model"])
@@ -572,7 +572,7 @@ image = imutils.resize(image, width=600)
 
 从那里，我们将找到我们的难题，并准备分离其中的细胞:
 
-```
+```py
 # find the puzzle in the image and then
 (puzzleImage, warped) = find_puzzle(image, debug=args["debug"] > 0)
 
@@ -590,7 +590,7 @@ stepY = warped.shape[0] // 9
 cellLocs = []
 ```
 
-```
+```py
 # loop over the grid locations
 for y in range(0, 9):
 	# initialize the current list of cell locations
@@ -612,7 +612,7 @@ for y in range(0, 9):
 
 在里面，我们使用我们的步长值来确定开始和结束 *(x，y)*—*当前单元格* ( **第 55-58 行**)的坐标。
 
-```
+```py
 		# crop the cell from the warped transform image and then
 		# extract the digit from the cell
 		cell = warped[startY:endY, startX:endX]
@@ -636,7 +636,7 @@ for y in range(0, 9):
 	cellLocs.append(row)
 ```
 
-```
+```py
 # construct a Sudoku puzzle from the board
 print("[INFO] OCR'd Sudoku board:")
 puzzle = Sudoku(3, 3, board=board.tolist())
@@ -652,7 +652,7 @@ solution.show_full()
 
 当然，如果我们不能在拼图图片上看到答案，这个项目会有什么乐趣呢？让我们现在就开始吧:
 
-```
+```py
 # loop over the cell locations and board
 for (cellRow, boardRow) in zip(cellLocs, solution.board):
 	# loop over individual cell in the row
@@ -696,7 +696,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python solve_sudoku_puzzle.py --model output/digit_classifier.h5 \
 	--image Sudoku_puzzle.jpg
 [INFO] loading digit classifier...

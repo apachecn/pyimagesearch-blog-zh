@@ -33,7 +33,7 @@
 
 为了创建我们的图像到数组预处理器，在`pyimagesearch`的`preprocessing`子模块中创建一个名为`imagetoarraypreprocessor.py`的新文件:
 
-```
+```py
 |--- pyimagesearch
 |    |--- __init__.py
 |    |--- datasets
@@ -48,7 +48,7 @@
 
 从那里，打开文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.preprocessing.image import img_to_array
 
@@ -77,19 +77,19 @@ class ImageToArrayPreprocessor:
 
 例如，假设我们希望将所有输入图像的大小调整为 32*×32*像素的固定大小。为此，我们需要初始化一个`SimplePreprocessor`:
 
-```
+```py
 sp = SimplePreprocessor(32, 32)
 ```
 
 调整图像大小后，我们需要应用适当的通道排序——这可以使用上面的`ImageToArrayPreprocessor`来完成:
 
-```
+```py
 iap = ImageToArrayPreprocessor()
 ```
 
 现在，假设我们希望从磁盘加载一个图像数据集，并为训练准备数据集中的所有图像。使用`SimpleDatasetLoader`，我们的任务变得非常简单:
 
-```
+```py
 sdl = SimpleDatasetLoader(preprocessors=[sp, iap])
 (data, labels) = sdl.load(imagePaths, verbose=500)
 ```
@@ -108,7 +108,7 @@ sdl = SimpleDatasetLoader(preprocessors=[sp, iap])
 
 为了保持我们的`pyimagesearch`包的整洁，让我们在`nn`中创建一个新的子模块，命名为`conv`，我们所有的 CNN 实现都将位于其中:
 
-```
+```py
 --- pyimagesearch
 |    |--- __init__.py
 |    |--- datasets
@@ -123,7 +123,7 @@ sdl = SimpleDatasetLoader(preprocessors=[sp, iap])
 
 在`conv`子模块中，创建一个名为`shallownet.py`的新文件来存储我们的 ShallowNet 架构实现。从那里，打开文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D
@@ -137,7 +137,7 @@ from tensorflow.keras import backend as K
 
 在实现网络架构时，我更喜欢将它们定义在一个类中，以保持代码有组织——我们在这里也将这样做:
 
-```
+```py
 class ShallowNet:
 	@staticmethod
 	def build(width, height, depth, classes):
@@ -162,7 +162,7 @@ class ShallowNet:
 
 现在我们的`inputShape`已经定义好了，我们可以开始构建浅水网络架构了:
 
-```
+```py
 		# define the first (and only) CONV => RELU layer
 		model.add(Conv2D(32, (3, 3), padding="same",
 			input_shape=inputShape))
@@ -173,7 +173,7 @@ class ShallowNet:
 
 让我们完成浅水网的构建:
 
-```
+```py
 		# softmax classifier
 		model.add(Flatten())
 		model.add(Dense(classes))
@@ -193,7 +193,7 @@ class ShallowNet:
 
 从那里，我们可以开始工作:
 
-```
+```py
 # import the necessary packages
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.model_selection import train_test_split
@@ -213,7 +213,7 @@ import argparse
 
  **接下来，我们需要解析我们的命令行参数并获取我们的图像路径:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -229,7 +229,7 @@ imagePaths = list(paths.list_images(args["dataset"]))
 
 还记得我说过如何创建一个管道来加载和处理我们的数据集吗？现在让我们看看这是如何做到的:
 
-```
+```py
 # initialize the image preprocessors
 sp = SimplePreprocessor(32, 32)
 iap = ImageToArrayPreprocessor()
@@ -247,7 +247,7 @@ data = data.astype("float") / 255.0
 
 既然已经加载了数据和标签，我们就可以执行我们的训练和测试分割，同时对标签进行一次性编码:
 
-```
+```py
 # partition the data into training and testing splits using 75% of
 # the data for training and the remaining 25% for testing
 (trainX, testX, trainY, testY) = train_test_split(data, labels,
@@ -262,7 +262,7 @@ testY = LabelBinarizer().fit_transform(testY)
 
 下一步是实例化`ShallowNet`，然后训练网络本身:
 
-```
+```py
 # initialize the optimizer and model
 print("[INFO] compiling model...")
 opt = SGD(lr=0.005)
@@ -282,7 +282,7 @@ H = model.fit(trainX, trainY, validation_data=(testX, testY),
 
 在训练我们的网络之后，我们可以评估它的性能:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(testX, batch_size=32)
@@ -295,7 +295,7 @@ print(classification_report(testY.argmax(axis=1),
 
 我们的最终代码块处理*和*训练和测试数据的准确性和随时间的损失的绘图:
 
-```
+```py
 # plot the training loss and accuracy
 plt.style.use("ggplot")
 plt.figure()
@@ -312,13 +312,13 @@ plt.show()
 
 要在 Animals 数据集上训练 ShallowNet，只需执行以下命令:
 
-```
+```py
 $ python shallownet_animals.py --dataset ../datasets/animals
 ```
 
 训练应该非常快，因为网络非常浅，我们的图像数据集相对较小:
 
-```
+```py
 [INFO] loading images...
 [INFO] processed 500/3000
 [INFO] processed 1000/3000
@@ -362,7 +362,7 @@ avg / total       0.71      0.69      0.68       750
 
 让我们也将 ShallowNet 架构应用于 CIFAR-10 数据集，看看我们是否可以改进我们的结果。打开一个新文件，将其命名为`shallownet_cifar10.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import classification_report
@@ -395,7 +395,7 @@ labelNames = ["airplane", "automobile", "bird", "cat", "deer",
 
 现在我们的数据准备好了，我们可以训练浅水网:
 
-```
+```py
 # initialize the optimizer and model
 print("[INFO] compiling model...")
 opt = SGD(lr=0.01)
@@ -413,7 +413,7 @@ H = model.fit(trainX, trainY, validation_data=(testX, testY),
 
 评估 ShallowNet 的方式与我们之前的动物数据集示例完全相同:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(testX, batch_size=32)
@@ -423,7 +423,7 @@ print(classification_report(testY.argmax(axis=1),
 
 我们还将绘制一段时间内的损耗和精度，以便了解我们的网络性能如何:
 
-```
+```py
 # plot the training loss and accuracy
 plt.style.use("ggplot")
 plt.figure()
@@ -440,7 +440,7 @@ plt.show()
 
 要在 CIFAR-10 上训练 ShallowNet，只需执行以下命令:
 
-```
+```py
 $ python shallownet_cifar10.py
 [INFO] loading CIFAR-10 data...
 [INFO] compiling model...

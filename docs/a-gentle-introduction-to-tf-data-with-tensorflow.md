@@ -123,7 +123,7 @@ TensorFlow 的`tf.data`模块可以根据你的硬件/实验设计自动调整�
 
 然后，您将看到以下目录结构:
 
-```
+```py
 $ tree . --Ddirsfirst --filelimit 10
 .
 ├── fruits
@@ -165,7 +165,7 @@ $ tree . --Ddirsfirst --filelimit 10
 
 打开`pyimagesearch`模块中的`helpers.py`文件，现在我们将实现我们的`benchmark`功能:
 
-```
+```py
 # import the necessary packages
 import time
 
@@ -207,7 +207,7 @@ def benchmark(datasetGen, numSteps):
 
 打开项目目录中的`reading_from_memory.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.helpers import benchmark
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
@@ -226,7 +226,7 @@ import tensorflow as tf
 
 现在让我们来关注一些重要的初始化:
 
-```
+```py
 # initialize the batch size and number of steps
 BS = 64
 NUM_STEPS = 5000
@@ -242,7 +242,7 @@ print("[INFO] loading the cifar100 dataset...")
 
 接下来，让我们实例化我们的`ImageDataGenerator`:
 
-```
+```py
 # create a standard image generator object
 print("[INFO] creating a ImageDataGenerator object...")
 imageGen = ImageDataGenerator()
@@ -257,7 +257,7 @@ dataGen = imageGen.flow(
 
 现在，我们期待已久的时刻到来了——使用`tf.data`创建数据管道:
 
-```
+```py
 # build a TensorFlow dataset from the training data
 dataset = tf.data.Dataset.from_tensor_slices((trainX, trainY))
 
@@ -290,7 +290,7 @@ dataset = (dataset
 
 完成初始化后，我们可以对我们的`ImageDataGenerator`进行基准测试:
 
-```
+```py
 # benchmark the image data generator and display the number of data
 # points generated, along with the time taken to perform the
 # operation
@@ -304,7 +304,7 @@ print("[INFO] ImageDataGenerator generated {} images in " \
 
 类似地，我们对我们的`tf.data`对象做同样的事情:
 
-```
+```py
 # create a dataset iterator, benchmark the tf.data pipeline, and
 # display the number of data points generator along with the time taken
 datasetGen = iter(dataset)
@@ -323,7 +323,7 @@ print("[INFO] tf.data generated {} images in {:.2f} seconds...".format(
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python reading_from_memory.py
 [INFO] loading the cifar100 dataset...
 [INFO] creating a ImageDataGenerator object...
@@ -352,7 +352,7 @@ $ python reading_from_memory.py
 
 打开项目目录中的`reading_from_disk.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.helpers import benchmark
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
@@ -378,7 +378,7 @@ import os
 
 现在让我们定义我们的`load_images`函数:
 
-```
+```py
 def load_images(imagePath):
 	# read the image from disk, decode it, resize it, and scale the
 	# pixels intensities to the range [0, 1]
@@ -413,7 +413,7 @@ def load_images(imagePath):
 
 现在已经定义了我们的`load_images`函数，让我们继续这个脚本的其余部分:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -425,7 +425,7 @@ args = vars(ap.parse_args())
 
 这里，我们关注一些重要的初始化:
 
-```
+```py
 # initialize batch size and number of steps
 BS = 64
 NUM_STEPS = 1000
@@ -443,7 +443,7 @@ classNames = np.array(sorted(os.listdir(args["dataset"])))
 
 现在，让我们创建我们的`tf.data`管道:
 
-```
+```py
 # build the dataset and data input pipeline
 print("[INFO] creating a tf.data input pipeline..")
 dataset = tf.data.Dataset.from_tensor_slices(imagePaths)
@@ -470,7 +470,7 @@ dataset = (dataset
 
 我们使用 Keras 的`ImageDataGenerator`对象创建一个类似的数据管道:
 
-```
+```py
 # create a standard image generator object
 print("[INFO] creating a ImageDataGenerator object...")
 imageGen = ImageDataGenerator(rescale=1.0/255)
@@ -488,7 +488,7 @@ dataGen = imageGen.flow_from_directory(
 
 我们对下面的`ImageDataGenerator`进行了基准测试:
 
-```
+```py
 # benchmark the image data generator and display the number of data
 # points generated, along with the time taken to perform the
 # operation
@@ -500,7 +500,7 @@ print("[INFO] ImageDataGenerator generated {} images in " \
 
 在这里，我们对我们的`tf.data`渠道进行了基准测试:
 
-```
+```py
 # create a dataset iterator, benchmark the tf.data pipeline, and
 # display the number of data points generated, along with the time
 # taken
@@ -522,7 +522,7 @@ print("[INFO] tf.data generated {} images in {:.2f} seconds...".format(
 
 从那里，您可以执行`reading_from_disk.py`脚本:
 
-```
+```py
 $ python reading_from_disk.py --dataset fruits
 [INFO] loading image paths...
 [INFO] creating a tf.data input pipeline..

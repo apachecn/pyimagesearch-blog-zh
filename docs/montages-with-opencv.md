@@ -48,7 +48,7 @@
 
 首先，打开一个新文件，将其命名为`montage_example.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils import build_montages
 from imutils import paths
@@ -62,7 +62,7 @@ import cv2
 
 如果您的系统上没有安装`imutils`(在撰写本文时， *v0.4.3* ，那么请确保您通过`pip`安装/升级它:
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -71,7 +71,7 @@ $ pip install --upgrade imutils
 
 从那里，我们可以解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--images", required=True,
@@ -89,7 +89,7 @@ args = vars(ap.parse_args())
 
 接下来，我们可以使用`--images`路径随机选择一些输入图像:
 
-```
+```py
 # grab the paths to the images, then randomly select a sample of
 # them
 imagePaths = list(paths.list_images(args["images"]))
@@ -112,7 +112,7 @@ imagePaths = imagePaths[:args["sample"]]
 
 给定我们的`imagePaths`，我们准备建立蒙太奇:
 
-```
+```py
 # initialize the list of images
 images = []
 
@@ -145,7 +145,7 @@ montages = build_montages(images, (128, 196), (7, 3))
 
 我们的最后一个代码块处理向屏幕显示`montages`:
 
-```
+```py
 # loop over the montages and display each of them
 for montage in montages:
 	cv2.imshow("Montage", montage)
@@ -167,7 +167,7 @@ for montage in montages:
 
 一旦您使用下面的 ***【下载】*** 部分下载了源代码+示例图像，您可以执行以下命令来查看结果:
 
-```
+```py
 $ python montage_example.py --images nordstrom_sample
 
 ```
@@ -186,7 +186,7 @@ $ python montage_example.py --images nordstrom_sample
 
 作为第二个例子，让我们增加`--sample`，这样我们创建*多个蒙太奇*，因为所有的图像都不适合三行七列的格式:
 
-```
+```py
 $ python montage_example.py --images nordstrom_sample --sample 33
 
 ```

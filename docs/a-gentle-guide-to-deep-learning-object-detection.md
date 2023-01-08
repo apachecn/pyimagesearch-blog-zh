@@ -280,7 +280,7 @@
 
 当你准备好了，继续创建一个名为`filter_object_detection.py`的新文件，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 from imutils.video import FPS
@@ -296,7 +296,7 @@ import cv2
 
 我们配备了必要的工具，所以让我们继续解析命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--prototxt", required=True,
@@ -318,7 +318,7 @@ args = vars(ap.parse_args())
 
 我们的模型可以预测 21 个对象类别:
 
-```
+```py
 # initialize the list of class labels MobileNet SSD was trained to
 # detect, then generate a set of bounding box colors for each class
 CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
@@ -351,7 +351,7 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
 
 用 Python 实现的`IGNORE`集合如下所示:
 
-```
+```py
 IGNORE = set(["person"])
 
 ```
@@ -362,7 +362,7 @@ IGNORE = set(["person"])
 
 接下来，我们将生成随机标签/盒子颜色，加载我们的模型，并开始视频流:
 
-```
+```py
 COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
 # load our serialized model from disk
@@ -386,7 +386,7 @@ fps = FPS().start()
 
 在这一点上，我们准备好循环从摄像机传入的帧，并通过我们的 CNN 对象检测器发送它们:
 
-```
+```py
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the threaded video stream and resize it
@@ -416,7 +416,7 @@ while True:
 
 让我们循环一下检测结果:
 
-```
+```py
 	# loop over the detections
 	for i in np.arange(0, detections.shape[2]):
 		# extract the confidence (i.e., probability) associated with
@@ -449,7 +449,7 @@ while True:
 
 否则，我们在白名单中检测到一个对象，我们需要在框架上显示类别标签和矩形:
 
-```
+```py
 			# compute the (x, y)-coordinates of the bounding box for
 			# the object
 			box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
@@ -472,7 +472,7 @@ while True:
 
 最后，仍在我们的`while`循环中，我们将在屏幕上显示我们的辛勤工作:
 
-```
+```py
 	# show the output frame
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
@@ -509,7 +509,7 @@ vs.stop()
 
 提取文件后，打开终端并导航到下载的代码+模型。在那里，执行以下命令:
 
-```
+```py
 $ python filter_object_detection.py --prototxt MobileNetSSD_deploy.prototxt.txt \
 	--model MobileNetSSD_deploy.caffemodel
 [INFO] loading model...
@@ -531,7 +531,7 @@ $ python filter_object_detection.py --prototxt MobileNetSSD_deploy.prototxt.txt 
 
 故障诊断的第一步是验证您是否连接了网络摄像头。如果这不是问题所在，您可能会在终端中看到以下错误消息:
 
-```
+```py
 $ python filter_object_detection.py 
 usage: filter_object_detection.py [-h] -p PROTOTXT -m MODEL [-c CONFIDENCE]
 filter_object_detection.py: error: the following arguments are required: -p/--prototxt, -m/--model

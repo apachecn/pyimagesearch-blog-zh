@@ -16,7 +16,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -43,7 +43,7 @@ $ pip install opencv-contrib-python
 
 让我们从培训部分开始—打开一个新文件，将其命名为`shallownet_train.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.model_selection import train_test_split
@@ -63,7 +63,7 @@ import argparse
 
 接下来，让我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -77,7 +77,7 @@ args = vars(ap.parse_args())
 
 我们现在可以在`--dataset`中获取图像的路径，初始化我们的预处理器，并从磁盘加载我们的图像数据集:
 
-```
+```py
 # grab the list of images that we'll be describing
 print("[INFO] loading images...")
 imagePaths = list(paths.list_images(args["dataset"]))
@@ -95,7 +95,7 @@ data = data.astype("float") / 255.0
 
 下一步是将我们的数据划分为训练和测试部分，同时将我们的标签编码为向量:
 
-```
+```py
 # partition the data into training and testing splits using 75% of
 # the data for training and the remaining 25% for testing
 (trainX, testX, trainY, testY) = train_test_split(data, labels,
@@ -108,7 +108,7 @@ testY = LabelBinarizer().fit_transform(testY)
 
 通过下面的代码块处理 ShallowNet 训练:
 
-```
+```py
 # initialize the optimizer and model
 print("[INFO] compiling model...")
 opt = SGD(lr=0.005)
@@ -124,7 +124,7 @@ H = model.fit(trainX, trainY, validation_data=(testX, testY),
 
 现在我们的网络已经训练好了，我们需要把它保存到磁盘上。这个过程就像调用`model.save`并提供我们的输出网络保存到磁盘的路径一样简单:
 
-```
+```py
 # save the network to disk
 print("[INFO] serializing network...")
 model.save(args["model"])
@@ -134,7 +134,7 @@ model.save(args["model"])
 
 在这里，我们评估我们的网络:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(testX, batch_size=32)
@@ -145,7 +145,7 @@ print(classification_report(testY.argmax(axis=1),
 
 以及绘制我们的损失和准确性:
 
-```
+```py
 # plot the training loss and accuracy
 plt.style.use("ggplot")
 plt.figure()
@@ -162,14 +162,14 @@ plt.show()
 
 要运行我们的脚本，只需执行以下命令:
 
-```
+```py
 $ python shallownet_train.py --dataset ../datasets/animals \
 	--model shallownet_weights.hdf5
 ```
 
 网络完成训练后，列出您的目录内容:
 
-```
+```py
 $ ls
 shallownet_load.py  shallownet_train.py  shallownet_weights.hdf5
 ```

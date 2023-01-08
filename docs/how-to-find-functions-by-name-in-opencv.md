@@ -20,7 +20,7 @@ OpenCV 3 的[版本只是使事情变得更加复杂，移动了一些重要的�
 
 假设您已经安装了 OpenCV 并准备好了 Python shell，我们可以使用`dir`方法创建一个所有 OpenCV 方法和属性的列表:
 
-```
+```py
 >>> import cv2
 >>> funcs = dir(cv2)
 >>> for f in funcs:
@@ -63,7 +63,7 @@ xphoto
 
 让我们从定义我们的`find_function`方法开始这一部分:
 
-```
+```py
 # import the necessary packages
 from __future__ import print_function
 import cv2
@@ -107,7 +107,7 @@ if __name__ == "__main__":
 
 要查看我们的`find_function`方法的运行情况，只需打开一个终端并执行以下命令:
 
-```
+```py
 $ python find_function.py
 1\. GaussianBlur
 2\. blur
@@ -121,14 +121,14 @@ $ python find_function.py
 
 正如我在这篇文章前面提到的，`find_functions`方法已经是 [imutils](https://github.com/jrosebr1/imutils) 库的一部分。您可以通过`pip`安装`imutils`:
 
-```
+```py
 $ pip install imutils
 
 ```
 
 如果您的系统上已经安装了`imutils`，请务必将其升级到最新版本:
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -141,7 +141,7 @@ $ pip install --upgrade imutils
 
 打开一个新文件，命名为`find_book.py`，让我们开始编码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import imutils
@@ -173,7 +173,7 @@ thresh = cv2.dilate(thresh, None, iterations=2)
 
 通过启动一个 shell 并使用`imutils`中的`find_function`，我很快确定我正在寻找`cv2.findContours`函数:
 
-```
+```py
 $ python
 >>> import imutils
 >>> imutils.find_function("contour")
@@ -186,7 +186,7 @@ $ python
 
 现在我知道我正在使用`cv2.findContours`方法，我需要弄清楚这个函数应该使用什么轮廓提取标志。我只想返回*外部*轮廓(即最外面的轮廓),所以我也需要查找那个属性:
 
-```
+```py
 >>> imutils.find_function("external")
 1\. RETR_EXTERNAL
 
@@ -194,7 +194,7 @@ $ python
 
 明白了。我需要使用`cv2.RETR_EXTERNAL`标志。现在我已经解决了这个问题，我可以完成我的 Python 脚本了:
 
-```
+```py
 # find contours in the thresholded image, keeping only the largest
 # one
 cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
@@ -218,7 +218,7 @@ cv2.waitKey(0)
 
 要查看我的脚本的运行情况，我只需启动一个终端并发出以下命令:
 
-```
+```py
 $ python find_book.py
 
 ```

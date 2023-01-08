@@ -92,7 +92,7 @@
 
 从那里，让我们来看看里面有什么:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── output
@@ -119,7 +119,7 @@ $ tree . --dirsfirst
 
 我们的配置文件短小精悍。打开`config.py`，插入以下代码:
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -139,7 +139,7 @@ EPOCHS = 100
 
 接下来，让我们定义输出路径:
 
-```
+```py
 # define the path to the base output directory
 BASE_OUTPUT = "output"
 
@@ -165,7 +165,7 @@ PLOT_PATH = os.path.sep.join([BASE_OUTPUT, "plot.png"])
 
 打开项目目录结构中的`siamese_network.py`,让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input
@@ -182,7 +182,7 @@ from tensorflow.keras.layers import MaxPooling2D
 
 考虑到我们的导入，我们现在可以定义负责构建姐妹网络的`build_siamese_model`函数:
 
-```
+```py
 def build_siamese_model(inputShape, embeddingDim=48):
 	# specify the inputs for the feature extractor network
 	inputs = Input(inputShape)
@@ -204,7 +204,7 @@ def build_siamese_model(inputShape, embeddingDim=48):
 
 我们现在可以完成构建姐妹网络架构了:
 
-```
+```py
 	# prepare the final outputs
 	pooledOutput = GlobalAveragePooling2D()(x)
 	outputs = Dense(embeddingDim)(pooledOutput)
@@ -224,7 +224,7 @@ def build_siamese_model(inputShape, embeddingDim=48):
 
 我在下面提供了该模型的摘要:
 
-```
+```py
 Model: "model"
 _________________________________________________________________
 Layer (type)                 Output Shape              Param #   
@@ -266,7 +266,7 @@ _________________________________________________________________
 
 ### **实现我们的配对生成、欧几里德距离和绘图历史实用函数**
 
-```
+```py
 # import the necessary packages
 import tensorflow.keras.backend as K
 import matplotlib.pyplot as plt
@@ -275,7 +275,7 @@ import numpy as np
 
 我们从第 2-4 行的**开始，导入我们需要的 Python 包。**
 
-```
+```py
 def make_pairs(images, labels):
 	# initialize two empty lists to hold the (image, image) pairs and
 	# labels to indicate if a pair is positive or negative
@@ -330,7 +330,7 @@ def make_pairs(images, labels):
 
 我们的下一个函数`euclidean_distance`接受一个 2 元组的`vectors`，然后利用 Keras/TensorFlow 函数计算它们之间的欧氏距离:
 
-```
+```py
 def euclidean_distance(vectors):
 	# unpack the vectors into separate lists
 	(featsA, featsB) = vectors
@@ -359,7 +359,7 @@ def euclidean_distance(vectors):
 
 我们的最后一个函数`plot_training`，接受(1)来自调用`model.fit`的训练历史和(2)一个输出`plotPath`:
 
-```
+```py
 def plot_training(H, plotPath):
 	# construct a plot that plots and saves the training history
 	plt.style.use("ggplot")
@@ -394,7 +394,7 @@ def plot_training(H, plotPath):
 
 打开`train_siamese_network.py`，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.siamese_network import build_siamese_model
 from pyimagesearch import config
@@ -416,7 +416,7 @@ import numpy as np
 
 导入工作完成后，我们可以继续从磁盘加载 MNIST 数据集，对其进行预处理，并构建图像对:
 
-```
+```py
 # load MNIST dataset and scale the pixel values to the range of [0, 1]
 print("[INFO] loading MNIST dataset...")
 (trainX, trainY), (testX, testY) = mnist.load_data()
@@ -441,7 +441,7 @@ print("[INFO] preparing positive and negative pairs...")
 
 **现在让我们构建我们的连体网络架构:**
 
-```
+```py
 # configure the siamese network
 print("[INFO] building siamese network...")
 imgA = Input(shape=config.IMG_SHAPE)
@@ -467,7 +467,7 @@ featsB = featureExtractor(imgB)
 
 现在，让我们完成暹罗网络架构的构建:
 
-```
+```py
 # finally, construct the siamese network
 distance = Lambda(utils.euclidean_distance)([featsA, featsB])
 outputs = Dense(1, activation="sigmoid")(distance)
@@ -484,7 +484,7 @@ model = Model(inputs=[imgA, imgB], outputs=outputs)
 
 既然我们的暹罗网络架构已经构建完毕，我们就可以继续训练它了:
 
-```
+```py
 # compile the model
 print("[INFO] compiling model...")
 model.compile(loss="binary_crossentropy", optimizer="adam",
@@ -509,7 +509,7 @@ history = model.fit(
 
 一旦模型被训练，我们可以将它序列化到磁盘并绘制训练历史:
 
-```
+```py
 # serialize the model to disk
 print("[INFO] saving siamese model...")
 model.save(config.MODEL_PATH)
@@ -527,7 +527,7 @@ utils.plot_training(history, config.PLOT_PATH)
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python train_siamese_network.py
 [INFO] loading MNIST dataset...
 [INFO] preparing positive and negative pairs...
@@ -566,7 +566,7 @@ Epoch 100/100
 
 检查您的`output`目录，您现在应该看到一个名为`siamese_model`的目录:
 
-```
+```py
 $ ls output/
 plot.png		siamese_model
 $ ls output/siamese_model/

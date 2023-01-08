@@ -196,7 +196,7 @@
 
 **Garcia-Martin，R.** “红外视觉简介:近中远红外图像”， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva 和 R. Raha 编辑。，2022 年，【https://pyimg.co/oj6kb 
 
-```
+```py
 @incollection{Garcia-Martin_2022_Intro-Infrared-Vision,
   author = {Raul Garcia-Martin},
   title = {Introduction to Infrared Vision: Near vs. Mid-Far Infrared Images},

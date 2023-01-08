@@ -18,7 +18,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -55,19 +55,19 @@ $ pip install opencv-contrib-python
 
 为了将文本从一种语言翻译成另一种语言，我们将使用`textblob` Python 包([https://textblob.readthedocs.io/en/dev/](https://textblob.readthedocs.io/en/dev/))。如果您遵循了早期教程中[的开发环境配置说明，那么您应该已经在系统上安装了`textblob`。如果没有，可以用`pip`安装:](https://pyimagesearch.com/2021/08/09/what-is-optical-character-recognition-ocr/)
 
-```
+```py
 $ pip install textblob
 ```
 
 一旦安装了`textblob`，您应该运行以下命令来下载`textblob`用来自动分析文本的自然语言工具包(NLTK)语料库:
 
-```
+```py
 $ python -m textblob.download_corpora
 ```
 
 接下来，您应该通过打开 Python shell 来熟悉这个库:
 
-```
+```py
 $ python
 >>> from textblob import TextBlob
 >>>
@@ -75,7 +75,7 @@ $ python
 
 注意我们是如何导入`TextBlob`类的——这个类使我们能够自动分析一段文本的标签、名词短语，是的，甚至是语言翻译。一旦实例化，我们可以调用`TextBlob`类的`translate()`方法并执行自动文本翻译。现在让我们使用`TextBlob`来做这件事:UTF8ipxm
 
-```
+```py
 >>> text = u"おはようございます。"
 >>> tb = TextBlob(text)
 >>> translated = tb.translate(to="en")
@@ -90,7 +90,7 @@ Good morning.
 
 让我们首先回顾一下本教程的项目目录结构:
 
-```
+```py
 |-- comic.png
 |-- ocr_translate.py
 ```
@@ -101,7 +101,7 @@ Good morning.
 
 我们现在准备实现我们的 Python 脚本，它将自动 OCR 文本并将其翻译成我们选择的语言。在我们的项目目录结构中打开`ocr_translate.py`，并插入下面的代码:
 
-```
+```py
 # import the necessary packages
 from textblob import TextBlob
 import pytesseract
@@ -124,7 +124,7 @@ args = vars(ap.parse_args())
 
 使用`pytesseract`，我们将对输入图像进行 OCR:
 
-```
+```py
 # load the input image and convert it from BGR to RGB channel
 # ordering
 image = cv2.imread(args["image"])
@@ -146,7 +146,7 @@ print("")
 
 在打印出我们最初的 OCR'd `text`之后，我们将继续进行**将字符串翻译成我们想要的语言:**
 
-```
+```py
 # translate the text to a different language
 tb = TextBlob(text)
 translated = tb.translate(to=args["lang"])

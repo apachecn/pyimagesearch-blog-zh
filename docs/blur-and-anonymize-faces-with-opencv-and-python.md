@@ -140,7 +140,7 @@
 
 继续使用本教程的 ***“下载”*** 部分下载源代码、示例图像和预训练的人脸检测器模型。从那里，让我们检查内容:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── examples
@@ -180,7 +180,7 @@ $ tree --dirsfirst
 
 我们来看看`anonymize_face_simple`的实现——打开`pyimagesearch`模块中的`face_blurring.py`文件，插入下面的代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import cv2
@@ -236,7 +236,7 @@ def anonymize_face_simple(image, factor=3.0):
 
 让我们学习如何用 OpenCV 实现这种像素化的面部模糊方法——打开`face_blurring.py`文件(我们在上一节中使用的同一个文件),并添加以下代码:
 
-```
+```py
 def anonymize_face_pixelate(image, blocks=3):
 	# divide the input image into NxN blocks
 	(h, w) = image.shape[:2]
@@ -287,7 +287,7 @@ def anonymize_face_pixelate(image, blocks=3):
 
 打开项目结构中的`blur_face.py`文件，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.face_blurring import anonymize_face_pixelate
 from pyimagesearch.face_blurring import anonymize_face_simple
@@ -324,7 +324,7 @@ args = vars(ap.parse_args())
 
 给定我们的命令行参数，我们现在准备执行面部检测:
 
-```
+```py
 # load our serialized face detector model from disk
 print("[INFO] loading face detector model...")
 prototxtPath = os.path.sep.join([args["face"], "deploy.prototxt"])
@@ -356,7 +356,7 @@ detections = net.forward()
 
 接下来，我们将开始遍历`detections`:
 
-```
+```py
 # loop over the detections
 for i in range(0, detections.shape[2]):
 	# extract the confidence (i.e., probability) associated with the
@@ -381,7 +381,7 @@ for i in range(0, detections.shape[2]):
 
 然后我们将匿名化这张脸(**步骤#3** ):
 
-```
+```py
 		# check to see if we are applying the "simple" face blurring
 		# method
 		if args["method"] == "simple":
@@ -403,7 +403,7 @@ for i in range(0, detections.shape[2]):
 
 **然后对输入`--image`中的所有人脸重复步骤#2-#4** ，直到我们准备好显示结果:
 
-```
+```py
 # display the original image and the output image with the blurred
 # face(s) side by side
 output = np.hstack([orig, image])
@@ -421,7 +421,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python blur_face.py --image examples/adrian.jpg --face face_detector
 [INFO] loading face detector model...
 [INFO] computing face detections...
@@ -435,7 +435,7 @@ $ python blur_face.py --image examples/adrian.jpg --face face_detector
 
  *让我们尝试另一个图像，这一次应用**像素化模糊技术:**
 
-```
+```py
 $ python blur_face.py --image examples/tom_king.jpg --face face_detector --method pixelated
 [INFO] loading face detector model...
 [INFO] computing face detections...
@@ -459,7 +459,7 @@ $ python blur_face.py --image examples/tom_king.jpg --face face_detector --metho
 
 打开项目结构中的`blur_face_video.py`文件，让我们学习如何使用 OpenCV 在实时视频中模糊人脸:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.face_blurring import anonymize_face_pixelate
 from pyimagesearch.face_blurring import anonymize_face_simple
@@ -491,7 +491,7 @@ args = vars(ap.parse_args())
 
 然后，我们将加载我们的面部检测器并初始化我们的视频流:
 
-```
+```py
 # load our serialized face detector model from disk
 print("[INFO] loading face detector model...")
 prototxtPath = os.path.sep.join([args["face"], "deploy.prototxt"])
@@ -509,7 +509,7 @@ time.sleep(2.0)
 
 然后，我们将继续循环流中的帧，并执行**步骤#1** —面部检测:
 
-```
+```py
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the threaded video stream and resize it
@@ -530,7 +530,7 @@ while True:
 
 一旦检测到人脸，我们将确保它们满足最低置信度阈值:
 
-```
+```py
 	# loop over the detections
 	for i in range(0, detections.shape[2]):
 		# extract the confidence (i.e., probability) associated with
@@ -571,7 +571,7 @@ while True:
 
 为了结束我们的面部模糊循环，我们在屏幕上显示`frame`(模糊的面部):
 
-```
+```py
 	# show the output frame
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
@@ -597,7 +597,7 @@ vs.stop()
 
 然后，您可以使用以下命令启动`blur_face_video.py`:
 
-```
+```py
 $ python blur_face_video.py --face face_detector --method simple
 [INFO] loading face detector model...
 [INFO] starting video stream...
@@ -607,7 +607,7 @@ $ python blur_face_video.py --face face_detector --method simple
 
 我们可以通过提供`--method pixelated`标志来应用像素化脸部模糊方法:
 
-```
+```py
 $ python blur_face_video.py --face face_detector --method pixelated
 [INFO] loading face detector model...
 [INFO] starting video stream...

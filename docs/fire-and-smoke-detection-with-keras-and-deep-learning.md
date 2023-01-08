@@ -151,7 +151,7 @@
 
 下载后，解压缩数据集:
 
-```
+```py
 $ unzip Robbery_Accident_Fire_Database2.zip
 
 ```
@@ -160,7 +160,7 @@ $ unzip Robbery_Accident_Fire_Database2.zip
 
 执行`prune.sh`脚本，从 fire 数据集中删除无关的文件:
 
-```
+```py
 $ sh prune.sh
 
 ```
@@ -173,7 +173,7 @@ $ sh prune.sh
 
 下载完成后，导航到项目文件夹并取消归档数据集:
 
-```
+```py
 $ unzip spatial_envelope_256x256_static_8outdoorcategories.zip
 
 ```
@@ -182,7 +182,7 @@ $ unzip spatial_envelope_256x256_static_8outdoorcategories.zip
 
 此时，是时候再次检查我们的目录结构了。你的应该和我的一样:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── Robbery_Accident_Fire_Database2
@@ -225,7 +225,7 @@ $ tree --dirsfirst --filelimit 10
 
 现在打开`config.py`并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -247,7 +247,7 @@ CLASSES = ["Non-Fire", "Fire"]
 
 让我们设置一些培训参数:
 
-```
+```py
 # define the size of the training and testing split
 TRAIN_SPLIT = 0.75
 TEST_SPLIT = 0.25
@@ -265,7 +265,7 @@ NUM_EPOCHS = 50
 
 从这里开始，我们将定义几条路径:
 
-```
+```py
 # set the path to the serialized model after training
 MODEL_PATH = os.path.sep.join(["output", "fire_detection.model"])
 
@@ -284,7 +284,7 @@ TRAINING_PLOT_PATH = os.path.sep.join(["output", "training_plot.png"])
 
 为了总结我们的配置，我们将定义预测抽查的设置:
 
-```
+```py
 # define the path to the output directory that will store our final
 # output with labels/annotations along with the number of images to
 # sample
@@ -314,7 +314,7 @@ SAMPLE_SIZE = 50
 
 现在让我们开始实现`FireDetectioNet`——现在打开`firedetectionnet.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import BatchNormalization
@@ -346,7 +346,7 @@ class FireDetectionNet:
 
 从这里开始，我们将定义第一组`CONV => RELU => POOL`层:
 
-```
+```py
 		# CONV => RELU => POOL
 		model.add(SeparableConv2D(16, (7, 7), padding="same",
 			input_shape=inputShape))
@@ -360,7 +360,7 @@ class FireDetectionNet:
 
 然后我们将定义更多的`CONV => RELU => POOL`层集合:
 
-```
+```py
 		# CONV => RELU => POOL
 		model.add(SeparableConv2D(32, (3, 3), padding="same"))
 		model.add(Activation("relu"))
@@ -382,7 +382,7 @@ class FireDetectionNet:
 
 从这里开始，我们将创建全连接的网络负责人:
 
-```
+```py
 		# first set of FC => RELU layers
 		model.add(Flatten())
 		model.add(Dense(128))
@@ -422,7 +422,7 @@ class FireDetectionNet:
 
 打开目录结构中的`train.py`文件，插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -459,7 +459,7 @@ import sys
 
 现在我们已经导入了包，让我们定义一个可重用的函数来加载我们的数据集:
 
-```
+```py
 def load_dataset(datasetPath):
 	# grab the paths to all images in our dataset directory, then
 	# initialize our lists of images
@@ -493,7 +493,7 @@ def load_dataset(datasetPath):
 
 我们现在将解析一个命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-f", "--lr-find", type=int, default=0,
@@ -506,7 +506,7 @@ args = vars(ap.parse_args())
 
 现在让我们开始加载我们的`data`:
 
-```
+```py
 # load the fire and non-fire images
 print("[INFO] loading data...")
 fireData = load_dataset(config.FIRE_PATH)
@@ -534,7 +534,7 @@ data /= 255
 
 我们还有三个步骤来准备数据:
 
-```
+```py
 # perform one-hot encoding on the labels and account for skew in the
 # labeled data
 labels = to_categorical(labels, num_classes=2)
@@ -555,7 +555,7 @@ classWeight = classTotals.max() / classTotals
 
 接下来，我们将初始化数据扩充并编译我们的`FireDetectionNet`模型:
 
-```
+```py
 # initialize the training data augmentation object
 aug = ImageDataGenerator(
 	rotation_range=30,
@@ -583,7 +583,7 @@ model.compile(loss="binary_crossentropy", optimizer=opt,
 
 让我们来处理我们的 **[学习率探测器](https://pyimagesearch.com/2019/08/05/keras-learning-rate-finder/)模式:**
 
-```
+```py
 # check to see if we are attempting to find an optimal learning rate
 # before training for the full number of epochs
 if args["lr_find"] > 0:
@@ -628,7 +628,7 @@ if args["lr_find"] > 0:
 
 假设我们已经完成了**步骤#1** 和**步骤#2** ，现在让我们处理**步骤#3** ，其中我们的初始学习率已经在配置中确定并更新。在这种情况下，是时候在我们的脚本中处理**训练模式**了:
 
-```
+```py
 # train the network
 print("[INFO] training network...")
 H = model.fit_generator(
@@ -645,7 +645,7 @@ H = model.fit_generator(
 
 最后，我们将评估模型，将其序列化到磁盘，并绘制培训历史:
 
-```
+```py
 # evaluate the network and show a classification report
 print("[INFO] evaluating network...")
 predictions = model.predict(testX, batch_size=config.BATCH_SIZE)
@@ -690,7 +690,7 @@ plt.savefig(config.TRAINING_PLOT_PATH)
 
 在那里，您可以通过执行以下命令来执行**步骤#1** :
 
-```
+```py
 $ python train.py --lr-find 1
 [INFO] loading data...
 [INFO] finding learning rate...
@@ -734,7 +734,7 @@ Epoch 19/20
 
 打开`config.py`并滚动到**第 16-19 行**，在这里我们设置我们的训练超参数:
 
-```
+```py
 # define the initial learning rate, batch size, and number of epochs
 INIT_LR = 1e-2
 BATCH_SIZE = 64
@@ -746,7 +746,7 @@ NUM_EPOCHS = 50
 
 最后一步(**步骤#3** )是为全套`NUM_EPOCHS`训练`FireDetectionNet`:
 
-```
+```py
 $ python train.py
 [INFO] loading data...
 [INFO] compiling model...
@@ -802,7 +802,7 @@ weighted avg       0.92      0.91      0.91      1001
 
 打开`predict_fire.py`并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import load_model
 from pyimagesearch import config
@@ -823,7 +823,7 @@ model = load_model(config.MODEL_PATH)
 
 让我们从合并的数据集中抓取 25 张随机图像:
 
-```
+```py
 # grab the paths to the fire and non-fire images, respectively
 print("[INFO] predicting...")
 firePaths = list(paths.list_images(config.FIRE_PATH))
@@ -841,7 +841,7 @@ imagePaths = imagePaths[:config.SAMPLE_SIZE]
 
 从这里开始，我们将遍历每个单独的图像路径，并执行火灾探测推断:
 
-```
+```py
 # loop over the sampled image paths
 for (i, imagePath) in enumerate(imagePaths):
 	# load the image and clone it
@@ -884,7 +884,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 从那里，您可以执行以下命令:
 
-```
+```py
 $ python predict_fire.py
 [INFO] loading model...
 [INFO] predicting...

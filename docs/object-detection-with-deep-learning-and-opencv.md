@@ -91,7 +91,7 @@ MobileNet SSD 首先在 [COCO 数据集](http://cocodataset.org/)(上下文中�
 
 打开一个新文件，将其命名为`deep_learning_object_detection.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -124,7 +124,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们初始化类标签和边界框颜色:
 
-```
+```py
 # initialize the list of class labels MobileNet SSD was trained to
 # detect, then generate a set of bounding box colors for each class
 CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
@@ -139,7 +139,7 @@ COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
 现在我们需要加载我们的模型:
 
-```
+```py
 # load our serialized model from disk
 print("[INFO] loading model...")
 net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
@@ -150,7 +150,7 @@ net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
 
 接下来，我们将加载我们的查询图像并准备我们的`blob`，我们将通过网络对其进行前馈:
 
-```
+```py
 # load the input image and construct an input blob for the image
 # by resizing to a fixed 300x300 pixels and then normalizing it
 # (note: normalization is done via the authors of the MobileNet SSD
@@ -166,7 +166,7 @@ blob = cv2.dnn.blobFromImage(cv2.resize(image, (300, 300)), 0.007843,
 
 现在我们准备好做繁重的工作了——我们将让这个 blob 通过神经网络:
 
-```
+```py
 # pass the blob through the network and obtain the detections and
 # predictions
 print("[INFO] computing object detections...")
@@ -179,7 +179,7 @@ detections = net.forward()
 
 让我们循环遍历我们的`detections`并确定*什么*和*物体在图像中的*位置:
 
-```
+```py
 # loop over the detections
 for i in np.arange(0, detections.shape[2]):
 	# extract the confidence (i.e., probability) associated with the
@@ -225,7 +225,7 @@ for i in np.arange(0, detections.shape[2]):
 
 剩下的唯一一步是显示结果:
 
-```
+```py
 # show the output image
 cv2.imshow("Output", image)
 cv2.waitKey(0)
@@ -240,7 +240,7 @@ cv2.waitKey(0)
 
 从那里，解压缩归档文件并执行以下命令:
 
-```
+```py
 $ python deep_learning_object_detection.py \
 	--prototxt MobileNetSSD_deploy.prototxt.txt \
 	--model MobileNetSSD_deploy.caffemodel --image images/example_01.jpg 
@@ -257,7 +257,7 @@ $ python deep_learning_object_detection.py \
 
 在这个示例中，我们使用基于深度学习的对象检测来检测飞机:
 
-```
+```py
 $ python deep_learning_object_detection.py \
 	--prototxt MobileNetSSD_deploy.prototxt.txt \
 	--model MobileNetSSD_deploy.caffemodel --image images/example_02.jpg 
@@ -271,7 +271,7 @@ $ python deep_learning_object_detection.py \
 
 深度学习检测和定位模糊对象的能力在下图中得到展示，我们看到一匹马(和它的骑手)跳过两侧有两株盆栽植物的围栏:
 
-```
+```py
 $ python deep_learning_object_detection.py \
 	--prototxt MobileNetSSD_deploy.prototxt.txt \
 	--model MobileNetSSD_deploy.caffemodel --image images/example_03.jpg
@@ -286,7 +286,7 @@ $ python deep_learning_object_detection.py \
 
 在本例中，我们可以看到啤酒瓶以令人印象深刻的 100%置信度被检测到:
 
-```
+```py
 $ python deep_learning_object_detection.py --prototxt MobileNetSSD_deploy.prototxt.txt \
 	--model MobileNetSSD_deploy.caffemodel --image images/example_04.jpg 
 [INFO] loading model...
@@ -297,7 +297,7 @@ $ python deep_learning_object_detection.py --prototxt MobileNetSSD_deploy.protot
 
 随后是另一个马图像，它也包含狗、汽车和人:
 
-```
+```py
 $ python deep_learning_object_detection.py \
 	--prototxt MobileNetSSD_deploy.prototxt.txt \
 	--model MobileNetSSD_deploy.caffemodel --image images/example_05.jpg 
@@ -312,7 +312,7 @@ $ python deep_learning_object_detection.py \
 
 最后，一张我和杰玛的照片，一只家庭猎犬:
 
-```
+```py
 $ python deep_learning_object_detection.py \
 	--prototxt MobileNetSSD_deploy.prototxt.txt \
 	--model MobileNetSSD_deploy.caffemodel --image images/example_06.jpg 

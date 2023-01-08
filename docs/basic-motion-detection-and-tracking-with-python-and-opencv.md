@@ -71,7 +71,7 @@
 
 打开一个编辑器，创建一个新文件，命名为`motion_detector.py`，让我们开始编码:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 import argparse
@@ -118,7 +118,7 @@ firstFrame = None
 
 显然，我们在这里做了一个相当大的假设。但是，我们的目标是在树莓 Pi 上运行这个系统，所以我们不能太复杂。正如你将在这篇文章的结果部分看到的，我们能够在跟踪一个人在房间里走动时轻松地检测到运动。
 
-```
+```py
 # loop over the frames of the video
 while True:
 	# grab the current frame and initialize the occupied/unoccupied
@@ -170,7 +170,7 @@ while True:
 
 给定这个静态背景图像，我们现在准备实际执行运动检测和跟踪:
 
-```
+```py
 	# compute the absolute difference between the current frame and
 	# first frame
 	frameDelta = cv2.absdiff(firstFrame, gray)
@@ -225,7 +225,7 @@ while True:
 
 如果轮廓面积大于我们提供的`--min-area`，我们将在**第 70 行和第 71 行**绘制包围前景和运动区域的边界框。我们还将更新我们的`text`状态字符串，以表明该房间“已被占用”。
 
-```
+```py
 	# draw the text and timestamp on the frame
 	cv2.putText(frame, "Room Status: {}".format(text), (10, 20),
 		cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
@@ -264,7 +264,7 @@ cv2.destroyAllWindows()
 
 让我们试试我们的简单检测器。打开终端并执行以下命令:
 
-```
+```py
 $ python motion_detector.py --video videos/example_01.mp4
 
 ```

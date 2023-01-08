@@ -47,7 +47,7 @@
 
 打开一个新文件，将其命名为`object_size.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from scipy.spatial import distance as dist
 from imutils import perspective
@@ -72,14 +72,14 @@ args = vars(ap.parse_args())
 
 **第 2-8 行**导入我们需要的 Python 包。在本例中，我们将大量使用 [imutils 包](https://github.com/jrosebr1/imutils)，因此如果您还没有安装它，请确保在继续之前安装它:
 
-```
+```py
 $ pip install imutils
 
 ```
 
 否则，如果你*确实*安装了`imutils`，确保你有最新的版本，也就是本文撰写时的`0.3.6`:
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -90,7 +90,7 @@ $ pip install --upgrade imutils
 
 我们现在可以加载图像并对其进行预处理:
 
-```
+```py
 # load the image, convert it to grayscale, and blur it slightly
 image = cv2.imread(args["image"])
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -122,7 +122,7 @@ pixelsPerMetric = None
 
 下一步是检查每个轮廓:
 
-```
+```py
 # loop over the contours individually
 for c in cnts:
 	# if the contour is not sufficiently large, ignore it
@@ -158,7 +158,7 @@ for c in cnts:
 
 现在我们已经有了边界框，我们可以计算一系列的中点:
 
-```
+```py
 	# unpack the ordered bounding box, then compute the midpoint
 	# between the top-left and top-right coordinates, followed by
 	# the midpoint between bottom-left and bottom-right coordinates
@@ -193,7 +193,7 @@ for c in cnts:
 
 接下来，我们需要通过研究我们的引用对象来初始化我们的`pixelsPerMetric`变量:
 
-```
+```py
 	# compute the Euclidean distance between the midpoints
 	dA = dist.euclidean((tltrX, tltrY), (blbrX, blbrY))
 	dB = dist.euclidean((tlblX, tlblY), (trbrX, trbrY))
@@ -212,7 +212,7 @@ for c in cnts:
 
 既然已经定义了我们的`pixelsPerMetric`变量，我们可以测量图像中对象的大小:
 
-```
+```py
 	# compute the size of the object
 	dimA = dA / pixelsPerMetric
 	dimB = dB / pixelsPerMetric
@@ -239,7 +239,7 @@ for c in cnts:
 
 要测试我们的`object_size.py`脚本，只需发出以下命令:
 
-```
+```py
 $ python object_size.py --image images/example_01.png --width 0.955
 
 ```
@@ -267,7 +267,7 @@ $ python object_size.py --image images/example_01.png --width 0.955
 
 也就是说，让我们看看测量物体尺寸的第二个例子，这次是测量药丸的尺寸:
 
-```
+```py
 $ python object_size.py --image images/example_02.png --width 0.955
 
 ```
@@ -280,7 +280,7 @@ $ python object_size.py --image images/example_02.png --width 0.955
 
 最后，我们还有最后一个例子，这次使用一张*3.5 英寸 x 2 英寸*的名片来测量两个乙烯基 EPs 和一个信封的大小:
 
-```
+```py
 $ python object_size.py --image images/example_03.png --width 3.5
 
 ```

@@ -46,7 +46,7 @@ NeRF 的独特性，从它在计算机图形学和深度学习领域打开的门
 
 幸运的是，TensorFlow 可以在 pip 上安装:
 
-```
+```py
 $ pip install tensorflow
 ```
 
@@ -77,7 +77,7 @@ $ pip install tensorflow
 
 让我们来看看目录结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── dataset
@@ -177,7 +177,7 @@ and a direction component ![(\alpha)](img/26efa2c08e5a6bd3e590a008f6204cd0.png "
 
 #### **[效用和图像](#TOC)**
 
-```
+```py
 # import the necessary packages
 from tensorflow.io import read_file
 from tensorflow.image import decode_jpeg
@@ -193,7 +193,7 @@ import json
 *   `tensorflow`构建数据管道
 *   `json`用于读取和处理 json 数据
 
-```
+```py
 def read_json(jsonPath):
 	# open the json file
 	with open(jsonPath, "r") as fp:
@@ -208,7 +208,7 @@ def read_json(jsonPath):
 
 我们用**行 12** 上的`open`函数打开`json`文件。然后，有了文件指针，我们读取内容并用第 14 行**的`json.load`函数解析它。最后，**第 17 行**返回解析后的 json 数据。**
 
-```
+```py
 def get_image_c2w(jsonData, datasetPath):
 	# define a list to store the image paths
 	imagePaths = []
@@ -238,7 +238,7 @@ def get_image_c2w(jsonData, datasetPath):
 
 `pyimagesearch/data.py`的后半部分定义了与`map`函数一起使用来转换数据集的函数。
 
-```
+```py
 class GetImages():
 	def __init__(self, imageWidth, imageHeight):
 		# define the image width and height
@@ -322,7 +322,7 @@ upper matrix that defines the camera’s orientation.
 
 让我们看看如何将它翻译成代码。我们将继续处理`pyimagesearch/data.py`文件。
 
-```
+```py
 class GetRays:
 	def __init__(self, focalLength, imageWidth, imageHeight, near, 
 		far, nC):
@@ -343,7 +343,7 @@ class GetRays:
 
  **`__init__`:我们初始化**行 66-68** 上的`focalLength`、`imageWidth`和`imageHeight`，以及摄像机视场的`near`和`far`边界(**行 71 和 72** )。我们将需要它来构造进入场景的光线，如图 8 所示。
 
-```
+```py
 	def __call__(self, camera2world):
 		# create a meshgrid of image dimensions
 		(x, y) = tf.meshgrid(
@@ -382,7 +382,7 @@ class GetRays:
 
 在第 95 和 96 行上，我们从摄像机到世界矩阵中提取旋转矩阵和平移向量。
 
-```
+```py
 		# expand the camera coordinates to 
 		xCyCzC = xCyCzC[..., None, :]
 
@@ -467,7 +467,7 @@ MLP 架构如图 13 所示。
 
 有了这些理论，我们就可以开始在 TensorFlow 中构建 NeRF 架构了。所以，我们打开文件`pyimagesearch/nerf.py`开始挖吧。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import concatenate
@@ -477,7 +477,7 @@ from tensorflow.keras import Model
 
 我们从在**2-5 号线**进口必要的包装开始。
 
-```
+```py
 def get_model(lxyz, lDir, batchSize, denseUnits, skipLayer):
 	# build input layer for rays
 	rayInput = Input(shape=(None, None, None, 2 * 3 * lxyz + 3),
@@ -574,7 +574,7 @@ to the current point ![t](img/35f482cb64a2e4778fb2718b111d8b99.png "t"). Think o
 
 Let’s look at how to express this in code. First, we will look at the `render_image_depth` in the `pyimagesearch/utils.py` file.
 
-```
+```py
 def render_image_depth(rgb, sigma, tVals):
 	# squeeze the last dimension of sigma
 	sigma = sigma[..., 0]
@@ -691,7 +691,7 @@ is given in **Figure 17**. The blue line depicts the cosine component, while the
 
 我们可以在`pyimagesearch/encode.py`文件中一个名为`encoder_fn`的函数中非常简单地创建它。
 
-```
+```py
 # import the necessary packages
 import tensorflow as tf
 
@@ -756,7 +756,7 @@ def encoder_fn(p, L):
 
 将权重转换为一组新的样本点的过程可以通过一个名为`sample_pdf`的函数来表示。首先，让我们参考一下`pyimagesearch`文件夹中的`utils.py`文件。
 
-```
+```py
 def sample_pdf(tValsMid, weights, nF):
 	# add a small value to the weights to prevent it from nan
 	weights += 1e-5
@@ -841,7 +841,7 @@ def sample_pdf(tValsMid, weights, nF):
 
 **gothipaty，A. R .和 Raha，R.** “使用 TensorFlow 和 Keras 的 NeRF 的计算机图形学和深度学习:第二部分”， *PyImageSearch* ，2021 年，[https://PyImageSearch . com/2021/11/17/Computer-Graphics-and-Deep-Learning-with-NeRF-using-tensor flow-and-Keras-Part-2/](https://pyimagesearch.com/2021/11/17/computer-graphics-and-deep-learning-with-nerf-using-tensorflow-and-keras-part-2/)
 
-```
+```py
 @article{Gosthipaty_Raha_2021_pt2,
   author = {Aritra Roy Gosthipaty and Ritwik Raha},
   title = {Computer Graphics and Deep Learning with {NeRF} using {TensorFlow} and {Keras}: Part 2},

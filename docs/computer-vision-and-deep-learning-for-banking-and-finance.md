@@ -205,7 +205,7 @@ Quill 提供了一项基于自然语言处理的服务，它可以自动选择�
 
 **Mangla，P.** “银行和金融的计算机视觉和深度学习”， *PyImageSearch* ，P. Chugh，R. Raha，K. Kudriavtseva 和 S. Huot 编辑。，2022 年，【https://pyimg.co/up7ad 
 
-```
+```py
 @incollection{Author_2022_BF,
   author = {Puneet Mangla},
   title = {Computer Vision and Deep Learning for Banking and Finance},

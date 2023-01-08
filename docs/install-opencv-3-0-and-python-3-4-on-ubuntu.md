@@ -32,7 +32,7 @@
 
 升级任何预安装的软件包:
 
-```
+```py
 $ sudo apt-get update
 $ sudo apt-get upgrade
 
@@ -40,35 +40,35 @@ $ sudo apt-get upgrade
 
 安装用于编译 OpenCV 3.0 的开发工具:
 
-```
+```py
 $ sudo apt-get install build-essential cmake git pkg-config
 
 ```
 
 安装用于从磁盘读取各种*图像格式*的库和包；
 
-```
+```py
 $ sudo apt-get install libjpeg8-dev libtiff4-dev libjasper-dev libpng12-dev
 
 ```
 
 安装几个用来从磁盘读取*视频格式*的库:
 
-```
+```py
 $ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
 
 ```
 
 安装 GTK，这样我们就可以使用 OpenCV 的 GUI 特性:
 
-```
+```py
 $ sudo apt-get install libgtk2.0-dev
 
 ```
 
 安装用于优化 OpenCV 内部各种功能的软件包，例如矩阵运算:
 
-```
+```py
 $ sudo apt-get install libatlas-base-dev gfortran
 
 ```
@@ -77,7 +77,7 @@ $ sudo apt-get install libatlas-base-dev gfortran
 
 让我们来看看为 Python 3 安装的 Python 包管理器`pip`:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python3 get-pip.py
 
@@ -91,7 +91,7 @@ $ sudo python3 get-pip.py
 
 让我们使用新的`pip3`安装来设置`virtualenv`和`virtualenvwrapper`:
 
-```
+```py
 $ sudo pip3 install virtualenv virtualenvwrapper
 
 ```
@@ -100,7 +100,7 @@ $ sudo pip3 install virtualenv virtualenvwrapper
 
 现在我们可以更新我们的`~/.bashrc`文件(放在文件的底部):
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 export WORKON_HOME=$HOME/.virtualenvs
@@ -112,14 +112,14 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 要使这些更改生效，您可以打开一个新的终端或重新加载您的`~/.bashrc`文件:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
 
 最后，让我们创建我们的`cv`虚拟环境，在这里我们将使用 OpenCV 3.0 和 Python 3.4 进行计算机视觉开发:
 
-```
+```py
 $ mkvirtualenv cv
 
 ```
@@ -128,14 +128,14 @@ $ mkvirtualenv cv
 
 我们已经完成了一半的 Python 设置。但是为了用 Python 3.4+绑定编译 OpenCV 3.0，我们需要安装 Python 3.4+头文件和开发文件:
 
-```
+```py
 $ sudo apt-get install python3.4-dev
 
 ```
 
 OpenCV 将图像表示为 NumPy 数组，因此我们需要将 [NumPy](http://www.numpy.org/) 安装到我们的`cv`虚拟环境中:
 
-```
+```py
 $ pip install numpy
 
 ```
@@ -148,7 +148,7 @@ $ pip install numpy
 
 然后只需删除缓存目录并重新运行 NumPy install 命令:
 
-```
+```py
 $ sudo rm -rf ~/.cache/pip/
 $ pip install numpy
 
@@ -164,7 +164,7 @@ $ pip install numpy
 
 好了，我们的系统已经设置好了！让我们[从 GitHub](https://github.com/Itseez/opencv) 下载 OpenCV 并检查`3.0.0`版本:
 
-```
+```py
 $ cd ~
 $ git clone https://github.com/Itseez/opencv.git
 $ cd opencv
@@ -176,7 +176,7 @@ $ git checkout 3.0.0
 
 我们还需要获取 [opencv_contrib](https://github.com/itseez/opencv_contrib) 回购(关于我们为什么需要`opencv_contrib`的更多信息，请看我之前的[OpenCV 3.0 Ubuntu 安装帖子](https://pyimagesearch.com/2015/06/22/install-opencv-3-0-and-python-2-7-on-ubuntu/)):
 
-```
+```py
 $ cd ~
 $ git clone https://github.com/Itseez/opencv_contrib.git
 $ cd opencv_contrib
@@ -188,7 +188,7 @@ $ git checkout 3.0.0
 
 设置构件的时间:
 
-```
+```py
 $ cd ~/opencv
 $ mkdir build
 $ cd build
@@ -213,7 +213,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 说到编译，让我们开始 OpenCV 编译过程:
 
-```
+```py
 $ make -j4
 
 ```
@@ -222,7 +222,7 @@ $ make -j4
 
 假设 OpenCV 3.0 编译无误，您现在可以将它安装到您的系统上:
 
-```
+```py
 $ sudo make install
 $ sudo ldconfig
 
@@ -242,7 +242,7 @@ $ sudo ldconfig
 
 然而，为了在我们的`cv`虚拟环境中使用 OpenCV 3.0，我们首先需要将 OpenCV 符号链接到`cv`环境的`site-packages`目录中，如下所示:
 
-```
+```py
 $ cd ~/.virtualenvs/cv/lib/python3.4/site-packages/
 $ ln -s /usr/local/lib/python3.4/site-packages/cv2.cpython-34m.so cv2.so
 
@@ -264,7 +264,7 @@ $ ln -s /usr/local/lib/python3.4/site-packages/cv2.cpython-34m.so cv2.so
 
 但是在我们打开香槟和啤酒之前，让我们确认一下这个装置已经工作了。首先，确保您处于`cv`虚拟环境中，然后启动 Python 3 并尝试导入`cv2`:
 
-```
+```py
 $ workon cv
 $ python
 >>> import cv2

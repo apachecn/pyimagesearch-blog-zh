@@ -45,7 +45,7 @@ mxnet 库将训练进度记录到您的终端或文件中，类似于 Caffe。
 
 当解析 mxnet 日志文件时，我们通常在磁盘上有一个或多个`.log`文件，如下所示:
 
-```
+```py
 (dl4cv) pyimagesearch@pyimagesearch-dl4cv:~/plot_log$ ls -al
 total 108
 drwxr-xr-x  2 pyimagesearch pyimagesearch  4096 Dec 25 15:46 .
@@ -87,7 +87,7 @@ drwxr-xr-x 23 pyimagesearch pyimagesearch  4096 Dec 25 16:48 ..
 
 首先，让我们来看一个`mxnet <= 0.11`的 mxnet 培训日志格式的例子:
 
-```
+```py
 INFO:root:Epoch[73] Batch [500]	Speed: 1694.57 samples/sec	Train-accuracy=0.584035
 INFO:root:Epoch[73] Batch [500]	Speed: 1694.57 samples/sec	Train-top_k_accuracy_5=0.816547
 INFO:root:Epoch[73] Batch [500]	Speed: 1694.57 samples/sec	Train-cross-entropy=1.740517
@@ -131,7 +131,7 @@ INFO:root:Epoch[73] Validation-cross-entropy=1.914535
 
 打开一个新文件，将其命名为`plot_log.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import matplotlib.pyplot as plt
 import numpy as np
@@ -165,7 +165,7 @@ args = vars(ap.parse_args())
 
 现在我们将创建一个`logs`列表:
 
-```
+```py
 # define the paths to the training logs
 logs = [
 	(65, "training_0.log"),			# lr=1e-2
@@ -188,7 +188,7 @@ logs = [
 
 从这里开始，我们将只执行一些紧凑列表初始化:
 
-```
+```py
 # initialize the list of train rank-1 and rank-5 accuracies, along
 # with the training loss
 (trainRank1, trainRank5, trainLoss) = ([], [], [])
@@ -203,7 +203,7 @@ logs = [
 
 现在让我们遍历日志，开始正则表达式匹配:
 
-```
+```py
 # loop over the training logs
 for (i, (endEpoch, p)) in enumerate(logs):
 	# load the contents of the log file, then initialize the batch
@@ -234,7 +234,7 @@ for (i, (endEpoch, p)) in enumerate(logs):
 
 现在，我们将遍历列表中的每个时期，并提取+附加训练信息到相应的列表:
 
-```
+```py
 	# loop over the epochs
 	for e in epochs:
 		# find all rank-1 accuracies, rank-5 accuracies, and loss
@@ -267,7 +267,7 @@ for (i, (endEpoch, p)) in enumerate(logs):
 
 对于时段 3，批次 500，日志文件如下所示(从第 38 行的**开始):**
 
-```
+```py
 INFO:root:Epoch[3] Batch [500]	Speed: 1692.63 samples/sec	Train-accuracy=0.159705
 INFO:root:Epoch[3] Batch [500]	Speed: 1692.63 samples/sec	Train-top_k_accuracy_5=0.352742
 INFO:root:Epoch[3] Batch [500]	Speed: 1692.63 samples/sec	Train-cross-entropy=4.523639
@@ -302,7 +302,7 @@ INFO:root:Epoch[3] Batch [500]	Speed: 1692.63 samples/sec	Train-cross-entropy=4.
 
 从那里，我们可以用同样的方式获取验证信息:
 
-```
+```py
 	# extract the validation rank-1 and rank-5 accuracies for each
 	# epoch, followed by the loss
 	bValRank1 = re.findall(r'Validation-accuracy=(.*)', rows)
@@ -322,7 +322,7 @@ INFO:root:Epoch[3] Batch [500]	Speed: 1692.63 samples/sec	Train-cross-entropy=4.
 
 接下来，我们将计算出我们的数组切片，以便我们可以更新将用于绘图的列表:
 
-```
+```py
 	# check to see if we are examining a log file other than the
 	# first one, and if so, use the number of the final epoch in
 	# the log file as our slice index
@@ -348,7 +348,7 @@ INFO:root:Epoch[3] Batch [500]	Speed: 1692.63 samples/sec	Train-cross-entropy=4.
 
 最后但同样重要的是，我们需要更新培训和验证列表:
 
-```
+```py
 	# update the training lists
 	trainRank1.extend(bTrainRank1[0:trainEnd])
 	trainRank5.extend(bTrainRank5[0:trainEnd])
@@ -367,7 +367,7 @@ INFO:root:Epoch[3] Batch [500]	Speed: 1692.63 samples/sec	Train-cross-entropy=4.
 
 现在，我们的数据已经在这些有用的列表中进行了解析和组织，让我们继续使用 matplotlib 构建图表:
 
-```
+```py
 # plot the accuracies
 plt.style.use("ggplot")
 plt.figure()
@@ -391,7 +391,7 @@ plt.legend(loc="lower right")
 
 同样，让我们绘制训练+验证损失:
 
-```
+```py
 # plot the losses
 plt.style.use("ggplot")
 plt.figure()
@@ -412,7 +412,7 @@ plt.show()
 
 主要区别是训练精度和损失现在显示在同一行。这里有一个来自第三纪元的例子，批次 500:
 
-```
+```py
 INFO:root:Epoch[3] Batch [500]	Speed: 1997.40 samples/sec	accuracy=0.013391	top_k_accuracy_5=0.048828	cross-entropy=6.878449
 
 ```
@@ -421,7 +421,7 @@ INFO:root:Epoch[3] Batch [500]	Speed: 1997.40 samples/sec	accuracy=0.013391	top_
 
 感谢澳大利亚国立大学医学院的丹尼尔·邦纳博士，我们有了一个更新的剧本:
 
-```
+```py
 	# loop over the epochs
 	for e in epochs:
 		# find all rank-1 accuracies, rank-5 accuracies, and loss
@@ -450,7 +450,7 @@ INFO:root:Epoch[3] Batch [500]	Speed: 1997.40 samples/sec	accuracy=0.013391	top_
 
 现在，通过一个命令，使用这篇博文中描述的方法，我已经解析了所有三个日志文件，并使用 matplotlib 生成了训练进度图:
 
-```
+```py
 $ python plot_log.py --network AlexNet --dataset ImageNet
 
 ```

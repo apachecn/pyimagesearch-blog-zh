@@ -50,7 +50,7 @@
 
 在那里，您可以使用以下命令检查项目目录:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── hed_model
@@ -84,7 +84,7 @@ $ tree --dirsfirst
 
 让我们开始吧——打开`detect_edge_image.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -109,7 +109,7 @@ args = vars(ap.parse_args())
 
 让我们定义一下我们的`CropLayer`类:
 
-```
+```py
 class CropLayer(object):
 	def __init__(self, params, blobs):
 		# initialize our starting and ending (x, y)-coordinates of
@@ -127,7 +127,7 @@ class CropLayer(object):
 
 使用 OpenCV 应用 HED 的下一步是定义`getMemoryShapes`函数，这个方法负责计算`inputs`的卷大小:
 
-```
+```py
 	def getMemoryShapes(self, inputs):
 		# the crop layer will receive two inputs -- we need to crop
 		# the first input blob to match the shape of the second one,
@@ -160,7 +160,7 @@ class CropLayer(object):
 
 我们需要定义的最后一个方法是`forward`函数。该功能负责在网络的正向传递(即推理/边缘预测)过程中执行裁剪:
 
-```
+```py
 	def forward(self, inputs):
 		# use the derived (x, y)-coordinates to perform the crop
 		return [inputs[0][:, :, self.startY:self.endY,
@@ -172,7 +172,7 @@ class CropLayer(object):
 
 给定我们的`CropLayer`类，我们现在可以从磁盘加载我们的 HED 模型，并用`net`注册`CropLayer`:
 
-```
+```py
 # load our serialized edge detector from disk
 print("[INFO] loading edge detector...")
 protoPath = os.path.sep.join([args["edge_detector"],
@@ -192,7 +192,7 @@ cv2.dnn_registerLayer("Crop", CropLayer)
 
 让我们继续加载我们的输入内容`image`:
 
-```
+```py
 # load the input image and grab its dimensions
 image = cv2.imread(args["image"])
 (H, W) = image.shape[:2]
@@ -212,7 +212,7 @@ canny = cv2.Canny(blurred, 30, 150)
 
 最后，我们准备应用 HED:
 
-```
+```py
 # construct a blob out of the input image for the Holistically-Nested
 # Edge Detector
 blob = cv2.dnn.blobFromImage(image, scalefactor=1.0, size=(W, H),
@@ -253,7 +253,7 @@ cv2.waitKey(0)
 
 要使用 OpenCV 将整体嵌套的边缘检测应用到您自己的图像，请确保您使用本教程的 ***【下载】*** 部分来获取源代码、经过训练的 HED 模型和示例图像文件。从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python detect_edges_image.py --edge-detector hed_model --image images/cat.jpg
 [INFO] loading edge detector...
 [INFO] performing Canny edge detection...
@@ -277,7 +277,7 @@ $ python detect_edges_image.py --edge-detector hed_model --image images/cat.jpg
 
 让我们尝试另一个图像:
 
-```
+```py
 $ python detect_edges_image.py --edge-detector hed_model --image images/guitar.jpg
 [INFO] loading edge detector...
 [INFO] performing Canny edge detection...
@@ -295,7 +295,7 @@ $ python detect_edges_image.py --edge-detector hed_model --image images/guitar.j
 
 让我们做最后一个例子:
 
-```
+```py
 $ python detect_edges_image.py --edge-detector hed_model --image images/janie.jpg
 [INFO] loading edge detector...
 [INFO] performing Canny edge detection...
@@ -321,7 +321,7 @@ HED ( *右*)更容易捕捉到简妮的整个轮廓。
 
 打开`detect_edges_video.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 import argparse
@@ -353,7 +353,7 @@ args = vars(ap.parse_args())
 
 我们的`CropLayer`类与我们之前定义的相同:
 
-```
+```py
 class CropLayer(object):
 	def __init__(self, params, blobs):
 		# initialize our starting and ending (x, y)-coordinates of
@@ -390,7 +390,7 @@ class CropLayer(object):
 
 在定义了我们的*相同的* `CropLayer`类之后，我们将继续初始化我们的视频流和 HED 模型:
 
-```
+```py
 # initialize a boolean used to indicate if either a webcam or input
 # video is being used
 webcam = not args.get("input", False)
@@ -425,7 +425,7 @@ cv2.dnn_registerLayer("Crop", CropLayer)
 
 让我们循环获取帧并应用边缘检测！
 
-```
+```py
 # loop over frames from the video stream
 while True:
 	# grab the next frame and handle if we are reading from either
@@ -450,7 +450,7 @@ while True:
 
 现在，让我们像在之前的脚本中一样处理帧*和*:
 
-```
+```py
 	# convert the frame to grayscale, blur it, and perform Canny
 	# edge detection
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -474,7 +474,7 @@ while True:
 
 从那里，我们将显示边缘检测结果:
 
-```
+```py
 	# show the output edge detection results for Canny and
 	# Holistically-Nested Edge Detection
 	cv2.imshow("Frame", frame)
@@ -513,7 +513,7 @@ cv2.destroyAllWindows()
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python detect_edges_video.py --edge-detector hed_model
 [INFO] starting video stream...
 [INFO] loading edge detector...

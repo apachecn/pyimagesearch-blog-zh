@@ -119,14 +119,14 @@ ResNet 可以说是*最重要的*网络架构，因为:
 
 我们可以使用以下代码来实现这一点:
 
-```
+```py
 >>> baseModel = ResNet50(weights="imagenet", include_top=False,
 	input_tensor=Input(shape=(224, 224, 3)))
 ```
 
 检查``baseModel.summary()`` ，你会看到以下内容:
 
-```
+```py
 ...
 conv5_block3_3_conv (Conv2D)    (None, 7, 7, 2048)   1050624     conv5_block3_2_relu[0][0]        
 __________________________________________________________________________________________________
@@ -143,7 +143,7 @@ conv5_block3_out (Activation)   (None, 7, 7, 2048)   0           conv5_block3_ad
 
 我们可以通过接受`baseModel.output`然后应用 *7×7* 平均池来构造一个*新的、刚刚初始化的*层头，然后是我们的全连接层:
 
-```
+```py
 headModel = baseModel.output
 headModel = AveragePooling2D(pool_size=(7, 7))(headModel)
 headModel = Flatten(name="flatten")(headModel)
@@ -154,13 +154,13 @@ headModel = Dense(len(config.CLASSES), activation="softmax")(headModel)
 
 在构造了`headModel`之后，我们只需要将它附加到 ResNet 模型的主体:
 
-```
+```py
 model = Model(inputs=baseModel.input, outputs=headModel)
 ```
 
 现在，如果我们看一下`model.summary()`，我们可以得出结论，我们已经成功地向 ResNet 添加了一个新的全连接层头，使架构适合微调:
 
-```
+```py
 conv5_block3_3_conv (Conv2D)    (None, 7, 7, 2048)   1050624     conv5_block3_2_relu[0][0]        
 __________________________________________________________________________________________________
 conv5_block3_3_bn (BatchNormali (None, 7, 7, 2048)   8192        conv5_block3_3_conv[0][0]        
@@ -213,7 +213,7 @@ dense_1 (Dense)                 (None, 2)            514         dropout[0][0]
 
 一定要从这篇博文的 ***“下载”*** 部分抓取并解压代码。让我们花点时间检查一下我们项目的组织结构:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── 8k_normal_vs_camouflage_clothes_images
@@ -246,7 +246,7 @@ $ tree --dirsfirst --filelimit 10
 
 打开项目中的`config.py`文件，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -273,7 +273,7 @@ TEST_PATH = os.path.sep.join([BASE_PATH, "testing"])
 
 接下来，我们将定义分割百分比和分类:
 
-```
+```py
 # define the amount of data that will be used training
 TRAIN_SPLIT = 0.75
 
@@ -291,7 +291,7 @@ CLASSES = ["camouflage_clothes", "normal_clothes"]
 
 我们将总结一些超参数和我们的输出模型路径:
 
-```
+```py
 # initialize the initial learning rate, batch size, and number of
 # epochs to train for
 INIT_LR = 1e-4
@@ -315,7 +315,7 @@ MODEL_PATH = "camo_detector.model"
 
 打开`build_dataset.py`，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from imutils import paths
@@ -328,7 +328,7 @@ import os
 
 让我们继续获取数据集中所有原始图像的路径:
 
-```
+```py
 # grab the paths to all input images in the original input directory
 # and shuffle them
 imagePaths = list(paths.list_images(config.ORIG_INPUT_DATASET))
@@ -355,7 +355,7 @@ datasets = [
 
 **第 25-29 行**定义了我们将在这个脚本的剩余部分构建的数据集分割。让我们继续:
 
-```
+```py
 # loop over the datasets
 for (dType, imagePaths, baseOutput) in datasets:
 	# show which data split we are creating
@@ -408,7 +408,7 @@ for (dType, imagePaths, baseOutput) in datasets:
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python build_dataset.py
 [INFO] building 'training' split
 [INFO] 'creating camo_not_camo/training' directory
@@ -426,7 +426,7 @@ $ python build_dataset.py
 
 然后，您可以使用`tree`命令来检查`camo_not_camo`目录，以验证每个训练、测试和验证分割都已创建:
 
-```
+```py
 $ tree camo_not_camo --filelimit 20
 camo_not_camo
 ├── testing
@@ -448,7 +448,7 @@ camo_not_camo
 
 打开`train_camo_detector.py`文件，插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -471,7 +471,7 @@ import numpy as np
 import argparse
 ```
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--plot", type=str, default="plot.png",
@@ -491,7 +491,7 @@ totalTest = len(list(paths.list_images(config.TEST_PATH)))
 
 接下来，我们将准备[数据扩充](https://pyimagesearch.com/2019/07/08/keras-imagedatagenerator-and-data-augmentation/):
 
-```
+```py
 # initialize the training training data augmentation object
 trainAug = ImageDataGenerator(
 	rotation_range=25,
@@ -520,7 +520,7 @@ valAug.mean = mean
 
 我们现在将从我们的数据扩充对象实例化三个 Python 生成器:
 
-```
+```py
 # initialize the training generator
 trainGen = trainAug.flow_from_directory(
 	config.TRAIN_PATH,
@@ -551,7 +551,7 @@ testGen = valAug.flow_from_directory(
 
 让我们加载我们的 ResNet50 分类模型，并为[微调](https://pyimagesearch.com/2019/06/03/fine-tuning-with-keras-and-deep-learning/)做准备:
 
-```
+```py
 # load the ResNet-50 network, ensuring the head FC layer sets are left
 # off
 print("[INFO] preparing model...")
@@ -583,7 +583,7 @@ for layer in baseModel.layers:
 
 我们现在已经准备好使用 TensorFlow、Keras 和深度学习来微调我们基于 ResNet 的伪装检测器:
 
-```
+```py
 # compile the model
 opt = Adam(lr=config.INIT_LR, decay=config.INIT_LR / config.NUM_EPOCHS)
 model.compile(loss="binary_crossentropy", optimizer=opt,
@@ -605,7 +605,7 @@ H = model.fit_generator(
 
 培训完成后，我们将在测试集上评估我们的模型:
 
-```
+```py
 # reset the testing generator and then use our trained model to
 # make predictions on the data
 print("[INFO] evaluating network...")
@@ -626,7 +626,7 @@ print("[INFO] saving model...")
 model.save(config.MODEL_PATH, save_format="h5")
 ```
 
-```
+```py
 # plot the training loss and accuracy
 N = config.NUM_EPOCHS
 plt.style.use("ggplot")
@@ -656,7 +656,7 @@ plt.savefig(args["plot"])
 
 从那里，打开一个终端，运行`train_camo_detector.py`脚本:
 
-```
+```py
 $ python train_camo_detector.py
 Found 10731 images belonging to 2 classes.
 Found 1192 images belonging to 2 classes.

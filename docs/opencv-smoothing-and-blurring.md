@@ -50,7 +50,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -77,7 +77,7 @@ $ pip install opencv-contrib-python
 
 首先访问本教程的 ***“下载”*** 部分，检索源代码和示例图像:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── adrian.png
@@ -131,7 +131,7 @@ kernel since the kernel covers more area of the image.
 
 为了研究这个概念，让我们探索一些代码。打开项目目录结构中的`blurring.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -149,7 +149,7 @@ args = vars(ap.parse_args())
 
 现在让我们从磁盘加载输入图像:
 
-```
+```py
 # load the image, display it to our screen, and initialize a list of
 # kernel sizes (so we can evaluate the relationship between kernel
 # size and amount of blurring)
@@ -212,7 +212,7 @@ and ![y](img/1308649485b87d470e3ba53ff87b8970.png "y")are the respective distanc
 
 同样，正如我们将在下面的代码中看到的，当我们的内核大小增加时，应用于输出图像的模糊量也会增加。然而，与简单的平均平滑相比，模糊会显得更加“自然”，并且会更好地保留图像中的边缘:
 
-```
+```py
 # close all windows to cleanup the screen
 cv2.destroyAllWindows()
 cv2.imshow("Original", image)
@@ -261,7 +261,7 @@ where ![K](img/07d7773e3a762544cb4e60be305306d2.png "K")is an odd integer.
 
 让我们现在应用我们的中间模糊:
 
-```
+```py
 # close all windows to cleanup the screen
 cv2.destroyAllWindows()
 cv2.imshow("Original", image)
@@ -308,7 +308,7 @@ kernel the rocks have lost almost all detail and look like a big “blob.”
 
 让我们深入研究一下双侧模糊的代码。打开项目目录结构中的`bilateral.py`文件，我们开始工作:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -326,7 +326,7 @@ args = vars(ap.parse_args())
 
 现在让我们从磁盘加载我们的映像:
 
-```
+```py
 # load the image, display it to our screen, and construct a list of
 # bilateral filtering parameters that we are going to explore
 image = cv2.imread(args["image"])
@@ -396,13 +396,13 @@ and ![\sigma_{space}](img/64874bdfc50bb123a76a0af372262455.png "\sigma_{space}")
 
 然后，您可以通过执行`blurring.py`脚本来应用基本的平滑和模糊:
 
-```
+```py
 $ python blurring.py
 ```
 
 要查看双向模糊的输出，请运行以下命令:
 
-```
+```py
 $ python bilateral.py
 ```
 

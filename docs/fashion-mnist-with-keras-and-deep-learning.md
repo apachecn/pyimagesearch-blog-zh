@@ -91,7 +91,7 @@
 
 如果你使用 TensorFlow/Keras 深度学习库，时尚 MNIST 数据集实际上是直接内置在`datasets`模块中的[:](https://keras.io/datasets/#fashion-mnist-database-of-fashion-articles)
 
-```
+```py
 from tensorflow.keras.datasets import fashion_mnist
 ((trainX, trainY), (testX, testY)) = fashion_mnist.load_data()
 
@@ -107,7 +107,7 @@ from tensorflow.keras.datasets import fashion_mnist
 
 解压缩文件后，目录结构将如下所示:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── pyimagesearch
@@ -140,7 +140,7 @@ $ tree --dirsfirst
 
 打开一个新文件，将其命名为`minivggnet.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import BatchNormalization
@@ -184,7 +184,7 @@ class MiniVGGNet:
 
 现在让我们将我们的图层添加到 CNN:
 
-```
+```py
 		# first CONV => RELU => CONV => RELU => POOL layer set
 		model.add(Conv2D(32, (3, 3), padding="same",
 			input_shape=inputShape))
@@ -249,7 +249,7 @@ class MiniVGGNet:
 
 创建一个名为`fashion_mnist.py`的新文件，打开它，并插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -291,7 +291,7 @@ BS = 32
 
 让我们继续加载时尚 MNIST 数据集，并在必要时对其进行整形:
 
-```
+```py
 # grab the Fashion MNIST dataset (if this is your first time running
 # this the dataset will be automatically downloaded)
 print("[INFO] loading Fashion MNIST...")
@@ -320,7 +320,7 @@ else:
 
 让我们继续预处理+准备我们的数据:
 
-```
+```py
 # scale data to the range of [0, 1]
 trainX = trainX.astype("float32") / 255.0
 testX = testX.astype("float32") / 255.0
@@ -344,7 +344,7 @@ labelNames = ["top", "trouser", "pullover", "dress", "coat",
 
 让我们继续安装我们的`model`:
 
-```
+```py
 # initialize the optimizer and model
 print("[INFO] compiling model...")
 opt = SGD(lr=INIT_LR, momentum=0.9, decay=INIT_LR / NUM_EPOCHS)
@@ -366,7 +366,7 @@ H = model.fit(x=trainX, y=trainY,
 
 完成`NUM_EPOCHS`的培训后，我们将继续评估我们的网络+生成一个培训图:
 
-```
+```py
 # make predictions on the test set
 preds = model.predict(testX)
 
@@ -399,7 +399,7 @@ plt.savefig("plot.png")
 
 好像我们到目前为止所做的还不够有趣，我们现在要可视化我们的结果！
 
-```
+```py
 # initialize our list of output images
 images = []
 
@@ -429,7 +429,7 @@ for i in np.random.choice(np.arange(0, len(testY)), size=(16,)):
 
 现在，让我们为每张图片添加一个彩色标签，并将它们排列成一个蒙太奇:
 
-```
+```py
 	# initialize the text label color as green (correct)
 	color = (0, 255, 0)
 
@@ -476,7 +476,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端，导航到您下载代码的位置，并执行以下命令:
 
-```
+```py
 $ python fashion_mnist.py
 Using TensorFlow backend.
 [INFO] loading Fashion MNIST...

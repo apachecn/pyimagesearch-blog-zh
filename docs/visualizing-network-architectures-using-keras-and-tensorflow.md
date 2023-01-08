@@ -38,7 +38,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -65,19 +65,19 @@ $ pip install opencv-contrib-python
 
 在 Ubuntu 上，这很简单:
 
-```
+```py
 $ sudo apt-get install graphviz
 ```
 
 在 macOS 上，我们可以通过自制软件安装`graphviz`:
 
-```
+```py
 $ brew install graphviz
 ```
 
 一旦安装了`graphviz`库，我们需要安装两个 Python 包:
 
-```
+```py
 $ pip install graphviz
 $ pip install pydot
 ```
@@ -86,7 +86,7 @@ $ pip install pydot
 
 用 Keras 可视化网络架构非常简单。要了解这有多简单，请打开一个新文件，将其命名为`visualize_architecture.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.nn.conv import LeNet
 from tensorflow.keras.utils import plot_model
@@ -105,13 +105,13 @@ plot_model(model, to_file="lenet.png", show_shapes=True)
 
 要执行我们的脚本，只需打开一个终端并发出以下命令:
 
-```
+```py
 $ python visualize_architecture.py
 ```
 
 命令成功存在后，检查您当前的工作目录:
 
-```
+```py
 $ ls
 lenet.png  visualize_architecture.py
 ```

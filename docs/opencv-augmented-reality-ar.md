@@ -60,7 +60,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -87,7 +87,7 @@ $ pip install opencv-contrib-python
 
 首先确保使用本教程的 ***“下载”*** 部分下载源代码和示例图像。
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── examples
@@ -122,7 +122,7 @@ $ tree . --dirsfirst
 
 打开项目目录结构中的``opencv_ar_image.py`` 文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -131,7 +131,7 @@ import sys
 import cv2
 ```
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -141,7 +141,7 @@ ap.add_argument("-s", "--source", required=True,
 args = vars(ap.parse_args())
 ```
 
-```
+```py
 # load the input image from disk, resize it, and grab its spatial
 # dimensions
 print("[INFO] loading input image and source image...")
@@ -153,7 +153,7 @@ image = imutils.resize(image, width=600)
 source = cv2.imread(args["source"])
 ```
 
-```
+```py
 # load the ArUCo dictionary, grab the ArUCo parameters, and detect
 # the markers
 print("[INFO] detecting markers...")
@@ -187,7 +187,7 @@ if len(corners) != 4:
 
 从那里，我们可以获取 ArUco 标记的 id 并初始化``refPts`` ，这是一个包含了 ArUco 标记边界框的 *(x，y)* 坐标的列表:
 
-```
+```py
 # otherwise, we've found the four ArUco markers, so we can continue
 # by flattening the ArUco IDs list and initializing our list of
 # reference points
@@ -207,7 +207,7 @@ for i in (923, 1001, 241, 1007):
 
 在第**行第 49** 处，我们循环了 Pantone 彩色图像中的四个 ArUco 标记 id。这些 id 是使用我们的 [ArUco 标记检测博客帖子](https://pyimagesearch.com/2020/12/21/detecting-aruco-markers-with-opencv-and-python/)获得的。**如果您使用自己的 ArUco 标记 id，您需要更新此列表并插入 id。**
 
-```
+```py
 # unpack our ArUco reference points and use the reference points to
 # define the *destination* transform matrix, making sure the points
 # are specified in top-left, top-right, bottom-right, and bottom-left
@@ -232,7 +232,7 @@ warped = cv2.warpPerspective(source, H, (imgW, imgH))
 
 然而，为了计算单应性，我们需要一个*源矩阵*和*目的矩阵。*
 
-```
+```py
 # construct a mask for the source image now that the perspective warp
 # has taken place (we'll need this mask to copy the source image into
 # the destination)
@@ -268,7 +268,7 @@ output = output.astype("uint8")
 
 现在剩下的就是:
 
-```
+```py
 # show the input image, source image, output of our augmented reality
 cv2.imshow("Input", image)
 cv2.imshow("Source", source)
@@ -284,7 +284,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python opencv_ar_image.py --image examples/input_01.jpg \
 	--source sources/squirrel.jpg
 [INFO] loading input image and source image...
@@ -302,7 +302,7 @@ $ python opencv_ar_image.py --image examples/input_01.jpg \
 
 让我们尝试另一个例子，这个例子使用不同的源和输入图像:
 
-```
+```py
 $ python opencv_ar_image.py --image examples/input_02.jpg \
 	--source sources/antelope_canyon.jpg 
 [INFO] loading input image and source image...
@@ -320,7 +320,7 @@ $ python opencv_ar_image.py --image examples/input_02.jpg \
 
 让我们看最后一个例子:
 
-```
+```py
 $ python opencv_ar_image.py --image examples/input_03.jpg \
 	--source sources/jp.jpg 
 [INFO] loading input image and source image...

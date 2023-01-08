@@ -35,7 +35,7 @@
 
 幸运的是，上面所有的库都是 pip 安装的！
 
-```
+```py
 $ pip install tensorflow
 $ pip install pillow
 $ pip install imutils 
@@ -64,7 +64,7 @@ $ pip install imutils
 
 一旦我们下载了我们的项目目录，它应该看起来像这样:
 
-```
+```py
 $ tree .
 .
 ├── generate_super_res.py
@@ -132,14 +132,14 @@ $ tree .
 
 如果您使用的是 Linux 系统，您可以简单地导航到项目的目录并执行以下命令:
 
-```
+```py
 $ wget http://www.eecs.berkeley.edu/Research/Projects/CS/vision/grouping/BSR/BSR_bsds500.tgz
 $ tar xvf BSR_bsds500.tgz
 ```
 
 在开始实现之前，让我们设置路径和超参数。为此，我们将进入模块`config.py`。我们项目中的大多数其他脚本将调用这个模块并使用它的预置。
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -154,7 +154,7 @@ TEST_SET = os.path.join(ROOT_PATH, "test")
 
 首先，我们将把我们的`ROOT_PATH`设置为数据集，如**第 5 行**所示。从`ROOT_PATH`开始，我们分别定义我们的训练、验证和测试集路径(**第 8-10 行**)。为了方便起见， **BSDS500** 已经以数据集被分为训练集、验证集和测试集的方式进行了设置。
 
-```
+```py
 # specify the initial size of the images and downsampling factor
 ORIG_SIZE = (300, 300)
 DOWN_FACTOR = 3
@@ -185,7 +185,7 @@ VISUALIZATION_PATH = os.path.join("output", "visualizations")
 
 我们的下一步是创建一个处理图像处理任务的模块。为此，我们转到`data_utils.py`脚本。
 
-```
+```py
 # import the necessary packages
 from . import config
 import tensorflow as tf
@@ -207,7 +207,7 @@ def process_input(imagePath, downFactor=config.DOWN_FACTOR):
 
 **第 11-15 行**包含基本的图像处理步骤，例如从指定的路径读取图像，将图像转换成必要的数据类型(本例中为`Float32`)，以及根据我们之前在`config.py`模块中设置的大小调整图像大小。
 
-```
+```py
 	# convert the color space from RGB to YUV and only keep the Y
 	# channel (which is our target variable)
 	origImageYUV = tf.image.rgb_to_yuv(origImage)
@@ -243,7 +243,7 @@ RDB 打算尽可能地利用这一想法，用卷积层的密集连接网络提�
 
  *我们来看一下`subpixel_net.py`中剩余密集块的代码。
 
-```
+```py
 # import the necessary packages
 from . import config
 from tensorflow.keras.layers import Add
@@ -261,7 +261,7 @@ def rdb_block(inputs, numLayers):
 
 我们从`rdb_block`函数(**第 9 行**)开始，它接受一个层输入和块数作为参数。在**的第 12 行和第 13 行**，我们将通道的数量存储在一个变量中以备后用，同时创建一个列表`storedOutputs`，当遇到它们时，它将连接输出。
 
-```
+```py
 	# iterate through the number of residual dense layers
 	for _ in range(numLayers):
 		# concatenate the previous outputs and pass it through a
@@ -275,7 +275,7 @@ def rdb_block(inputs, numLayers):
 
 这里，我们实现了 RDB 的内部结构。我们直接遍历 RDB 中的每个图层，并存储每个输出。在第 19 行**上，** `localConcat`充当到每个先前层的链接，如前所述。当我们遍历给定数量的层时，`localConcat`会遇到之前的每个输出，这些输出会在每次迭代结束时被追加到`storedOutputs`列表中(*回显一个密集块*)。在**线 20-22** 上，`localConcat`然后被送到`Conv2D`层。
 
-```
+```py
 	# concatenate all the outputs, pass it through a pointwise
 	# convolutional layer, and add the outputs to initial inputs
 	finalConcat = tf.concat(storedOutputs, axis=-1)
@@ -292,7 +292,7 @@ def rdb_block(inputs, numLayers):
 
 接下来是我们的整体模型架构，在这里我们将实现**像素混洗。**
 
-```
+```py
 def get_subpixel_net(downsampleFactor=config.DOWN_FACTOR, channels=1,
 	rdbLayers=config.RDB_LAYERS):
 	# initialize an input layer
@@ -327,7 +327,7 @@ def get_subpixel_net(downsampleFactor=config.DOWN_FACTOR, channels=1,
 
 *to* ![(H*r) \times (W*r) \times C](img/3b45985b9ccabc93754e475c3fc7a94a.png "(H*r) \times (W*r) \times C")**.**
 
-```
+```py
 	# pass the inputs through a final CONV layer such that the
 	# channels of the outputs can be spatially organized into
 	# the output resolution
@@ -352,7 +352,7 @@ step before proceeding to use the `tf.nn.depth_to_space` (**Line 59**) function,
 
 在导入必要的包后，我们定义一个名为`psnr`的函数，它以一幅原始图像和一幅预测图像作为它的参数。我们的主要目的是通过比较原始图像和预测图像来计算**峰值信噪比(PSNR)** 。
 
-```
+```py
 # USAGE
 # python train.py
 
@@ -383,7 +383,7 @@ def psnr(orig, pred):
 
 我们的下一个任务是为训练和验证路径分配变量，并相应地创建我们的训练和验证数据集。
 
-```
+```py
 # define autotune flag for performance optimization
 AUTO = tf.data.AUTOTUNE
 
@@ -400,7 +400,7 @@ valDS = tf.data.Dataset.from_tensor_slices(valPaths)
 
 接下来，我们创建训练和验证数据加载器，并编译我们的模型。
 
-```
+```py
 # prepare data loaders
 print("[INFO] preparing data loaders...")
 trainDS = trainDS.map(process_input,
@@ -421,7 +421,7 @@ H = model.fit(trainDS, validation_data=valDS, epochs=config.EPOCHS)
 
 正如你在**第 49 行**看到的，我们使用`psnr`作为我们的模型度量，这意味着我们模型的目标将是最大化**峰值信噪比**。我们使用`adam`优化器，并选择`mse`(均方差)作为我们的损失函数。在**第 50 行**上，我们继续用数据加载器装配我们的模型。
 
-```
+```py
 # prepare training plot of the model and serialize it
 plt.style.use("ggplot")
 plt.figure()
@@ -446,7 +446,7 @@ model.save(config.SUPER_RES_MODEL)
 
 在执行文件`train.py`时，我们的模型得到训练。下面是该模型在历史上的培训历史，一旦您运行该模块，您将完全可以使用它。
 
-```
+```py
 $ python train.py
 [INFO] loading images from disk...
 [INFO] preparing data loaders...
@@ -477,7 +477,7 @@ Epoch 100/100
 
 为了最终通过使用经过训练的具有 RDB 的亚像素 CNN 应用超分辨率来生成图像，让我们打开`generate_super_res.py`并开始编码。
 
-```
+```py
 # USAGE
 # python generate_super_res.py
 
@@ -508,7 +508,7 @@ def psnr(orig, pred):
 
 我们从第 15 行的**开始，定义另一个函数`psnr`，它计算预测输出和原始图像的 **PSNR** 。如前所述，PSNR 越高，结果越好。**
 
-```
+```py
 def load_image(imagePath):
 	# load image from disk and downsample it using the bicubic method
 	orig = load_img(imagePath)
@@ -521,7 +521,7 @@ def load_image(imagePath):
 
 在第 29 行**，**上，我们编写了一个辅助函数`load_image`，它将图像路径作为参数，并返回原始图像和缩减采样后的图像。注意在第 32 和 33 行的**上，我们根据在`config.py`模块中定义的`DOWN_FACTOR`对图像进行下采样。这是非常重要的一步，因为我们模型的输出尺寸取决于此。**
 
-```
+```py
 def get_y_channel(image):
 	# convert the image to YCbCr colorspace and then split it to get the
 	# individual channels
@@ -539,7 +539,7 @@ def get_y_channel(image):
 
 接下来，我们定义一个名为`get_y_channel`的函数，它将 **RGB** 图像转换为其等效的 **YCbCr** 形式，以隔离 **Y 通道**。根据我们在整个博客中维护的东西，在通过我们的模型之前，我们将像素值缩放到范围`[0.0, 1.0]` ( **Line 47** )。
 
-```
+```py
 def clip_numpy(image):
 	# cast image to integer, clip its pixel range to [0, 255]
 	image = tf.cast(image * 255.0, tf.uint8)
@@ -551,7 +551,7 @@ def clip_numpy(image):
 
 **第 52-58 行**包含我们最后的辅助函数`clip_numpy`，它根据给定的范围裁剪图像的值。由于该函数是我们后处理步骤的一部分，我们将从`[0.0, 1.0]` ( **行 54** )再次将范围扩大到`[0, 255]`，并剪裁任何超出给定边界(**行 55** )的值。
 
-```
+```py
 def postprocess_image(y, cb, cr):
 	# do a bit of initial preprocessing, reshape it to match original
 	# size, and then convert it to a PIL Image
@@ -574,7 +574,7 @@ def postprocess_image(y, cb, cr):
 
 完成所有的效用函数后，我们终于可以继续生成一些超分辨率图像了。我们创建一个名为`testPaths`的变量，它将包含所有可用测试图像的路径。第二个变量`currentTestPaths`将在每次被调用时从可用的测试路径中随机选择 10 个值。我们还加载了之前保存的模型。
 
-```
+```py
 # load the test image paths from disk and select ten paths randomly
 print("[INFO] loading test images...")
 testPaths = list(paths.list_images(config.TEST_SET))
@@ -588,7 +588,7 @@ superResModel = load_model(config.SUPER_RES_MODEL,
 
 遍历`currentTestPaths` ( **第 80 行**)中可用的测试图像路径，我们将图像通过我们的模型，并将预测与使用朴素双三次方法(用于放大图像的旧技术之一)调整大小的图像进行比较。
 
-```
+```py
 # iterate through our test image paths
 print("[INFO] performing predictions...")
 for (i, path) in enumerate(currentTestPaths):
@@ -624,7 +624,7 @@ for (i, path) in enumerate(currentTestPaths):
 
 有了所有的代码，我们剩下要做的就是在 shell 脚本中运行`python generate_super_res.py`命令。
 
-```
+```py
 $ python generate_super_res.py
 [INFO] loading test images...
 [INFO] loading model...

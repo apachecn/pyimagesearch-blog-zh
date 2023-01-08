@@ -54,7 +54,7 @@ dlib 内部实现的面部标志检测器产生 68 个 *(x，y)*-坐标，映射
 
 这些映射编码在 imutils 库的 [face_utils 内的`FACIAL_LANDMARKS_IDXS`字典中:](https://github.com/jrosebr1/imutils/blob/master/imutils/face_utils.py#L8)
 
-```
+```py
 # define a dictionary that maps the indexes of the facial
 # landmarks to specific face regions
 FACIAL_LANDMARKS_IDXS = OrderedDict([
@@ -77,7 +77,7 @@ FACIAL_LANDMARKS_IDXS = OrderedDict([
 
 为此，我们需要已经包含在 imutils 库中的`visualize_facial_landmarks`函数[:](https://github.com/jrosebr1/imutils/blob/master/imutils/face_utils/helpers.py#L56)
 
-```
+```py
 def visualize_facial_landmarks(image, shape, colors=None, alpha=0.75):
 	# create two copies of the input image -- one for the
 	# overlay and one for the final output image
@@ -106,7 +106,7 @@ def visualize_facial_landmarks(image, shape, colors=None, alpha=0.75):
 
 我们现在准备通过面部标志来可视化每个单独的面部区域:
 
-```
+```py
 	# loop over the facial landmark regions individually
 	for (i, name) in enumerate(FACIAL_LANDMARKS_IDXS.keys()):
 		# grab the (x, y)-coordinates associated with the
@@ -141,7 +141,7 @@ def visualize_facial_landmarks(image, shape, colors=None, alpha=0.75):
 
 最后一步是通过`cv2.addWeighted`函数创建一个[透明叠加](https://pyimagesearch.com/2016/03/07/transparent-overlays-with-opencv/):
 
-```
+```py
 	# apply the transparent overlay
 	cv2.addWeighted(overlay, alpha, output, 1 - alpha, 0, output)
 
@@ -167,7 +167,7 @@ def visualize_facial_landmarks(image, shape, colors=None, alpha=0.75):
 
 从那里，打开一个新文件，将其命名为`detect_face_parts.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils import face_utils
 import numpy as np
@@ -213,7 +213,7 @@ rects = detector(gray, 1)
 
 既然我们已经在图像中检测到面部，我们可以单独循环每个面部 ROI:
 
-```
+```py
 # loop over the face detections
 for (i, rect) in enumerate(rects):
 	# determine the facial landmarks for the face region, then
@@ -244,7 +244,7 @@ for (i, rect) in enumerate(rects):
 
 为了实际地*提取*每个面部区域，我们只需要计算与特定区域相关联的 *(x，y)* 坐标的边界框，并使用 NumPy 数组切片来提取它:
 
-```
+```py
 		# extract the ROI of the face region as a separate image
 		(x, y, w, h) = cv2.boundingRect(np.array([shape[i:j]]))
 		roi = image[y:y + h, x:x + w]
@@ -280,7 +280,7 @@ for (i, rect) in enumerate(rects):
 
 在那里，您可以使用以下命令来可视化结果:
 
-```
+```py
 $ python detect_face_parts.py --shape-predictor shape_predictor_68_face_landmarks.dat \
 	--image images/example_01.jpg
 
@@ -332,7 +332,7 @@ $ python detect_face_parts.py --shape-predictor shape_predictor_68_face_landmark
 
 让我们试试另一个例子:
 
-```
+```py
 $ python detect_face_parts.py --shape-predictor shape_predictor_68_face_landmarks.dat \
 	--image images/example_02.jpg
 
@@ -346,7 +346,7 @@ $ python detect_face_parts.py --shape-predictor shape_predictor_68_face_landmark
 
 最后一个例子也是如此:
 
-```
+```py
 $ python detect_face_parts.py --shape-predictor shape_predictor_68_face_landmarks.dat \
 	--image images/example_03.jpg
 

@@ -109,7 +109,7 @@ Alon Agmon 在这篇文章中更详细地解释了这个概念。
 
 继续从这篇文章的 ***“下载”*** 部分抓取代码。一旦你解压了这个项目，你会看到下面的结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── output
@@ -145,7 +145,7 @@ $ tree --dirsfirst
 
 打开`convautoencoder.py`并检查:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.layers import BatchNormalization
 from tensorflow.keras.layers import Conv2D
@@ -205,7 +205,7 @@ class ConvAutoencoder:
 
 在上面的代码块中，我们使用自动编码器的`encoder`部分来构建我们的潜在空间表示——这个相同的表示现在将用于重建原始输入图像:
 
-```
+```py
 		# start building the decoder model which will accept the
 		# output of the encoder as its inputs
 		latentInputs = Input(shape=(latentDim,))
@@ -251,7 +251,7 @@ class ConvAutoencoder:
 
 打开项目目录中的`train_unsupervised_autoencoder.py`文件，并插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -273,7 +273,7 @@ import cv2
 
 假设我们正在执行*无监督学习，*接下来我们将定义一个函数来构建一个无监督数据集:
 
-```
+```py
 def build_unsupervised_dataset(data, labels, validLabel=1,
 	anomalyLabel=3, contam=0.01, seed=42):
 	# grab all indexes of the supplied class label that are *truly*
@@ -323,7 +323,7 @@ def build_unsupervised_dataset(data, labels, validLabel=1,
 
 我们的下一个功能将帮助我们可视化无监督自动编码器做出的预测:
 
-```
+```py
 def visualize_predictions(decoded, gt, samples=10):
 	# initialize our list of output images
 	outputs = None
@@ -354,7 +354,7 @@ def visualize_predictions(decoded, gt, samples=10):
 
 既然我们已经定义了导入和必要的函数，我们将继续解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", type=str, required=True,
@@ -377,7 +377,7 @@ args = vars(ap.parse_args())
 
 现在，我们准备好了用于训练的数据:
 
-```
+```py
 # initialize the number of epochs to train for, initial learning rate,
 # and batch size
 EPOCHS = 20
@@ -418,7 +418,7 @@ images = images.astype("float32") / 255.0
 
 我们的数据已经准备好了，所以让我们构建我们的自动编码器并训练它:
 
-```
+```py
 # construct our convolutional autoencoder
 print("[INFO] building autoencoder...")
 (encoder, decoder, autoencoder) = ConvAutoencoder.build(28, 28, 1)
@@ -449,7 +449,7 @@ cv2.imwrite(args["vis"], vis)
 
 从这里开始，我们将总结:
 
-```
+```py
 # construct a plot that plots and saves the training history
 N = np.arange(0, EPOCHS)
 plt.style.use("ggplot")
@@ -487,7 +487,7 @@ autoencoder.save(args["model"], save_format="h5")
 
 从那里，启动一个终端并执行以下命令:
 
-```
+```py
 $ python train_unsupervised_autoencoder.py \
 	--dataset output/images.pickle \
 	--model output/autoencoder.model
@@ -535,7 +535,7 @@ Epoch 20/20
 
 在继续下一部分之前，您应该确认`autoencoder.model`和`images.pickle`文件已经正确保存到您的`output`目录中:
 
-```
+```py
 $ ls output/
 autoencoder.model	images.pickle
 ```
@@ -553,7 +553,7 @@ autoencoder.model	images.pickle
 
 打开`find_anomalies.py`文件，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import load_model
 import numpy as np
@@ -580,7 +580,7 @@ args = vars(ap.parse_args())
 
 从这里，我们将(1)加载我们的自动编码器和数据，以及(2)进行预测:
 
-```
+```py
 # load the model and image data from disk
 print("[INFO] loading autoencoder and image data...")
 autoencoder = load_model(args["model"])
@@ -608,7 +608,7 @@ for (image, recon) in zip(images, decoded):
 
 从这里，我们会发现异常:
 
-```
+```py
 # compute the q-th quantile of the errors which serves as our
 # threshold to identify anomalies -- any data point that our model
 # reconstructed with > threshold error will be marked as an outlier
@@ -624,7 +624,7 @@ print("[INFO] {} outliers found".format(len(idxs)))
 
 接下来，我们将遍历数据集中的异常指数:
 
-```
+```py
 # initialize the outputs array
 outputs = None
 
@@ -659,7 +659,7 @@ cv2.waitKey(0)
 
 首先，确保您已经使用本教程的 ***“下载”*** 部分下载了源代码——从这里，您可以执行以下命令来检测我们数据集中的异常:
 
-```
+```py
 $ python find_anomalies.py --dataset output/images.pickle \
 	--model output/autoencoder.model
 [INFO] loading autoencoder and image data...

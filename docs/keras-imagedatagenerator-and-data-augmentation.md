@@ -235,7 +235,7 @@ drawn from a random distribution (*right*).
 
 在深入研究代码之前，让我们先回顾一下项目的目录结构:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── dogs_vs_cats_small
@@ -285,7 +285,7 @@ $ tree --dirsfirst --filelimit 10
 
 打开`train.py`脚本，让我们开始吧:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -311,7 +311,7 @@ import os
 
 让我们继续[解析我们的命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -332,7 +332,7 @@ args = vars(ap.parse_args())
 
 让我们继续初始化超参数并加载我们的图像数据:
 
-```
+```py
 # initialize the initial learning rate, batch size, and number of
 # epochs to train for
 INIT_LR = 1e-1
@@ -366,7 +366,7 @@ for imagePath in imagePaths:
 
 接下来，让我们完成预处理，对标签进行编码，并对数据进行分区:
 
-```
+```py
 # convert the data into a NumPy array, then preprocess it by scaling
 # all pixel intensities to the range [0, 1]
 data = np.array(data, dtype="float") / 255.0
@@ -388,7 +388,7 @@ labels = to_categorical(labels, 2)
 
 从那里我们执行我们的`labels` ( **第 61-63 行**)的“一键编码”。这种对我们的`labels`进行编码的方法会产生一个如下所示的数组:
 
-```
+```py
 array([[0., 1.],
        [0., 1.],
        [0., 1.],
@@ -405,7 +405,7 @@ array([[0., 1.],
 
 现在，我们准备好**初始化我们的数据扩充对象:**
 
-```
+```py
 # initialize an our data augmenter as an "empty" image data generator
 aug = ImageDataGenerator()
 
@@ -415,7 +415,7 @@ aug = ImageDataGenerator()
 
 让我们检查一下是否要用`--augment`命令行参数覆盖默认设置:
 
-```
+```py
 # check to see if we are applying "on the fly" data augmentation, and
 # if so, re-instantiate the object
 if args["augment"] > 0:
@@ -435,7 +435,7 @@ if args["augment"] > 0:
 
 让我们编译和训练我们的模型:
 
-```
+```py
 # initialize the optimizer and model
 print("[INFO] compiling model...")
 opt = SGD(lr=INIT_LR, momentum=0.9, decay=INIT_LR / EPOCHS)
@@ -462,7 +462,7 @@ H = model.fit(
 
 最后，我们将评估我们的模型，打印统计数据，并生成一个训练历史图:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(x=testX.astype("float32"), batch_size=BS)
@@ -519,7 +519,7 @@ plt.savefig(args["plot"])
 
 要了解我们如何使用数据扩充来生成新的示例，请打开`generate_images.py`文件并按照以下步骤操作:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.preprocessing.image import img_to_array
@@ -549,7 +549,7 @@ args = vars(ap.parse_args())
 
 让我们继续加载我们的`image`和**初始化我们的数据扩充对象:**
 
-```
+```py
 # load the input image, convert it to a NumPy array, and then
 # reshape it to have an extra dimension
 print("[INFO] loading example image...")
@@ -577,7 +577,7 @@ total = 0
 
 接下来，我们将构建一个 Python 生成器，并让它工作，直到我们的所有图像都已生成:
 
-```
+```py
 # construct the actual Python generator
 print("[INFO] generating images...")
 imageGen = aug.flow(image, batch_size=1, save_to_dir=args["output"],
@@ -603,7 +603,7 @@ for image in imageGen:
 
 从那里打开一个终端并执行以下命令:
 
-```
+```py
 $ python generate_images.py --image cat.jpg --output generated_dataset/cats
 [INFO] loading example image...
 [INFO] generating images...
@@ -612,7 +612,7 @@ $ python generate_images.py --image cat.jpg --output generated_dataset/cats
 
 检查`generated_dataset/cats`目录的输出，你现在会看到 100 张图片:
 
-```
+```py
 $ ls generated_dataset/cats/*.jpg | wc -l
      100
 
@@ -620,7 +620,7 @@ $ ls generated_dataset/cats/*.jpg | wc -l
 
 现在让我们为“狗”类做同样的事情:
 
-```
+```py
 $ python generate_images.py --image dog.jpg --output generated_dataset/dogs
 [INFO] loading example image...
 [INFO] generating images...
@@ -629,7 +629,7 @@ $ python generate_images.py --image dog.jpg --output generated_dataset/dogs
 
 现在检查狗的图像:
 
-```
+```py
 $ ls generated_dataset/dogs/*.jpg | wc -l
      100
 
@@ -641,7 +641,7 @@ $ ls generated_dataset/dogs/*.jpg | wc -l
 
 我们现在准备进行我们的第一个实验:
 
-```
+```py
 $ python train.py --dataset generated_dataset --plot plot_generated_dataset.png
 [INFO] loading images...
 [INFO] compiling model...
@@ -702,7 +702,7 @@ weighted avg       1.00      1.00      1.00        50
 
 在我们的第一个实验中，我们不进行数据扩充:
 
-```
+```py
 $ python train.py --dataset dogs_vs_cats_small --plot plot_dogs_vs_cats_no_aug.png
 [INFO] loading images...
 [INFO] compiling model...
@@ -750,7 +750,7 @@ weighted avg       0.64      0.64      0.64       500
 
 现在让我们研究一下数据扩充如何作为一种正则化形式:
 
-```
+```py
 [INFO] loading images...
 [INFO] performing 'on the fly' data augmentation
 [INFO] compiling model...

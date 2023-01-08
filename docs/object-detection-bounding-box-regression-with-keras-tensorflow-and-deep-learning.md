@@ -114,7 +114,7 @@
 
 去拿吧。本教程的 ***【下载】*** 部分的 zip 文件。在里面，您将找到数据子集以及我们的项目文件:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── dataset
@@ -139,7 +139,7 @@ $ tree --dirsfirst --filelimit 10
 
 打开`config.py`文件，让我们看一看:
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -150,7 +150,7 @@ IMAGES_PATH = os.path.sep.join([BASE_PATH, "images"])
 ANNOTS_PATH = os.path.sep.join([BASE_PATH, "airplanes.csv"])
 ```
 
-```
+```py
 # define the path to the base output directory
 BASE_OUTPUT = "output"
 
@@ -161,7 +161,7 @@ PLOT_PATH = os.path.sep.join([BASE_OUTPUT, "plot.png"])
 TEST_FILENAMES = os.path.sep.join([BASE_OUTPUT, "test_images.txt"])
 ```
 
-```
+```py
 # initialize our initial learning rate, number of epochs to train
 # for, and the batch size
 INIT_LR = 1e-4
@@ -187,7 +187,7 @@ BATCH_SIZE = 32
 
 边界框回归是一个最好通过代码解释的概念，所以打开项目目录中的`train.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from tensorflow.keras.applications import VGG16
@@ -219,7 +219,7 @@ import os
 
 现在，我们的环境已经准备就绪，包也已导入，让我们来处理我们的数据:
 
-```
+```py
 # load the contents of the CSV annotations file
 print("[INFO] loading dataset...")
 rows = open(config.ANNOTS_PATH).read().strip().split("\n")
@@ -242,7 +242,7 @@ filenames = []
 
 这是三个相互对应的独立列表。我们现在开始一个循环，试图从 CSV 数据填充列表:
 
-```
+```py
 # loop over the rows
 for row in rows:
 	# break the row into the filename and bounding box coordinates
@@ -254,7 +254,7 @@ for row in rows:
 
 为了对 CSV 数据有所了解，让我们来看一下内部情况:
 
-```
+```py
 image_0001.jpg,49,30,349,137
 image_0002.jpg,59,35,342,153
 image_0003.jpg,47,36,331,135
@@ -279,7 +279,7 @@ image_0010.jpg,55,32,335,106
 
 我们仍在循环中工作，接下来我们将加载一个图像:
 
-```
+```py
 	# derive the path to the input image, load the image (in OpenCV
 	# format), and grab its dimensions
 	imagePath = os.path.sep.join([config.IMAGES_PATH, filename])
@@ -296,7 +296,7 @@ image_0010.jpg,55,32,335,106
 
 让我们结束我们的循环:
 
-```
+```py
 	# load the image and preprocess it
 	image = load_img(imagePath, target_size=(224, 224))
 	image = img_to_array(image)
@@ -309,7 +309,7 @@ image_0010.jpg,55,32,335,106
 
 现在我们已经加载了数据，让我们为训练对其进行分区:
 
-```
+```py
 # convert the data and targets to NumPy arrays, scaling the input
 # pixel intensities from the range [0, 255] to [0, 1]
 data = np.array(data, dtype="float32") / 255.0
@@ -335,7 +335,7 @@ f.close()
 
 在这里我们:
 
-```
+```py
 # load the VGG16 network, ensuring the head FC layers are left off
 vgg = VGG16(weights="imagenet", include_top=False,
 	input_tensor=Input(shape=(224, 224, 3)))
@@ -368,7 +368,7 @@ model = Model(inputs=vgg.input, outputs=bboxHead)
 
 现在让我们训练(即微调)我们新形成的野兽:
 
-```
+```py
 # initialize the optimizer, compile the model, and show the model
 # summary
 opt = Adam(lr=config.INIT_LR)
@@ -385,7 +385,7 @@ H = model.fit(
 	verbose=1)
 ```
 
-```
+```py
 # serialize the model to disk
 print("[INFO] saving object detector model...")
 model.save(config.MODEL_PATH, save_format="h5")
@@ -411,7 +411,7 @@ plt.savefig(config.PLOT_PATH)
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python train.py
 [INFO] loading dataset...
 [INFO] saving testing filenames...
@@ -423,7 +423,7 @@ $ python train.py
 
 从那里，我们的训练脚本输出具有边界框回归头的 VGG16 网络的模型摘要:
 
-```
+```py
 Model: "model"
 _________________________________________________________________
 Layer (type)                 Output Shape              Param #
@@ -487,7 +487,7 @@ Non-trainable params: 14,714,688
 
 接下来是我们的实际培训流程:
 
-```
+```py
 [INFO] training bounding box regressor...
 Epoch 1/25
 23/23 [==============================] - 37s 2s/step - loss: 0.0239 - val_loss: 0.0014
@@ -521,7 +521,7 @@ Epoch 25/25
 
 培训完成后，您的`output`目录应该包含以下文件:
 
-```
+```py
 $ ls output/
 detector.h5	plot.png	test_images.txt
 ```
@@ -536,7 +536,7 @@ detector.h5	plot.png	test_images.txt
 
 打开一个新文件，将其命名为`predict.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from tensorflow.keras.preprocessing.image import img_to_array
@@ -554,7 +554,7 @@ import os
 
 让我们解析一下[命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--input", required=True,
@@ -562,7 +562,7 @@ ap.add_argument("-i", "--input", required=True,
 args = vars(ap.parse_args())
 ```
 
-```
+```py
 # determine the input file type, but assume that we're working with
 # single input image
 filetype = mimetypes.guess_type(args["input"])[0]
@@ -589,7 +589,7 @@ if "text/plain" == filetype:
 
 给定一个或多个测试图像，让我们开始**用我们的深度学习 TensorFlow/Keras `model`执行包围盒回归**:
 
-```
+```py
 # load our trained bounding box regressor from disk
 print("[INFO] loading object detector...")
 model = load_model(config.MODEL_PATH)
@@ -612,7 +612,7 @@ for imagePath in imagePaths:
 
 从那里，我们可以**执行包围盒回归推理**并注释结果:
 
-```
+```py
 	# make bounding box predictions on the input image
 	preds = model.predict(image)[0]
 	(startX, startY, endX, endY) = preds
@@ -659,7 +659,7 @@ for imagePath in imagePaths:
 
 从这里开始，让我们尝试对单个输入图像应用对象检测:
 
-```
+```py
 $ python predict.py --input datasimg/image_0697.jpg
 [INFO] loading object detector...
 ```
@@ -668,7 +668,7 @@ $ python predict.py --input datasimg/image_0697.jpg
 
 接下来，让我们通过提供到`test_images.txt`文件的路径作为`--input`命令行参数，将边界框回归器应用到测试集中的每个图像的*:*
 
-```
+```py
 $ python predict.py --input output/test_images.txt
 [INFO] loading object detector...
 ```

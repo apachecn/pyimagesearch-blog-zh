@@ -48,7 +48,7 @@ Danny 提出了一个很好的问题 Keras 的 Conv2D 类有很多参数。如�
 
 Keras Conv2D 类构造函数具有以下签名:
 
-```
+```py
 tensorflow.keras.layers.Conv2D(filters, kernel_size, strides=(1, 1),
   padding='valid', data_format=None, dilation_rate=(1, 1),
   activation=None, use_bias=True, kernel_initializer='glorot_uniform',
@@ -76,7 +76,7 @@ tensorflow.keras.layers.Conv2D(filters, kernel_size, strides=(1, 1),
 
 中间的 Conv2D 层将比早期的 Conv2D 层学习更多的滤波器，但比更靠近输出的层学习更少的滤波器。让我们来看一个例子:
 
-```
+```py
 model.add(Conv2D(32, (3, 3), padding="same", activation="relu"))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 ...
@@ -140,7 +140,7 @@ ResNet 架构中的残差模块使用 *1×1* 和 *3×3* 过滤器作为一种降
 
 如果是这样，考虑使用一个 *5×5* 或 *7×7* 内核来学习更大的特性，然后快速降低空间维度——然后开始使用 *3×3* 内核:
 
-```
+```py
 model.add(Conv2D(32, (7, 7), activation="relu"))
 ...
 model.add(Conv2D(32, (3, 3), activation="relu"))
@@ -165,7 +165,7 @@ model.add(Conv2D(32, (3, 3), activation="relu"))
 
 通常情况下，您会看到以 *2×2* 的步幅取代最大池:
 
-```
+```py
 model.add(Conv2D(128, (3, 3), strides=(1, 1), activation="relu"))
 model.add(Conv2D(128, (3, 3), strides=(1, 1), activation="relu"))
 model.add(Conv2D(128, (3, 3), strides=(2, 2), activation="relu"))
@@ -190,7 +190,7 @@ Keras Conv2D 类的`padding`参数可以取两个值之一:`valid`或`same`。
 
 下面的例子自然会减少我们体积的空间维度:
 
-```
+```py
 model.add(Conv2D(32, (3, 3), padding="valid"))
 
 ```
@@ -199,7 +199,7 @@ model.add(Conv2D(32, (3, 3), padding="valid"))
 
 如果您希望保留体积的空间维度，以使输出体积大小与输入体积大小相匹配，那么您可能希望为`padding`提供一个值`same`:
 
-```
+```py
 model.add(Conv2D(32, (3, 3), padding="same"))
 
 ```
@@ -252,14 +252,14 @@ Conv2D 类的`activation`参数只是一个方便的参数，允许您提供一�
 
 在以下示例中，我们执行卷积，然后应用 ReLU 激活函数:
 
-```
+```py
 model.add(Conv2D(32, (3, 3), activation="relu"))
 
 ```
 
 上面的代码相当于:
 
-```
+```py
 model.add(Conv2D(32, (3, 3)))
 model.add(Activation("relu"))
 
@@ -311,7 +311,7 @@ Conv2D 类的`use_bias`参数控制是否将偏置向量添加到卷积层。
 
  *通常情况下，您会遇到应用 L1 或 L2 正则化的情况，如果我发现过度拟合的迹象，我会在我的网络上使用 L2 正则化:
 
-```
+```py
 from tensorflow.keras.regularizers import l2
 ...
 model.add(Conv2D(32, (3, 3), activation="relu"),
@@ -386,14 +386,14 @@ CALTECH-101 数据集是 101 个对象类别的数据集，每个类别有 40 �
 
 下载完。源代码的 zip 文件，将其解压缩，然后将目录更改为`keras-conv2d-example`目录:
 
-```
+```py
 $ cd /path/to/keras-conv2d-example
 
 ```
 
 从那里，使用下面的`wget`命令下载并解压缩 CALTECH-101 数据集:
 
-```
+```py
 $ wget http://www.vision.caltech.edu/Image_Datasets/Caltech101/101_ObjectCategories.tar.gz
 $ tar -zxvf 101_ObjectCategories.tar.gz
 
@@ -405,7 +405,7 @@ $ tar -zxvf 101_ObjectCategories.tar.gz
 
 要查看我们的项目是如何组织的，只需使用`tree`命令:
 
-```
+```py
 $ tree --dirsfirst -L 2 -v
 .
 ├── 101_ObjectCategories
@@ -456,7 +456,7 @@ $ tree --dirsfirst -L 2 -v
 
 打开一个新文件，将其命名为`stridednet.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import BatchNormalization
@@ -505,7 +505,7 @@ class StridedNet:
 
 让我们看看如何构建前三个 CONV 层:
 
-```
+```py
 		# our first CONV layer will learn a total of 16 filters, each
 		# Of which are 7x7 -- we'll then apply 2x2 strides to reduce
 		# the spatial dimensions of the volume
@@ -541,7 +541,7 @@ class StridedNet:
 
 让我们看看 StridedNet 的更多层:
 
-```
+```py
 		# stack two more CONV layers, keeping the size of each filter
 		# as 3x3 but increasing to 64 total learned filters
 		model.add(Conv2D(64, (3, 3), padding="same",
@@ -571,7 +571,7 @@ class StridedNet:
 
 在大多数网络的末端，我们会添加一个全连接层:
 
-```
+```py
 		# fully-connected layer
 		model.add(Flatten())
 		model.add(Dense(512, kernel_initializer=init))
@@ -604,7 +604,7 @@ class StridedNet:
 
 打开`train.py`文件并插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -648,7 +648,7 @@ import os
 
 现在让我们继续[解析命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -669,7 +669,7 @@ args = vars(ap.parse_args())
 
 让我们准备加载数据集:
 
-```
+```py
 # initialize the set of labels from the CALTECH-101 dataset we are
 # going to train our network on
 LABELS = set(["Faces", "Leopards", "Motorbikes", "airplanes"])
@@ -692,7 +692,7 @@ labels = []
 
 让我们填充我们的`data`和`labels`列表:
 
-```
+```py
 # loop over the image paths
 for imagePath in imagePaths:
 	# extract the class label from the filename
@@ -723,7 +723,7 @@ for imagePath in imagePaths:
 
 下一个模块中有四个动作:
 
-```
+```py
 # convert the data into a NumPy array, then preprocess it by scaling
 # all pixel intensities to the range [0, 1]
 data = np.array(data, dtype="float") / 255.0
@@ -756,7 +756,7 @@ aug = ImageDataGenerator(rotation_range=20, zoom_range=0.15,
 
 现在我们准备编写代码来实际训练我们的模型:
 
-```
+```py
 # initialize the optimizer and model
 print("[INFO] compiling model...")
 opt = Adam(lr=1e-4, decay=1e-4 / args["epochs"])
@@ -782,7 +782,7 @@ H = model.fit(x=aug.flow(trainX, trainY, batch_size=32),
 
 为了评估我们的模型，我们将使用`testX`数据并打印一个`classification_report`:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(x=testX, batch_size=32)
@@ -795,7 +795,7 @@ print(classification_report(testY.argmax(axis=1),
 
 最后，我们将绘制我们的准确度/损失训练历史，并将其保存到磁盘:
 
-```
+```py
 # plot the training loss and accuracy
 N = args["epochs"]
 plt.style.use("ggplot")
@@ -822,7 +822,7 @@ plt.savefig(args["plot"])
 
 在那里，打开一个终端，将目录切换到下载代码和 CALTECH-101 数据集的位置，然后执行以下命令:
 
-```
+```py
 $ python train.py --dataset 101_ObjectCategories
 [INFO] loading images...
 [INFO] compiling model...

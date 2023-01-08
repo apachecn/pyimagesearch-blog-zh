@@ -84,7 +84,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -111,7 +111,7 @@ $ pip install opencv-contrib-python
 
 首先访问本教程的 ***“下载”*** 部分，检索源代码和示例图像。从那里，您将看到以下目录结构:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── beach.png
@@ -134,7 +134,7 @@ $ tree . --dirsfirst
 
 让我们学习如何使用 OpenCV 计算灰度直方图。打开项目结构中的`grayscale_histogram.py`文件，我们将开始:
 
-```
+```py
 # import the necessary packages
 from matplotlib import pyplot as plt
 import argparse
@@ -153,7 +153,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们从磁盘加载输入图像，并将其转换为灰度:
 
-```
+```py
 # load the input image and convert it to grayscale
 image = cv2.imread(args["image"])
 image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -161,7 +161,7 @@ image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 灰度转换完成后，我们可以使用`cv2.calcHist`函数来计算图像直方图:
 
-```
+```py
 # compute a grayscale histogram
 hist = cv2.calcHist([image], [0], None, [256], [0, 256])
 ```
@@ -172,7 +172,7 @@ hist = cv2.calcHist([image], [0], None, [256], [0, 256])
 
 计算出图像直方图后，我们在屏幕上显示灰度图像，并绘制出*未标准化的*图像直方图:
 
-```
+```py
 # matplotlib expects RGB images so convert and then display the image
 # with matplotlib
 plt.figure()
@@ -208,7 +208,7 @@ plt.xlim([0, 256])
 
 考虑到这一点，让我们看看如何归一化直方图，并获得每个像素的百分比计数:
 
-```
+```py
 # normalize the histogram
 hist /= hist.sum()
 
@@ -232,7 +232,7 @@ plt.show()
 
 请务必访问本指南的 ***“下载”*** 部分，以检索源代码和示例图像。从那里，您可以执行以下命令:
 
-```
+```py
 $ python grayscale_histogram.py --image beach.png
 ```
 
@@ -254,7 +254,7 @@ $ python grayscale_histogram.py --image beach.png
 
 打开项目目录中的`color_histograms.py`文件，我们将开始:
 
-```
+```py
 # import the necessary packages
 from matplotlib import pyplot as plt
 import argparse
@@ -274,7 +274,7 @@ args = vars(ap.parse_args())
 
 现在让我们计算三个直方图，输入 RGB 图像的每个通道一个直方图:
 
-```
+```py
 # load the input image from disk
 image = cv2.imread(args["image"])
 
@@ -316,7 +316,7 @@ for (chan, color) in zip(chans, colors):
 
 就这么简单。让我们来看一些代码来自动完成构建 2D 直方图的过程:
 
-```
+```py
 # create a new figure and then plot a 2D color histogram for the
 # green and blue channels
 fig = plt.figure()
@@ -363,7 +363,7 @@ print("2D histogram shape: {}, with {} values".format(
 
 使用 2D 直方图一次考虑两个通道。但是如果我们想考虑所有三个 RGB 通道呢？你猜对了。我们现在要构建一个 3D 直方图:
 
-```
+```py
 # our 2D histogram could only take into account 2 out of the 3
 # channels in the image so now let's build a 3D color histogram
 # (utilizing all channels) with 8 bins in each direction -- we
@@ -380,7 +380,7 @@ print("3D histogram shape: {}, with {} values".format(
 
 最后，让我们在屏幕上显示我们的原始输入`image`:
 
-```
+```py
 # display the original input image
 plt.figure()
 plt.axis("off")
@@ -398,7 +398,7 @@ plt.show()
 
 请务必访问本教程的 ***“下载”*** 部分，以检索源代码和示例图像。从那里，您可以执行`color_histograms.py`脚本:
 
-```
+```py
 $ python color_histograms.py --image beach.png
 ```
 
@@ -416,7 +416,7 @@ $ python color_histograms.py --image beach.png
 
 此外，我们可以通过命令行输出来研究图像直方图的形状:
 
-```
+```py
 2D histogram shape: (32, 32), with 1024 values
 3D histogram shape: (8, 8, 8), with 512 values
 ```
@@ -439,7 +439,7 @@ $ python color_histograms.py --image beach.png
 
 在您的项目目录结构中打开`histogram_with_mask.py`,我将向您展示它是如何完成的:
 
-```
+```py
 # import the necessary packages
 from matplotlib import pyplot as plt
 import numpy as np
@@ -450,7 +450,7 @@ import cv2
 
 现在让我们定义一个方便的函数`plot_histogram`，它将把我们的大多数 matplotlib 调用封装到一个简单易用的函数中:
 
-```
+```py
 def plot_histogram(image, title, mask=None):
 	# split the image into its respective channels, then initialize
 	# the tuple of channel names along with our figure for plotting
@@ -477,7 +477,7 @@ def plot_histogram(image, title, mask=None):
 
 有了`plot_histogram`函数定义，我们可以继续我们脚本的其余部分:
 
-```
+```py
 # load the beach image and plot a histogram for it
 image = cv2.imread("beach.png")
 plot_histogram(image, "Histogram for Original Image")
@@ -490,7 +490,7 @@ cv2.imshow("Original", image)
 
 现在，让我们来学习如何只为*图像的*蒙版区域计算颜色直方图:
 
-```
+```py
 # construct a mask for our image; our mask will be *black* for regions
 # we want to *ignore* and *white* for regions we want to *examine*
 mask = np.zeros(image.shape[:2], dtype="uint8")
@@ -521,7 +521,7 @@ plt.show()
 
 请务必访问本教程的 ***“下载”*** 部分，以检索源代码和示例图像。从那里，您可以执行`histogram_with_mask.py`脚本:
 
-```
+```py
 $ python histogram_with_mask.py
 ```
 

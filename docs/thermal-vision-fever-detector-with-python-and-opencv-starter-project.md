@@ -92,7 +92,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -125,7 +125,7 @@ $ pip install opencv-contrib-python
 
 首先，看看我们的项目结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── fever_detector_image.py
@@ -167,7 +167,7 @@ $ tree --dirsfirst
 
 打开您的`fever_detector_image.py`文件并导入 NumPy 和 OpenCV 库:
 
-```
+```py
 # import the necessary packages
 import cv2
 import numpy as np
@@ -177,14 +177,14 @@ import numpy as np
 
 首先，我们将开始打开热灰色图像:
 
-```
+```py
 # open the gray16 image
 gray16_image = cv2.imread("faces_gray16_image.tiff", cv2.IMREAD_ANYDEPTH)
 ```
 
 `cv2.IMREAD_ANYDEPTH`标志允许我们以 16 位格式打开灰色 16 图像。
 
-```
+```py
 # convert the gray16 image into a gray8
 gray8_image = np.zeros((120,160), dtype=np.uint8)
 gray8_image = cv2.normalize(gray16_image, gray8_image, 0, 255, cv2.NORM_MINMAX)
@@ -197,7 +197,7 @@ gray8_image = np.uint8(gray8_image)
 
 然后，我们使用我们最喜欢的 OpenCV colormap*为 gray8 图像着色，以获得不同的热调色板(**图 3** ，中间):
 
-```
+```py
 # color the gray8 image using OpenCV colormaps
 gray8_image = cv2.applyColorMap(gray8_image, cv2.COLORMAP_INFERNO)
 ```
@@ -206,21 +206,21 @@ gray8_image = cv2.applyColorMap(gray8_image, cv2.COLORMAP_INFERNO)
 
 最后，我们实现了我们的 Haar 级联算法。
 
-```
+```py
 # load the haar cascade face detector
 haar_cascade_face = cv2.CascadeClassifier('haarcascade_frontalface_alt2.xml')
 ```
 
 在**第 17 行**上，加载了由 OpenCV 库(GitHub)的开发者和维护者提供的带有我们预先训练好的人脸检测器的 XML `haarcascade_frontalface_alt2.xml`文件。
 
-```
+```py
 # detect faces in the input image using the haar cascade face detector
 faces = haar_cascade_face.detectMultiScale(gray8_image, scaleFactor=1.1, minNeighbors=5, minSize=(10, 10), flags=cv2.CASCADE_SCALE_IMAGE)
 ```
 
 在**第 20 行**上，应用了哈尔级联检测器。
 
-```
+```py
 # loop over the bounding boxes
 for (x, y, w, h) in faces:
 # draw the rectangles
@@ -229,7 +229,7 @@ cv2.rectangle(gray8_image, (x, y), (x + w, y + h), (255, 255, 255), 1)
 
 在**第 23-25 行**上，我们循环检测到的人脸，并绘制相应的矩形。
 
-```
+```py
 # show result
 cv2.imshow("gray8-face-detected", gray8_image)
 cv2.waitKey(0)
@@ -253,7 +253,7 @@ cv2.waitKey(0)
 
 在导入必要的库之后，我们使用`fever_detector_video.py`文件来遵循我们在上一节中看到的相同过程，在每一帧上循环:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import cv2
@@ -263,7 +263,7 @@ import argparse
 
 在本例中，我们还导入了 argparse 和 os 库。
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", required=True, help="path of the video sequence")
@@ -272,7 +272,7 @@ args = vars(ap.parse_args())
 
 如果您熟悉 PyImageSearch 教程，那么您已经知道 argparse Python 库。我们用它在运行时给程序提供额外的信息(例如，命令行参数)。在这种情况下，我们将使用它来指定我们的热视频路径(**第 8-10 行**)。
 
-```
+```py
 # load the haar cascade face detector
 haar_cascade_face = cv2.CascadeClassifier("haarcascade_frontalface_alt2.xml")
 
@@ -282,7 +282,7 @@ fps = 8
 
 让我们加载预训练的 Haar Cascade 人脸检测器，并定义每秒帧序列值(**第 13-16 行**):
 
-```
+```py
 # loop over the thermal video frames to detect faces
 for image in sorted(os.listdir(args["video"])):
 
@@ -339,7 +339,7 @@ for image in sorted(os.listdir(args["video"])):
 
 我们继续编码吧！首先，我们打开我们的`fever_detector_image.py`文件。
 
-```
+```py
 # loop over the bounding boxes to measure their temperature
 for (x, y, w, h) in faces:
 
@@ -404,14 +404,14 @@ for (x, y, w, h) in faces:
 
 为此，为了简化过程，我们将围绕 Haar 级联人脸检测的中心点定义一个圆形 ROI。
 
-```
+```py
 # draw the rectangles
 cv2.rectangle(gray8_image, (x, y), (x + w, y + h), (255, 255, 255), 1)
 ```
 
 为此，首先，我们为每个检测到的人脸再次绘制一个 Haar Cascade 矩形(**行 39** )。
 
-```
+```py
 # define the roi with a circle at the haar cascade origin coordinate
 
 # haar cascade center for the circle
@@ -426,7 +426,7 @@ radius = w // 4
 
 首先，我们将 16 位热成像的每个像素值分成两组，每组 8 位(2 个字节)，如图 5 所示。
 
-```
+```py
 # get the 8 most significant bits of the gray16 image
 # (we follow this process because we can't extract a circle
 # roi in a gray16 image directly)
@@ -435,7 +435,7 @@ gray16_high_byte = (np.right_shift(gray16_image, 8)).astype('uint8')
 
 我们右移第 51 行**上的 16 位，丢失 8 个较低有效位，并通过将图像转换为灰度 8 来删除新的最高有效位(8 个零)。**
 
-```
+```py
 # get the 8 less significant bits of the gray16 image
 # (we follow this process because we can't extract a circle
 # roi in a gray16 image directly)
@@ -444,7 +444,7 @@ gray16_low_byte = (np.left_shift(gray16_image, 8) / 256).astype('uint16')
 
 我们左移第 56 行**上的 16 位，丢失 8 个最高有效位(msb ),并通过将值除以 256 来转换新的 8 个 msb。**
 
-```
+```py
 # apply the mask to our 8 most significant bits
 mask = np.zeros_like(gray16_high_byte)
 cv2.circle(mask, haar_cascade_circle_origin, radius, (255, 255, 255), -1)
@@ -460,7 +460,7 @@ gray16_low_byte = np.bitwise_and(gray16_low_byte, mask)
 
 如果您不熟悉这些操作，我们鼓励您遵循 [OpenCV 按位 AND、OR、XOR 和 NOT](https://pyimagesearch.com/2021/01/19/opencv-bitwise-and-or-xor-and-not/) 。
 
-```
+```py
 # create/recompose our gray16 roi
 gray16_roi = np.array(gray16_high_byte, dtype=np.uint16)
 gray16_roi = gray16_roi * 256
@@ -469,7 +469,7 @@ gray16_roi = gray16_roi | gray16_low_byte
 
 在第**行第 69-71** 行，我们用内眼角区域的温度值重新组合图像，获得我们的 16 位圆形 ROI。
 
-```
+```py
 # estimate the face temperature by obtaining the higher value
 higher_temperature = np.amax(gray16_roi)
 
@@ -480,7 +480,7 @@ higher_temperature = (higher_temperature / 100) - 273.15
 
 最后，为了容易地确定检测到的面部是否具有高于正常范围的温度，即，超过 99-100.5 F(大约 37-38 C)，我们在第 74-78 行上计算我们的圆形 ROI 的最高温度值。
 
-```
+```py
 # fever temperature threshold in Celsius or Fahrenheit
 fever_temperature_threshold = 37.0
 fever_temperature_threshold = 99.0
@@ -488,7 +488,7 @@ fever_temperature_threshold = 99.0
 
 然后，如果该值(**第 88 行**)高于我们的阈值(`fever_temperature_threshold`、**第 32 行和第 33 行**)，我们将显示发烧红色警报文本(**第 81 行**)。再次我们要记住上面提到的 ***免责声明*** 。
 
-```
+```py
     # write temperature value in gray8
     if higher_temperature < fever_temperature_threshold:
 
@@ -542,7 +542,7 @@ cv2.waitKey(0)
 
 打开`fever_detector_camera.py`并导入 NumPy 和 OpenCV 库:
 
-```
+```py
 # import the necessary packages
 import cv2
 import numpy as np
@@ -552,7 +552,7 @@ import numpy as np
 
 设置热感摄像机指数和分辨率，在我们的例子中，`160x120`:
 
-```
+```py
 # set up the thermal camera index (thermal_camera = cv2.VideoCapture(0, cv2.CAP_DSHOW) on Windows OS)
 thermal_camera = cv2.VideoCapture(0)
 
@@ -567,7 +567,7 @@ thermal_camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 120)
 
 将热感摄像机设置为 gray16 源，并接收 raw 格式的数据:
 
-```
+```py
 # set up the thermal camera to get the gray16 stream and raw data
 thermal_camera.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter.fourcc('Y','1','6',' '))
 thermal_camera.set(cv2.CAP_PROP_CONVERT_RGB, 0)
@@ -575,7 +575,7 @@ thermal_camera.set(cv2.CAP_PROP_CONVERT_RGB, 0)
 
 **第 14 行**阻止 RGB 转换。
 
-```
+```py
 # load the haar cascade face detector
 haar_cascade_face = cv2.CascadeClassifier("haarcascade_frontalface_alt2.xml")
 
@@ -586,7 +586,7 @@ fever_temperature_threshold = 37.0
 
 让我们加载预训练的 Haar Cascade 人脸检测器，并定义我们的发烧阈值(`fever_temperature_threshold`、**第 20 行和第 21 行**)。
 
-```
+```py
 # loop over the thermal camera frames
 while True:
 
@@ -705,7 +705,7 @@ cv2.destroyAllWindows()
 
 **Garcia-Martin，R.** “热视觉:使用 Python 和 OpenCV 的发热探测器(启动项目)， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva 和 R. Raha 编辑。，2022 年，【https://pyimg.co/6nxs0 
 
-```
+```py
 @incollection{Garcia-Martin_2022_Fever,
   author = {Raul Garcia-Martin},
   title = {Thermal Vision: Fever Detector with {P}ython and {OpenCV} (starter project)},

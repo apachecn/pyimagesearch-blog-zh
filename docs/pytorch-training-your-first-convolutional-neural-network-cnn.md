@@ -48,7 +48,7 @@
 
 幸运的是，使用 pip 安装这三个都非常容易:
 
-```
+```py
 $ pip install torch torchvision
 $ pip install opencv-contrib-python
 $ pip install scikit-learn
@@ -91,7 +91,7 @@ KMNIST 数据集中总共有 10 个类(即 10 个平假名字符)，每个类都
 
 然后，您将看到以下目录结构:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── output
@@ -128,7 +128,7 @@ $ tree . --dirsfirst
 
 用 PyTorch 学习 CNN 的最好方法是实现一个，所以说，打开`pyimagesearch`模块中的`lenet.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from torch.nn import Module
 from torch.nn import Conv2d
@@ -151,7 +151,7 @@ from torch import flatten
 
 有了我们的导入，我们可以使用 PyTorch 实现我们的`LeNet`类:
 
-```
+```py
 class LeNet(Module):
 	def __init__(self, numChannels, classes):
 		# call the parent constructor
@@ -216,7 +216,7 @@ class LeNet(Module):
 
 现在让我们检查一下`forward`功能:
 
-```
+```py
 	def forward(self, x):
 		# pass the input through our first set of CONV => RELU =>
 		# POOL layers
@@ -272,7 +272,7 @@ class LeNet(Module):
 
 打开项目目录结构中的`train.py`文件，让我们开始工作:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -308,7 +308,7 @@ import time
 
 现在让我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-m", "--model", type=str, required=True,
@@ -325,7 +325,7 @@ args = vars(ap.parse_args())
 
 继续，我们现在有一些重要的初始化要处理:
 
-```
+```py
 # define training hyperparameters
 INIT_LR = 1e-3
 BATCH_SIZE = 64
@@ -345,7 +345,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 让我们开始准备数据集:
 
-```
+```py
 # load the KMNIST dataset
 print("[INFO] loading the KMNIST dataset...")
 trainData = KMNIST(root="data", train=True, download=True,
@@ -380,7 +380,7 @@ numValSamples = int(len(trainData) * VAL_SPLIT)
 
 下一步是为每一个创建一个`DataLoader`:
 
-```
+```py
 # initialize the train, validation, and test data loaders
 trainDataLoader = DataLoader(trainData, shuffle=True,
 	batch_size=BATCH_SIZE)
@@ -400,7 +400,7 @@ valSteps = len(valDataLoader.dataset) // BATCH_SIZE
 
 现在让我们初始化 LeNet:
 
-```
+```py
 # initialize the LeNet model
 print("[INFO] initializing the LeNet model...")
 model = LeNet(
@@ -444,7 +444,7 @@ startTime = time.time()
 
 以下是我们的培训循环:
 
-```
+```py
 # loop over our epochs
 for e in range(0, EPOCHS):
 	# set the model in training mode
@@ -505,7 +505,7 @@ for e in range(0, EPOCHS):
 
 此时，我们已经循环了当前时期训练集中的所有批次的数据，现在我们可以在验证集上评估我们的模型:
 
-```
+```py
 	# switch off autograd for evaluation
 	with torch.no_grad():
 		# set the model in evaluation mode
@@ -536,7 +536,7 @@ for e in range(0, EPOCHS):
 
 我们通过计算一些统计数据来完善我们的训练循环:
 
-```
+```py
 	# calculate the average training and validation loss
 	avgTrainLoss = totalTrainLoss / trainSteps
 	avgValLoss = totalValLoss / valSteps
@@ -569,7 +569,7 @@ for e in range(0, EPOCHS):
 
 既然训练已经完成，我们需要在*测试集*上评估我们的模型(之前我们只使用了训练集和验证集):
 
-```
+```py
 # finish measuring how long training took
 endTime = time.time()
 print("[INFO] total time taken to train the model: {:.2f}s".format(
@@ -616,7 +616,7 @@ print(classification_report(testData.targets.cpu().numpy(),
 
 这里我们要做的最后一步是绘制我们的训练和验证历史，然后将我们的模型权重序列化到磁盘:
 
-```
+```py
 # plot the training loss and accuracy
 plt.style.use("ggplot")
 plt.figure()
@@ -653,7 +653,7 @@ torch.save(model, args["model"])
 
 在那里，您可以通过执行以下命令来训练您的 PyTorch CNN:
 
-```
+```py
 $ python train.py --model output/model.pth --plot output/plot.png
 [INFO] loading the KMNIST dataset...
 [INFO] generating the train-val split...
@@ -729,7 +729,7 @@ weighted avg       0.95      0.95      0.95     10000
 
 在进入下一部分之前，看一下您的`output`目录:
 
-```
+```py
 $ ls output/
 model.pth	plot.png
 ```
@@ -742,7 +742,7 @@ model.pth	plot.png
 
 打开项目目录结构中的`predict.py`文件，我们将开始:
 
-```
+```py
 # set the numpy seed for better reproducibility
 import numpy as np
 np.random.seed(42)
@@ -770,7 +770,7 @@ import cv2
 
 接下来是我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-m", "--model", type=str, required=True,
@@ -782,7 +782,7 @@ args = vars(ap.parse_args())
 
 继续，让我们设定我们的`device`:
 
-```
+```py
 # set the device we will be using to test the model
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -813,7 +813,7 @@ model.eval()
 
 现在让我们对测试集的一个样本进行预测:
 
-```
+```py
 # switch off autograd
 with torch.no_grad():
 	# loop over the test set
@@ -844,7 +844,7 @@ with torch.no_grad():
 
 剩下的只是一点想象:
 
-```
+```py
 		# convert the image from grayscale to RGB (so we can draw on
 		# it) and resize it (so we can more easily see it on our
 		# screen)
@@ -881,7 +881,7 @@ KMNIST 数据集中的每个图像都是单通道灰度图像；但是，我们�
 
 从那里，您可以执行`predict.py`脚本:
 
-```
+```py
 $ python predict.py --model output/model.pth
 [INFO] loading the KMNIST test dataset...
 [INFO] Ground truth label: ki, Predicted label: ki

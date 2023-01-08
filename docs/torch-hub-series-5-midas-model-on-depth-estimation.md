@@ -41,7 +41,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -70,7 +70,7 @@ $ pip install opencv-contrib-python
 
 从这里，看一下目录结构:
 
-```
+```py
 !tree .
 .
 ├── midas_inference.py
@@ -97,7 +97,7 @@ $ pip install opencv-contrib-python
 
 由于其紧凑性，我们将再次使用来自 Kaggle 的[狗&猫图像](https://www.kaggle.com/chetankv/dogs-cats-images)数据集。
 
-```
+```py
 $ mkdir ~/.kaggle
 $ cp <path to your kaggle.json> ~/.kaggle/
 $ chmod 600 ~/.kaggle/kaggle.json
@@ -116,7 +116,7 @@ $ rm -rf "/content/dog vs cat"
 
 在`pyimagesearch`目录中，您会发现一个名为`config.py`的脚本。这个脚本将包含我们项目的完整的端到端配置管道。
 
-```
+```py
 # import the necessary packages
 import torch
 import os
@@ -147,7 +147,7 @@ MIDAS_OUTPUT = os.path.join(OUTPUT_PATH, "midas_output")
 
 在今天的任务中，我们将只使用一个助手函数来帮助我们的管道。为此，我们将转到`pyimagesearch`目录中的第二个脚本`data_utils.py`。
 
-```
+```py
 # import the necessary packages
 from torch.utils.data import DataLoader
 
@@ -168,7 +168,7 @@ def get_dataloader(dataset, batchSize, shuffle=True):
 
 我们在这里选择的方法是一种处理大型数据集的完全可靠的方法，即使您选择训练模型以便稍后进行微调，管道也是有用的。我们还考虑在不调用 MiDaS 储存库的预制功能的情况下尽可能准备数据。
 
-```
+```py
 # import necessary packages
 from pyimagesearch.data_utils import get_dataloader
 from pyimagesearch import config
@@ -190,7 +190,7 @@ testLoader = get_dataloader(testDataset, config.PRED_BATCH_SIZE)
 
 如果你的数据集的格式与我们在项目中使用的格式相同(例如，文件夹下的图像命名为 labels)，那么我们可以使用`ImageFolder`函数创建一个 PyTorch 数据集实例(**第 14 行**)。最后，我们使用之前定义的`get_dataloader`函数来生成一个数据加载器实例(**第 15 行**)。
 
-```
+```py
 # initialize the midas model using torch hub
 modelType = "DPT_Large" 
 midas = torch.hub.load("intel-isl/MiDaS", modelType)
@@ -202,7 +202,7 @@ midas.eval()
 
 接下来，我们使用`torch.hub.load`函数在本地运行时加载 MiDaS 模型(**第 18 行和第 19 行**)。同样，几个可用的选择可以在这里调用，所有这些都可以在这里找到[。最后，我们将模型加载到我们的设备中，并将其设置为评估模式(**第 22 行和第 23 行**)。](https://github.com/isl-org/MiDaS)
 
-```
+```py
 # initialize iterable variable
 sweeper = iter(testLoader)
 
@@ -232,7 +232,7 @@ output = prediction.cpu().numpy()
 
 最后，我们将重新格式化的预测存储到 numpy 格式的输出变量中(**第 45 行**)。
 
-```
+```py
 # define row and column variables
 rows = config.PRED_BATCH_SIZE
 cols = 2
@@ -292,7 +292,7 @@ plt.savefig(outputFileName)
 
 **Chakraborty，D.** “火炬中心系列# 5:MiDaS-深度估计模型”， *PyImageSearch* ，2022 年，[https://PyImageSearch . com/2022/01/17/Torch-Hub-Series-5-MiDaS-深度估计模型/](https://pyimagesearch.com/2022/01/17/torch-hub-series-5-midas-model-on-depth-estimation/)
 
-```
+```py
 @article{Chakraborty_2022_THS5,
   author = {Devjyoti Chakraborty},
   title = {Torch Hub Series \#5: {MiDaS} — Model on Depth Estimation},

@@ -61,7 +61,7 @@
 
 解压文件后，您将看到以下目录结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── config
@@ -111,7 +111,7 @@ $ tree --dirsfirst
 
 然后，您可以 pip 安装所有需要的软件包:
 
-```
+```py
 $ workon <env_name> # insert your environment name such as cv or py3cv4
 $ pip install opencv-contrib-python
 $ pip install imutils
@@ -198,7 +198,7 @@ Twilio 将成为我们的树莓派和手机之间的桥梁。我想知道鹰嘴�
 
 现在让我们来看看带注释的 JSON 文件:
 
-```
+```py
 {
 	// two constants, first threshold for detecting if the
 	// refrigerator is open, and a second threshold for the number of
@@ -212,7 +212,7 @@ Twilio 将成为我们的树莓派和手机之间的桥梁。我想知道鹰嘴�
 
 现在让我们来处理 AWS + S3 配置:
 
-```
+```py
 	// variables to store your aws account credentials
 	"aws_access_key_id": "YOUR_AWS_ACCESS_KEY_ID",
 	"aws_secret_access_key": "YOUR_AWS_SECRET_ACCESS_KEY",
@@ -224,7 +224,7 @@ Twilio 将成为我们的树莓派和手机之间的桥梁。我想知道鹰嘴�
 
 最后是我们的 Twilio 配置:
 
-```
+```py
 	// variables to store your twilio account credentials
 	"twilio_sid": "YOUR_TWILIO_SID",
 	"twilio_auth": "YOUR_TWILIO_AUTH_ID",
@@ -246,7 +246,7 @@ Twilio 安全设置在**第 14 行和第 15 行**。`"twilio_from"`值 ***必须
 
 现在让我们来看看如何实现`Conf`类:
 
-```
+```py
 # import the necessary packages
 from json_minify import json_minify
 import json
@@ -277,7 +277,7 @@ class Conf:
 
 为了保持代码整洁有序，我们将把这个功能封装在一个名为`TwilioNotifier`的类中——现在让我们回顾一下这个类:
 
-```
+```py
 # import the necessary packages
 from twilio.rest import Client
 import boto3
@@ -310,7 +310,7 @@ class TwilioNotifier:
 
 因此，核心文本消息发送逻辑在下一个方法中，`_send`:
 
-```
+```py
 	def _send(self, msg, tempVideo):
 		# create a s3 client object
 		s3 = boto3.client("s3",
@@ -339,7 +339,7 @@ class TwilioNotifier:
 
 让我们继续发送消息:
 
-```
+```py
 		# get the bucket location and build the url
 		location = s3.get_bucket_location(
 			Bucket=self.conf["s3_bucket"])["LocationConstraint"]
@@ -384,7 +384,7 @@ URL 在第 30-33 行生成。
 
 打开`detect.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from __future__ import print_function
 from pyimagesearch.notifications import TwilioNotifier
@@ -407,7 +407,7 @@ import sys
 
 让我们定义一个中断信号处理程序并解析我们的配置文件路径参数:
 
-```
+```py
 # function to handle keyboard interrupt
 def signal_handler(sig, frame):
 	print("[INFO] You pressed `ctrl + c`! Closing refrigerator monitor" \
@@ -430,7 +430,7 @@ args = vars(ap.parse_args())
 
 让我们执行初始化:
 
-```
+```py
 # load the configuration file and initialize the Twilio notifier
 conf = Conf(args["conf"])
 tn = TwilioNotifier(conf)
@@ -468,7 +468,7 @@ H = None
 
 是时候开始循环帧了:
 
-```
+```py
 # loop over the frames of the stream
 while True:
 	# grab both the next frame from the stream and the previous
@@ -502,7 +502,7 @@ while True:
 
 现在让我们确定冰箱是否打开:
 
-```
+```py
 	# calculate the average of all pixels where a higher mean
 	# indicates that there is more light coming into the refrigerator
 	mean = np.mean(gray)
@@ -521,7 +521,7 @@ while True:
 
 现在让我们决定是否需要开始捕捉视频:
 
-```
+```py
 	# if the fridge is open and previously it was closed, it means
 	# the fridge has been just opened
 	if fridgeOpen and not fridgePrevOpen:
@@ -542,7 +542,7 @@ while True:
 
 现在我们将处理**冰箱先前打开的情况:**
 
-```
+```py
 	# if the fridge is open then there are 2 possibilities,
 	# 1) it's left open for more than the *threshold* seconds. 
 	# 2) it's closed in less than or equal to the *threshold* seconds.
@@ -582,7 +582,7 @@ while True:
 
 现在让我们来看看最常见的场景，即**冰箱以前是开着的，但现在是关着的**(例如，某个小偷偷了你的食物，或者当你饿了的时候可能是你):
 
-```
+```py
 		# check to see if the fridge is closed
 		elif not fridgeOpen:
 			# if a notification has already been sent, then just set 
@@ -626,7 +626,7 @@ while True:
 
 我们的最后一个块完成了循环并执行清理:
 
-```
+```py
 	# check to see if we should write the frame to disk
 	if writer is not None:
 		writer.write(frame)
@@ -681,7 +681,7 @@ vs.stop()
 
 这些命令是:
 
-```
+```py
 $ screen
 # wait for screen to start
 $ source ~/.profile

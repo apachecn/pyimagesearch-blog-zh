@@ -59,7 +59,7 @@ U-Net 架构(见**图 1** )遵循编码器-解码器级联结构，其中编码�
 
 幸运的是，使用 pip 安装这些包非常容易:
 
-```
+```py
 $ pip install torch torchvision
 $ pip install matplotlib
 $ pip install opencv-contrib-python
@@ -93,7 +93,7 @@ $ pip install tqdm
 
 从这里，看一下目录结构:
 
-```
+```py
 .
 ├── dataset
 │   └── train
@@ -120,7 +120,7 @@ $ pip install tqdm
 
 我们从讨论`config.py`文件开始，它存储了教程中使用的配置和参数设置。
 
-```
+```py
 # import the necessary packages
 import torch
 import os
@@ -146,7 +146,7 @@ PIN_MEMORY = True if DEVICE == "cuda" else False
 
 在**第 13 行**，我们定义了数据集的一部分，我们将为测试集保留。然后，在**行第 16** 处，我们定义了`DEVICE`参数，该参数根据可用性决定我们是使用 GPU 还是 CPU 来训练我们的分割模型。在这种情况下，我们使用支持 CUDA 的 GPU 设备，并且在第 19 行将`PIN_MEMORY`参数设置为`True`。
 
-```
+```py
 # define the number of channels in the input, number of classes,
 # and number of levels in the U-Net model
 NUM_CHANNELS = 1
@@ -188,7 +188,7 @@ TEST_PATHS = os.path.sep.join([BASE_OUTPUT, "test_paths.txt"])
 
 让我们从项目目录的`pyimagesearch`文件夹中打开`dataset.py`文件。
 
-```
+```py
 # import the necessary packages
 from torch.utils.data import Dataset
 import cv2
@@ -247,7 +247,7 @@ class SegmentationDataset(Dataset):
 
 我们从项目目录的`pyimagesearch`文件夹中打开我们的`model.py`文件，然后开始。
 
-```
+```py
 # import the necessary packages
 from . import config
 from torch.nn import ConvTranspose2d
@@ -267,7 +267,7 @@ import torch
 
 接下来，我们定义一个`Block`模块作为编码器和解码器架构的构建单元。值得注意的是，我们定义的所有模型或模型子部分都需要从 PyTorch `Module`类继承，该类是 PyTorch 中所有神经网络模块的父类。
 
-```
+```py
 class Block(Module):
 	def __init__(self, inChannels, outChannels):
 		super().__init__()
@@ -287,7 +287,7 @@ class Block(Module):
 
 我们初始化两个卷积层(即`self.conv1`和`self.conv2`)以及第 17-19 行上的一个 ReLU 激活。在**第 21-23 行**上，我们定义了`forward`函数，该函数将我们的特征图`x`作为输入，应用`self.conv1 =>` **`self.relu`** `=> self.conv2`操作序列并返回输出特征图。
 
-```
+```py
 class Encoder(Module):
 	def __init__(self, channels=(3, 16, 32, 64)):
 		super().__init__()
@@ -323,7 +323,7 @@ class Encoder(Module):
 
 最后，我们在第 47 行的**返回我们的`blockOutputs`列表。**
 
-```
+```py
 class Decoder(Module):
 	def __init__(self, channels=(64, 32, 16)):
 		super().__init__()
@@ -385,7 +385,7 @@ class Decoder(Module):
 
 既然我们已经定义了组成我们的 U-Net 模型的子模块，我们就准备构建我们的 U-Net 模型类。
 
-```
+```py
 class UNet(Module):
 	def __init__(self, encChannels=(3, 16, 32, 64),
 		 decChannels=(64, 32, 16),
@@ -415,7 +415,7 @@ class UNet(Module):
 
 我们还在**行 102 和 103** 上初始化`self.retainDim`和`self.outSize`属性。
 
-```
+```py
 def forward(self, x):
 		# grab the features from the encoder
 		encFeatures = self.encoder(x)
@@ -463,7 +463,7 @@ def forward(self, x):
 *   定义训练循环
 *   可视化训练和测试损失曲线
 
-```
+```py
 # USAGE
 # python train.py
 
@@ -494,7 +494,7 @@ import os
 
 一旦我们导入了所有必需的包，我们将加载我们的数据并构建数据加载管道。
 
-```
+```py
 # load the image and mask filepaths in a sorted manner
 imagePaths = sorted(list(paths.list_images(config.IMAGE_DATASET_PATH)))
 maskPaths = sorted(list(paths.list_images(config.MASK_DATASET_PATH)))
@@ -524,7 +524,7 @@ f.close()
 
 现在，我们已经准备好设置数据加载管道了。
 
-```
+```py
 # define transformations
 transforms = transforms.Compose([transforms.ToPILImage(),
  	transforms.Resize((config.INPUT_IMAGE_HEIGHT,
@@ -562,7 +562,7 @@ testLoader = DataLoader(testDS, shuffle=False,
 
 既然我们已经构建并定义了数据加载管道，我们将初始化我们的 U-Net 模型和训练参数。
 
-```
+```py
 # initialize our UNet model
 unet = UNet().to(config.DEVICE)
 
@@ -588,7 +588,7 @@ H = {"train_loss": [], "test_loss": []}
 
 最后，我们已经准备好开始理解我们的训练循环。
 
-```
+```py
 # loop over epochs
 print("[INFO] training the network...")
 startTime = time.time()
@@ -678,7 +678,7 @@ print("[INFO] total time taken to train the model: {:.2f}s".format(
 
 在**的第 133 行和第 134 行**上，我们记下了我们训练循环的结束时间，并从`startTime`(我们在训练开始时初始化的)中减去`endTime`，以获得我们网络训练期间所用的总时间。
 
-```
+```py
 # plot the training loss
 plt.style.use("ggplot")
 plt.figure()
@@ -706,7 +706,7 @@ torch.save(unet, config.MODEL_PATH)
 
 从我们的项目目录中打开`predict.py`文件。
 
-```
+```py
 # USAGE
 # python predict.py
 
@@ -747,7 +747,7 @@ def prepare_plot(origImage, origMask, predMask):
 
 最后，**行 22-24** 为我们的情节设置标题，在**行 27 和 28** 显示它们。
 
-```
+```py
 def make_predictions(model, imagePath):
 	# set model to evaluation mode
 	model.eval()
@@ -790,7 +790,7 @@ def make_predictions(model, imagePath):
 
 现在，我们将我们的`image`处理成模型可以处理的格式。请注意，目前我们的`image`的形状是`[128, 128, 3]`。然而，我们的分割模型接受格式为`[batch_dimension, channel_dimension, height, width]`的四维输入。
 
-```
+```py
 		# make the channel axis to be the leading one, add a batch
 		# dimension, create a PyTorch tensor, and flash it to the
 		# current device
@@ -822,7 +822,7 @@ def make_predictions(model, imagePath):
 
 我们现在可以看到我们的模型在运行了。
 
-```
+```py
 # load the image paths in our testing file and randomly select 10
 # image paths
 print("[INFO] loading up test image paths...")

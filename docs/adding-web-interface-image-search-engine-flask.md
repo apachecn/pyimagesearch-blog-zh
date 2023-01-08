@@ -26,14 +26,14 @@
 
 现在构建 Docker 映像:
 
-```
+```py
 $ docker build --rm -t opencv-docker .
 
 ```
 
 构建完成后，运行 Docker 容器:
 
-```
+```py
 $ docker run -p 80:5000 opencv-docker
 
 ```
@@ -46,7 +46,7 @@ $ docker run -p 80:5000 opencv-docker
 
 从[库](https://github.com/realpython/flask-image-search)中抓取 *_setup.zip* ，解压缩文件，并将它们添加到您的项目目录中。创建并激活一个 virtualenv，然后通过 Pip 安装需求:
 
-```
+```py
 $ pip install flask numpy scipy matplotlib scikit-image gunicorn
 $ pip freeze > requirements.txt
 
@@ -58,7 +58,7 @@ $ pip freeze > requirements.txt
 
 现在，您的项目目录应该如下所示:
 
-```
+```py
 ├── Dockerfile
 ├── app
 │   ├── app.py
@@ -114,7 +114,7 @@ $ pip freeze > requirements.txt
 
 将下面的代码添加到 *app.py* 中，就在主路由的下面。
 
-```
+```py
 # search route
 @app.route('/search', methods=['POST'])
 def search():
@@ -167,7 +167,7 @@ def search():
 
 请务必更新导入-
 
-```
+```py
 import os
 
 from flask import Flask, render_template, request, jsonify
@@ -179,7 +179,7 @@ from pyimagesearch.searcher import Searcher
 
 -并在创建 Flask 实例的下面添加以下变量，该变量指定图像搜索中使用的 *index.csv* 文件的路径-
 
-```
+```py
 INDEX = os.path.join(os.path.dirname(__file__), 'index.csv')
 
 ```
@@ -194,7 +194,7 @@ INDEX = os.path.join(os.path.dirname(__file__), 'index.csv')
 
 我们已经包含了 Bootstrap 样式表(通过一个 [CDN](http://en.wikipedia.org/wiki/Content_delivery_network) )以及 jQuery 和 Bootstrap JavaScript 库以及一个定制样式表和 JavaScript 文件(两者都位于“static”文件夹中):
 
-```
+```py
 <!-- stylesheets -->
 <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/yeti/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet">
@@ -212,7 +212,7 @@ INDEX = os.path.join(os.path.dirname(__file__), 'index.csv')
 
 首先，让我们更新一下*index.html*模板:
 
-```
+```py
 {% extends "_base.html" %}
 
 {% block content %}
@@ -263,7 +263,7 @@ INDEX = os.path.join(os.path.dirname(__file__), 'index.csv')
 
 重建 Docker 映像，然后运行新容器:
 
-```
+```py
 $ docker build --rm -t opencv-docker .
 $ docker run -p 80:5000 opencv-docker
 
@@ -271,7 +271,7 @@ $ docker run -p 80:5000 opencv-docker
 
 **不带 Docker:**
 
-```
+```py
 $ python app/app.py
 
 ```
@@ -294,7 +294,7 @@ $ python app/app.py
 
 更新 *main.js* 文件:
 
-```
+```py
 // ----- custom js ----- //
 
 $(function() {
@@ -333,7 +333,7 @@ $(function() {
 
 更新 *main.js* 这样:
 
-```
+```py
 // ----- custom js ----- //
 
 $(function() {
@@ -378,7 +378,7 @@ $(function() {
 
 这一次，在用户点击之后，我们向`/search`端点发送一个 POST 请求，其中包括图像 URL。后端执行它的魔法(抓取图像，运行搜索代码)，然后以 JSON 格式返回结果。AJAX 请求有两个处理程序——一个用于成功，一个用于失败。跳回到后端，`/search`路由或者返回 200 响应(成功)或者 500 响应(失败)以及数据或错误消息:
 
-```
+```py
     # return success
     return jsonify(results=(RESULTS_ARRAY[::-1]))
 
@@ -391,7 +391,7 @@ except:
 
 回到前端…由于结果是成功的，您可以在 JavaScript 控制台中看到数据:
 
-```
+```py
 [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object]
 
 ```
@@ -404,7 +404,7 @@ except:
 
 我们在最后冲刺阶段！让我们更新成功和错误处理程序，以便一旦其中一个从后端接收到数据，我们就将该数据追加到 DOM:
 
-```
+```py
 <a href="'+url+data[i][" data-mce-href="'+url+data[i][">'+data[i]["image"]+'</a>'+data[i]['score']+'')   }; }, // handle error error: function(error) {   console.log(error);   // show error   $("#error").show(); }" >// handle success
 success: function(result) {
   console.log(result.results);
@@ -427,7 +427,7 @@ error: function(error) {
 
 我们还需要在文件 JavaScript 文件的顶部添加一些全局变量:
 
-```
+```py
 // ----- custom js ----- //
 
 // global
@@ -444,14 +444,14 @@ var data = [];
 
 添加:
 
-```
+```py
 <p id="error">Oh no! No results! Check your internet connection.</p>
 
 ```
 
 正上方:
 
-```
+```py
 <table class="table" id="results-table">
 
 ```
@@ -466,7 +466,7 @@ var data = [];
 
 主要功能完成后，我们只需要做一些日常工作。更新 *main.js* 这样:
 
-```
+```py
 // ----- custom js ----- //
 
 // hide initial
@@ -532,7 +532,7 @@ $(function() {
 
 看一看添加的代码…
 
-```
+```py
 // hide initial
 $("#searching").hide();
 $("#results-table").hide();
@@ -542,7 +542,7 @@ $("#error").hide();
 
 和
 
-```
+```py
 // empty/hide results
 $("#results").empty();
 $("#results-table").hide();
@@ -552,7 +552,7 @@ $("#error").hide();
 
 和
 
-```
+```py
 // remove active class
 $(".img").removeClass("active")
 
@@ -560,7 +560,7 @@ $(".img").removeClass("active")
 
 和
 
-```
+```py
 // show searching text
 $("#searching").show();
 console.log("searching...")
@@ -569,7 +569,7 @@ console.log("searching...")
 
 和
 
-```
+```py
 // show table
 $("#results-table").show();
 
@@ -579,14 +579,14 @@ $("#results-table").show();
 
 添加:
 
-```
+```py
 <p id="searching">Searching...</p>
 
 ```
 
 正上方:
 
-```
+```py
 <p id="error">Oh no! No results! Check your internet connection.</p>
 
 ```
@@ -599,7 +599,7 @@ $("#results-table").show();
 
 在风格方面，我们可以做很多事情，但让我们保持简单。将以下代码添加到 *main.css* 中:
 
-```
+```py
 .center-container {
   text-align: center;
   padding-top: 20px;
@@ -622,14 +622,14 @@ $("#results-table").show();
 
 从后端开始，更新`search()`视图函数，以便它只返回前三个结果:
 
-```
+```py
 return jsonify(results=(RESULTS_ARRAY[::-1][:3]))
 
 ```
 
 接下来更新成功处理程序 *main.js* 中的 for 循环:
 
-```
+```py
 // loop through results, append to dom
 for (i = 0; i < data.length; i++) {
   $("#results").append('<tr><th><a href="'+url+data[i]["image"]+'"><img src="'+url+data[i]["image"]+
@@ -640,7 +640,7 @@ for (i = 0; i < data.length; i++) {
 
 最后，添加以下 CSS 样式:
 
-```
+```py
 .result-img {
   max-width: 100px;
   max-height: 100px;

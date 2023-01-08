@@ -63,7 +63,7 @@
 
 假设您已经安装了 OpenCV(带有 Python 绑定)和 NumPy，最简单的安装方法是使用`pip`:
 
-```
+```py
 $ pip install color_transfer
 
 ```
@@ -74,7 +74,7 @@ $ pip install color_transfer
 
 无论如何，让我们卷起袖子，把手弄脏，看看在`color_transfer`包的引擎盖下发生了什么:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import cv2
@@ -98,7 +98,7 @@ OpenCV 将图像表示为多维 NumPy 数组，但默认为`uint8`数据类型�
 
 现在，让我们开始执行实际的颜色转换:
 
-```
+```py
 	# compute color statistics for the source and target images
 	(lMeanSrc, lStdSrc, aMeanSrc, aStdSrc, bMeanSrc, bStdSrc) = image_stats(source)
 	(lMeanTar, lStdTar, aMeanTar, aStdTar, bMeanTar, bStdTar) = image_stats(target)
@@ -154,7 +154,7 @@ OpenCV 将图像表示为多维 NumPy 数组，但默认为`uint8`数据类型�
 
 让我们快速看一下`image_stats`函数，使这段代码解释更加完整:
 
-```
+```py
 def image_stats(image):
 	# compute the mean and standard deviation of each channel
 	(l, a, b) = cv2.split(image)
@@ -181,7 +181,7 @@ def image_stats(image):
 
 你已经在这篇文章的顶部看到了海滩的例子，但是让我们再看一看:
 
-```
+```py
 $ python example.py --source images/ocean_sunset.jpg --target images/ocean_day.jpg
 
 ```
@@ -198,7 +198,7 @@ $ python example.py --source images/ocean_sunset.jpg --target images/ocean_day.j
 
 太棒了。但是让我们尝试一些不同的东西:
 
-```
+```py
 $ python example.py --source images/woods.jpg --target images/storm.jpg
 
 ```
@@ -219,7 +219,7 @@ $ python example.py --source images/woods.jpg --target images/storm.jpg
 
 再举一个例子:
 
-```
+```py
 $ python example.py --source images/autumn.jpg --target images/fallingwater.jpg
 
 ```

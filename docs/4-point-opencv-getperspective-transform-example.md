@@ -41,7 +41,7 @@
 
 所以我们不要再浪费时间了。打开一个新文件，命名为`transform.py`，我们开始吧。
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import cv2
@@ -93,7 +93,7 @@ def order_points(pts):
 
 在下一个函数中你会明白为什么:
 
-```
+```py
 def four_point_transform(image, pts):
 	# obtain a consistent order of the points and unpack them
 	# individually
@@ -168,7 +168,7 @@ def four_point_transform(image, pts):
 
 打开一个新文件，调用`transform_example.py`，让我们完成它:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.transform import four_point_transform
 import numpy as np
@@ -223,7 +223,7 @@ cv2.waitKey(0)
 
 打开一个 shell 并执行以下命令:
 
-```
+```py
 $ python transform_example.py --image images/example_01.png --coords "[(73, 239), (356, 117), (475, 265), (187, 443)]"
 
 ```
@@ -236,14 +236,14 @@ $ python transform_example.py --image images/example_01.png --coords "[(73, 239)
 
 让我们尝试另一个图像:
 
-```
+```py
 $ python transform_example.py --image images/example_02.png --coords "[(101, 185), (393, 151), (479, 323), (187, 441)]"
 
 ```
 
 第三个是好的措施:
 
-```
+```py
 $ python transform_example.py --image images/example_03.png --coords "[(63, 242), (291, 110), (361, 252), (78, 386)]"
 
 ```

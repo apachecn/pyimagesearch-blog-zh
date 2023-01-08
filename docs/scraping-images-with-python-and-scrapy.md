@@ -28,7 +28,7 @@
 
 你需要做的第一件事是安装一些依赖项来帮助 Scrapy 解析文档(再次提醒，记住我是在我的 *Ubuntu* 系统上运行这些命令的):
 
-```
+```py
 $ sudo apt-get install libffi-dev
 $ sudo apt-get install libssl-dev
 $ sudo apt-get install libxml2-dev libxslt1-dev
@@ -39,14 +39,14 @@ $ sudo apt-get install libxml2-dev libxslt1-dev
 
 然后，我使用 [virtualenv](https://virtualenv.pypa.io/en/latest/) 和 [virtualenvwrapper](https://virtualenvwrapper.readthedocs.org/en/latest/) 创建了一个名为`scrapy`的 Python 虚拟环境，以保持我的系统`site-packages`独立，并与我即将设置的新 Python 环境隔离。同样，这是可选的，但是如果你是一个`virtualenv`用户，这样做没有坏处:
 
-```
+```py
 $ mkvirtualenv scrapy
 
 ```
 
 无论是哪种情况，现在我们都需要安装 Scrapy 和 [Pillow](https://python-pillow.github.io/) ，如果您计划抓取实际的二进制文件(比如图像)，这是一个必要条件:
 
-```
+```py
 $ pip install pillow
 $ pip install scrapy
 
@@ -56,7 +56,7 @@ Scrapy 应该花几分钟的时间来删除它的依赖项、编译和安装。
 
 您可以通过打开一个 shell(如有必要，访问`scrapy`虚拟环境)并尝试导入`scrapy`库来测试 Scrapy 是否安装正确:
 
-```
+```py
 $ python
 >>> import scrapy
 >>>
@@ -71,14 +71,14 @@ $ python
 
 要创建我们的 Scrapy 项目，只需执行以下命令:
 
-```
+```py
 $ scrapy startproject timecoverspider
 
 ```
 
 运行该命令后，您将在当前工作目录中看到一个`timecoverspider`。进入`timecoverspider`目录，你会看到下面这个杂乱的项目结构:
 
-```
+```py
 |--- scrapy.cfg
 |    |--- timecoverspider
 |    |    |--- __init__.py
@@ -95,7 +95,7 @@ $ scrapy startproject timecoverspider
 
 让我们从只需要快速更新的`settings.py`文件开始。第一个是找到`ITEMS_PIPELINE`元组，取消对它的注释(如果它被注释掉了)，并添加如下设置:
 
-```
+```py
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
@@ -108,7 +108,7 @@ ITEM_PIPELINES = {
 
 第二次更新可以附加到文件的底部。该值`FILES_STORE`只是输出目录的路径，下载图像将存储在该目录中:
 
-```
+```py
 FILES_STORE = "/home/adrian/projects/time_magazine/timecoverspider/output"
 
 ```
@@ -117,7 +117,7 @@ FILES_STORE = "/home/adrian/projects/time_magazine/timecoverspider/output"
 
 现在我们可以继续讨论`items.py`，它允许我们为蜘蛛抓取的网页定义一个数据对象模型:
 
-```
+```py
 # import the necessary packages
 import scrapy
 
@@ -138,7 +138,7 @@ class MagazineCover(scrapy.Item):
 
 现在我们已经更新了我们的设置并创建了我们的数据模型，我们可以继续进行最难的部分——实际实现蜘蛛抓取封面图片的*时间*。在`spiders`目录中创建一个新文件，将其命名为`coverspider.py`，然后我们开始工作:
 
-```
+```py
 # import the necessary packages
 from timecoverspider.items import MagazineCover
 import datetime
@@ -159,7 +159,7 @@ class CoverSpider(scrapy.Spider):
 
 每个 Scrapy spider 都需要(至少)有一个处理解析`start_urls`的`parse`方法。这个方法反过来可以产生其他请求，触发其他页面被抓取和爬行，但至少，我们需要定义我们的`parse`函数:
 
-```
+```py
 # import the necessary packages
 from timecoverspider.items import MagazineCover
 import datetime
@@ -203,7 +203,7 @@ Scrapy 令人惊叹的一个方面是能够使用简单的 CSS 和 [XPath](https
 
  ***下面是我们对`parse_page`方法的实现，以实现这一点:
 
-```
+```py
 	def parse_page(self, response):
 		# loop over all cover link elements that link off to the large
 		# cover of the magazine and yield a request to grab the cove
@@ -231,7 +231,7 @@ Scrapy 令人惊叹的一个方面是能够使用简单的 CSS 和 [XPath](https
 
 这里我用 ***绿色*** 突出显示了刊名，用 ***红色*** 突出显示了出版日期，用 ***紫色*** 突出显示了封面图片本身。剩下要做的就是定义`parse_covers`方法来提取这些数据:
 
-```
+```py
 	def parse_covers(self, response):
 		# grab the URL of the cover image
 		img = response.css(".art-cover-photo figure a img").xpath("@src")
@@ -264,7 +264,7 @@ Scrapy 令人惊叹的一个方面是能够使用简单的 CSS 和 [XPath](https
 
 要运行 Scrapy spider 来抓取图像，只需执行以下命令:
 
-```
+```py
 $ scrapy crawl pyimagesearch-cover-spider -o output.json
 
 ```
@@ -289,7 +289,7 @@ $ scrapy crawl pyimagesearch-cover-spider -o output.json
 
 为了逐个检查它们，让我们启动一个 Python shell，看看我们在做什么:
 
-```
+```py
 $ python
 >>> import json
 >>> data = open("output.json").read()
@@ -303,7 +303,7 @@ $ python
 
 `data`列表中的每个条目都是一个字典，它本质上映射到我们的`MagazineCover`数据模型:
 
-```
+```py
 >>> data[0]
 {u'files': [{u'url': u'http://img.timeinc.net/time/magazine/archive/covers/2014/1101140113_600.jpg', u'path': u'full/78a2264fb6103aaf20ff13982a09cb182294709d.jpg', u'checksum': u'02a6b4d22402fd9d5642535bea950c5f'}], u'file_urls': [u'http://img.timeinc.net/time/magazine/archive/covers/2014/1101140113_600.jpg'], u'pubDate': u'2014-01-13', u'title': u'2014: The Year Ahead '}
 >>> data[0].keys()
@@ -313,7 +313,7 @@ $ python
 
 我们可以像这样轻松地获取到*时间*封面图像的路径:
 
-```
+```py
 >>> print("Title: {}\nFile Path: {}".format(data[0]["title"], data[0]["files"][0]["path"]))
 Title: 2014: The Year Ahead 
 File Path: full/78a2264fb6103aaf20ff13982a09cb182294709d.jpg
@@ -322,7 +322,7 @@ File Path: full/78a2264fb6103aaf20ff13982a09cb182294709d.jpg
 
 检查`output/full`目录我们可以看到我们有自己的*3969 张*图片:
 
-```
+```py
 $ cd output/full/
 $ ls -l *.jpg | wc -l
     3969

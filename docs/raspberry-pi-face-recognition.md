@@ -34,7 +34,7 @@
 
 接下来，让我们将 Davis King 的 [dlib toolkit](http://dlib.net/) 软件安装到您安装 OpenCV 的同一个 Python 虚拟环境中(假设您正在使用一个虚拟环境):
 
-```
+```py
 $ workon <your env name> # optional
 $ pip install dlib
 
@@ -44,7 +44,7 @@ $ pip install dlib
 
 从那里，只需使用 pip 安装 Adam Geitgey 的[面部识别模块](https://github.com/ageitgey/face_recognition):
 
-```
+```py
 $ workon <your env name> # optional
 $ pip install face_recognition
 
@@ -52,7 +52,7 @@ $ pip install face_recognition
 
 别忘了安装我的便利功能包:
 
-```
+```py
 $ workon <your env name> # optional
 $ pip install imutils
 
@@ -78,7 +78,7 @@ $ pip install imutils
 
 在您的 Pi 上，您应该解压缩归档文件，更改工作目录，并查看项目结构，就像我下面所做的那样:
 
-```
+```py
 $ unzip pi-face-recognition.zip
 ...
 $ cd pi-face-recognition
@@ -157,7 +157,7 @@ $ tree
 
 让我们从 ***【下载】*** 中打开`encode_faces.py`与这篇博文相关的评论:
 
-```
+```py
 # import the necessary packages
 from imutils import paths
 import face_recognition
@@ -190,7 +190,7 @@ args = vars(ap.parse_args())
 
 现在我们已经定义了参数，让我们获取数据集中图像文件的路径(并执行两次初始化):
 
-```
+```py
 # grab the paths to the input images in our dataset
 print("[INFO] quantifying faces...")
 imagePaths = list(paths.list_images(args["dataset"]))
@@ -203,7 +203,7 @@ knownNames = []
 
 从这里开始，我们将继续遍历数据集中的每个面:
 
-```
+```py
 # loop over the image paths
 for (i, imagePath) in enumerate(imagePaths):
 	# extract the person name from the image path
@@ -242,7 +242,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 让我们将面部编码导出到磁盘，以便在面部识别脚本中使用:
 
-```
+```py
 # dump the facial encodings + names to disk
 print("[INFO] serializing encodings...")
 data = {"encodings": knownEncodings, "names": knownNames}
@@ -258,7 +258,7 @@ f.close()
 
 要创建我们的面部嵌入，打开一个终端并执行以下命令:
 
-```
+```py
 $ python encode_faces.py --dataset dataset --encodings encodings.pickle \
 	--detection-method hog
 [INFO] quantifying faces...
@@ -289,7 +289,7 @@ $ python encode_faces.py --dataset dataset --encodings encodings.pickle \
 
 事不宜迟，让我们开始编码吧:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 from imutils.video import FPS
@@ -319,7 +319,7 @@ args = vars(ap.parse_args())
 
 从这里开始，在我们开始从我们的相机循环帧之前，让我们实例化几个对象:
 
-```
+```py
 # load the known faces and embeddings along with OpenCV's Haar
 # cascade for face detection
 print("[INFO] loading encodings + face detector...")
@@ -347,7 +347,7 @@ fps = FPS().start()
 
 从这里，让我们开始从相机捕捉帧并识别人脸:
 
-```
+```py
 # loop over frames from the video file stream
 while True:
 	# grab the frame from the threaded video stream and resize it
@@ -404,7 +404,7 @@ while True:
 
 现在让我们循环面部编码并检查匹配:
 
-```
+```py
 	# loop over the facial embeddings
 	for encoding in encodings:
 		# attempt to match each face in the input image to our known
@@ -444,7 +444,7 @@ while True:
 
 然后，我们简单地在每张脸周围画出矩形，并附上预测的人名:
 
-```
+```py
 	# loop over the recognized faces
 	for ((top, right, bottom, left), name) in zip(boxes, names):
 		# draw the predicted face name on the image
@@ -471,7 +471,7 @@ while True:
 
 最后一点。让我们清理并将性能诊断写入终端:
 
-```
+```py
 # stop the timer and display FPS information
 fps.stop()
 print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
@@ -489,7 +489,7 @@ vs.stop()
 
 从那里，打开您的 Raspberry Pi 终端并执行以下命令:
 
-```
+```py
 $ python pi_face_recognition.py --cascade haarcascade_frontalface_default.xml \
 	--encodings encodings.pickle
 [INFO] loading encodings + face detector...

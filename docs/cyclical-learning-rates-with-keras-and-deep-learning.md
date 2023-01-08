@@ -179,7 +179,7 @@
 
 继续从`keras-cyclical-learning-rates/`目录中运行`tree`命令来打印我们的项目结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── output
@@ -212,7 +212,7 @@ $ tree --dirsfirst
 
 在实现我们的培训脚本之前，让我们先来回顾一下我们的配置文件:
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -228,7 +228,7 @@ CLASSES = ["airplane", "automobile", "bird", "cat", "deer", "dog",
 
 让我们定义我们的**循环学习率参数:**
 
-```
+```py
 # define the minimum learning rate, maximum learning rate, batch size,
 # step size, CLR method, and number of epochs
 MIN_LR = 1e-7
@@ -256,7 +256,7 @@ NUM_EPOCHS = 96
 
 最后，我们定义输出绘图路径/文件名:
 
-```
+```py
 # define the path to the output training history plot and cyclical
 # learning rate plot
 TRAINING_PLOT_PATH = os.path.sep.join(["output", "training_plot.png"])
@@ -272,7 +272,7 @@ CLR_PLOT_PATH = os.path.sep.join(["output", "clr_plot.png"])
 
 打开`train_cifar10.py`并插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -295,7 +295,7 @@ import numpy as np
 
 接下来，让我们加载我们的 CIFAR-10 数据:
 
-```
+```py
 # load the training and testing data, converting the images from
 # integers to floats
 print("[INFO] loading CIFAR-10 data...")
@@ -330,7 +330,7 @@ aug = ImageDataGenerator(width_shift_range=0.1,
 
 让我们初始化(1)我们的模型，以及(2)我们的周期性学习率回调:
 
-```
+```py
 # initialize the optimizer and model
 print("[INFO] compiling model...")
 opt = SGD(lr=config.MIN_LR, momentum=0.9)
@@ -354,7 +354,7 @@ clr = CyclicLR(
 
 现在让我们使用 CLR 来训练和评估我们的模型:
 
-```
+```py
 # train the network
 print("[INFO] training network...")
 H = model.fit(
@@ -381,7 +381,7 @@ print(classification_report(testY.argmax(axis=1),
 
 最后，我们将生成两个图:
 
-```
+```py
 # plot the training loss and accuracy
 N = np.arange(0, config.NUM_EPOCHS)
 plt.style.use("ggplot")
@@ -420,7 +420,7 @@ plt.savefig(config.CLR_PLOT_PATH)
 
 确保你已经使用了这篇文章的 ***“下载”*** 部分来下载源代码——从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python train_cifar10.py
 [INFO] loading CIFAR-10 data...
 [INFO] compiling model...
@@ -485,7 +485,7 @@ weighted avg       0.91      0.91      0.91     10000
 
 只是为了好玩，回到`config.py`文件的**第 14 行**，将`CLR_METHOD`从`”triangular”`更新为`”triangular2”`:
 
-```
+```py
 # define the minimum learning rate, maximum learning rate, batch size,
 # step size, CLR method, and number of epochs
 MIN_LR = 1e-7
@@ -499,7 +499,7 @@ NUM_EPOCHS = 96
 
 从那里，训练网络:
 
-```
+```py
 $ python train_cifar10.py
 [INFO] loading CIFAR-10 data...
 [INFO] compiling model...

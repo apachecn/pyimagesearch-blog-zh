@@ -41,7 +41,7 @@
 
 我们将基于[前一篇文章](https://pyimagesearch.com/2014/04/21/building-pokedex-python-finding-game-boy-screen-step-4-6/)中的代码进行构建，所以如果我们看起来像是跳到了一个文件的中间，那是因为我们确实是这样。
 
-```
+```py
 # now that we have our screen contour, we need to determine
 # the top-left, top-right, bottom-right, and bottom-left
 # points so that we can later warp the image -- we'll start
@@ -87,7 +87,7 @@ rect *= ratio
 
 接下来，我们需要计算 Game Boy 屏幕的大小，以便我们可以分配内存来存储它:
 
-```
+```py
 # now that we have our rectangle of points, let's compute
 # the width of our new image
 (tl, tr, br, bl) = rect
@@ -141,7 +141,7 @@ warp = cv2.warpPerspective(orig, M, (maxWidth, maxHeight))
 
 此外，你会注意到我们的 Marowak 似乎有点“模糊”, Game Boy 本身的屏幕比我们希望的要暗。我们需要看看我们是否可以重新缩放我们图像的强度，以帮助减轻这种阴影，并使提取 Marowak 的轮廓变得更容易，之后允许我们计算 Pokemon 轮廓的形状特征。
 
-```
+```py
 # convert the warped image to grayscale and then adjust
 # the intensity of the pixels to have minimum and maximum
 # values of 0 and 255, respectively
@@ -192,7 +192,7 @@ cv2.waitKey(0)
 
 要在 Game Boy 屏幕中对口袋妖怪执行我们的脚本，只需执行以下命令:
 
-```
+```py
 $ python find_screen.py --query queries/query_marowak.jpg
 
 ```

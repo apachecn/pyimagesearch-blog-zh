@@ -82,7 +82,7 @@ Keras *抽象掉了*构建深度神经网络的大部分复杂性，给我们留
 
 安装 virtualenv 和 virtualenvwrapper 后，让我们为基于 Keras + TensorFlow 的项目专门创建一个 Python 3 虚拟环境*和*:
 
-```
+```py
 $ mkvirtualenv keras_tf -p python3
 
 ```
@@ -91,14 +91,14 @@ $ mkvirtualenv keras_tf -p python3
 
 每当您需要访问给定的 Python 虚拟环境时，只需使用`workon`命令:
 
-```
+```py
 $ workon <virtual_env_name>
 
 ```
 
 在这种特殊情况下，我们可以使用以下方式访问`keras_tf`虚拟环境:
 
-```
+```py
 $ workon keras_tf
 
 ```
@@ -109,7 +109,7 @@ $ workon keras_tf
 
 安装 TensorFlow 非常简单，因为`pip`将为我们完成所有繁重的工作:
 
-```
+```py
 $ pip install --upgrade tensorflow
 
 ```
@@ -122,7 +122,7 @@ $ pip install --upgrade tensorflow
 
 假设您的 TensorFlow 安装已正确退出，您现在可以通过打开 Python shell 并尝试导入`tensorflow`包来测试安装:
 
-```
+```py
 $ python
 >>> import tensorflow
 >>>
@@ -135,7 +135,7 @@ $ python
 
 首先，让我们安装一些 Python 依赖项:
 
-```
+```py
 $ pip install numpy scipy
 $ pip install scikit-learn
 $ pip install pillow
@@ -145,7 +145,7 @@ $ pip install h5py
 
 其次是安装`keras`本身:
 
-```
+```py
 $ pip install keras
 
 ```
@@ -158,7 +158,7 @@ $ pip install keras
 
 用你最喜欢的文本编辑器打开它，看看里面的内容。默认值应该如下所示:
 
-```
+```py
 {
     "floatx": "float32",
     "epsilon": 1e-07,
@@ -195,7 +195,7 @@ $ pip install keras
 
 如果您发现`~/.keras/keras.json`文件*在您的系统*上不存在，只需打开一个 shell，(可选地)访问您的 Python 虚拟环境(如果您正在使用虚拟环境)，然后导入 Keras:
 
-```
+```py
 $ workon keras_tf
 $ python
 >>> import keras
@@ -213,7 +213,7 @@ $ python
 
 为此，首先要找到您的`cv2.so`绑定在系统中的位置:
 
-```
+```py
 $ cd /
 $ sudo find . -name '*cv2.so*'
 ./Users/adrianrosebrock/.virtualenvs/cv/lib/python3.6/site-packages/cv2.so
@@ -229,7 +229,7 @@ $ sudo find . -name '*cv2.so*'
 
 从那里，将目录更改为 Python 虚拟环境的`site-packages`目录(在本例中是`keras_tf`环境)并创建 sym-link:
 
-```
+```py
 $ cd ~/.virtualenvs/keras_tf/lib/python3.6/site-packages/
 $ ln -s /usr/local/lib/python3.6/site-packages/cv2.so cv2.so
 $ cd ~
@@ -242,7 +242,7 @@ $ cd ~
 
 要验证 Keras + TensorFlow 是否已经安装，只需使用`workon`命令访问`keras_tf`环境，打开一个 Python shell，并导入`keras`:
 
-```
+```py
 (keras_tf) ~ $ python
 Python 3.6.4 (default, Mar 27 2018, 15:31:37) 
 [GCC 4.2.1 Compatible Apple LLVM 9.0.0 (clang-900.0.39.2)] on darwin
@@ -257,7 +257,7 @@ Using TensorFlow backend.
 
 如果您执行了可选的**步骤#5** 并且想要测试您的 OpenCV sym-link，也尝试导入您的 OpenCV 绑定:
 
-```
+```py
 (keras_tf) ~ $ python
 Python 3.6.4 (default, Mar 27 2018, 15:31:37) 
 [GCC 4.2.1 Compatible Apple LLVM 9.0.0 (clang-900.0.39.2)] on darwin

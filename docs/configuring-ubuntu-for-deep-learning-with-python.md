@@ -51,7 +51,7 @@ Python 3 将成为 PyImageSearch 的标准，因为它很稳定，坦率地说�
 
 本教程中的所有步骤都将通过使用您的终端来完成。首先，打开你的命令行并更新`apt-get`包管理器来刷新和升级预安装的包/库:
 
-```
+```py
 $ sudo apt-get update
 $ sudo apt-get upgrade
 
@@ -59,7 +59,7 @@ $ sudo apt-get upgrade
 
 我们还需要安装一些开发工具，以及图像和视频 I/O、优化和创建绘图/可视化所需的先决条件:
 
-```
+```py
 $ sudo apt-get install build-essential cmake git unzip pkg-config
 $ sudo apt-get install libjpeg-dev libtiff5-dev libjasper-dev libpng12-dev
 $ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
@@ -73,7 +73,7 @@ $ sudo apt-get install python-tk python3-tk python-imaging-tk
 
 我们将通过为 Python 2.7 和 Python 3.5 安装 Python 开发头文件和库来结束步骤#1(这样您就可以同时拥有这两个版本)。
 
-```
+```py
 $ sudo apt-get install python2.7-dev python3-dev
 
 ```
@@ -90,7 +90,7 @@ $ sudo apt-get install python2.7-dev python3-dev
 
 我们现在准备开始为构建配置我们的 Python 开发环境。第一步是安装`pip`，一个 Python 包管理器:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python get-pip.py
 $ sudo python3 get-pip.py
@@ -109,7 +109,7 @@ $ sudo python3 get-pip.py
 
 让我再次重申，在 Python 社区中，利用某种虚拟环境是**的标准做法，所以我建议你也这样做:**
 
-```
+```py
 $ sudo pip install virtualenv virtualenvwrapper
 $ sudo rm -rf ~/.cache/pip get-pip.py
 
@@ -117,7 +117,7 @@ $ sudo rm -rf ~/.cache/pip get-pip.py
 
 一旦我们安装了`virtualenv`和`virtualenvwrapper`，我们需要更新我们的`~/.bashrc`文件，在文件的*底部*包含以下行:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
@@ -131,7 +131,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 一个更简单的解决方案是使用`cat`命令，完全避免编辑器:
 
-```
+```py
 $ echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.bashrc
 $ echo "export WORKON_HOME=$HOME/.virtualenvs" >> ~/.bashrc
 $ echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc
@@ -141,7 +141,7 @@ $ echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
 
 编辑完我们的`~/.bashrc`文件后，我们需要重新加载修改:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
@@ -156,7 +156,7 @@ $ source ~/.bashrc
 
 也就是说，对于下面的命令，确保您的 Python ( `-p`)标志设置为`python3`:
 
-```
+```py
 $ mkvirtualenv dl4cv -p python3
 
 ```
@@ -169,7 +169,7 @@ $ mkvirtualenv dl4cv -p python3
 
 如果你重启了你的 Ubuntu 系统；注销并重新登录；或者打开一个新的终端，您需要使用`workon`命令来重新访问您的`dl4cv`虚拟环境。下面是一个`workon`命令的例子:
 
-```
+```py
 $ workon dl4cv
 
 ```
@@ -192,7 +192,7 @@ $ workon dl4cv
 
 从那里执行以下命令:
 
-```
+```py
 $ pip install numpy
 
 ```
@@ -205,7 +205,7 @@ $ pip install numpy
 
 首先让我们将 [opencv](https://github.com/Itseez/opencv) 和 [opencv_contrib](https://github.com/itseez/opencv_contrib) 下载到您的主目录中:
 
-```
+```py
 $ cd ~
 $ wget -O opencv.zip https://github.com/Itseez/opencv/archive/3.3.0.zip
 $ wget -O opencv_contrib.zip https://github.com/Itseez/opencv_contrib/archive/3.3.0.zip
@@ -216,7 +216,7 @@ $ wget -O opencv_contrib.zip https://github.com/Itseez/opencv_contrib/archive/3.
 
 然后，让我们解压缩这两个文件:
 
-```
+```py
 $ unzip opencv.zip
 $ unzip opencv_contrib.zip
 
@@ -226,7 +226,7 @@ $ unzip opencv_contrib.zip
 
 让我们创建一个`build`目录并运行 CMake:
 
-```
+```py
 $ cd ~/opencv-3.3.0/
 $ mkdir build
 $ cd build
@@ -261,7 +261,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 现在，我们已经准备好用 4 个内核编译 OpenCV:
 
-```
+```py
 $ make -j4
 
 ```
@@ -270,7 +270,7 @@ $ make -j4
 
 从那里，你需要做的就是安装 OpenCV 3.3，然后如果你愿意的话，释放一些磁盘空间:
 
-```
+```py
 $ sudo make install
 $ sudo ldconfig
 $ cd ~
@@ -289,7 +289,7 @@ $ rm -rf opencv_contrib-3.3.0 opencv_contrib.zip
 
 要将 OpenCV 绑定符号链接到`dl4cv`虚拟环境中，发出以下命令:
 
-```
+```py
 $ cd ~/.virtualenvs/dl4cv/lib/python3.5/site-packages/
 $ ln -s /usr/local/lib/python3.5/site-packages/cv2.cpython-35m-x86_64-linux-gnu.so cv2.so
 $ cd ~
@@ -304,7 +304,7 @@ $ cd ~
 
 现在我们已经安装并链接了 OpenCV 3.3，让我们做一个快速的健全性测试来看看事情是否正常:
 
-```
+```py
 $ python
 >>> import cv2
 >>> cv2.__version__
@@ -320,7 +320,7 @@ $ python
 
 对于这一步，通过发出`workon dl4cv`命令，确保您处于`dl4cv`环境中。然后安装我们的各种 Python 计算机视觉、图像处理和机器学习库:
 
-```
+```py
 $ pip install scipy matplotlib pillow
 $ pip install imutils h5py requests progressbar2
 $ pip install scikit-learn scikit-image
@@ -329,7 +329,7 @@ $ pip install scikit-learn scikit-image
 
 Next, install Tensorflow:
 
-```
+```py
 $ pip install tensorflow
 
 ```
@@ -338,7 +338,7 @@ $ pip install tensorflow
 
 安装 Keras 非常简单，这要归功于`pip`:
 
-```
+```py
 $ pip install keras
 
 ```
@@ -347,7 +347,7 @@ $ pip install keras
 
 您可以从 Python shell 测试我们的 Keras 安装:
 
-```
+```py
 $ python
 >>> import keras
 Using TensorFlow backend.
@@ -359,7 +359,7 @@ Using TensorFlow backend.
 
 在您结束安装教程之前，花点时间熟悉一下`~/.keras/keras.json`文件:
 
-```
+```py
 {
     "image_data_format": "channels_last",
     "backend": "tensorflow",

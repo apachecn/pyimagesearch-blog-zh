@@ -84,7 +84,7 @@
 
 解压缩文件后，您将看到以下目录结构:
 
-```
+```py
 $ tree --filelimit 10 --dirsfirst
 .
 ├── malaria
@@ -134,7 +134,7 @@ $ tree --filelimit 10 --dirsfirst
 
 请打开您的`save_model.py`文件，让我们开始吧:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -160,7 +160,7 @@ import os
 
 使用`argparse`导入，让[解析我们的命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", type=str, required=True,
@@ -183,7 +183,7 @@ args = vars(ap.parse_args())
 
 让我们初始化我们的训练变量和路径:
 
-```
+```py
 # initialize the number of training epochs and batch size
 NUM_EPOCHS = 25
 BS = 32
@@ -216,7 +216,7 @@ totalTest = len(list(paths.list_images(TEST_PATH)))
 
 让我们初始化我们的数据扩充对象:
 
-```
+```py
 # initialize the training training data augmentation object
 trainAug = ImageDataGenerator(
 	rescale=1 / 255.0,
@@ -241,7 +241,7 @@ valAug = ImageDataGenerator(rescale=1 / 255.0)
 
 既然已经创建了训练和验证增强对象，让我们初始化生成器:
 
-```
+```py
 # initialize the training generator
 trainGen = trainAug.flow_from_directory(
 	TRAIN_PATH,
@@ -275,7 +275,7 @@ testGen = valAug.flow_from_directory(
 
 现在我们将构建、编译和训练我们的模型。我们还将评估我们的模型并打印一份分类报告:
 
-```
+```py
 # initialize our Keras implementation of ResNet model and compile it
 model = ResNet.build(64, 64, 3, 2, (2, 2, 3),
 	(32, 64, 128, 256), reg=0.0005)
@@ -318,7 +318,7 @@ print(classification_report(testGen.classes, predIdxs,
 
 现在我们的模型已经训练好了，让我们**将我们的 Keras 模型保存到磁盘:**
 
-```
+```py
 # save the network to disk
 print("[INFO] serializing network to '{}'...".format(args["model"]))
 model.save(args["model"], save_format="h5")
@@ -337,7 +337,7 @@ model.save(args["model"], save_format="h5")
 
 让我们绘制训练结果并保存训练图:
 
-```
+```py
 # plot the training loss and accuracy
 N = NUM_EPOCHS
 plt.style.use("ggplot")
@@ -364,7 +364,7 @@ plt.savefig(args["plot"])
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python save_model.py --dataset malaria --model saved_model.model
 Found 360 images belonging to 2 classes.
 Found 40 images belonging to 2 classes.
@@ -404,7 +404,7 @@ weighted avg       0.99      0.99      0.99       100
 
 培训后，您可以列出目录的内容，并查看保存的 Keras 模型:
 
-```
+```py
 $ ls -l
 total 5216
 -rw-r--r--@ 1 adrian  staff     2415 Nov 28 10:09 load_model.py
@@ -432,7 +432,7 @@ drwxr-xr-x@ 6 adrian  staff      192 Nov 28 08:12 pyimagesearch
 
 既然我们已经学会了如何将 Keras 模型保存到磁盘，下一步就是加载 Keras 模型，这样我们就可以用它来进行分类。打开您的`load_model.py`脚本，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.models import load_model
@@ -464,7 +464,7 @@ args = vars(ap.parse_args())
 
 **下一步是从磁盘加载我们的 Keras 模型:**
 
-```
+```py
 # load the pre-trained network
 print("[INFO] loading pre-trained network...")
 model = load_model(args["model"])
@@ -475,7 +475,7 @@ model = load_model(args["model"])
 
 给定`model`，我们现在可以用它进行预测。但是首先我们需要一些图片和一个地方来放置我们的结果:
 
-```
+```py
 # grab all image paths in the input directory and randomly sample them
 imagePaths = list(paths.list_images(args["images"]))
 random.shuffle(imagePaths)
@@ -492,7 +492,7 @@ results = []
 
 让我们循环一遍我们的每个`imagePaths`:
 
-```
+```py
 # loop over our sampled image paths
 for p in imagePaths:
 	# load our original input image
@@ -516,7 +516,7 @@ for p in imagePaths:
 
 继续，让我们对循环的每次迭代进行预测:
 
-```
+```py
 	# order channel dimensions (channels-first or channels-last)
 	# depending on our Keras backend, then add a batch dimension to
 	# the image
@@ -553,7 +553,7 @@ for p in imagePaths:
 
 为了可视化我们的结果，让我们创建一个蒙太奇，并显示在屏幕上:
 
-```
+```py
 # create a montage using 128x128 "tiles" with 4 rows and 4 columns
 montage = build_montages(results, (128, 128), (4, 4))[0]
 
@@ -573,7 +573,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python load_model.py --images malaria/testing --model saved_model.model
 Using TensorFlow backend.
 [INFO] loading pre-trained network...

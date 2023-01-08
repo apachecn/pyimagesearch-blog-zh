@@ -92,7 +92,7 @@
 
 提取。压缩并从您的终端导航到项目文件夹:
 
-```
+```py
 $ unzip keras-video-classification.zip
 $ cd keras-video-classification
 
@@ -102,7 +102,7 @@ $ cd keras-video-classification
 
 我们今天将使用的数据位于以下路径:
 
-```
+```py
 $ cd keras-video-classification
 $ ls Sports-Type-Classifier/data | grep -Ev "urls|models|csv|pkl"
 football
@@ -126,7 +126,7 @@ weight_lifting
 
 现在我们已经有了项目文件夹和 [Anubhav Maity](https://github.com/anubhavmaity) 的回购，让我们回顾一下我们的项目结构:
 
-```
+```py
 $ tree --dirsfirst --filelimit 50
 .
 ├── Sports-Type-Classifier
@@ -172,7 +172,7 @@ $ tree --dirsfirst --filelimit 50
 
 打开`train.py`文件并插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -214,7 +214,7 @@ import os
 
 现在让我们继续[解析我们的命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -241,7 +241,7 @@ args = vars(ap.parse_args())
 
 有了解析的命令行参数，让我们继续初始化我们的`LABELS`并加载我们的`data`:
 
-```
+```py
 # initialize the set of labels from the spots activity dataset we are
 # going to train our network on
 LABELS = set(["weight_lifting", "tennis", "football"])
@@ -291,7 +291,7 @@ for imagePath in imagePaths:
 
 接下来，我们将对我们的`labels`进行一次性编码，并对我们的`data`进行分区:
 
-```
+```py
 # convert the data and labels to NumPy arrays
 data = np.array(data)
 labels = np.array(labels)
@@ -315,7 +315,7 @@ labels = lb.fit_transform(labels)
 
 让我们初始化我们的[数据扩充](https://pyimagesearch.com/2019/07/08/keras-imagedatagenerator-and-data-augmentation/)对象:
 
-```
+```py
 # initialize the training data augmentation object
 trainAug = ImageDataGenerator(
 	rotation_range=30,
@@ -349,7 +349,7 @@ valAug.mean = mean
 
 现在我们将执行我称之为“网络手术”的操作，作为[微调](https://pyimagesearch.com/2019/06/03/fine-tuning-with-keras-and-deep-learning/)的一部分:
 
-```
+```py
 # load the ResNet-50 network, ensuring the head FC layer sets are left
 # off
 baseModel = ResNet50(weights="imagenet", include_top=False,
@@ -383,7 +383,7 @@ for layer in baseModel.layers:
 
 让我们继续编译+训练我们的`model`:
 
-```
+```py
 # compile our model (this needs to be done after our setting our
 # layers to being non-trainable)
 print("[INFO] compiling model...")
@@ -414,7 +414,7 @@ H = model.fit(
 
 我们将从评估我们的网络和绘制培训历史开始总结:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(x=testX.astype("float32"), batch_size=32)
@@ -443,7 +443,7 @@ plt.savefig(args["plot"])
 
 总结将序列化我们的`model`和标签二进制化器(`lb`)到磁盘:
 
-```
+```py
 # serialize the model to disk
 print("[INFO] serializing network...")
 model.save(args["model"], save_format="h5")
@@ -469,7 +469,7 @@ f.close()
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python train.py --dataset Sports-Type-Classifier/data --model model/activity.model \
 	--label-bin output/lb.pickle --epochs 50
 [INFO] loading images...
@@ -518,7 +518,7 @@ weight_lifting       0.97      0.92      0.95       143
 
 检查我们的模型目录，我们可以看到微调模型和标签二进制化器已经序列化到磁盘:
 
-```
+```py
 $ ls model/
 activity.model		lb.pickle
 
@@ -536,7 +536,7 @@ activity.model		lb.pickle
 
 让我们开始吧——打开`predict_video.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import load_model
 from collections import deque
@@ -573,7 +573,7 @@ args = vars(ap.parse_args())
 
 有了导入和命令行`args`，我们现在准备执行初始化:
 
-```
+```py
 # load the trained model and label binarizer from disk
 print("[INFO] loading model and label binarizer...")
 model = load_model(args["model"])
@@ -594,7 +594,7 @@ Q = deque(maxlen=args["size"])
 
 让我们初始化我们的`cv2.VideoCapture`对象，并开始循环视频帧:
 
-```
+```py
 # initialize the video stream, pointer to output video file, and
 # frame dimensions
 vs = cv2.VideoCapture(args["input"])
@@ -629,7 +629,7 @@ while True:
 
 让我们预处理一下我们的`frame`:
 
-```
+```py
 	# clone the output frame, then convert it from BGR to RGB
 	# ordering, resize the frame to a fixed 224x224, and then
 	# perform mean subtraction
@@ -650,7 +650,7 @@ while True:
 
 **帧分类推断和*滚动预测平均*接下来:**
 
-```
+```py
 	# make predictions on the frame and then update the predictions
 	# queue
 	preds = model.predict(np.expand_dims(frame, axis=0))[0]
@@ -670,7 +670,7 @@ while True:
 
 现在我们已经得到了结果`label`，让我们注释我们的`output`帧并将其写入磁盘:
 
-```
+```py
 	# draw the activity on the output frame
 	text = "activity: {}".format(label)
 	cv2.putText(output, text, (35, 50), cv2.FONT_HERSHEY_SIMPLEX,
@@ -717,7 +717,7 @@ vs.release()
 
 接下来，让我们将视频分类应用于一个“网球”剪辑，但是让我们将队列的`--size`设置为`1`，将视频分类简单地转换为标准图像分类:
 
-```
+```py
 $ python predict_video.py --model model/activity.model \
 	--label-bin model/lb.pickle \
 	--input example_clips/tennis.mp4 \
@@ -733,7 +733,7 @@ Using TensorFlow backend.
 
 现在让我们使用`128`的默认队列`--size`，从而利用我们的**预测平均算法**来平滑结果:
 
-```
+```py
 $ python predict_video.py --model model/activity.model \
 	--label-bin model/lb.pickle \
 	--input example_clips/tennis.mp4 \
@@ -749,7 +749,7 @@ Using TensorFlow backend.
 
 让我们尝试一个不同的例子，这个“举重”的例子。同样，我们将从使用`1`的队列`--size`开始:
 
-```
+```py
 $ python predict_video.py --model model/activity.model \
 	--label-bin model/lb.pickle \
 	--input example_clips/lifting.mp4 \
@@ -765,7 +765,7 @@ Using TensorFlow backend.
 
 然而，如果我们使用`128`的帧`--size`，我们的预测平均将获得期望的结果:
 
-```
+```py
 $ python predict_video.py --model model/activity.model \
 	--label-bin model/lb.pickle \
 	--input example_clips/lifting.mp4 \
@@ -779,7 +779,7 @@ Using TensorFlow backend.
 
 让我们试试最后一个例子:
 
-```
+```py
 $ python predict_video.py --model model/activity.model \
 	--label-bin model/lb.pickle \
 	--input example_clips/soccer.mp4 \

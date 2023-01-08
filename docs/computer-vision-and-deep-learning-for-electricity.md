@@ -177,7 +177,7 @@
 
 * * *
 
-```
+```py
 @incollection{Mangla_2022_CVDL4Elec,
   author = {Puneet Mangla},
   title = {Computer Vision and Deep Learning for Electricity},

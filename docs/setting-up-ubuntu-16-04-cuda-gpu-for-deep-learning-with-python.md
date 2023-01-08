@@ -97,7 +97,7 @@ NVIDIA 是深度学习硬件的市场领导者，坦率地说，如果你进入�
 
 现在我们已经准备好了，让我们更新我们的 Ubuntu 操作系统:
 
-```
+```py
 $ sudo apt-get update
 $ sudo apt-get upgrade
 
@@ -105,7 +105,7 @@ $ sudo apt-get upgrade
 
 然后，让我们安装一些必要的开发工具，图像/视频 I/O，GUI 操作和各种其他包:
 
-```
+```py
 $ sudo apt-get install build-essential cmake git unzip pkg-config
 $ sudo apt-get install libjpeg-dev libtiff5-dev libjasper-dev libpng12-dev
 $ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
@@ -119,14 +119,14 @@ $ sudo apt-get install python-tk python3-tk python-imaging-tk
 
 接下来，让我们安装 Python 2.7 和 Python 3 头文件，这样我们就可以使用 Python 绑定来编译 OpenCV:
 
-```
+```py
 $ sudo apt-get install python2.7-dev python3-dev
 
 ```
 
 我们还需要准备我们的系统，用 NVIDIA CUDA 驱动程序替换默认驱动程序:
 
-```
+```py
 $ sudo apt-get install linux-image-generic linux-image-extra-virtual
 $ sudo apt-get install linux-source linux-headers-generic
 
@@ -140,7 +140,7 @@ CUDA 工具包安装步骤需要注意细节，以便顺利进行。
 
 首先通过创建一个新文件来禁用新的内核驱动程序:
 
-```
+```py
 $ sudo nano /etc/modprobe.d/blacklist-nouveau.conf
 
 ```
@@ -149,7 +149,7 @@ $ sudo nano /etc/modprobe.d/blacklist-nouveau.conf
 
 添加以下行，然后保存并退出:
 
-```
+```py
 blacklist nouveau
 blacklist lbm-nouveau
 options nouveau modeset=0
@@ -166,7 +166,7 @@ alias lbm-nouveau off
 
 接下来，让我们更新初始 RAM 文件系统并重启机器:
 
-```
+```py
 $ echo options nouveau modeset=0 | sudo tee -a /etc/modprobe.d/nouveau-kms.conf
 $ sudo update-initramfs -u
 $ sudo reboot
@@ -189,7 +189,7 @@ $ sudo reboot
 
 从那里下载文件名为`cuda_8.0.61_375.26_linux-run`或类似的`-run`文件。为此，只需右键单击复制下载链接，并在您的远程 GPU 框上使用`wget`:
 
-```
+```py
 $ wget https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_375.26_linux-run
 
 ```
@@ -200,7 +200,7 @@ $ wget https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda
 
 从那里，解压`-run`文件:
 
-```
+```py
 $ chmod +x cuda_8.0.61_375.26_linux-run
 $ mkdir installers
 $ sudo ./cuda_8.0.61_375.26_linux-run -extract=`pwd`/installers
@@ -211,7 +211,7 @@ $ sudo ./cuda_8.0.61_375.26_linux-run -extract=`pwd`/installers
 
 现在是时候安装 NVIDIA 内核驱动程序了:
 
-```
+```py
 $ cd installers
 $ sudo ./NVIDIA-Linux-x86_64-375.26.run
 
@@ -225,14 +225,14 @@ $ sudo ./NVIDIA-Linux-x86_64-375.26.run
 
 从那里，将 NVIDIA 可加载内核模块(LKM)添加到 Linux 内核:
 
-```
+```py
 $ modprobe nvidia
 
 ```
 
 安装 CUDA 工具包和示例:
 
-```
+```py
 $ sudo ./cuda-linux64-rel-8.0.61-21551265.run
 $ sudo ./cuda-samples-linux-8.0.61-21551265.run
 
@@ -242,7 +242,7 @@ $ sudo ./cuda-samples-linux-8.0.61-21551265.run
 
 既然已经安装了 NVIDIA CUDA 驱动程序和工具，您需要更新您的`~/.bashrc`文件以包含 CUDA Toolkit(我建议使用终端文本编辑器，如`vim`、`emacs`或`nano`):
 
-```
+```py
 # NVIDIA CUDA Toolkit
 export PATH=/usr/local/cuda-8.0/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64/
@@ -251,7 +251,7 @@ export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64/
 
 现在，重新加载您的`~/.bashrc` ( `source ~/.bashrc`)，然后通过编译`deviceQuery`示例程序并运行它来测试 CUDA 工具包的安装:
 
-```
+```py
 $ source ~/.bashrc
 $ cd /usr/local/cuda-8.0/samples/1_Utilities/deviceQuery
 $ sudo make
@@ -277,7 +277,7 @@ Result = PASS
 
 相反，将文件下载到您的*本地机器*，然后(在您的本地机器上)使用`scp`(安全拷贝)，同时用适当的值替换`<username>`和`<password>`，以将文件更新到您的远程实例(同样，假设您通过 SSH 访问您的机器):
 
-```
+```py
 scp -i EC2KeyPair.pem ~/Downloads/cudnn-8.0-linux-x64-v6.0.tgz \
 	username@your_ip_address:~
 
@@ -285,7 +285,7 @@ scp -i EC2KeyPair.pem ~/Downloads/cudnn-8.0-linux-x64-v6.0.tgz \
 
 接下来，解压缩文件，然后将结果文件分别复制到`lib64`和`include`中，使用`-P`开关保留符号链接:
 
-```
+```py
 $ cd ~
 $ tar -zxf cudnn-8.0-linux-x64-v6.0.tgz
 $ cd cuda
@@ -305,7 +305,7 @@ $ cd ~
 
 第一步是安装`pip`，一个 Python 包管理器:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python get-pip.py
 $ sudo python3 get-pip.py
@@ -322,7 +322,7 @@ $ sudo python3 get-pip.py
 
 让我再次重申，在 Python 社区中，利用某种虚拟环境是**的标准做法，所以我建议你也这样做:**
 
-```
+```py
 $ sudo pip install virtualenv virtualenvwrapper
 $ sudo rm -rf ~/.cache/pip get-pip.py
 
@@ -330,7 +330,7 @@ $ sudo rm -rf ~/.cache/pip get-pip.py
 
 一旦我们安装了`virtualenv`和`virtualenvwrapper`，我们需要更新我们的`~/.bashrc`文件，在文件的*底部*包含以下行:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
@@ -340,7 +340,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 编辑完我们的`~/.bashrc`文件后，我们需要重新加载修改:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
@@ -353,7 +353,7 @@ $ source ~/.bashrc
 
 也就是说，对于下面的命令，确保将`-p`标志设置为`python3`。
 
-```
+```py
 $ mkvirtualenv dl4cv -p python3
 
 ```
@@ -364,7 +364,7 @@ $ mkvirtualenv dl4cv -p python3
 
 如果你重启了你的 Ubuntu 系统；注销并重新登录；或者打开一个新的终端，您需要使用`workon`命令来重新访问您的`dl4cv`虚拟环境。下面是一个`workon`命令的例子:
 
-```
+```py
 $ workon dl4cv
 
 ```
@@ -387,7 +387,7 @@ $ workon dl4cv
 
 从那里执行以下命令:
 
-```
+```py
 $ pip install numpy
 
 ```
@@ -398,7 +398,7 @@ $ pip install numpy
 
 首先你需要将 opencv 和 opencv_contrib 下载到你的主目录中。对于本安装指南，我们将使用 OpenCV 3.3:
 
-```
+```py
 $ cd ~
 $ wget -O opencv.zip https://github.com/Itseez/opencv/archive/3.3.0.zip
 $ wget -O opencv_contrib.zip https://github.com/Itseez/opencv_contrib/archive/3.3.0.zip
@@ -407,7 +407,7 @@ $ wget -O opencv_contrib.zip https://github.com/Itseez/opencv_contrib/archive/3.
 
 然后，解压缩这两个文件:
 
-```
+```py
 $ unzip opencv.zip
 $ unzip opencv_contrib.zip
 
@@ -417,7 +417,7 @@ $ unzip opencv_contrib.zip
 
 在这一步中，我们创建一个构建目录，然后运行 CMake:
 
-```
+```py
 $ cd ~/opencv-3.3.0/
 $ mkdir build
 $ cd build
@@ -454,7 +454,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 现在我们已经准备好编译 OpenCV 了:
 
-```
+```py
 $ make -j4
 
 ```
@@ -464,7 +464,7 @@ $ make -j4
 
 从那里，你需要做的就是安装 OpenCV 3.3:
 
-```
+```py
 $ sudo make install
 $ sudo ldconfig
 $ cd ~
@@ -477,7 +477,7 @@ $ cd ~
 
 要将我们的 OpenCV 绑定符号链接到`dl4cv`虚拟环境中，发出以下命令
 
-```
+```py
 $ cd ~/.virtualenvs/dl4cv/lib/python3.5/site-packages/
 $ ln -s /usr/local/lib/python3.5/site-packages/cv2.cpython-35m-x86_64-linux-gnu.so cv2.so
 $ cd ~
@@ -492,7 +492,7 @@ $ cd ~
 
 现在我们已经安装并链接了 OpenCV 3.3，让我们做一个快速的健全性测试来看看事情是否正常:
 
-```
+```py
 $ python
 >>> import cv2
 >>> cv2.__version__
@@ -514,7 +514,7 @@ $ python
 
 从那里我们可以安装一些需要的计算机视觉、图像处理和机器学习库:
 
-```
+```py
 $ pip install scipy matplotlib pillow
 $ pip install imutils h5py requests progressbar2
 $ pip install scikit-learn scikit-image
@@ -523,14 +523,14 @@ $ pip install scikit-learn scikit-image
 
 接下来，安装 Tensorflow (GPU 版):
 
-```
+```py
 $ pip install tensorflow-gpu
 
 ```
 
 您可以通过在 Python shell 中导入 TensorFlow 来验证它是否已安装:
 
-```
+```py
 $ python
 >>> import tensorflow
 >>>
@@ -539,14 +539,14 @@ $ python
 
 现在我们准备安装 [Keras](https://pyimagesearch.com/2018/04/16/keras-and-convolutional-neural-networks-cnns/) :
 
-```
+```py
 $ pip install keras
 
 ```
 
 同样，您可以通过 Python shell 验证 Keras 是否已经安装:
 
-```
+```py
 $ python
 >>> import keras
 Using TensorFlow backend.
@@ -558,7 +558,7 @@ Using TensorFlow backend.
 
 在进入第 7 步之前，花点时间熟悉一下`~/.keras/keras.json`文件:
 
-```
+```py
 {
     "image_data_format": "channels_last",
     "backend": "tensorflow",
@@ -578,7 +578,7 @@ Using TensorFlow backend.
 
 不管怎样，让我们首先克隆 mxnet 存储库和检出分支`0.11.0`:
 
-```
+```py
 $ cd ~
 $ git clone --recursive https://github.com/apache/incubator-mxnet.git mxnet --branch 0.11.0
 
@@ -586,7 +586,7 @@ $ git clone --recursive https://github.com/apache/incubator-mxnet.git mxnet --br
 
 我们可以编译 mxnet:
 
-```
+```py
 $ cd mxnet
 $ make -j4 USE_OPENCV=1 USE_BLAS=openblas USE_CUDA=1 USE_CUDA_PATH=/usr/local/cuda USE_CUDNN=1
 
@@ -594,7 +594,7 @@ $ make -j4 USE_OPENCV=1 USE_BLAS=openblas USE_CUDA=1 USE_CUDA_PATH=/usr/local/cu
 
 然后是到我们 dl4cv 环境的符号链接。
 
-```
+```py
 $ cd ~/.virtualenvs/dl4cv/lib/python3.5/site-packages/
 $ ln -s ~/mxnet/python/mxnet mxnet
 $ cd ~
@@ -603,7 +603,7 @@ $ cd ~
 
 最后，您可以在您的环境中启动 Python 来测试安装是否成功:
 
-```
+```py
 $ python
 >>> import mxnet
 >>>

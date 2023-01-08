@@ -16,7 +16,7 @@
 
 好吧，我们别浪费时间了。让我们跳到一些代码中:
 
-```
+```py
 >>> import matplotlib.pyplot as plt
 >>> import matplotlib.image as mpimg
 >>> image = mpimg.imread("chelsea-the-cat.png")
@@ -37,7 +37,7 @@
 
 这是一个好的开始，但是去掉编号的轴怎么样呢？
 
-```
+```py
 plt.axis("off")
 plt.imshow(image)
 plt.show()
@@ -60,7 +60,7 @@ plt.show()
 
 因此，让我们使用 OpenCV 加载一个图像，并用 matplotlib 显示它:
 
-```
+```py
 import cv2
 image = cv2.imread("chelsea-the-cat.png")
 plt.axis("off")
@@ -93,7 +93,7 @@ OpenCV 将 RGB 图像表示为多维 NumPy 数组… ***但是顺序相反！***
 
 我们需要做的就是将图像从 BGR 转换成 RGB:
 
-```
+```py
 plt.axis("off")
 plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
 plt.show()

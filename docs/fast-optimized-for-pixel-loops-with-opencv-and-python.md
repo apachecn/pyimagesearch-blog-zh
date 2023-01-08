@@ -67,7 +67,7 @@ Cython 与 Python 的不同之处在于，使用 CPython 解释器将代码翻�
 
 但是在我们开始之前，请确保您安装了 NumPy、Cython、matplotlib 和 Jupyter:
 
-```
+```py
 $ workon cv
 $ pip install numpy
 $ pip install cython
@@ -80,7 +80,7 @@ $ pip install jupyter
 
 从那里，您可以在您的环境中启动 Jupyter 笔记本，并开始输入本文中的代码:
 
-```
+```py
 $ jupyter notebook
 
 ```
@@ -99,7 +99,7 @@ $ jupyter notebook
 
 要将“幼稚”的像素循环与我们更快的 Cython 循环进行比较，请看下面的笔记本:
 
-```
+```py
 # import the necessary packages
 import matplotlib.pyplot as plt
 import cv2
@@ -114,7 +114,7 @@ import cv2
 
 接下来，我们将加载并预处理一个示例图像:
 
-```
+```py
 # load the original image, convert it to grayscale, and display
 # it inline
 image = cv2.imread("example.png")
@@ -135,7 +135,7 @@ plt.imshow(image, cmap="gray")
 
 接下来，我们将加载 Cython:
 
-```
+```py
 %load_ext cython
 
 ```
@@ -144,7 +144,7 @@ plt.imshow(image, cmap="gray")
 
 现在我们已经将 Cython 存储在内存中，我们将指示 Cython 显示哪些行可以在我们的自定义阈值函数中进行优化:
 
-```
+```py
 %%cython -a
 def threshold_slow(T, image):
     # grab the image dimensions
@@ -179,7 +179,7 @@ def threshold_slow(T, image):
 
 在 Jupyter 中(假设您执行了上面的`In [ ]`块)，您将看到以下输出:
 
-```
+```py
  01: 
 +02: def threshold_slow(T, image):
  03:     # grab the image dimensions
@@ -203,14 +203,14 @@ def threshold_slow(T, image):
 
 接下来，让我们计时函数的操作:
 
-```
+```py
 %timeit threshold_slow(5, image)
 
 ```
 
 使用`%timeit`语法，我们可以执行函数并计时——我们指定一个阈值 *5* 和我们已经加载的图像。结果输出如下所示:
 
-```
+```py
 1 loop, best of 3: 244 ms per loop
 
 ```
@@ -219,7 +219,7 @@ def threshold_slow(T, image):
 
 让我们看看阈值操作的结果，从视觉上验证我们的函数是否正常工作:
 
-```
+```py
 # threshold our image to validate that it's working
 image = threshold_slow(5, image)
 plt.imshow(image, cmap="gray")
@@ -234,7 +234,7 @@ plt.imshow(image, cmap="gray")
 
 现在我们到了有趣的部分。让我们利用 Cython 创建一个高度优化的逐像素环路:
 
-```
+```py
 %%cython -a
 import cython
 
@@ -278,7 +278,7 @@ Cython 的美妙之处在于，我们的 Python 代码只需要很少的修改�
 
 我们的输出如下所示:
 
-```
+```py
 +01: import cython
  02: 
  03: @cython.boundscheck(False)
@@ -305,7 +305,7 @@ Cython 的美妙之处在于，我们的 Python 代码只需要很少的修改�
 
 接下来，我们将重新加载并重新预处理我们的原始图像(有效地重置它):
 
-```
+```py
 # reload the original image and convert it to grayscale
 image = cv2.imread("example.png")
 image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -316,14 +316,14 @@ image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 让我们继续，根据 Python 中最初的`threshold_slow`函数对我们的`threshold_fast`函数进行基准测试:
 
-```
+```py
 %timeit threshold_fast(5, image)
 
 ```
 
 结果是:
 
-```
+```py
 10000 loops, best of 3: 41.2 µs per loop
 
 ```

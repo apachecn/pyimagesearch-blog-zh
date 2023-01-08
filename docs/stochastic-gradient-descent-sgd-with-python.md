@@ -16,7 +16,7 @@
 
 相反，我们应该做的是*批量*我们的更新。我们可以通过添加额外的函数调用来更新伪代码，将 vanilla gradient descent 转换为 SGD:
 
-```
+```py
 while True:
 	batch = next_training_batch(data, 256)
 	Wgradient = evaluate_gradient(loss, batch, W)
@@ -35,7 +35,7 @@ while True:
 
 让我们继续实现 SGD，看看它与标准的普通梯度下降有什么不同。打开一个新文件，将其命名为`sgd.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
@@ -59,7 +59,7 @@ def sigmoid_deriv(x):
 
 事实上，`predict`方法也没有改变:
 
-```
+```py
 def predict(X, W):
 	# take the dot product between our features and weight matrix
 	preds = sigmoid_activation(X.dot(W))
@@ -75,7 +75,7 @@ def predict(X, W):
 
 然而，改变的*是增加了`next_batch`功能:*
 
-```
+```py
 def next_batch(X, y, batchSize):
 	# loop over our dataset "X" in mini-batches, yielding a tuple of
 	# the current batched data and labels
@@ -93,7 +93,7 @@ def next_batch(X, y, batchSize):
 
 接下来，我们可以解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-e", "--epochs", type=float, default=100,
@@ -109,7 +109,7 @@ args = vars(ap.parse_args())
 
 我们的下一个代码块处理生成具有 1，000 个数据点的 2 类分类问题，添加偏差列，然后执行训练和测试分割:
 
-```
+```py
 # generate a 2-class classification problem with 1,000 data points,
 # where each data point is a 2D feature vector
 (X, y) = make_blobs(n_samples=1000, n_features=2, centers=2,
@@ -129,7 +129,7 @@ X = np.c_[X, np.ones((X.shape[0]))]
 
 然后，我们将初始化权重矩阵和损失，就像前面的例子一样:
 
-```
+```py
 # initialize our weight matrix and list of losses
 print("[INFO] training...")
 W = np.random.randn(X.shape[1], 1)
@@ -138,7 +138,7 @@ losses = []
 
 接下来是*真正的*变化，我们循环期望的历元数，沿途采样小批量:
 
-```
+```py
 # loop over the desired number of epochs
 for epoch in np.arange(0, args["epochs"]):
 	# initialize the total loss for the epoch
@@ -162,7 +162,7 @@ for epoch in np.arange(0, args["epochs"]):
 
 现在我们有了`error`，我们可以计算梯度下降更新，与从普通梯度下降计算梯度相同，只是这次我们对*批*而不是*整个*训练集执行更新:
 
-```
+```py
 		# the gradient descent update is the dot product between our
 		# (1) current batch and (2) the error of the sigmoid
 		# derivative of our predictions
@@ -180,7 +180,7 @@ for epoch in np.arange(0, args["epochs"]):
 
 然后，我们可以通过取时段中所有批次的平均值来更新我们的损失历史，然后在必要时向我们的终端显示更新:
 
-```
+```py
 	# update our loss history by taking the average loss across all
 	# batches
 	loss = np.average(epochLoss)
@@ -194,7 +194,7 @@ for epoch in np.arange(0, args["epochs"]):
 
 评估我们的分类器的方式与普通梯度下降法相同——只需使用我们学习的`W`权重矩阵对`testX`数据调用`predict`:
 
-```
+```py
 # evaluate our model
 print("[INFO] evaluating...")
 preds = predict(testX, W)
@@ -203,7 +203,7 @@ print(classification_report(testY, preds))
 
 我们将通过绘制测试分类数据以及每个时期的损失来结束我们的脚本:
 
-```
+```py
 # plot the (testing) classification data
 plt.style.use("ggplot")
 plt.figure()
@@ -224,7 +224,7 @@ plt.show()
 
 要可视化我们实现的结果，只需执行以下命令:
 
-```
+```py
 $ python sgd.py
 [INFO] training...
 [INFO] epoch=1, loss=0.1317637

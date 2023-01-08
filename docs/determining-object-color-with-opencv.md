@@ -25,7 +25,7 @@
 
 在深入研究任何代码之前，让我们简要回顾一下我们的项目结构:
 
-```
+```py
 |--- pyimagesearch
 |    |--- __init__.py
 |    |--- colorlabeler.py
@@ -41,7 +41,7 @@
 
 在继续阅读本文之前，请确保您的系统上安装了 [imutils Python 包](https://github.com/jrosebr1/imutils):
 
-```
+```py
 $ pip install imutils
 
 ```
@@ -54,7 +54,7 @@ $ pip install imutils
 
 为此，让我们在`colorlabeler.py`文件中定义一个名为`ColorLabeler`的类:
 
-```
+```py
 # import the necessary packages
 from scipy.spatial import distance as dist
 from collections import OrderedDict
@@ -107,7 +107,7 @@ class ColorLabeler:
 
 下一步是定义`label`方法:
 
-```
+```py
 	def label(self, image, c):
 		# construct a mask for the contour, then compute the
 		# average L*a*b* value for the masked region
@@ -157,7 +157,7 @@ class ColorLabeler:
 
 让我们开始吧:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.shapedetector import ShapeDetector
 from pyimagesearch.colorlabeler import ColorLabeler
@@ -179,7 +179,7 @@ args = vars(ap.parse_args())
 
 接下来，我们可以加载图像并处理它:
 
-```
+```py
 # load the image and resize it to a smaller factor so that
 # the shapes can be approximated better
 image = cv2.imread(args["image"])
@@ -216,7 +216,7 @@ cl = ColorLabeler()
 
 我们现在准备检测图像中每个物体的形状和颜色:
 
-```
+```py
 # loop over the contours
 for c in cnts:
 	# compute the center of the contour
@@ -257,7 +257,7 @@ for c in cnts:
 
 要运行我们的 shape detector + color labeler，只需使用本教程底部的表单将源代码下载到 post 并执行以下命令:
 
-```
+```py
 $ python detect_color.py --image example_shapes.png
 
 ```

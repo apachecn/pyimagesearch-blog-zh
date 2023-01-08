@@ -56,7 +56,7 @@
 
 这些都可以通过 pip 安装在您的环境中(推荐虚拟环境):
 
-```
+```py
 $ pip install numpy
 $ pip install pillow
 $ pip install --upgrade scikit-learn
@@ -226,7 +226,7 @@ Iris 数据集可以说是最简单的机器学习数据集之一——它通常
 
 在那里，您可以解压缩归档文件并检查内容:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── 3scenes
@@ -263,7 +263,7 @@ $ tree --dirsfirst --filelimit 10
 
 让我们开始吧——打开`classify_iris.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
@@ -295,7 +295,7 @@ args = vars(ap.parse_args())
 
 使用`argparse`，让我们解析第 15-18 行上的单个命令行参数标志`--model`。`--model`开关允许我们从以下任何型号中进行选择:
 
-```
+```py
 # define the dictionary of models our script can use, where the key
 # to the dictionary is the name of the model (supplied via command
 # line argument) and the value is the model itself
@@ -323,7 +323,7 @@ models = {
 
 按键可以通过`--model`开关直接输入终端。这里有一个例子:
 
-```
+```py
 $ python classify_irs.py --model knn
 
 ```
@@ -332,7 +332,7 @@ $ python classify_irs.py --model knn
 
 接下来，让我们加载并拆分数据:
 
-```
+```py
 # load the Iris dataset and perform a training and testing split,
 # using 75% of the data for training and 25% for evaluation
 print("[INFO] loading data...")
@@ -346,7 +346,7 @@ dataset = load_iris()
 
 最后一步是训练和评估我们的模型:
 
-```
+```py
 # train the model
 print("[INFO] using '{}' model".format(args["model"]))
 model = models[args["model"]]
@@ -376,7 +376,7 @@ print(classification_report(testY, predictions,
 
 现在让我们实现这个脚本:
 
-```
+```py
 # import the necessary packages
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
@@ -408,7 +408,7 @@ import os
 
 接下来让我们定义一个名为`extract_color_stats`的函数:
 
-```
+```py
 def extract_color_stats(image):
 	# split the input image into its respective RGB color channels
 	# and then create a feature vector with 6 values: the mean and
@@ -437,7 +437,7 @@ def extract_color_stats(image):
 
 让我们继续解析两个[命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", type=str, default="3scenes",
@@ -455,7 +455,7 @@ args = vars(ap.parse_args())
 
 同样，我们有七个机器学习模型可供选择，带有`--model`参数:
 
-```
+```py
 # define the dictionary of models our script can use, where the key
 # to the dictionary is the name of the model (supplied via command
 # line argument) and the value is the model itself
@@ -473,7 +473,7 @@ models = {
 
 定义完`models`字典后，我们需要继续将图像加载到内存中:
 
-```
+```py
 # grab all image paths in the input dataset directory, initialize our
 # list of extracted features and corresponding labels
 print("[INFO] extracting image features...")
@@ -509,7 +509,7 @@ for imagePath in imagePaths:
 
 现在，让我们编码我们的`labels`并构造我们的数据分割:
 
-```
+```py
 # encode the labels, converting them from strings to integers
 le = LabelEncoder()
 labels = le.fit_transform(labels)
@@ -523,7 +523,7 @@ labels = le.fit_transform(labels)
 
 使用`LabelEncoder` ( **第 71 行和第 72 行**)将我们的文本`labels`转换成表示标签的整数:
 
-```
+```py
 (pdb) labels = le.fit_transform(labels)
 (pdb) set(labels)
 {0, 1, 2}
@@ -534,7 +534,7 @@ labels = le.fit_transform(labels)
 
 最后，我们可以训练和评估我们的模型:
 
-```
+```py
 # train the model
 print("[INFO] using '{}' model".format(args["model"]))
 model = models[args["model"]]
@@ -582,7 +582,7 @@ k-最近邻分类器是迄今为止最简单的图像分类算法。
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python classify_iris.py 
 [INFO] loading data...
 [INFO] using 'knn' model
@@ -602,7 +602,7 @@ $ python classify_iris.py
 
 让我们来看看我们的 3 场景数据集:
 
-```
+```py
 python classify_images.py --model knn
 [INFO] extracting image features...
 [INFO] using 'knn' model
@@ -654,7 +654,7 @@ weighted avg       0.75      0.73      0.73       237
 
 让我们继续将朴素贝叶斯算法应用于虹膜数据集:
 
-```
+```py
 $ python classify_iris.py --model naive_bayes
 [INFO] loading data...
 [INFO] using 'naive_bayes' model
@@ -675,7 +675,7 @@ weighted avg       0.98      0.97      0.97        38
 
 现在，让我们将朴素贝叶斯应用于 3 场景数据集进行图像分类:
 
-```
+```py
 $ python classify_images.py --model naive_bayes
 [INFO] extracting image features...
 [INFO] using 'naive_bayes' model
@@ -722,7 +722,7 @@ weighted avg       0.66      0.65      0.64       237
 
 让我们将逻辑回归应用于 Iris 数据集:
 
-```
+```py
 $ python classify_iris.py --model logit
 [INFO] loading data...
 [INFO] using 'logit' model
@@ -745,7 +745,7 @@ weighted avg       0.98      0.97      0.97        38
 
 现在让我们将逻辑回归应用于图像分类的任务:
 
-```
+```py
 $ python classify_images.py --model logit
 [INFO] extracting image features...
 [INFO] using 'logit' model
@@ -783,7 +783,7 @@ weighted avg       0.69      0.70      0.69       237
 
 如果一开始，你的 SVM 没有获得合理的精度，你会想回去调整内核和相关参数——调整 SVM 的这些旋钮对于获得一个好的机器学习模型至关重要。也就是说，让我们将 SVM 应用于虹膜数据集:
 
-```
+```py
 $ python classify_iris.py --model svm
 [INFO] loading data...
 [INFO] using 'svm' model
@@ -804,7 +804,7 @@ weighted avg       0.98      0.97      0.97        38
 
 让我们将 SVM 应用于 3 场景数据集:
 
-```
+```py
 $ python classify_images.py --model svm
 [INFO] extracting image features...
 [INFO] using 'svm' model
@@ -858,7 +858,7 @@ $ python classify_images.py --model svm
 
 让我们继续将决策树算法应用于 Iris 数据集:
 
-```
+```py
 $ python classify_iris.py --model decision_tree
 [INFO] loading data...
 [INFO] using 'decision_tree' model
@@ -879,7 +879,7 @@ weighted avg       0.95      0.95      0.95        38
 
 我们的图像分类项目呢？
 
-```
+```py
 $ python classify_images.py --model decision_tree
 [INFO] extracting image features...
 [INFO] using 'decision_tree' model
@@ -917,7 +917,7 @@ weighted avg       0.74      0.74      0.74       237
 
 让我们在 Iris 数据集上尝试我们的随机森林:
 
-```
+```py
 $ python classify_iris.py --model random_forest
 [INFO] loading data...
 [INFO] using 'random_forest' model
@@ -940,7 +940,7 @@ weighted avg       0.96      0.95      0.95        38
 
 随机森林适合我们的 3 场景数据集吗？
 
-```
+```py
 $ python classify_images.py --model random_forest
 [INFO] extracting image features...
 [INFO] using 'random_forest' model
@@ -977,7 +977,7 @@ weighted avg       0.84      0.83      0.83       237
 
 让我们使用 Python 和 scikit-learn 将多层感知器机器学习算法应用于我们的虹膜数据集:
 
-```
+```py
 $ python classify_iris.py --model mlp
 [INFO] loading data...
 [INFO] using 'mlp' model
@@ -998,7 +998,7 @@ weighted avg       0.98      0.97      0.97        38
 
 让我们继续使用 MLP 进行图像分类:
 
-```
+```py
 $ python classify_images.py --model mlp
 [INFO] extracting image features...
 [INFO] using 'mlp' model
@@ -1056,7 +1056,7 @@ MLP 在这里达到了 81%的准确率——考虑到模型的简单性，这已
 
 打开`nn_iris.py`并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from keras.models import Sequential
 from keras.layers.core import Dense
@@ -1088,7 +1088,7 @@ testY = lb.transform(testY)
 
 现在让我们建立我们的神经网络:
 
-```
+```py
 # define the 4-3-3-3 architecture using Keras
 model = Sequential()
 model.add(Dense(3, input_shape=(4,), activation="sigmoid"))
@@ -1103,7 +1103,7 @@ model.add(Dense(3, activation="softmax"))
 
 让我们继续训练和评估我们的`model`:
 
-```
+```py
 # train the model using SGD
 print("[INFO] training network...")
 opt = SGD(lr=0.1, momentum=0.9, decay=0.1 / 250)
@@ -1128,7 +1128,7 @@ print(classification_report(testY.argmax(axis=1),
 
  *我们到了关键时刻— **我们的神经网络在虹膜数据集上会有怎样的表现？**
 
-```
+```py
 $ python nn_iris.py 
 Using TensorFlow backend.
 [INFO] loading data...
@@ -1184,7 +1184,7 @@ avg / total       1.00      1.00      1.00        38
 
 打开`basic_cnn.py`脚本并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from keras.models import Sequential
 from keras.layers.convolutional import Conv2D
@@ -1220,7 +1220,7 @@ args = vars(ap.parse_args())
 
 现在让我们加载数据:
 
-```
+```py
 # grab all image paths in the input dataset directory, then initialize
 # our list of images and corresponding class labels
 print("[INFO] loading images...")
@@ -1254,7 +1254,7 @@ for imagePath in imagePaths:
 
 让我们一次性编码我们的标签，并拆分我们的培训/测试数据:
 
-```
+```py
 # encode the labels, converting them from strings to integers
 lb = LabelBinarizer()
 labels = lb.fit_transform(labels)
@@ -1268,7 +1268,7 @@ labels = lb.fit_transform(labels)
 
 然后用 Keras 建立我们的图像分类 CNN:
 
-```
+```py
 # define our Convolutional Neural Network architecture
 model = Sequential()
 model.add(Conv2D(8, (3, 3), padding="same", input_shape=(32, 32, 3)))
@@ -1294,7 +1294,7 @@ model.add(Activation("softmax"))
 
 让我们继续训练和评估我们的 CNN 模型:
 
-```
+```py
 # train the model using the Adam optimizer
 print("[INFO] training network...")
 opt = Adam(lr=1e-3, decay=1e-3 / 50)
@@ -1315,7 +1315,7 @@ print(classification_report(testY.argmax(axis=1),
 
 让我们试试 CNN，好吗？
 
-```
+```py
 $ python basic_cnn.py 
 Using TensorFlow backend.
 [INFO] loading images...

@@ -95,14 +95,14 @@ AprilTags 和密切相关的 ArUco tags 的用例数量惊人。在本教程中�
 
 如果您正在使用 Python 虚拟环境(这是我推荐的，因为这是 Python 的最佳实践)，请确保使用`workon`命令访问您的 Python 环境，然后将`apriltag`安装到该环境中:
 
-```
+```py
 $ workon your_env_name
 $ pip install apriltag
 ```
 
 从那里，验证您可以将`cv2`(您的 OpenCV 绑定)和`apriltag`(您的 AprilTag 检测器库)导入到您的 Python shell 中:
 
-```
+```py
 $ python
 >>> import cv2
 >>> import apriltag
@@ -128,7 +128,7 @@ $ python
 
 在我们实现 Python 脚本来检测图像中的 AprilTags 之前，让我们先回顾一下我们的项目目录结构:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── images
@@ -141,7 +141,7 @@ $ tree . --dirsfirst
 
 ### 用 Python 实现 AprilTag 检测
 
-```
+```py
 # import the necessary packages
 import apriltag
 import argparse
@@ -156,7 +156,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们加载输入图像并对其进行预处理:
 
-```
+```py
 # load the input image and convert it to grayscale
 print("[INFO] loading image...")
 image = cv2.imread(args["image"])
@@ -167,7 +167,7 @@ gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 说到 AprilTag 检测，现在让我们继续执行检测步骤:
 
-```
+```py
 # define the AprilTags detector options and then detect the AprilTags
 # in the input image
 print("[INFO] detecting AprilTags...")
@@ -194,7 +194,7 @@ AprilTags 中的**族**定义了 AprilTag 检测器将在输入图像中采用�
 
 这里的最后一步是遍历 AprilTags 并显示结果:
 
-```
+```py
 # loop over the AprilTag detection results
 for r in results:
 	# extract the bounding box (x, y)-coordinates for the AprilTag
@@ -242,7 +242,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python detect_apriltag.py --image images/example_01.png 
 [INFO] loading image...
 [INFO] detecting AprilTags...
@@ -254,7 +254,7 @@ $ python detect_apriltag.py --image images/example_01.png
 
 让我们试试另一张图片，这张图片有*多个* AprilTags:
 
-```
+```py
 $ python detect_apriltag.py --image images/example_02.png 
 [INFO] loading image...
 [INFO] detecting AprilTags...

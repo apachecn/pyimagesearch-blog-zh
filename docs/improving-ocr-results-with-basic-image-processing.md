@@ -33,7 +33,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -58,7 +58,7 @@ $ pip install opencv-contrib-python
 
 让我们从回顾我们的项目目录结构开始:
 
-```
+```py
 |-- challenging_example.png
 |-- process_image.py
 ```
@@ -76,7 +76,7 @@ $ pip install opencv-contrib-python
 
 为了演示在当前状态下分割该图像有多困难，让我们将 Tesseract 应用于原始图像:
 
-```
+```py
 $ tesseract challenging_example.png stdout
 Warning: Invalid resolution 0 dpi. Using 70 instead.
 
@@ -87,7 +87,7 @@ Estimating resolution as 169
 
 如果你要试验来自[先前教程](https://pyimagesearch.com/2021/11/15/tesseract-page-segmentation-modes-psms-explained-how-to-improve-your-ocr-accuracy/)的各种 PSM 设置，你会看到返回*任何输出*的唯一 PSM 之一是`--psm 8`(将图像视为一个单词):
 
-```
+```py
 $ tesseract challenging_example.png stdout --psm 8
 Warning: Invalid resolution 0 dpi. Using 70 instead.
  T2eti@ce
@@ -105,7 +105,7 @@ Warning: Invalid resolution 0 dpi. Using 70 instead.
 
 如上所述，打开一个新文件，将其命名为`process_image.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import pytesseract
@@ -124,7 +124,7 @@ args = vars(ap.parse_args())
 
 现在让我们深入研究图像处理管道:
 
-```
+```py
 # load the input image and convert it to grayscale
 image = cv2.imread(args["image"])
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -139,7 +139,7 @@ cv2.imshow("Otsu", thresh)
 
 在我们的图像准备好进行 OCR 之前，我们还有许多路要走，所以让我们看看接下来会发生什么:
 
-```
+```py
 # apply a distance transform which calculates the distance to the
 # closest zero pixel for each pixel in the input image
 dist = cv2.distanceTransform(thresh, cv2.DIST_L2, 5)
@@ -163,7 +163,7 @@ cv2.imshow("Dist Otsu", dist)
 
  *让我们继续清理我们的前景:
 
-```
+```py
 # apply an "opening" morphological operation to disconnect components
 # in the image
 kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7))
@@ -175,7 +175,7 @@ cv2.imshow("Opening", opening)
 
 此时，我们可以从图像中提取轮廓，并对其进行过滤，以仅显示*和*数字:
 
-```
+```py
 # find contours in the opening image, then initialize the list of
 # contours which belong to actual characters that we will be OCR'ing
 cnts = cv2.findContours(opening.copy(), cv2.RETR_EXTERNAL,
@@ -200,7 +200,7 @@ for c in cnts:
 
 现在我们已经隔离了我们的角色轮廓，让我们清理一下周围的区域:
 
-```
+```py
 # compute the convex hull of the characters
 chars = np.vstack([chars[i] for i in range(0, len(chars))])
 hull = cv2.convexHull(chars)
@@ -228,7 +228,7 @@ final = cv2.bitwise_and(opening, opening, mask=mask)
 
 这就是我们的图像处理流程——我们现在有了一个清晰的图像，可以很好地处理宇宙魔方。让我们执行 OCR 并显示结果:
 
-```
+```py
 # OCR the input image using Tesseract
 options = "--psm 8 -c tessedit_char_whitelist=0123456789"
 text = pytesseract.image_to_string(final, config=options)
@@ -250,7 +250,7 @@ cv2.waitKey(0)
 
 让我们测试一下我们的图像处理程序。打开终端并启动`process_image.py`脚本:
 
-```
+```py
 $ python process_image.py --image challenging_example.png
 1214
 ```

@@ -79,7 +79,7 @@
 
 准备好看代码了吗？好了，我们开始吧:
 
-```
+```py
 # import the necessary packages
 import imutils
 import cv2
@@ -134,7 +134,7 @@ class RGBHistogram:
 
 让我们深入了解一下`index.py`:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.rgbhistogram import RGBHistogram
 from imutils.paths import list_images
@@ -167,7 +167,7 @@ index = {}
 
 同样，您可以根据自己的意愿让这个过程变得简单或复杂。更复杂的图像描述符使用术语频率-逆文档频率加权( [tf-idf](http://en.wikipedia.org/wiki/Tf%E2%80%93idf) )和一个[倒排索引](http://en.wikipedia.org/wiki/Inverted_index)，但是我们现在要避开它。不过不要担心，我会有*很多*的博客文章讨论我们如何利用更复杂的技术，但是目前，让我们保持简单。
 
-```
+```py
 # initialize our image descriptor -- a 3D RGB histogram with
 # 8 bins per channel
 desc = RGBHistogram([8, 8, 8])
@@ -176,7 +176,7 @@ desc = RGBHistogram([8, 8, 8])
 
 这里我们实例化我们的`RGBHistogram`。同样，我们将分别为红色、绿色和蓝色通道使用 8 个箱。
 
-```
+```py
 # use list_images to grab the image paths and loop over them
 for imagePath in list_images(args["dataset"]):
 	# extract our unique image ID (i.e. the filename)
@@ -196,7 +196,7 @@ for imagePath in list_images(args["dataset"]):
 *   **第 28 行:**我们提取字典的“关键字”。在这个样本数据集中，所有的文件名都是唯一的，所以文件名本身就足以作为键。
 *   **第 32-34 行:**图像从磁盘上下载，然后我们使用`RGBHistogram`从图像中提取直方图。直方图然后存储在索引中。
 
-```
+```py
 # we are now done indexing our image -- now we can write our
 # index to disk
 f = open(args["index"], "wb")
@@ -212,7 +212,7 @@ print("[INFO] done...indexed {} images".format(len(index)))
 
 要索引您的图像搜索引擎，只需在终端中输入以下内容(注意[命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/)):
 
-```
+```py
 $ python index.py --dataset images --index index.cpickle
 [INFO] done...indexed 25 images
 
@@ -226,7 +226,7 @@ $ python index.py --dataset images --index index.cpickle
 
 这个问题最好先在`searcher.py`里面解决，然后我再分解一下。
 
-```
+```py
 # import the necessary packages
 import numpy as np
 
@@ -289,7 +289,7 @@ class Searcher:
 
 但是我们还没到那一步。我们在`search.py`中需要一点额外的代码来处理从磁盘上加载图像和执行搜索:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.searcher import Searcher
 import numpy as np
@@ -314,7 +314,7 @@ searcher = Searcher(index)
 
 重要的事情先来。导入我们将需要的包。如您所见，我已经将我们的`Searcher`类存储在了`pyimagesearch`模块中。然后，我们以与索引步骤中相同的方式定义我们的参数。最后，我们使用`cPickle`从磁盘上加载我们的索引并初始化我们的`Searcher`。
 
-```
+```py
 # loop over images in the index -- we will use each one as
 # a query image
 for (query, queryFeatures) in index.items():
@@ -370,14 +370,14 @@ for (query, queryFeatures) in index.items():
 
 让我们看看这东西的表现如何:
 
-```
+```py
 $ python search.py --dataset images --index index.cpickle
 
 ```
 
 最后，在窗口处于活动状态时按下一个键后，您将看到这个魔多查询和结果:
 
-```
+```py
 query: Mordor-002.png
 	1\. Mordor-002.png : 0.000
 	2\. Mordor-004.png : 0.296
@@ -400,7 +400,7 @@ query: Mordor-002.png
 
 现在，让我们尝试另一个图像，这一次使用妖精镇中的妖精王。当你准备好了，只要在 OpenCV 窗口激活时按一个键，直到你看到这个妖精王的查询:
 
-```
+```py
 query: Goblin-004.png
 	1\. Goblin-004.png : 0.000
 	2\. Goblin-003.png : 0.103
@@ -429,7 +429,7 @@ query: Goblin-004.png
 
 到目前为止，我只向你展示了如何使用已经在你的索引中的图片*进行搜索。但显然，这并不是所有图像搜索引擎的工作方式。谷歌允许你上传自己的图片。TinEye 允许你上传自己的图片。为什么我们不能？让我们看看如何使用`search_external.py`来执行搜索，使用一个我们还没有索引的图像:*
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.rgbhistogram import RGBHistogram
 from pyimagesearch.searcher import Searcher
@@ -506,7 +506,7 @@ cv2.waitKey(0)
 
 要运行该脚本，只需在终端中提供正确的命令行参数:
 
-```
+```py
 $ python search_external.py --dataset images --index index.cpickle \
 	--query queries/rivendell-query.png
 query: queries/rivendell-query.png

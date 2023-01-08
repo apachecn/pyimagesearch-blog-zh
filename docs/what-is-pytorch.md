@@ -70,13 +70,13 @@ PyTorch 通过创建一个既 Pythonic 化又易于定制的 API 解决了这些
 
 PyTorch 库可以使用 Python 的包管理器 pip 安装:
 
-```
+```py
 $ pip install torch torchvision
 ```
 
 从那里，您应该启动一个 Python shell 并验证您可以导入`torch`和`torchvision`:
 
-```
+```py
 $ python
 >>> import torch
 >>> torch.__version__
@@ -94,7 +94,7 @@ PyTorch 将数据表示为多维的类似 NumPy 的数组，称为**张量。张
 
 下面是一个用 NumPy 初始化数组的例子:
 
-```
+```py
 >>> import numpy as np
 >>> np.array([[0.0, 1.3], [2.8, 3.3], [4.1, 5.2], [6.9, 7.0]])
 array([[0\. , 1.3],
@@ -105,7 +105,7 @@ array([[0\. , 1.3],
 
 我们可以使用 PyTorch 初始化同一个数组，如下所示:
 
-```
+```py
 >>> import torch
 >>> torch.tensor([[0.0, 1.3], [2.8, 3.3], [4.1, 5.2], [6.9, 7.0]])
 tensor([[0.0000, 1.3000],

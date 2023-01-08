@@ -162,7 +162,7 @@ CycleGAN 模型标志着解决不成对图像到图像转换问题的第一个�
 
 **Chandhok，s .**“cycle gan:不成对的图像到图像的翻译(第一部分)， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva，R. Raha 和 A. Thanki 编辑。，2022 年，【https://pyimg.co/7vh0s 
 
-```
+```py
 @incollection{Chandhok_2022_CycleGAN,
   author = {Shivam Chandhok},
   title = {{CycleGAN}: Unpaired Image-to-Image Translation (Part 1)},

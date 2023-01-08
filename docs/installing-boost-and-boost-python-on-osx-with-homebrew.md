@@ -54,7 +54,7 @@ Boost 是一个经过同行评审的(也就是非常高质量的)C++库的集合
 
 只需进入 [Homebrew](http://brew.sh/) 主页，将以下代码复制并粘贴到您的终端中:
 
-```
+```py
 $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 ```
@@ -67,7 +67,7 @@ $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/maste
 
 要更新 Homebrew，只需:
 
-```
+```py
 $ brew update
 
 ```
@@ -78,7 +78,7 @@ $ brew update
 
 在我们继续之前，让我们通过 brew 安装 Python:
 
-```
+```py
 $ brew install python
 
 ```
@@ -91,7 +91,7 @@ $ brew install python
 
 要安装 boost，请执行以下命令:
 
-```
+```py
 $ brew install boost --with-python
 
 ```
@@ -110,7 +110,7 @@ $ brew install boost --with-python
 
 既然已经安装了 boost，我们也可以安装 boost-python 了:
 
-```
+```py
 $ brew install boost-python
 
 ```
@@ -121,7 +121,7 @@ boost-python 包的安装速度应该比 boost 快得多，但是您可能还是
 
 确保安装了 boost 和 boost-python:
 
-```
+```py
 $ brew list | grep 'boost'
 boost
 boost-python
@@ -169,7 +169,7 @@ boost-python
 
 让我们从使用 virtualenvwrapper 创建 virtualenv 开始:
 
-```
+```py
 $ mkvirtualenv annoy
 ...
 $ pip install numpy annoy
@@ -179,7 +179,7 @@ $ pip install numpy annoy
 
 现在我们的包已经安装好了，让我们用 128-D 创建 1，000 个随机向量。我们将把这些向量传递给 Annoy，并使用 10 棵树构造我们的嵌入:
 
-```
+```py
 >>> import numpy as np
 >>> M = np.random.normal(size=(1000, 128))
 >>> from annoy import AnnoyIndex
@@ -193,7 +193,7 @@ $ pip install numpy annoy
 
 现在我们的嵌入已经创建好了，让我们找到列表中第一个向量的 10 个(近似)最近的邻居:
 
-```
+```py
 >>> ann.get_nns_by_item(0, 10)
 [0, 75, 934, 148, 506, 915, 392, 849, 602, 95]
 
@@ -201,7 +201,7 @@ $ pip install numpy annoy
 
 我们还可以找到不属于索引的最近邻居:
 
-```
+```py
 >>> ann.get_nns_by_vector(np.random.normal(size=(128,)).tolist(), 10)
 [176, 594, 742, 215, 478, 903, 516, 413, 484, 480]
 

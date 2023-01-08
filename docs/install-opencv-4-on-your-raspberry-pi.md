@@ -59,7 +59,7 @@ OpenCV 4 于 2018 年 11 月 20 日[正式发布](https://opencv.org/opencv-4-0-
 
 如果是这样的话，你应该做的第一件事就是扩展你的文件系统，在你的 micro-SD 卡上包含所有可用空间:
 
-```
+```py
 $ sudo raspi-config
 
 ```
@@ -78,14 +78,14 @@ $ sudo raspi-config
 
 一旦出现提示，你应该选择第一个选项，***“A1。展开文件系统"*** ， ***点击键盘上的回车键*** ，向下箭头到 ***" <完成> "*** 按钮，然后重新启动您的 Pi——可能会提示您重新启动，但如果不是，您可以执行:
 
-```
+```py
 $ sudo reboot
 
 ```
 
 重新启动后，您的文件系统应该已经扩展到包括 micro-SD 卡上的所有可用空间。您可以通过执行`df -h`并检查输出来验证磁盘是否已经扩展:
 
-```
+```py
 $ df -h
 Filesystem      Size  Used Avail Use% Mounted on
 /dev/root        30G  4.2G   24G  15% /
@@ -105,7 +105,7 @@ tmpfs            88M     0   88M   0% /run/user/1000
 
 如果您使用的是 8GB 卡，您可能会使用将近 50%的可用空间，因此一个简单的方法是删除 LibreOffice 和 Wolfram engine，以释放 Pi 上的一些空间:
 
-```
+```py
 $ sudo apt-get purge wolfram-engine
 $ sudo apt-get purge libreoffice*
 $ sudo apt-get clean
@@ -119,21 +119,21 @@ $ sudo apt-get autoremove
 
 从那里，让我们更新我们的系统:
 
-```
+```py
 $ sudo apt-get update && sudo apt-get upgrade
 
 ```
 
 然后让我们安装开发工具，包括 [CMake](https://cmake.org/) :
 
-```
+```py
 $ sudo apt-get install build-essential cmake unzip pkg-config
 
 ```
 
 接下来，让我们安装一系列图像和视频库——这些库对于能够处理图像和视频文件至关重要:
 
-```
+```py
 $ sudo apt-get install libjpeg-dev libpng-dev libtiff-dev
 $ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
 $ sudo apt-get install libxvidcore-dev libx264-dev
@@ -142,14 +142,14 @@ $ sudo apt-get install libxvidcore-dev libx264-dev
 
 从那里，让我们安装 GTK，我们的 GUI 后端:
 
-```
+```py
 $ sudo apt-get install libgtk-3-dev
 
 ```
 
 现在让我们安装一个可以减少讨厌的 GTK 警告的包:
 
-```
+```py
 $ sudo apt-get install libcanberra-gtk*
 
 ```
@@ -158,14 +158,14 @@ $ sudo apt-get install libcanberra-gtk*
 
 然后安装两个包含 OpenCV 数值优化的包:
 
-```
+```py
 $ sudo apt-get install libatlas-base-dev gfortran
 
 ```
 
 最后，让我们安装 Python 3 开发头:
 
-```
+```py
 $ sudo apt-get install python3-dev
 
 ```
@@ -180,7 +180,7 @@ $ sudo apt-get install python3-dev
 
 当你准备好了，就跟着下载`opencv`和`opencv_contrib`代码:
 
-```
+```py
 $ cd ~
 $ wget -O opencv.zip https://github.com/opencv/opencv/archive/4.0.0.zip
 $ wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.0.0.zip
@@ -189,7 +189,7 @@ $ wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.
 
 从那里，让我们解压缩档案:
 
-```
+```py
 $ unzip opencv.zip
 $ unzip opencv_contrib.zip
 
@@ -197,7 +197,7 @@ $ unzip opencv_contrib.zip
 
 我也喜欢重命名目录:
 
-```
+```py
 $ mv opencv-4.0.0 opencv
 $ mv opencv_contrib-4.0.0 opencv_contrib
 
@@ -213,7 +213,7 @@ $ mv opencv_contrib-4.0.0 opencv_contrib
 
 要安装 pip，只需在终端中输入以下内容:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python3 get-pip.py
 
@@ -227,7 +227,7 @@ $ sudo python3 get-pip.py
 
 现在让我们继续安装`virtualenv`和`virtualenvwrapper`——它们支持 Python 虚拟环境:
 
-```
+```py
 $ sudo pip install virtualenv virtualenvwrapper
 $ sudo rm -rf ~/get-pip.py ~/.cache/pip
 
@@ -237,7 +237,7 @@ $ sudo rm -rf ~/get-pip.py ~/.cache/pip
 
 使用终端文本编辑器，如`vi` / `vim`或`nano`，将下列行添加到您的`~/.profile`中:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
@@ -247,7 +247,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 或者，您可以通过 bash 命令直接附加这些行:
 
-```
+```py
 $ echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.profile
 $ echo "export WORKON_HOME=$HOME/.virtualenvs" >> ~/.profile
 $ echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.profile
@@ -257,7 +257,7 @@ $ echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.profile
 
 接下来，获取`~/.profile`文件:
 
-```
+```py
 $ source ~/.profile
 
 ```
@@ -266,7 +266,7 @@ $ source ~/.profile
 
 现在，您可以在 Raspberry Pi 上创建 OpenCV 4 + Python 3 虚拟环境了:
 
-```
+```py
 $ mkvirtualenv cv -p python3
 
 ```
@@ -282,7 +282,7 @@ $ mkvirtualenv cv -p python3
 
 让我们通过使用`workon`命令来验证我们是否处于`cv`环境中:
 
-```
+```py
 $ workon cv
 
 ```
@@ -295,7 +295,7 @@ $ workon cv
 
 我们将安装的第一个 Python 包和唯一的 OpenCV 先决条件是 NumPy:
 
-```
+```py
 $ pip install numpy
 
 ```
@@ -308,7 +308,7 @@ $ pip install numpy
 
 导航回 OpenCV repo 并创建+输入一个`build`目录:
 
-```
+```py
 $ cd ~/opencv
 $ mkdir build
 $ cd build
@@ -319,7 +319,7 @@ $ cd build
 
 现在让我们运行 CMake 来配置 OpenCV 4 版本:
 
-```
+```py
 $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
     -D CMAKE_INSTALL_PREFIX=/usr/local \
     -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules \
@@ -354,14 +354,14 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 打开您的`/etc/dphys-swapfile`文件:
 
-```
+```py
 $ sudo nano /etc/dphys-swapfile
 
 ```
 
 …然后编辑`CONF_SWAPSIZE`变量:
 
-```
+```py
 # set size to absolute value, leaving empty (default) then uses computed value
 #   you most likely don't want this, unless you have an special disk situation
 # CONF_SWAPSIZE=100
@@ -375,7 +375,7 @@ CONF_SWAPSIZE=2048
 
 从那里，重新启动交换服务:
 
-```
+```py
 $ sudo /etc/init.d/dphys-swapfile stop
 $ sudo /etc/init.d/dphys-swapfile start
 
@@ -387,7 +387,7 @@ $ sudo /etc/init.d/dphys-swapfile start
 
 现在我们准备编译 OpenCV 4:
 
-```
+```py
 $ make -j4
 
 ```
@@ -402,7 +402,7 @@ $ make -j4
 
 接下来，让我们用另外两个命令安装 OpenCV 4:
 
-```
+```py
 $ sudo make install
 $ sudo ldconfig
 
@@ -417,7 +417,7 @@ $ sudo ldconfig
 
 让我们创建一个从系统`site-packages`目录中的 OpenCV 安装到我们的虚拟环境的符号链接:
 
-```
+```py
 $ cd ~/.virtualenvs/cv/lib/python3.5/site-packages/
 $ ln -s /usr/local/python/cv2/python-3.5/cv2.cpython-35m-arm-linux-gnueabihf.so cv2.so
 $ cd ~
@@ -432,7 +432,7 @@ $ cd ~
 
 打开终端并执行以下操作:
 
-```
+```py
 $ workon cv
 $ python
 >>> import cv2
@@ -487,7 +487,7 @@ $ python
 
 您可以将 zip 文件下载到您的`~/Downloads`文件夹，然后启动一个终端:
 
-```
+```py
 $ cd ~/Downloads
 $ scp pi-home-surveillance.zip pi@192.168.1.119:~ # replace IP with your Pi's IP
 $ ssh pi@192.168.1.119 # replace with your Pi's IP
@@ -496,7 +496,7 @@ $ ssh pi@192.168.1.119 # replace with your Pi's IP
 
 一旦建立了 SSH 连接，让我们安装几个包，即 Dropbox API:
 
-```
+```py
 $ workon cv
 $ pip install dropbox
 $ pip install imutils
@@ -506,7 +506,7 @@ $ pip install "picamera[array]"
 
 从那里，解压缩文件并更改工作目录:
 
-```
+```py
 $ cd ~
 $ unzip pi-home-surveillance.zip
 $ cd pi-home-surveillance
@@ -515,7 +515,7 @@ $ cd pi-home-surveillance
 
 您将看到如下所示的目录结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── pyimagesearch
@@ -530,7 +530,7 @@ $ tree --dirsfirst
 
 在您能够部署项目之前，您需要编辑配置文件`conf.json`。让我们使用`nano`文本编辑器(或者`vim` / `emacs`)在我们的终端中快速检查一下:
 
-```
+```py
 $ nano conf.json
 
 ```
@@ -577,21 +577,21 @@ $ nano conf.json
 
 以下是如何开始使用 Python 2.7 的方法:
 
-```
+```py
 $ sudo apt-get install python2.7 python2.7-dev
 
 ```
 
 然后，在您在**步骤#4** 中创建您的虚拟环境之前，首先安装 pip for Python 2.7:
 
-```
+```py
 $ sudo python2.7 get-pip.py
 
 ```
 
 同样在**步骤#4** 中:当您创建虚拟环境时，只需使用相关的 Python 版本标志:
 
-```
+```py
 $ mkvirtualenv cv -p python2.7
 
 ```

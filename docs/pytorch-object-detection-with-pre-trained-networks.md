@@ -48,7 +48,7 @@
 
 幸运的是，PyTorch 和 OpenCV 都非常容易使用 pip 安装:
 
-```
+```py
 $ pip install torch torchvision
 $ pip install opencv-contrib-python
 ```
@@ -80,7 +80,7 @@ $ pip install opencv-contrib-python
 
 然后，您将看到以下目录结构:
 
-```
+```py
 $ tree . --dirsfirst 
 .
 ├── images
@@ -112,7 +112,7 @@ $ tree . --dirsfirst
 
 打开`detect_image.py`脚本并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from torchvision.models import detection
 import numpy as np
@@ -126,7 +126,7 @@ import cv2
 
 让我们继续解析我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", type=str, required=True,
@@ -150,7 +150,7 @@ args = vars(ap.parse_args())
 
 这里，我们有一些重要的初始化:
 
-```
+```py
 # set the device we will be using to run the model
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -166,7 +166,7 @@ COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
 接下来，我们定义一个`MODELS`字典来将给定对象检测器的名称映射到其对应的 PyTorch 函数:
 
-```
+```py
 # initialize a dictionary containing model name and its corresponding 
 # torchvision function call
 MODELS = {
@@ -198,7 +198,7 @@ PyTorch 为我们提供了三种对象检测模型:
 
 加载完模型后，让我们继续为对象检测准备输入图像:
 
-```
+```py
 # load the image from disk
 image = cv2.imread(args["image"])
 orig = image.copy()
@@ -234,7 +234,7 @@ detections = model(image)[0]
 
 现在让我们循环我们的边界框预测:
 
-```
+```py
 # loop over the detections
 for i in range(0, len(detections["boxes"])):
 	# extract the confidence (i.e., probability) associated with the
@@ -288,7 +288,7 @@ cv2.waitKey(0)
 
 接下来，让我们应用对象检测:
 
-```
+```py
 $ python detect_image.py --model frcnn-resnet  \
 	--image images/example_01.jpg --labels coco_classes.pickle    
 [INFO] car: 99.54%
@@ -300,7 +300,7 @@ $ python detect_image.py --model frcnn-resnet  \
 
 这是另一个使用我们更快的 R-CNN 物体探测器的示例图像:
 
-```
+```py
 $ python detect_image.py --model frcnn-resnet \
 	--image images/example_06.jpg --labels coco_classes.pickle
 [INFO] dog: 99.92%
@@ -313,7 +313,7 @@ $ python detect_image.py --model frcnn-resnet \
 
 让我们尝试最后一张图片，这是一个更复杂的场景，它真实地展示了更快的 R-CNN 模型在检测小物体方面有多好:
 
-```
+```py
 $ python detect_image.py --model frcnn-resnet \
 	--image images/example_05.jpg --labels coco_classes.pickle \
 	--confidence 0.7
@@ -342,7 +342,7 @@ $ python detect_image.py --model frcnn-resnet \
 
 打开项目目录结构中的`detect_realtime.py`脚本，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from torchvision.models import detection
 from imutils.video import VideoStream
@@ -363,7 +363,7 @@ import cv2
 
 接下来是我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-m", "--model", type=str, default="frcnn-resnet",
@@ -384,7 +384,7 @@ args = vars(ap.parse_args())
 
 下一个代码块处理设置我们的推理设备(CPU 或 GPU)，以及加载我们的类标签:
 
-```
+```py
 # set the device we will be using to run the model
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -398,7 +398,7 @@ COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
 然后我们定义我们的`MODELS`字典，就像前面的脚本一样:
 
-```
+```py
 # initialize a dictionary containing model name and its corresponding 
 # torchvision function call
 MODELS = {
@@ -417,7 +417,7 @@ model.eval()
 
 我们现在可以访问我们的网络摄像头了:
 
-```
+```py
 # initialize the video stream, allow the camera sensor to warmup,
 # and initialize the FPS counter
 print("[INFO] starting video stream...")
@@ -432,7 +432,7 @@ fps = FPS().start()
 
 下一步是循环视频流中的帧:
 
-```
+```py
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the threaded video stream and resize it
@@ -472,7 +472,7 @@ while True:
 
 物体检测模型结果的处理与`predict_image.py`相同:
 
-```
+```py
 	# loop over the detections
 	for i in range(0, len(detections["boxes"])):
 		# extract the confidence (i.e., probability) associated with
@@ -500,7 +500,7 @@ while True:
 
 最后，我们可以在窗口中显示输出帧:
 
-```
+```py
 	# show the output frame
 	cv2.imshow("Frame", orig)
 	key = cv2.waitKey(1) & 0xFF
@@ -532,7 +532,7 @@ vs.stop()
 
 从那里，您可以执行`detect_realtime.py`脚本:
 
-```
+```py
 $ python detect_realtime.py --model frcnn-mobilenet \
 	--labels coco_classes.pickle
 [INFO] starting video stream...

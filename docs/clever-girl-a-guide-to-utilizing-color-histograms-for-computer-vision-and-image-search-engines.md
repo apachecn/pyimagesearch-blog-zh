@@ -45,7 +45,7 @@
 
 我们将使用 OpenCV 中的`cv2.calcHist`函数来构建直方图。在我们进入任何代码示例之前，让我们快速回顾一下这个函数:
 
-```
+```py
 cv2.calcHist(images, channels, mask, histSize, ranges)
 
 ```
@@ -58,7 +58,7 @@ cv2.calcHist(images, channels, mask, histSize, ranges)
 
 现在我们已经了解了`cv2.calcHist`函数，让我们来写一些实际的代码。
 
-```
+```py
 # import the necessary packages
 from matplotlib import pyplot as plt
 import numpy as np
@@ -78,7 +78,7 @@ cv2.imshow("image", image)
 
 这段代码还不是很令人兴奋。我们所做的就是导入我们需要的包，设置一个参数解析器，并加载我们的图像。
 
-```
+```py
 # convert the image to grayscale and create a histogram
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 cv2.imshow("gray", gray)
@@ -104,7 +104,7 @@ plt.xlim([0, 256])
 
 现在我们已经看到了灰度直方图，让我们来看看我所说的“扁平”颜色直方图:
 
-```
+```py
 # grab the image channels, initialize the tuple of colors,
 # the figure and the flattened feature vector
 chans = cv2.split(image)
@@ -163,7 +163,7 @@ print "flattened feature vector size: %d" % (np.array(features).flatten().shape)
 
 就这么简单。让我们检查一些代码来自动完成构建 2D 直方图的过程:
 
-```
+```py
 # let's move on to 2D histograms -- I am reducing the
 # number of bins in the histogram from 256 to 32 so we
 # can better visualize the results
@@ -218,7 +218,7 @@ print "2D histogram shape: %s, with %d values" % (
 
 使用 2D 直方图一次考虑两个通道。但是如果我们想考虑所有三个 RGB 通道呢？你猜对了。我们现在要构建一个 3D 直方图。
 
-```
+```py
 # our 2D histogram could only take into account 2 out
 # of the 3 channels in the image so now let's build a
 # 3D color histogram (utilizing all channels) with 8 bins

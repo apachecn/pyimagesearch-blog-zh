@@ -63,7 +63,7 @@ SSD 以利用多尺度特征地图而不是单一特征地图进行检测而闻�
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -92,7 +92,7 @@ $ pip install opencv-contrib-python
 
 从这里，看一下目录结构:
 
-```
+```py
 !tree . 
 .
 ├── output
@@ -123,7 +123,7 @@ $ pip install opencv-contrib-python
 
 第一步是根据我们的需求配置数据集。像在之前的教程中一样，我们将使用来自 Kaggle 的[狗&猫图像](https://www.kaggle.com/chetankv/dogs-cats-images)数据集，因为它相对较小。
 
-```
+```py
 $ mkdir ~/.kaggle
 $ cp <path to your kaggle.json> ~/.kaggle/
 $ chmod 600 ~/.kaggle/kaggle.json
@@ -142,7 +142,7 @@ $ rm -rf "/content/dog vs cat"
 
 在`pyimagesearch`目录中，您会发现一个名为`config.py`的脚本。这个脚本将包含我们项目的完整的端到端配置管道。
 
-```
+```py
 # import the necessary packages
 import torch
 import os
@@ -181,7 +181,7 @@ YOLO_OUTPUT = os.path.join(OUTPUT_PATH, "yolo_output")
 
 在我们看到运行中的模型之前，我们还有一项任务；为数据处理创建辅助函数。为此，转到位于`pyimagesearch`目录中的`data_utils.py`脚本。
 
-```
+```py
 # import the necessary packages
 from torch.utils.data import DataLoader
 
@@ -194,7 +194,7 @@ def get_dataloader(dataset, batchSize, shuffle=True):
 
 `get_dataloader` ( **第 4 行)**函数接受数据集、批量大小和随机参数，返回一个`PyTorch Dataloader` ( **第 6 行和第 7 行**)实例。`Dataloader`实例解决了许多麻烦，这需要为巨大的数据集编写单独的定制生成器类。
 
-```
+```py
 def normalize(image, mean=128, std=128):
     # normalize the SSD input and return it 
     image = (image * 256 - mean) / std
@@ -207,7 +207,7 @@ def normalize(image, mean=128, std=128):
 
 先决条件得到满足后，我们的下一个目的地是`yolov5_inference.py`。我们将准备我们的自定义数据，并将其提供给 YOLO 模型。
 
-```
+```py
 # import necessary packages
 from pyimagesearch.data_utils import get_dataloader
 import pyimagesearch.config as config
@@ -237,7 +237,7 @@ testLoader = get_dataloader(testDataset, config.PRED_BATCH_SIZE)
 
 一旦我们有了数据集，我们就将它传递给预先创建的`get_dataloader`函数，以获得一个类似 PyTorch Dataloader 实例的生成器(**第 23 行**)。
 
-```
+```py
 # initialize the yolov5 using torch hub
 yoloModel = torch.hub.load("ultralytics/yolov5", "yolov5s")
 
@@ -264,7 +264,7 @@ images = images.to(config.DEVICE)
 
 在**行 40** 上，我们将抓取的数据加载到我们将用于计算的设备上。
 
-```
+```py
 # loop over all the batch 
 for index in range(0, config.PRED_BATCH_SIZE):
 	# grab each image
@@ -283,7 +283,7 @@ results = yoloModel(imageInput, size=300)
 
 接下来，我们将列表传递给 YOLOv5 模型实例(**第 53 行**)。
 
-```
+```py
 # get random index value
 randomIndex = random.randint(0,len(imageInput)-1)
 
@@ -333,7 +333,7 @@ plt.savefig(outputFileName)
 
 对于 SSD 模型的推理，我们将遵循类似于 YOLOv5 推理脚本中的模式。
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.data_utils import get_dataloader
 from pyimagesearch.data_utils import normalize
@@ -371,7 +371,7 @@ imageInput = []
 
 可迭代变量`sweeper`在**线 28** 上初始化，以便于访问测试数据。接下来，为了存储我们将要预处理的图像，我们初始化一个名为`imageInput` ( **第 31 行**)的列表。
 
-```
+```py
 # grab a batch of test data
 print("[INFO] getting the test data...")
 batch = next(sweeper)
@@ -394,7 +394,7 @@ with torch.no_grad():
 
 从 YOLOv5 推理脚本再次重复上面代码块中显示的过程。我们抓取一批数据(**第 35 行和第 36 行**)并循环遍历它们，将每个数据重新排列到最后一个通道，并将它们添加到我们的`imageInput`列表(**第 39-50 行**)。
 
-```
+```py
 # call the required entry points
 ssdModel = torch.hub.load("NVIDIA/DeepLearningExamples:torchhub",
 	"nvidia_ssd")
@@ -426,7 +426,7 @@ inputTensor = utils.prepare_tensor(processedInput)
 
 在第 63 行的**上，我们创建了一个空列表来保存预处理后的输入。然后，循环遍历这些图像，我们对它们中的每一个进行归一化，并相应地添加它们(**第 66-68 行)**。最后，为了将预处理后的图像转换成所需的张量，我们使用了之前调用的效用函数(**第 71 行**)。**
 
-```
+```py
 # turn off auto-grad
 print("[INFO] getting detections from the test data...")
 with torch.no_grad():
@@ -445,7 +445,7 @@ bestResults = [utils.pick_best(results,
 
 这意味着`bestResults`列表包含边界框值、对象类别和置信度值，对应于它在给出检测输出时遇到的每个图像。这样，这个列表的索引将直接对应于我们的输入列表的索引。
 
-```
+```py
 # get coco labels 
 classesToLabels = utils.get_coco_object_dictionary()
 
@@ -467,7 +467,7 @@ for image_idx in range(len(bestResults)):
 
 使用相同的索引，我们从结果中获取边界框结果、类名和置信度值(**第 96 行**)。
 
-```
+```py
 	# loop over the detected bounding boxes
 	for idx in range(len(bboxes)):
 		# scale values up according to image size
@@ -491,7 +491,7 @@ for image_idx in range(len(bestResults)):
 
 最后，我们在第 109-112 行的**函数的帮助下添加对象类名。**
 
-```
+```py
 # check to see if the output directory already exists, if not
 # make the output directory
 if not os.path.exists(config.SSD_OUTPUT):
@@ -525,7 +525,7 @@ plt.savefig(outputFileName)
 
 **Chakraborty，D.** “火炬中心系列#3: YOLOv5 和 SSD-物体探测模型”， *PyImageSearch* ，2022 年，[https://PyImageSearch . com/2022/01/03/Torch-Hub-Series-3-yolov 5-SSD-物体探测模型/](https://pyimagesearch.com/2022/01/03/torch-hub-series-3-yolov5-and-ssd-models-on-object-detection/)
 
-```
+```py
 @article{dev_2022_THS3,
   author = {Devjyoti Chakraborty},
   title = {{Torch Hub} Series \#3: {YOLOv5} and {SSD} — Models on Object Detection},

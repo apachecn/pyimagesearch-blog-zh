@@ -77,7 +77,7 @@
 
 幸运的是，要运行 YOLOv5 培训，您只需在`requirements.txt`文件上进行 pip 安装，这意味着所有的库都可以通过 pip 安装！
 
-```
+```py
 $ git clone https://github.com/ultralytics/yolov5.git #clone repo
 $ cd yolov5/
 $ pip install -r requirements.txt #install dependencies
@@ -166,7 +166,7 @@ $ pip install -r requirements.txt #install dependencies
 
 ### [**下载车辆-打开图像数据集**](#TOC)
 
-```
+```py
 # Download the vehicles-open image dataset
 !mkdir vehicles_open_image
 %cd vehicles_open_image
@@ -179,7 +179,7 @@ $ pip install -r requirements.txt #install dependencies
 
 让我们看看`vehicles_open_image`文件夹的内容:
 
-```
+```py
 $tree /content/vehicles_open_image -L 2
 /content/vehicles_open_image
 ├── data.yaml
@@ -211,7 +211,7 @@ $tree /content/vehicles_open_image -L 2
 
 接下来，我们将编辑`data.yaml`文件，为`train`和`valid`图像设置`path`和绝对路径。
 
-```
+```py
 # Create configuration
 import yaml
 config = {'path': '/content/vehicles_open_image',
@@ -236,7 +236,7 @@ YOLOv5 有大约 30 个用于各种训练设置的超参数。这些在`hyp.scra
 
 如您所见，它有`learning rate`、`weight_decay`和`iou_t` (IoU 训练阈值)，以及一些数据增强超参数，如`translate`、`scale`、`mosaic`、`mixup`和`copy_paste`。`mixup:0.0`表示不应应用混合数据增强。
 
-```
+```py
 lr0: 0.01  # initial learning rate (SGD=1E-2, Adam=1E-3)
 lrf: 0.01  # final OneCycleLR learning rate (lr0 * lrf)
 momentum: 0.937  # SGD momentum/Adam beta1
@@ -270,7 +270,7 @@ copy_paste: 0.0  # segment copy-paste (probability)
 
 接下来，您可以简单地查看一下`YOLOv5s`网络架构的结构，尽管您几乎不会修改模型配置文件，这与训练数据超参数不同。对于 COCO 女士数据集，它将`nc`设置为`80`，将`backbone`设置为特征提取，然后将`head`设置为检测。
 
-```
+```py
 # Parameters
 nc: 80  # number of classes
 depth_multiple: 0.33  # model depth multiple
@@ -325,7 +325,7 @@ head:
 
 我们几乎已经准备好训练 YOLOv5 模型了，正如上面讨论的，我们将训练 YOLOv5s 模型。但是，在我们运行培训之前，让我们定义几个参数:
 
-```
+```py
 SIZE = 640
 BATCH_SIZE = 32
 EPOCHS = 20
@@ -345,7 +345,7 @@ RUN_NAME = f"{MODEL}_size{SIZE}_epochs{EPOCHS}_batch{BATCH_SIZE}_small"
 *   `PROJECT`:这将在当前目录下创建一个项目目录(`yolov5`)。
 *   `RUN_NAME`:每次运行这个模型时，它都会在项目目录下创建一个子目录，其中会有很多关于模型的信息，比如权重、样本输入图像、一些验证预测输出、度量图等。
 
-```
+```py
 !python train.py --img {SIZE}\
                --batch {BATCH_SIZE}\
                --epochs {EPOCHS}\
@@ -361,7 +361,7 @@ RUN_NAME = f"{MODEL}_size{SIZE}_epochs{EPOCHS}_batch{BATCH_SIZE}_small"
 
 下载了`yolov5s.pt`权重，这意味着用 MS COCO 数据集训练的参数来初始化 YOLOv5s 模型。最后，我们可以看到两个纪元已经用一个`mAP@0.5=0.237`完成了。
 
-```
+```py
 github: up to date with https://github.com/ultralytics/yolov5 ✅
 YOLOv5 ? v6.1-236-gdcf8073 Python-3.7.13 torch-1.11.0+cu113 CUDA:0 (Tesla T4, 15110MiB)
 hyperparameters: lr0=0.01, lrf=0.01, momentum=0.937, weight_decay=0.0005, warmup_epochs=3.0, warmup_momentum=0.8, warmup_bias_lr=0.1, box=0.05, cls=0.5, cls_pw=1.0, obj=1.0, obj_pw=1.0, iou_t=0.2, anchor_t=4.0, fl_gamma=0.0, hsv_h=0.015, hsv_s=0.7, hsv_v=0.4, degrees=0.0, translate=0.1, scale=0.5, shear=0.0, perspective=0.0, flipud=0.0, fliplr=0.5, mosaic=1.0, mixup=0.0, copy_paste=0.0
@@ -394,7 +394,7 @@ Starting training for 20 epochs...
 
 培训完成后，您将看到类似于下图的输出:
 
-```
+```py
 ​​    Epoch   gpu_mem       box       obj       cls    labels  img_size
      19/19     7.16G   0.02747   0.01736  0.004772        46       640: 100% 28/28 [01:03<00:00,  2.27s/it]
                Class     Images     Labels          P          R     mAP@.5 mAP@.5:.95: 100% 4/4 [00:05<00:00,  1.42s/it]
@@ -428,7 +428,7 @@ Model summary: 213 layers, 7023610 parameters, 0 gradients, 15.8 GFLOPs
 
 接下来，让我们看看实验中创建的文件。
 
-```
+```py
 $tree parking_lot_pyimagesearch/yolov5s_size640_epochs20_batch32_small/
 parking_lot_pyimagesearch/yolov5s_size640_epochs20_batch32_small/
 ├── confusion_matrix.png
@@ -486,7 +486,7 @@ parking_lot_pyimagesearch/yolov5s_size640_epochs20_batch32_small/
 
 现在让我们通过执行`train.py`脚本来训练模型。首先我们把`--name`，也就是运行名改成`freeze_layers`，传递`--freeze`参数，其他参数都一样。
 
-```
+```py
 !python train.py --img {SIZE}\
                --batch {BATCH_SIZE}\
                --epochs {EPOCHS}\
@@ -503,7 +503,7 @@ parking_lot_pyimagesearch/yolov5s_size640_epochs20_batch32_small/
 
 话虽如此，现在还是让我们来看看结果吧！
 
-```
+```py
 freezing model.0.conv.weight
 freezing model.0.bn.weight
 freezing model.0.bn.bias
@@ -525,7 +525,7 @@ freezing model.10.bn.bias
 
 在冻结 11 层的情况下，模型实现了`0.551 mAP@0.5` IoU 和`0.336 mAP@0.5:0.95` IoU。这两个模型的精确度之间肯定有差异，但不太显著。
 
-```
+```py
 20 epochs completed in 0.158 hours.
 Optimizer stripped from parking_lot_pyimagesearch/freeze_layers/weights/last.pt, 14.5MB
 Optimizer stripped from parking_lot_pyimagesearch/freeze_layers/weights/best.pt, 14.5MB
@@ -563,7 +563,7 @@ Model summary: 213 layers, 7023610 parameters, 0 gradients, 15.8 GFLOPs
 
 **Sharma，A.** “在自定义数据集上训练 YOLOv5 对象检测器”， *PyImageSearch* ，D. Chakraborty，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva，R. Raha 和 A. Thanki 编辑。，2022 年，【https://pyimg.co/fq0a3 
 
-```
+```py
 @incollection{Sharma_2022_Custom_Dataset,
   author = {Aditya Sharma},
   title = {Training the {YOLOv5} Object Detector on a Custom Dataset},

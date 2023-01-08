@@ -74,7 +74,7 @@
 
 您将看到以下项目布局:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── pyimagesearch
@@ -103,7 +103,7 @@ $ tree --dirsfirst
 
 也就是说，打开项目结构中的`convautoencoder.py`文件，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.layers import BatchNormalization
 from tensorflow.keras.layers import Conv2D
@@ -146,7 +146,7 @@ class ConvAutoencoder:
 
 让我们开始构建编码器的滤波器:
 
-```
+```py
 		# loop over the number of filters
 		for f in filters:
 			# apply a CONV => RELU => BN operation
@@ -171,7 +171,7 @@ class ConvAutoencoder:
 
 接下来，我们将使用我们的潜在空间表示来重建原始输入图像。
 
-```
+```py
 		# start building the decoder model which will accept the
 		# output of the encoder as its inputs
 		latentInputs = Input(shape=(latentDim,))
@@ -221,7 +221,7 @@ class ConvAutoencoder:
 
 打开`train_denoising_autoencoder.py`文件，插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -256,7 +256,7 @@ args = vars(ap.parse_args())
 
 接下来，我们初始化超参数并预处理我们的 MNIST 数据集:
 
-```
+```py
 # initialize the number of epochs to train for and batch size
 EPOCHS = 25
 BS = 32
@@ -279,7 +279,7 @@ testX = testX.astype("float32") / 255.0
 
 此时，我们将**偏离上周的教程:**
 
-```
+```py
 # sample noise from a random normal distribution centered at 0.5 (since
 # our images lie in the range [0, 1]) and a standard deviation of 0.5
 trainNoise = np.random.normal(loc=0.5, scale=0.5, size=trainX.shape)
@@ -300,7 +300,7 @@ testXNoisy = np.clip(testX + testNoise, 0, 1)
 
 幸运的是，我们的去噪自动编码器将胜任这项任务:
 
-```
+```py
 # construct our convolutional autoencoder
 print("[INFO] building autoencoder...")
 (encoder, decoder, autoencoder) = ConvAutoencoder.build(28, 28, 1)
@@ -333,7 +333,7 @@ plt.savefig(args["plot"])
 
 让我们编写一个快速循环来帮助我们可视化去噪自动编码器的结果:
 
-```
+```py
 # use the convolutional autoencoder to make predictions on the
 # testing images, then initialize our list of output images
 print("[INFO] making predictions...")
@@ -372,7 +372,7 @@ cv2.imwrite(args["output"], outputs)
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python train_denoising_autoencoder.py --output output_denoising.png \
 	--plot plot_denoising.png
 [INFO] loading MNIST dataset...

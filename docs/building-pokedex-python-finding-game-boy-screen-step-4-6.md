@@ -56,7 +56,7 @@ Pokedex 是如何工作的？
 
 启动您最喜欢的文本编辑器，创建一个名为`find_screen.py`的新文件。我们就要把手弄脏了:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import imutils
 from skimage import exposure
@@ -79,7 +79,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们加载查询图像并开始处理图像:
 
-```
+```py
 # load the query image, compute the ratio of the old height
 # to the new height, clone it, and resize it
 image = cv2.imread(args["query"])
@@ -113,7 +113,7 @@ edged = cv2.Canny(gray, 30, 200)
 
 我们可以清楚地看到，有一个矩形边缘区域对应于我们的游戏男孩的屏幕。但是我们如何找到它呢？让我展示给你看:
 
-```
+```py
 # find contours in the edged image, keep only the largest
 # ones, and initialize our screen contour
 cnts = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -137,7 +137,7 @@ screenCnt = None
 
 我们现在准备确定哪个轮廓是 Game Boy 屏幕:
 
-```
+```py
 # loop over our contours
 for c in cnts:
 	# approximate the contour
@@ -168,7 +168,7 @@ for c in cnts:
 
 如果你想自己画等高线，就用下面的代码:
 
- ````
+ ```py`
 cv2.drawContours(image, [screenCnt], -1, (0, 255, 0), 3) 
 cv2.imshow("Game Boy Screen", image) 
 cv2.waitKey(0)

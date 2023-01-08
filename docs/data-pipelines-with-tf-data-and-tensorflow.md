@@ -95,7 +95,7 @@
 
 从那里，解压缩归档文件:
 
-```
+```py
 $ cd path/to/downloaded/zip
 $ unzip tfdata-piplines.zip
 ```
@@ -104,7 +104,7 @@ $ unzip tfdata-piplines.zip
 
 继续创建以下目录:
 
-```
+```py
 $ cd tfdata-pipelines
 $ mkdir datasets
 $ mkdir datasets/orig
@@ -120,14 +120,14 @@ $ mkdir datasets/orig
 
 现在回到您的终端，导航到您刚刚创建的目录，并解压缩数据:
 
-```
+```py
 $ cd path/to/tfdata-pipelines/datasets/orig
 $ unzip archive.zip -x "IDC_regular_ps50_idx5/*"
 ```
 
 从那里，让我们回到项目目录，并使用 tree 命令来检查我们的项目结构:
 
-```
+```py
 $ tree . --dirsfirst --filelimit 10
 .
 ├── datasets
@@ -173,7 +173,7 @@ $ tree . --dirsfirst --filelimit 10
 
 否则，打开`pyimagesearch`模块中的`config.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -191,7 +191,7 @@ BASE_PATH = os.path.join("datasets", "idc")
 
 使用`BASE_PATH`集合，我们可以分别定义我们的输出训练、验证和测试目录:
 
-```
+```py
 # derive the training, validation, and testing directories
 TRAIN_PATH = os.path.sep.join([BASE_PATH, "training"])
 VAL_PATH = os.path.sep.join([BASE_PATH, "validation"])
@@ -200,7 +200,7 @@ TEST_PATH = os.path.sep.join([BASE_PATH, "testing"])
 
 以下是我们的数据分割信息:
 
-```
+```py
 # define the amount of data that will be used training
 TRAIN_SPLIT = 0.8
 
@@ -218,7 +218,7 @@ IMAGE_SIZE = (48, 48)
 
 最后，我们有几个重要的培训参数:
 
-```
+```py
 # initialize our number of epochs, early stopping patience, initial
 # learning rate, and batch size
 NUM_EPOCHS = 40
@@ -241,7 +241,7 @@ BS = 128
 
 打开`build_dataset.py`脚本，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from imutils import paths
@@ -287,7 +287,7 @@ datasets = [
 
 我们现在可以循环我们的`datasets`:
 
-```
+```py
 # loop over the datasets
 for (dType, imagePaths, baseOutput) in datasets:
 	# show which data split we are creating
@@ -341,7 +341,7 @@ for (dType, imagePaths, baseOutput) in datasets:
 
 从那里，我们可以在磁盘上组织我们的数据集:
 
-```
+```py
 $ python build_dataset.py
 [INFO] building 'training' split
 [INFO] 'creating datasets/idc/training' directory
@@ -358,7 +358,7 @@ $ python build_dataset.py
 
 现在让我们来看看`datasets/idc`子目录:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── datasets
@@ -385,7 +385,7 @@ $ tree --dirsfirst --filelimit 10
 
 打开项目目录结构中的`train_model.py`文件，让我们开始工作:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -421,7 +421,7 @@ import os
 
 如果你读了上周关于 [*的教程，一个关于使用 TensorFlow*](https://pyimagesearch.com/2021/06/14/a-gentle-introduction-to-tf-data-with-tensorflow/) 的 tf.data 的温和介绍(如果你还没有，你现在应该停下来阅读那个指南)，那么下面的`load_images`函数应该看起来很熟悉:
 
-```
+```py
 def load_images(imagePath):
 	# read the image from disk, decode it, convert the data type to
 	# floating point, and resize it
@@ -453,7 +453,7 @@ def load_images(imagePath):
 
 接下来，让我们定义一个将执行简单数据扩充的函数:
 
-```
+```py
 @tf.function
 def augment(image, label):
 	# perform random horizontal and vertical flips
@@ -472,7 +472,7 @@ def augment(image, label):
 
 现在让我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--plot", type=str, default="plot.png",
@@ -482,7 +482,7 @@ args = vars(ap.parse_args())
 
 我们有一个单独的(可选的)参数，`--plot`，它是显示我们的损失和准确性的训练图的路径。
 
-```
+```py
 # grab all the training, validation, and testing dataset image paths
 trainPaths = list(paths.list_images(config.TRAIN_PATH))
 valPaths = list(paths.list_images(config.VAL_PATH))
@@ -508,7 +508,7 @@ for i in range(0, len(classTotals)):
 
 接下来，让我们定义我们的培训`tf.data`渠道:
 
-```
+```py
 # build the training dataset and data input pipeline
 trainDS = tf.data.Dataset.from_tensor_slices(trainPaths)
 trainDS = (trainDS
@@ -536,7 +536,7 @@ trainDS = (trainDS
 
 以类似的方式，我们可以构建我们的验证和测试`tf.data`管道:
 
-```
+```py
 # build the validation dataset and data input pipeline
 valDS = tf.data.Dataset.from_tensor_slices(valPaths)
 valDS = (valDS
@@ -567,7 +567,7 @@ testDS = (testDS
 
 如果不考虑数据集初始化，我们会实例化我们的网络架构:
 
-```
+```py
 # initialize our CancerNet model and compile it
 model = CancerNet.build(width=48, height=48, depth=3,
 	classes=1)
@@ -583,7 +583,7 @@ model.compile(loss="binary_crossentropy", optimizer=opt,
 
 从那里，培训可以开始:
 
-```
+```py
 # initialize an early stopping callback to prevent the model from
 # overfitting
 es = EarlyStopping(
@@ -615,7 +615,7 @@ print("[INFO] test accuracy: {:.2f}%...".format(acc * 100))
 
 最后一步是绘制我们的训练历史:
 
-```
+```py
 # plot the training loss and accuracy
 plt.style.use("ggplot")
 plt.figure()
@@ -638,7 +638,7 @@ plt.savefig(args["plot"])
 
 首先访问本教程的 ***【下载】*** 部分来检索源代码。从那里，您可以启动`train_model.py`脚本:
 
-```
+```py
 $ python train_model.py 
 1562/1562 [==============================] - 39s 23ms/step - loss: 0.6887 - accuracy: 0.7842 - val_loss: 0.4085 - val_accuracy: 0.8357
 Epoch 2/40
@@ -659,7 +659,7 @@ Epoch 6/40
 
 现在让我们将 epoch speed 与我们关于乳腺癌分类的[原始教程](https://pyimagesearch.com/2019/02/18/breast-cancer-classification-with-keras-and-deep-learning/)进行比较，该教程利用了`ImageDataGenerator`功能:
 
-```
+```py
 $ python train_model.py
 Found 199818 images belonging to 2 classes.
 Found 22201 images belonging to 2 classes.

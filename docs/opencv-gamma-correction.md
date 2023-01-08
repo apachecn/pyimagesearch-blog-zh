@@ -24,7 +24,7 @@
 
 现在我们了解了什么是伽马校正，让我们使用 OpenCV 和 Python 来实现它。打开一个新文件，命名为`adjust_gamma.py`，然后我们开始:
 
-```
+```py
 # import the necessary packages
 from __future__ import print_function
 import numpy as np
@@ -53,7 +53,7 @@ def adjust_gamma(image, gamma=1.0):
 
 例如，以下是`gamma=1.2`的示例查找表:
 
-```
+```py
 0 => 0
 1 => 2
 2 => 4
@@ -76,7 +76,7 @@ def adjust_gamma(image, gamma=1.0):
 
 让我们继续我们的例子:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -92,7 +92,7 @@ original = cv2.imread(args["image"])
 
 让我们通过使用各种伽马值并检查每个值的输出图像来探索伽马校正:
 
-```
+```py
 # loop over various values of gamma
 for gamma in np.arange(0.0, 3.5, 0.5):
 	# ignore when gamma is 1 (there will be no change to the image)
@@ -117,7 +117,7 @@ for gamma in np.arange(0.0, 3.5, 0.5):
 
 要查看 gamma 校正的效果，只需打开一个终端并执行以下命令:
 
-```
+```py
 $ python adjust_gamma.py --image example_01.png
 
 ```
@@ -148,7 +148,7 @@ $ python adjust_gamma.py --image example_01.png
 
 让我们试试另一个图像:
 
-```
+```py
 $ python adjust_gamma.py --image example_02.png
 
 ```

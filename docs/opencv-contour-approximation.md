@@ -57,7 +57,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 $ pip install imutils
 ```
@@ -83,7 +83,7 @@ $ pip install imutils
 
 让我们来看看项目结构。
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── opencv_contour_approx.py
@@ -101,7 +101,7 @@ $ tree . --dirsfirst
 
 在跳到轮廓近似之前，我们将通过一些先决条件来更好地理解整个过程。所以，事不宜迟，让我们跳进`opencv_contour_approx.py`开始编码吧！
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -117,7 +117,7 @@ args = vars(ap.parse_args())
 
 创建一个参数解析器实例是为了在用户选择想要修改的图像时给他们一个简单的命令行界面体验(**第 8-11 行**)。默认图像被设置为`shape.png`，该图像已经存在于目录中。然而，我们鼓励读者用他们自己的自定义图像来尝试这个实验！
 
-```
+```py
 # load the image and display it
 image = cv2.imread(args["image"])
 cv2.imshow("Image", image)
@@ -137,7 +137,7 @@ cv2.imshow("Thresh", thresh)
 
 注意，由于我们在**行 2 **0**** 上选择了`cv2.THRESH_BINARY_INV`作为参数，因此高亮度像素变为`0`，而周围的低亮度像素变为`255`。
 
-```
+```py
 # find the largest contour in the threshold image
 cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
 	cv2.CHAIN_APPROX_SIMPLE)
@@ -167,7 +167,7 @@ cv2.waitKey(0)
 
 现在，让我们演示一下轮廓近似可以做什么！
 
-```
+```py
 # to demonstrate the impact of contour approximation, let's loop
 # over a number of epsilon sizes
 for eps in np.linspace(0.001, 0.05, 10):
@@ -200,7 +200,7 @@ for eps in np.linspace(0.001, 0.05, 10):
 
 在进行可视化之前，让我们看看轮廓近似如何影响这些值。
 
-```
+```py
 $ python opencv_contour_approx.py
 [INFO] original, num_pts=248
 [INFO] eps=0.0010, num_pts=43

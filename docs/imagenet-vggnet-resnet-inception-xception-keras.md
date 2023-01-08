@@ -142,7 +142,7 @@ Xception 是重量最小的系列，只有 91MB。
 
 打开一个新文件，将其命名为`classify_image.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.applications import ResNet50
 from tensorflow.keras.applications import InceptionV3
@@ -171,7 +171,7 @@ import cv2
 
 接下来，让我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -188,7 +188,7 @@ args = vars(ap.parse_args())
 
 假设我们通过命令行参数接受预训练网络的名称，我们需要定义一个 Python 字典，将模型名称(字符串)映射到它们实际的 Keras 类:
 
-```
+```py
 # define a dictionary that maps model names to their classes
 # inside Keras
 MODELS = {
@@ -216,7 +216,7 @@ if args["model"] not in MODELS.keys():
 
 VGG16、VGG19 和 ResNet 都接受 *224×224* 输入图像，而 Inception V3 和 Xception 需要 *299×299* 像素输入，如以下代码块所示:
 
-```
+```py
 # initialize the input image shape (224x224 pixels) along with
 # the pre-processing function (this might need to be changed
 # based on which model we use to classify our image)
@@ -238,7 +238,7 @@ if args["model"] in ("inception", "xception"):
 
 下一步是从磁盘加载我们预先训练的网络架构权重，并实例化我们的模型:
 
-```
+```py
 # load our the network weights from disk (NOTE: if this is the
 # first time you are running this script for a given network, the
 # weights will need to be downloaded first -- depending on which
@@ -259,7 +259,7 @@ model = Network(weights="imagenet")
 
  *我们的网络现在已经加载完毕，可以对图像进行分类了——我们只需准备好该图像进行分类:
 
-```
+```py
 # load the input image using the Keras helper utility while ensuring
 # the image is resized to `inputShape`, the required input dimensions
 # for the ImageNet pre-trained network
@@ -293,7 +293,7 @@ image = preprocess(image)
 
 我们现在准备通过网络传递我们的图像，并获得输出分类:
 
-```
+```py
 # classify the image
 print("[INFO] classifying image with '{}'...".format(args["model"]))
 preds = model.predict(image)
@@ -314,7 +314,7 @@ for (i, (imagenetID, label, prob)) in enumerate(P[0]):
 
 在结束示例之前，我们要做的最后一件事是通过 OpenCV 从磁盘加载输入图像，在图像上绘制#1 预测，最后将图像显示在屏幕上:
 
-```
+```py
 # load the image via OpenCV, draw the top prediction on the image,
 # and display the image to our screen
 orig = cv2.imread(args["image"])
@@ -336,7 +336,7 @@ cv2.waitKey(0)
 
 从这里开始，让我们尝试用 VGG16 对图像进行分类:
 
-```
+```py
 $ python classify_image.py --image images/soccer_ball.jpg --model vgg16
 
 ```
@@ -349,7 +349,7 @@ $ python classify_image.py --image images/soccer_ball.jpg --model vgg16
 
 要使用 VGG19，我们只需更改`--model`命令行参数:
 
-```
+```py
 $ python classify_image.py --image images/bmw.png --model vgg19
 
 ```
@@ -362,7 +362,7 @@ VGG19 能够以 91.76%的概率将输入图像正确分类为*“可转换”*�
 
 在使用预训练 ResNet 架构的下例中，我们可以看到类似的前 5 级精度:
 
-```
+```py
 $ python classify_image.py --image images/clint_eastwood.jpg --model resnet
 
 ```
@@ -375,7 +375,7 @@ ResNet 以 69.79%的准确率将这张克林特·伊斯特伍德持枪的图像�
 
 下一个示例尝试使用 ResNet 对狗的种类进行分类:
 
-```
+```py
 $ python classify_image.py --image images/jemma.png --model resnet
 
 ```
@@ -388,7 +388,7 @@ $ python classify_image.py --image images/jemma.png --model resnet
 
 然后我试着给下面这张来自《加勒比海盗》系列的约翰尼·德普的照片分类:
 
-```
+```py
 $ python classify_image.py --image images/boat.png --model inception
 
 ```
@@ -401,7 +401,7 @@ $ python classify_image.py --image images/boat.png --model inception
 
 关于盗梦空间网络的另一个例子，我拍了一张坐在我办公室沙发上的照片:
 
-```
+```py
 $ python classify_image.py --image images/office.png --model inception
 
 ```
@@ -416,7 +416,7 @@ Inception 以 69.68%的置信度正确预测图像中有一个*【台灯】*。�
 
 继续讨论例外情况:
 
-```
+```py
 $ python classify_image.py --image images/scotch.png --model xception
 
 ```
@@ -429,7 +429,7 @@ $ python classify_image.py --image images/scotch.png --model xception
 
 最后一个例子使用 VGG16 分类:
 
-```
+```py
 $ python classify_image.py --image images/tv.png --model vgg16
 
 ```

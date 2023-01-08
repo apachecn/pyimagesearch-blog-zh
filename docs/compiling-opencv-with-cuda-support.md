@@ -26,7 +26,7 @@ light，这样你就在支持 GPU 的系统上安装了 NVIDIA CUDA Toolkit 和 
 
 在我们可以用 CUDA 支持编译 OpenCV 之前，我们首先需要安装一些先决条件:
 
-```
+```py
 $ sudo apt-get install libjpeg8-dev libtiff5-dev libjasper-dev libpng12-dev
 $ sudo apt-get install libgtk2.0-dev
 $ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
@@ -38,7 +38,7 @@ $ sudo apt-get install python2.7-dev
 
 如果你是 PyImageSearch 博客的追随者，那么你也会知道我是使用`pip`、`virtualenv`和`virtualenvwrapper`为我们的每个项目创建隔离的、独立的 Python 虚拟环境的*大粉丝*。您可以使用下面列出的命令安装虚拟环境包(或者，如果您的计算机上已经安装了 Python 虚拟环境，您可以跳过此步骤):
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python get-pip.py
 $ sudo pip install virtualenv virtualenvwrapper
@@ -50,14 +50,14 @@ $ sudo rm -rf get-pip.py ~/.cache/pip
 
 接下来，让我们使用 update 我们的`~/.bashrc`文件。使用您喜欢的命令行文本编辑器(如`nano`、`vi`或`emacs`)打开该文件:
 
-```
+```py
 $ nano ~/.bashrc
 
 ```
 
 然后，向下滚动到文件的底部，添加以下几行，保存并退出编辑器:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 source /usr/local/bin/virtualenvwrapper.sh
@@ -66,7 +66,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 此时，我们可以创建我们的`cv`虚拟环境:
 
-```
+```py
 $ source ~/.bashrc
 $ mkvirtualenv cv
 $ pip install numpy
@@ -91,7 +91,7 @@ $ pip install numpy
 
 如果您确实在 Amazon EC2 实例上，请确保将目录更改为`/mnt`,并在下载源代码之前专门为您的 OpenCV 编译器创建一个目录:
 
-```
+```py
 $ cd /mnt
 $ sudo mkdir opencv_compile
 $ sudo chown -R ubuntu opencv_compile
@@ -105,7 +105,7 @@ $ cd opencv_compile
 
 对于本教程，我将使用 OpenCV 3.1。但是你也可以使用 OpenCV 2.4.X 或者 OpenCV 3.0。使用以下命令下载源代码:
 
-```
+```py
 $ wget -O opencv.zip https://github.com/Itseez/opencv/archive/3.1.0.zip
 $ wget -O opencv_contrib.zip https://github.com/Itseez/opencv_contrib/archive/3.1.0.zip
 $ unzip opencv.zip
@@ -120,7 +120,7 @@ $ unzip opencv_contrib.zip
 
 我们现在准备使用`cmake`来配置我们的构建。运行这个命令时要特别小心，因为我将介绍一些您可能不熟悉的配置变量:
 
-```
+```py
 $ cd opencv-3.1.0
 $ mkdir build
 $ cd build
@@ -152,7 +152,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 假设您自己的 CMake 命令已正确退出，现在您可以编译并安装 OpenCV:
 
-```
+```py
 $ make -j8
 $ sudo make install
 $ sudo ldconfig
@@ -167,7 +167,7 @@ Figure 4: OpenCV with CUDA support has successfully compiled.
 
 同样，假设您的编译没有错误地完成，OpenCV 现在应该安装在`/usr/local/lib/python2.7/site-packages`中。您可以使用`ls`命令来验证这一点:
 
-```
+```py
 $ ls -l /usr/local/lib/python2.7/site-packages
 total 2092
 -rw-r--r-- 1 root staff 2138812 Jun  2 14:11 cv2.so
@@ -178,7 +178,7 @@ total 2092
 
 最后一步是将`cv2.so`文件(我们的 Python 绑定)符号链接到`cv`虚拟环境中:
 
-```
+```py
 $ cd ~/.virtualenvs/cv/lib/python2.7/site-packages/
 $ ln -s /usr/local/lib/python2.7/site-packages/cv2.so cv2.so
 
@@ -186,7 +186,7 @@ $ ln -s /usr/local/lib/python2.7/site-packages/cv2.so cv2.so
 
 为了验证我们的安装，打开一个新的终端，使用`workon`命令访问`cv`虚拟环境，启动一个 Python shell，然后导入 OpenCV:
 
-```
+```py
 $ cd ~
 $ workon cv
 $ python
@@ -199,7 +199,7 @@ $ python
 
 最后，既然已经安装了 OpenCV，让我们执行一点清理并删除用于安装的源文件:
 
-```
+```py
 $ cd /mnt
 $ sudo rm -rf opencv_compile
 

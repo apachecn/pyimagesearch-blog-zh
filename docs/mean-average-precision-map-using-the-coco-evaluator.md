@@ -61,7 +61,7 @@
 
 幸运的是，下面所有的库都是 pip 安装的！
 
-```
+```py
 $ pip install pycocotools==2.0.4
 $ pip install matplotlib==3.2.2
 $ pip install opencv==4.1.2
@@ -98,7 +98,7 @@ $ pip install sklearn==1.0.2
 
 一旦我们下载了我们的项目目录，它应该看起来像这样:
 
-```
+```py
 $ tree .
 .
 ├── darknet
@@ -200,7 +200,7 @@ IoU 分数被归一化(因为分母是*联盟区* ) *，*范围从 0.0 到 1.0�
 
 在深入 IoU 的实现、精确召回曲线和评估 YOLOv4 object detector 之前，让我们设置路径和超参数。为此，我们将进入模块`config.py`。我们项目中的大多数其他脚本将调用这个模块并使用它的预置。
 
-```
+```py
 # import the necessary packages
 from glob import glob
 
@@ -249,7 +249,7 @@ PREDICTION_PR = [0.7, 0.3, 0.5, 0.6, 0.3, 0.35, 0.55, 0.2, 0.4, 0.3,
 
 既然我们已经理解了什么是并上交集以及为什么我们使用它来评估对象检测模型，那么让我们继续在`utils_iou.py`脚本中实现它。请注意，我们没有运行对象检测器来获得 IoU 示例的预测边界框坐标；我们假设预测的坐标。对于地面真实坐标，我们手动注释了图像。
 
-```
+```py
 # import the necessary packages
 from matplotlib import pyplot as plt
 import cv2
@@ -302,7 +302,7 @@ def intersection_over_union(gt, pred):
 
 最后，将 Union score 上的交集返回给第 30 行上的调用函数。
 
-```
+```py
 def plt_imshow(title, image, path):
     # convert the image frame BGR to RGB color space and display it
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -318,7 +318,7 @@ def plt_imshow(title, image, path):
 
 一旦我们写好了计算并集交集的方法，是时候将所有东西包装在一个`compute_iou`方法中了，在这个方法中，我们将传递用于计算借据的`imagePath`，所以让我们进入`eval_iou.py`脚本。
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.utils_iou import intersection_over_union
 from pyimagesearch.utils_iou import plt_imshow
@@ -422,7 +422,7 @@ are the total predicted objects.
 
 现在，让我们用几行 Python 代码来计算精度。
 
-```
+```py
 import sklearn.metrics
 
 ground_truth = ["cat", "cat", "others", "cat", "others", "others","cat", "cat", "cat", "others" ]
@@ -452,7 +452,7 @@ are the total ground-truth objects.
 
 当所有阳性样本都被归类为阳性时，召回率为`1.0`或 100%。另一方面，如果阳性样本被归类为阴性，召回率会很低；例如，假设一幅图像中有五辆汽车，但只有四辆被检测到，那么假阴性就是一辆。
 
-```
+```py
 import sklearn.metrics
 
 ground_truth = ["cat", "cat", "others", "cat", "others", "others","cat", "cat", "cat", "others"]
@@ -519,7 +519,7 @@ print(recall)
 
 让我们用一个猫和狗的二元分类例子来理解精确召回曲线。在`utils_precision_recall.py`中，我们将编写`compute_precision_recall`方法，该方法将在一个向量中采用实际向量和预测向量以及 10 个阈值。最后，返回 10 个阈值中每个阈值的精度和召回率。这也将有助于绘制精确召回曲线。
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 import matplotlib.pyplot as plt
@@ -562,7 +562,7 @@ def compute_precision_recall(yTrue, predScores, thresholds):
 
 最后，我们将`precisions`和`recalls`返回给**行 32** 上的调用函数。
 
-```
+```py
 def pr_compute():
     # define thresholds from 0.2 to 0.65 with step size of 0.05
     thresholds = np.arange(start=0.2, stop=0.7, step=0.05)
@@ -581,7 +581,7 @@ def pr_compute():
 
 从**的第 39-42 行**，我们通过传入`ground_truth`、`prediction`和`thresholds`数组来调用`compute_precision_recall`方法。
 
-```
+```py
 def plot_pr_curve(precisions, recalls, path):
     # plots the precision recall values for each threshold
     # and save the graph to disk
@@ -601,7 +601,7 @@ def plot_pr_curve(precisions, recalls, path):
 
 ![\text{F1} = \displaystyle\frac{2 \times \text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}} = \displaystyle\frac{2\times\text{TP}}{2\times(\text{TP}+\text{FP}+\text{FN})}](img/613cdf8b7c97c1fa91bc41d45f5609b7.png "\text{F1} = \displaystyle\frac{2 \times \text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}} = \displaystyle\frac{2\times\text{TP}}{2\times(\text{TP}+\text{FP}+\text{FN})}")
 
-```
+```py
 f1_score = np.divide(2 * (np.array(precisions) * np.array(recalls)), (np.array(precisions) + np.array(recalls)))
 
 print(f1_score)
@@ -613,7 +613,7 @@ array([0.71959027, 0.69536849, 0.69536849, 0.69986987, 0.73694181, 0.70606916, 0
 
 现在，让我们使用最高的`f1_score`来获得平衡精确度和召回率的最佳阈值。
 
-```
+```py
 precision = precisions[np.argmax(f1_score)]
 recall = recalls[np.argmax(f1_score)]
 best_threshold = np.round(thresholds[np.argmax(f1_score)], 1)
@@ -807,7 +807,7 @@ with the ground truth. Since there is only one threshold, hence, a detection tha
 
 如果您使用的是 Linux 系统，只需按照以下说明操作即可:
 
-```
+```py
 $ cd data
 $ wget http://images.cocodataset.org/zips/val2017.zip
 $ unzip val2017.zip
@@ -821,7 +821,7 @@ $ cd ../
 
 为了计算平均精度，我们打开`utils_map.py`脚本，它有几个非常重要的方法来检测对象:将边界框转换为所需的格式，加载 pickle 文件，在图像目录上运行推理，最后以 JSON 格式存储它们的预测。
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from progressbar import progressbar
@@ -871,7 +871,7 @@ def image_detection(imagePath, network, classNames, thresh):
 
 最后，我们将`detections`和`image.shape`返回给**行 35** 上的调用函数。
 
-```
+```py
 def bbox2points(bbox, img_shape):
     #from bounding box yolo format centerx, centery, w, h
     #to corner points top-left and bottom right
@@ -901,7 +901,7 @@ format and also scale them as per the original image size. We do this so that th
 
 . Then we calculate the top-left coordinates: `xmin` and `ymin` and finally return the scaled top-left, width, and height of the bounding box to the calling function.
 
-```
+```py
 def load_yolo_cls_idx(path):
     # load pickle files: COCO 'class_id' to the
     # class_name list and the COCO 0-90 class ids list
@@ -912,7 +912,7 @@ def load_yolo_cls_idx(path):
 
 `load_yolo_cls_idx`函数是一个将 COCO `class_id`加载到`class_name`列表和 COCO 0-90 类 id 列表的实用函数。我们需要将 COCO 0-80 类 id 映射到 0-90 类 id，因为 COCO Val2017 地面实况`category_id`的范围是从 0 到 90。
 
-```
+```py
 def run_inference(imagePaths, network, class_names,
     label2idx, yolo_cls_90, conf_thresh, pred_file):
     results = []
@@ -960,7 +960,7 @@ def run_inference(imagePaths, network, class_names,
 
 现在大部分工作已经在前面的脚本中完成了，我们定义了`eval_map.py`脚本，它是从磁盘加载`YOLOv4`模型并调用`utils_map.py`脚本中所需方法的主驱动程序脚本。最后，它使用`COCOeval`API 在 COCO Val 2017 数据集上计算`YOLOv4`探测器的地图。
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.utils_map import run_inference
 from pyimagesearch.utils_map import load_yolo_cls_idx
@@ -997,7 +997,7 @@ def compute_map():
 
 现在我们已经定义了`image_paths`列表、创建了网络、加载了类名和其他帮助文件，我们可以通过将这些作为参数传递来调用第 25 行**和第 26 行**上的`run_inference`函数。一旦函数执行完成，就会创建一个`COCO_Val_Prediction.json`文件，样本预测 JSON 如图**图 22** 所示。
 
-```
+```py
 	# load detection JSON file from the disk
 	cocovalPrediction = cocoAnnotation.loadRes(config.COCO_VAL_PRED)
 
@@ -1044,7 +1044,7 @@ def compute_map():
 
 **Sharma，A.** “使用 COCO 评估器的平均精度(mAP)”*PyImageSearch*，D. Chakraborty，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva，R. Raha 和 A. Thanki 编辑。，2022 年，【https://pyimg.co/nwoka 
 
-```
+```py
 @incollection{Sharma_2022_mAP,
   author = {Aditya Sharma},
   title = {Mean Average Precision {(mAP)} Using the {COCO} Evaluator},

@@ -12,7 +12,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -37,7 +37,7 @@ $ pip install opencv-contrib-python
 
 打开一个新的文件，命名为`shallownet_load.py`，我们来动手做:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.preprocessing import ImageToArrayPreprocessor
 from pyimagesearch.preprocessing import SimplePreprocessor
@@ -57,7 +57,7 @@ import cv2
 
 接下来，让我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -79,7 +79,7 @@ classLabels = ["cat", "dog", "panda"]
 
 我们的下一个代码块处理从动物数据集中随机采样十个图像路径进行分类:
 
-```
+```py
 # grab the list of images in the dataset then randomly sample
 # indexes into the image paths list
 print("[INFO] sampling images...")
@@ -90,7 +90,7 @@ imagePaths = imagePaths[idxs]
 
 这十个图像中的每一个都需要预处理，所以让我们初始化我们的预处理器，并从磁盘加载这十个图像:
 
-```
+```py
 # initialize the image preprocessors
 sp = SimplePreprocessor(32, 32)
 iap = ImageToArrayPreprocessor()
@@ -106,7 +106,7 @@ data = data.astype("float") / 255.0
 
 接下来，让我们从磁盘加载保存的网络:
 
-```
+```py
 # load the pre-trained network
 print("[INFO] loading pre-trained network...")
 model = load_model(args["model"])
@@ -116,7 +116,7 @@ model = load_model(args["model"])
 
 一旦加载了模型，我们就可以对我们的 10 幅图像进行预测:
 
-```
+```py
 # make predictions on the images
 print("[INFO] predicting...")
 preds = model.predict(data, batch_size=32).argmax(axis=1)
@@ -126,7 +126,7 @@ preds = model.predict(data, batch_size=32).argmax(axis=1)
 
 现在我们有了我们的预测，让我们来想象一下结果:
 
-```
+```py
 # loop over the sample images
 for (i, imagePath) in enumerate(imagePaths):
 	# load the example image, draw the prediction, and display it
@@ -142,7 +142,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 要尝试一下`shallownet_load.py`,请执行以下命令:
 
-```
+```py
 $ python shallownet_load.py --dataset ../datasets/animals \
 	--model shallownet_weights.hdf5
 [INFO] sampling images...

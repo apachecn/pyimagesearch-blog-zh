@@ -176,7 +176,7 @@ ML 模型可以通过考虑给定产品的总需求来确定给定作物的价�
 
 **Mangla，P.** “计算机视觉和农业深度学习”， *PyImageSearch* ，P. Chugh，R. Raha，K. Kudriavtseva 和 S. Huot 编辑。，2022 年，【https://pyimg.co/tqlmn 
 
-```
+```py
 @incollection{Mangla_2022_CVDL4Agri,
   author = {Puneet Mangla},
   title = {Computer Vision and Deep Learning for Agriculture},

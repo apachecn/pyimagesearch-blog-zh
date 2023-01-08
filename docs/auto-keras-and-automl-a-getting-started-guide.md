@@ -120,7 +120,7 @@ Auto-Keras 还利用神经架构搜索，但应用“网络态射”(在改变�
 
 让我们用`tree`命令来检查今天的项目:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── output
@@ -154,14 +154,14 @@ $ tree --dirsfirst
 
 要检查您的 Python 版本，只需使用以下命令:
 
-```
+```py
 $ python --version
 
 ```
 
 如果您有 Python 3.6，您可以使用 pip 安装 Auto-Keras:
 
-```
+```py
 $ pip install tensorflow # or tensorflow-gpu
 $ pip install keras
 $ pip install autokeras
@@ -174,7 +174,7 @@ $ pip install autokeras
 
 让我们继续使用 Auto-Keras 实现我们的培训脚本。打开`train_auto_keras.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.metrics import classification_report
 from keras.datasets import cifar10
@@ -200,7 +200,7 @@ def main():
 
 现在，让我们初始化自动 Keras 的训练时间列表:
 
-```
+```py
 	# initialize the list of training times that we'll allow
 	# Auto-Keras to train for
 	TRAINING_TIMES = [
@@ -218,7 +218,7 @@ def main():
 
 让我们加载 CIFAR-10 数据集并初始化类名:
 
-```
+```py
 	# load the training and testing data, then scale it into the
 	# range [0, 1]
 	print("[INFO] loading CIFAR-10 data...")
@@ -240,7 +240,7 @@ def main():
 
 现在让我们开始循环我们的`TRAINING_TIMES`，每次都使用 Auto-Keras:
 
-```
+```py
 	# loop over the number of seconds to allow the current Auto-Keras
 	# model to train for
 	for seconds in TRAINING_TIMES:
@@ -277,7 +277,7 @@ def main():
 
 最后，我们将检查并启动执行的`main`线程:
 
-```
+```py
 # if this is the main thread of execution then start the process (our
 # code must be wrapped like this to avoid threading issues with
 # TensorFlow)
@@ -298,7 +298,7 @@ if __name__ == "__main__":
 
 从那里，打开一个终端，导航到您下载源代码的位置，并执行以下命令:
 
-```
+```py
 $ python train_auto_keras.py
 [INFO] training model for 3600 seconds max...   
 Preprocessing the images.

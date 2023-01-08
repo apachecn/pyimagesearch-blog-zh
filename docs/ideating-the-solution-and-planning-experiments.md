@@ -168,7 +168,7 @@
 
 **Mangla，P.** “构思解决方案和规划实验”， *PyImageSearch* ，P. Chugh，R. Raha，K. Kudriavtseva 和 S. Huot 编辑。，2022 年，【https://pyimg.co/h3joc 
 
-```
+```py
 @incollection{Mangla_2022_Ideating,
   author = {Puneet Mangla},
   title = {Ideating the Solution and Planning Experiments},

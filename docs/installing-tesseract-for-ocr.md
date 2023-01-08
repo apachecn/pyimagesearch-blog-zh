@@ -38,7 +38,7 @@ OCR 是将键入的、手写的或印刷的文本转换成机器编码的文本�
 
 对于 ***macOS 用户*** ，我们将使用[自制软件](https://brew.sh/)来安装宇宙魔方:
 
-```
+```py
 $ brew install tesseract
 
 ```
@@ -49,7 +49,7 @@ $ brew install tesseract
 
 如果您使用的是 ***Ubuntu 操作系统*** ，只需使用`apt-get`安装 Tesseract OCR:
 
-```
+```py
 $ sudo apt-get install tesseract-ocr
 
 ```
@@ -64,7 +64,7 @@ $ sudo apt-get install tesseract-ocr
 
 要验证 Tesseract 是否已成功安装在您的计算机上，请执行以下命令:
 
-```
+```py
 $ tesseract -v
 tesseract 3.05.00
  leptonica-1.74.1
@@ -80,7 +80,7 @@ tesseract 3.05.00
 
 如果您得到的是错误消息:
 
-```
+```py
 -bash: tesseract: command not found
 
 ```
@@ -108,7 +108,7 @@ tesseract 3.05.00
 
 只需在终端中输入以下命令:
 
-```
+```py
 $ tesseract tesseract_inputs/example_01.png stdout 
 Warning in pixReadMemPng: work-around: writing to a temp file
 Testing Tesseract OCR
@@ -125,7 +125,7 @@ Testing Tesseract OCR
 
 在您的终端中输入以下内容，注意更改后的输入文件名:
 
-```
+```py
 $ tesseract tesseract_inputs/example_02.png stdout 
 Warning in pixReadMemPng: work-around: writing to a temp file
 PyImageSearch
@@ -146,7 +146,7 @@ PyImageSearch
 
 本例使用命令行`digits`开关来*仅*报告数字:
 
-```
+```py
 $ tesseract tesseract_inputs/example_03.png stdout digits
 Warning in pixReadMemPng: work-around: writing to a temp file
 650 3428
@@ -177,7 +177,7 @@ Warning in pixReadMemPng: work-around: writing to a temp file
 
 **Figure 9:** Trying to apply Tesseract to “noisy” images.
 
-```
+```py
 $ tesseract tesseract_inputs/example_04.png stdout digits
 Warning in pixReadMemPng: work-around: writing to a temp file
 5513

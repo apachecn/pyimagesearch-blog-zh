@@ -52,7 +52,7 @@
 
 幸运的是，两者都是 pip 可安装的:
 
-```
+```py
 $ pip install tensorflow
 $ pip install tensorflow-text
 ```
@@ -160,7 +160,7 @@ can be any non-linearity that outputs the probability of the next word given all
 
 您可以使用以下代码片段将数据集下载到 Colab 笔记本或您的本地系统中:
 
-```
+```py
 $ wget https://www.manythings.org/anki/fra-eng.zip
 $ unzip fra-eng.zip
 $ rm _about.txt fra-eng.zip
@@ -184,7 +184,7 @@ $ rm _about.txt fra-eng.zip
 
 A. R. Gosthipaty 和 R. Raha。“神经机器翻译”， *PyImageSearch* ，P. Chugh，S. Huot，K. Kidriavsteva，和 A. Thanki 合编。，2022 年，【https://pyimg.co/4yi97 
 
-```
+```py
 @incollection{ADR_2022_NMT,
   author = {Aritra Roy Gosthipaty and Ritwik Raha},
   title = {Neural Machine Translation},

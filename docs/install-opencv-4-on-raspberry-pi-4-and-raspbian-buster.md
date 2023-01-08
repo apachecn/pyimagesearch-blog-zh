@@ -88,7 +88,7 @@
 
 第一步是运行并扩展您的文件系统:
 
-```
+```py
 $ sudo raspi-config
 
 ```
@@ -107,14 +107,14 @@ $ sudo raspi-config
 
 一旦出现提示，您应该选择第一个选项，***【A1 扩展文件系统】*** ，点击键盘上的`enter`，向下箭头到***<【完成】>***按钮，然后重新启动您的 Pi——您可能会被提示重新启动，但如果不是，您可以执行:
 
-```
+```py
 $ sudo reboot
 
 ```
 
 重新启动后，您的文件系统应该已经扩展到包括 micro-SD 卡上的所有可用空间。您可以通过执行`df -h`并检查输出来验证磁盘是否已经扩展:
 
-```
+```py
 $ df -h
 Filesystem      Size  Used Avail Use% Mounted on
 /dev/root        29G  5.3G   23G  20% /
@@ -134,7 +134,7 @@ tmpfs           386M     0  386M   0% /run/user/1000
 
 虽然这不是必需的，但我建议删除 Wolfram Engine 和 LibreOffice，以便在您的 Raspberry Pi 上回收大约 1GB 的空间:
 
-```
+```py
 $ sudo apt-get purge wolfram-engine
 $ sudo apt-get purge libreoffice*
 $ sudo apt-get clean
@@ -148,28 +148,28 @@ $ sudo apt-get autoremove
 
 第一步是更新和升级任何现有的软件包:
 
-```
+```py
 $ sudo apt-get update && sudo apt-get upgrade
 
 ```
 
 然后我们需要安装一些开发工具，包括 [CMake](https://cmake.org/) ，它帮助我们配置 OpenCV 构建过程:
 
-```
+```py
 $ sudo apt-get install build-essential cmake pkg-config
 
 ```
 
 接下来，我们需要安装一些图像 I/O 包，允许我们从磁盘加载各种图像文件格式。这种文件格式的例子包括 JPEG、PNG、TIFF 等。：
 
-```
+```py
 $ sudo apt-get install libjpeg-dev libtiff5-dev libjasper-dev libpng-dev
 
 ```
 
 就像我们需要图像 I/O 包一样，我们也需要视频 I/O 包。这些库允许我们从磁盘读取各种视频文件格式，并直接处理视频流:
 
-```
+```py
 $ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
 $ sudo apt-get install libxvidcore-dev libx264-dev
 
@@ -177,7 +177,7 @@ $ sudo apt-get install libxvidcore-dev libx264-dev
 
 OpenCV 库附带了一个名为`highgui`的子模块，用于在屏幕上显示图像和构建基本的 GUI。为了编译`highgui`模块，我们需要安装 GTK 开发库和先决条件:
 
-```
+```py
 $ sudo apt-get install libfontconfig1-dev libcairo2-dev
 $ sudo apt-get install libgdk-pixbuf2.0-dev libpango1.0-dev
 $ sudo apt-get install libgtk2.0-dev libgtk-3-dev
@@ -186,7 +186,7 @@ $ sudo apt-get install libgtk2.0-dev libgtk-3-dev
 
 OpenCV 内部的许多操作(即矩阵操作)可以通过安装一些额外的依赖项来进一步优化:
 
-```
+```py
 $ sudo apt-get install libatlas-base-dev gfortran
 
 ```
@@ -195,7 +195,7 @@ $ sudo apt-get install libatlas-base-dev gfortran
 
 以下先决条件是针对**步骤 4a** 的，它们当然也不会对**步骤 4b** 造成伤害。它们适用于 HDF5 数据集和 Qt GUIs:
 
-```
+```py
 $ sudo apt-get install libhdf5-dev libhdf5-serial-dev libhdf5-103
 $ sudo apt-get install libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5
 
@@ -203,7 +203,7 @@ $ sudo apt-get install libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5
 
 最后，让我们安装 Python 3 头文件，这样我们就可以用 Python 绑定来编译 OpenCV:
 
-```
+```py
 $ sudo apt-get install python3-dev
 
 ```
@@ -220,7 +220,7 @@ Python 虚拟环境是您系统上的一个*隔离的*开发/测试/生产环境
 
 您可以使用以下命令安装 pip:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python get-pip.py
 $ sudo python3 get-pip.py
@@ -230,21 +230,21 @@ $ sudo rm -rf ~/.cache/pip
 
 现在让我们安装`virtualenv`和`virtualenvwrapper`:
 
-```
+```py
 $ sudo pip install virtualenv virtualenvwrapper
 
 ```
 
 一旦`virtualenv`和`virtualenvwrapper`都安装好了，打开你的`~/.bashrc`文件:
 
-```
+```py
 $ nano ~/.bashrc
 
 ```
 
 …并将以下几行附加到文件的底部:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
@@ -260,14 +260,14 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 从那里，重新加载您的`~/.bashrc`文件，将更改应用到您当前的 bash 会话:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
 
 接下来，创建您的 **Python 3 虚拟环境:**
 
-```
+```py
 $ mkvirtualenv cv -p python3
 
 ```
@@ -280,7 +280,7 @@ $ mkvirtualenv cv -p python3
 
 如果你的 RPi 上有一个 Raspberry Pi 相机模块，你现在也应该安装 **PiCamera API** :
 
-```
+```py
 $ pip install "picamera[array]"
 
 ```
@@ -298,7 +298,7 @@ $ pip install "picamera[array]"
 
 在几秒钟内，你可以将 OpenCV 安装到虚拟环境中:
 
-```
+```py
 $ pip install opencv-contrib-python==4.1.0.25
 
 ```
@@ -321,7 +321,7 @@ $ pip install opencv-contrib-python==4.1.0.25
 
 让我们继续下载 OpenCV 源代码，包括 [opencv](https://github.com/opencv/opencv) 和 [opencv_contrib](https://github.com/opencv/opencv_contrib) 库，然后解包:
 
-```
+```py
 $ cd ~
 $ wget -O opencv.zip https://github.com/opencv/opencv/archive/4.1.1.zip
 $ wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.1.1.zip
@@ -340,14 +340,14 @@ $ mv opencv_contrib-4.1.1 opencv_contrib
 
 继续打开您的`/etc/dphys-swapfile`文件:
 
-```
+```py
 $ sudo nano /etc/dphys-swapfile
 
 ```
 
 …然后编辑`CONF_SWAPSIZE`变量:
 
-```
+```py
 # set size to absolute value, leaving empty (default) then uses computed value
 #   you most likely don't want this, unless you have an special disk situation
 # CONF_SWAPSIZE=100
@@ -365,7 +365,7 @@ CONF_SWAPSIZE=2048
 
 从那里，重新启动交换服务:
 
-```
+```py
 $ sudo /etc/init.d/dphys-swapfile stop
 $ sudo /etc/init.d/dphys-swapfile start
 
@@ -379,21 +379,21 @@ $ sudo /etc/init.d/dphys-swapfile start
 
 使用`workon`命令确保您处于`cv`虚拟环境中:
 
-```
+```py
 $ workon cv
 
 ```
 
 然后，将 NumPy(一个 OpenCV 依赖项)安装到 Python 虚拟环境中:
 
-```
+```py
 $ pip install numpy
 
 ```
 
 并从那里配置您的构建:
 
-```
+```py
 $ cd ~/opencv
 $ mkdir build
 $ cd build
@@ -435,7 +435,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 现在我们已经为 OpenCV 4 编译做好了准备，是时候使用所有四个内核启动编译过程了:
 
-```
+```py
 $ make -j4
 
 ```
@@ -448,7 +448,7 @@ $ make -j4
 
 假设 OpenCV 编译没有错误(如我上面的截图所示)，您可以在您的 Raspberry Pi 上安装您的 OpenCV 优化版本:
 
-```
+```py
 $ sudo make install
 $ sudo ldconfig
 
@@ -467,7 +467,7 @@ $ sudo ldconfig
 
 让我们继续创建我们的符号链接。确保[对以下所有路径使用“tab-completion”](https://www.howtogeek.com/195207/use-tab-completion-to-type-commands-faster-on-any-operating-system/)(而不是盲目复制这些命令):
 
-```
+```py
 $ cd /usr/local/lib/python3.7/site-packages/cv2/python-3.7
 $ sudo mv cv2.cpython-37m-arm-linux-gnueabihf.so cv2.so
 $ cd ~/.virtualenvs/cv/lib/python3.7/site-packages/
@@ -481,7 +481,7 @@ $ ln -s /usr/local/lib/python3.7/site-packages/cv2/python-3.7/cv2.so cv2.so
 
 作为快速检查，访问`cv`虚拟环境，启动 Python shell，并尝试导入 OpenCV 库:
 
-```
+```py
 $ cd ~
 $ workon cv
 $ python

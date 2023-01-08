@@ -213,7 +213,7 @@ MSPG 为我们提供了拆分前培训、验证和测试拆分。我们将在本
 
 完成这些步骤后，您将看到以下目录结构:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── Food-5K
@@ -255,7 +255,7 @@ $ tree --dirsfirst --filelimit 10
 
 打开`pyimagesearch`子模块中的`config.py`,插入以下代码:
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -278,7 +278,7 @@ BASE_PATH = "dataset"
 
 让我们指定更多数据集配置以及我们的类标签和批量大小:
 
-```
+```py
 # define the names of the training, testing, and validation
 # directories
 TRAIN = "training"
@@ -301,7 +301,7 @@ BATCH_SIZE = 32
 
 最后，我们可以建立其余的路径:
 
-```
+```py
 # initialize the label encoder file path and the output directory to
 # where the extracted features (in CSV file format) will be stored
 LE_PATH = os.path.sep.join(["output", "le.cpickle"])
@@ -339,7 +339,7 @@ MODEL_PATH = os.path.sep.join(["output", "model.cpickle"])
 
 打开`build_dataset.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from imutils import paths
@@ -363,7 +363,7 @@ for split in (config.TRAIN, config.TEST, config.VAL):
 
 从这里开始，我们将继续遍历`imagePaths`:
 
-```
+```py
 	# loop over the image paths
 	for imagePath in imagePaths:
 		# extract class label from the filename
@@ -396,7 +396,7 @@ for split in (config.TRAIN, config.TEST, config.VAL):
 
 然后，您可以使用以下命令执行`build_dataset.py`:
 
-```
+```py
 $ python build_dataset.py
 [INFO] processing 'training split'...
 [INFO] processing 'evaluation split'...
@@ -408,7 +408,7 @@ $ python build_dataset.py
 
 要验证磁盘上的目录结构，请使用`ls`命令:
 
-```
+```py
 $ ls dataset/
 evaluation  training  validation
 
@@ -418,7 +418,7 @@ evaluation  training  validation
 
 在每个目录中，我们都有类别标签目录:
 
-```
+```py
 $ ls dataset/training/
 food  non_food
 
@@ -430,7 +430,7 @@ food  non_food
 
 使用预先训练的 CNN 进行特征提取的所有代码将存在于`extract_features.py`中—打开该文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.applications import VGG16
@@ -466,7 +466,7 @@ le = None
 
 让我们循环一下我们的数据分割:
 
-```
+```py
 # loop over the data splits
 for split in (config.TRAIN, config.TEST, config.VAL):
 	# grab all image paths in the current split
@@ -503,7 +503,7 @@ for split in (config.TRAIN, config.TEST, config.VAL):
 
 下一步是循环遍历`BATCH_SIZE`块中的`imagePaths`:
 
-```
+```py
 	# loop over the images in batches
 	for (b, i) in enumerate(range(0, len(imagePaths), config.BATCH_SIZE)):
 		# extract the batch of images and labels, then initialize the
@@ -525,7 +525,7 @@ for split in (config.TRAIN, config.TEST, config.VAL):
 
 现在让我们继续填充我们的`batchImages`:
 
-```
+```py
 		# loop over the images and labels in the current batch
 		for imagePath in batchPaths:
 			# load the input image using the Keras helper utility
@@ -561,7 +561,7 @@ for split in (config.TRAIN, config.TEST, config.VAL):
 
 现在，我们将通过我们的网络将该批图像传递给**以提取特征:**
 
-```
+```py
 		# pass the images through the network and use the outputs as
 		# our actual features, then reshape the features into a
 		# flattened volume
@@ -579,7 +579,7 @@ for split in (config.TRAIN, config.TEST, config.VAL):
 
 让我们总结一下这个脚本:
 
-```
+```py
 		# loop over the class labels and extracted features
 		for (label, vec) in zip(batchLabels, features):
 			# construct a row that exists of the class label and
@@ -611,7 +611,7 @@ f.close()
 
 使用本教程的 ***“下载”*** 部分下载源代码，并从那里执行以下命令:
 
-```
+```py
 $ python extract_features.py
 [INFO] loading network...
 [INFO] processing 'training split'...
@@ -646,7 +646,7 @@ $ python extract_features.py
 
 要了解我们如何在这些特征向量上训练一个模型，打开`train.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
@@ -697,7 +697,7 @@ def load_data_split(splitPath):
 
 随着`load_data_spit`函数准备就绪，让我们通过加载我们的数据来让它工作:
 
-```
+```py
 # derive the paths to the training and testing CSV files
 trainingPath = os.path.sep.join([config.BASE_CSV_PATH,
 	"{}.csv".format(config.TRAIN)])
@@ -720,7 +720,7 @@ le = pickle.loads(open(config.LE_PATH, "rb").read())
 
 有了内存中的数据，我们现在准备好**训练我们的机器学习分类器:**
 
-```
+```py
 # train the model
 print("[INFO] training model...")
 model = LogisticRegression(solver="lbfgs", multi_class="auto",
@@ -779,7 +779,7 @@ f.close()
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python train.py
 [INFO] loading data...
 [INFO] training model...

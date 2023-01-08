@@ -60,7 +60,7 @@
 
 一旦它打开了，你就可以嘘它了。您的 SSH 命令应该如下所示:
 
-```
+```py
 $ ssh -i EC2KeyPair.pem ubuntu@<your instance ip address>
 
 ```
@@ -73,70 +73,70 @@ $ ssh -i EC2KeyPair.pem ubuntu@<your instance ip address>
 
 **更新默认包:**
 
-```
+```py
 $ sudo apt-get update
 
 ```
 
 **安装任何 Ubuntu 更新:**
 
-```
+```py
 $ sudo apt-get -y dist-upgrade
 
 ```
 
 **安装依赖项:**
 
-```
+```py
 $ sudo apt-get install -y gcc g++ gfortran build-essential git wget linux-image-generic libopenblas-dev python-dev python-pip python-nose python-numpy python-scipy
 
 ```
 
 **安装 LAPACK:**
 
-```
+```py
 $ sudo apt-get install -y liblapack-dev
 
 ```
 
 **安装 BLAS:**
 
-```
+```py
 $ sudo apt-get install -y libblas-dev
 
 ```
 
 **获取最新版本的 CUDA 工具包:**
 
-```
+```py
 $ wget http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1404/x86_64/cuda-repo-ubuntu1404_6.5-14_amd64.deb
 
 ```
 
 **解包工具包:**
 
-```
+```py
 $ sudo dpkg -i cuda-repo-ubuntu1404_6.5-14_amd64.deb
 
 ```
 
 **添加 CUDA 工具包:**
 
-```
+```py
 $ sudo apt-get update
 
 ```
 
 **安装 CUDA 工具包:**
 
-```
+```py
 $ sudo apt-get install -y cuda
 
 ```
 
 **更新你的** `PATH` **:**
 
-```
+```py
 $ echo "export PATH=/usr/local/cuda-6.5/bin:$PATH" >> .bashrc
 $ echo "export LD_LIBRARY_PATH=/usr/local/cuda-6.5/lib64:$LD_LIBRARY_PATH" >> .bashrc
 $ source ~/.bashrc
@@ -145,14 +145,14 @@ $ source ~/.bashrc
 
 **安装 virtualenv 和 virtualenvwrapper:**
 
-```
+```py
 $ pip install virtualenv virtualenvwrapper
 
 ```
 
 **配置 virtualenv 和 virtualenvwrapper:**
 
-```
+```py
 $ mkdir ~/.virtualenvs
 $ export WORKON_HOME=~/.virtualenvs
 $ echo ". /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
@@ -162,21 +162,21 @@ $ source ~/.bashrc
 
 **打造你的深度学习环境:**
 
-```
+```py
 $ mkvirtualenv deeplearning
 
 ```
 
 **安装 Python 包:**
 
-```
+```py
 $ pip install numpy scipy scikit-learn nolearn
 
 ```
 
 **编译 CUDAMat:**
 
-```
+```py
 $ git clone https://github.com/cudamat/cudamat
 $ cd cudamat
 $ make
@@ -193,7 +193,7 @@ $ make
 
 所以现在让我们来训练一个深度的信念网络。打开一个新文件，将其命名为`dbn.py`，并添加以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import classification_report
@@ -243,7 +243,7 @@ print classification_report(testY, preds)
 
 当我在我的 CPU 上训练我的深度信念网络时，我得到了以下结果:
 
-```
+```py
 (deeplearning)ubuntu@ip-xxx:~/deep-belief-network-gpu$ time python dbn.py
 gnumpy: failed to import cudamat. Using npmat instead. No GPU will be used.
 [X] downloading data...
@@ -325,7 +325,7 @@ sys	28m24.093s
 
 现在，为了训练深度信念网络，我将我编译的`cudamat`目录移动到与`dbn.py`相同的目录中。或者，您可以将`cudamat`目录添加到您的`PATH`中。
 
-```
+```py
 (deeplearning)ubuntu@ip-xxx:~/deep-belief-network-gpu$ time python dbn.py[X] downloading data...
 [DBN] fitting X.shape=(46900, 784)
 [DBN] layers [784, 800, 800, 10]

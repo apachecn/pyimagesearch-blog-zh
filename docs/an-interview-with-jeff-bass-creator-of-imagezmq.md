@@ -83,7 +83,7 @@ Jeff:imagezmq 库实现了一个简单快速的 Raspberry Pis(客户端)和服�
 
 下面是一对代码片段，展示了如何使用 imagezmq 从 Raspberry Pi 向 Mac 连续发送图像。首先，在每个 Raspberry Pi 上运行的代码:
 
-```
+```py
 # run this program on each RPi to send a labelled image stream
 import socket
 import time
@@ -103,7 +103,7 @@ while True:  # send images as stream until Ctrl-C
 
 然后是运行在 Mac(服务器)上的代码:
 
-```
+```py
  # run this program on the Mac to display image streams from multiple RPis
 import cv2
 import imagezmq

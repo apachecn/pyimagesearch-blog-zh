@@ -34,7 +34,7 @@ OpenCV 基础知识的快速复习也将对您自己的项目有所帮助。
 
 一旦新的 OpenCV 开发环境设置好了，**通过 pip 安装 imutils 包。**我为图像处理社区创建并维护了`imutils`(GitHub 上的[资源](https://github.com/jrosebr1/imutils))，它在我的博客上被大量使用。您应该在安装 OpenCV 的同一个环境中安装`imutils`——您将需要它来完成这篇博文，因为它将有助于基本的图像处理操作:
 
-```
+```py
 $ pip install imutils
 
 ```
@@ -47,7 +47,7 @@ $ pip install imutils
 
 从那里，导航到您下载的位置。压缩你的终端(`cd`)。然后我们可以`unzip`存档，将工作目录(`cd`)转到项目文件夹，并通过`tree`分析项目结构:
 
-```
+```py
 $ cd ~/Downloads
 $ unzip opencv-tutorial.zip
 $ cd opencv-tutorial
@@ -75,7 +75,7 @@ $ tree
 
 让我们首先在您最喜欢的文本编辑器或 IDE 中打开`opencv_tutorial_01.py`:
 
-```
+```py
 # import the necessary packages
 import imutils
 import cv2
@@ -114,7 +114,7 @@ cv2.waitKey(0)
 
 在**行 10** 显示的打印命令将把数值输出到终端:
 
-```
+```py
 width=600, height=322, depth=3
 
 ```
@@ -147,7 +147,7 @@ BGR 三元组中的每个值都有一个范围`[0, 255]`。OpenCV 中一个 RGB 
 
 现在我们已经确切知道了像素是什么，让我们看看如何检索图像中单个像素的值:
 
-```
+```py
 # access the RGB pixel located at x=50, y=100, keepind in mind that
 # OpenCV stores images in BGR order rather than RGB
 (B, G, R) = image[100, 50]
@@ -161,7 +161,7 @@ print("R={}, G={}, B={}".format(R, G, B))
 
 生成的像素值显示在终端上，如下所示:
 
-```
+```py
 R=41, G=49, B=37
 
 ```
@@ -178,7 +178,7 @@ R=41, G=49, B=37
 
 **Figure 3:** Array slicing with OpenCV allows us to extract a region of interest (ROI) easily.
 
-```
+```py
 # extract a 100x100 pixel square ROI (Region of Interest) from the
 # input image starting at x=320,y=60 at ending at x=420,y=160
 roi = image[60:160, 320:420]
@@ -197,7 +197,7 @@ cv2.waitKey(0)
 
 让我们将原始图像的大小调整为 200 x 200 像素:
 
-```
+```py
 # resize the image to 200x200px, ignoring aspect ratio
 resized = cv2.resize(image, (200, 200))
 cv2.imshow("Fixed Resizing", resized)
@@ -213,7 +213,7 @@ cv2.waitKey(0)
 
 让我们计算原始图像的长宽比，并使用它来调整图像的大小，以便它不会出现挤压和扭曲:
 
-```
+```py
 # fixed resizing and distort aspect ratio so let's resize the width
 # to be 300px but compute the new height based on the aspect ratio
 r = 300.0 / w
@@ -248,7 +248,7 @@ cv2.waitKey(0)
 
 以下是你如何使用`imutils.resize`:
 
-```
+```py
 # manually computing the aspect ratio can be a pain so let's use the
 # imutils library instead
 resized = imutils.resize(image, width=300)
@@ -273,7 +273,7 @@ cv2.waitKey(0)
 
 让我们为下一个例子旋转我们的*侏罗纪公园*图像:
 
-```
+```py
 # let's rotate an image 45 degrees clockwise using OpenCV by first
 # computing the image center, then constructing the rotation matrix,
 # and then finally applying the affine warp
@@ -301,7 +301,7 @@ cv2.waitKey(0)
 
 现在让我们使用`imutils`在一行代码中执行相同的操作:
 
-```
+```py
 # rotation can also be easily accomplished via imutils with less code
 rotated = imutils.rotate(image, -45)
 cv2.imshow("Imutils Rotation", rotated)
@@ -321,7 +321,7 @@ cv2.waitKey(0)
 
 事情是这样的，OpenCV *并不关心*我们的图像在旋转后是否被裁剪掉了。我发现这很麻烦，所以这是我的`imutils`版本，它将保留整个图像。我称之为`rotate_bound`:
 
-```
+```py
 # OpenCV doesn't "care" if our rotated image is clipped after rotation
 # so we can instead use another imutils convenience function to help
 # us out
@@ -351,7 +351,7 @@ cv2.waitKey(0)
 
 我经常使用`GaussianBlur`功能:
 
-```
+```py
 # apply a Gaussian blur with a 11x11 kernel to the image to smooth it,
 # useful when reducing high frequency noise
 blurred = cv2.GaussianBlur(image, (11, 11), 0)
@@ -372,7 +372,7 @@ cv2.waitKey(0)
 
 让我们围绕伊恩·马尔科姆的脸画一个矩形:
 
-```
+```py
 # draw a 2px thick red rectangle surrounding the face
 output = image.copy()
 cv2.rectangle(output, (320, 60), (420, 160), (0, 0, 255), 2)
@@ -403,7 +403,7 @@ cv2.waitKey(0)
 
 现在让我们在艾丽·塞特勒的脸前面画一个蓝色的实心圆:
 
-```
+```py
 # draw a blue 20px (filled in) circle on the image centered at
 # x=300,y=150
 output = image.copy()
@@ -433,7 +433,7 @@ cv2.waitKey(0)
 
 如果您仔细观察方法参数并将它们与矩形的参数进行比较，您会注意到它们是相同的:
 
-```
+```py
 # draw a 5px thick red line from x=60,y=20 to x=400,y=200
 output = image.copy()
 cv2.line(output, (60, 20), (400, 200), (0, 0, 255), 5)
@@ -454,7 +454,7 @@ cv2.waitKey(0)
 
 让我们看看 OpenCV 的 putText 函数是如何工作的:
 
-```
+```py
 # draw green text on the image
 output = image.copy()
 cv2.putText(output, "OpenCV + Jurassic Park!!!", (10, 25), 
@@ -492,7 +492,7 @@ OpenCV 的`putText`函数负责在图像上绘制文本。让我们来看看所�
 
 在那里，输入以下命令:
 
-```
+```py
 $ python opencv_tutorial_01.py 
 width=600, height=322, depth=3
 R=41, G=49, B=37
@@ -532,7 +532,7 @@ R=41, G=49, B=37
 
 继续并关闭您下载的第一个脚本，打开`opencv_tutorial_02.py`开始第二个示例:
 
-```
+```py
 # import the necessary packages
 import argparse
 import imutils
@@ -558,7 +558,7 @@ args = vars(ap.parse_args())
 
 ### 将图像转换为灰度
 
-```
+```py
 # load the input image (whose path was supplied via command line
 # argument) and display the image to our screen
 image = cv2.imread(args["image"])
@@ -592,7 +592,7 @@ cv2.waitKey(0)
 
 让我们执行边缘检测，看看这个过程是如何工作的:
 
-```
+```py
 # applying edge detection we can find the outlines of objects in
 # images
 edged = cv2.Canny(gray, 30, 150)
@@ -624,7 +624,7 @@ cv2.waitKey(0)
 
 我强烈建议您尝试阈值处理。我通过反复试验(以及经验)调整了下面的代码，使其适用于我们的示例:
 
-```
+```py
 # threshold the image by setting all pixel values less than 225
 # to 255 (white; foreground) and all pixel values >= 225 to 255
 # (black; background), thereby segmenting the image
@@ -657,7 +657,7 @@ cv2.waitKey(0)
 
 在**图 20** 动画中，我们有 6 个外形轮廓。让我们通过代码找到并画出它们的轮廓:
 
-```
+```py
 # find contours (i.e., outlines) of the foreground objects in the
 # thresholded image
 cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
@@ -685,7 +685,7 @@ for c in cnts:
 
 利用我们在这篇博文中所学的知识，让我们在图片上叠加一些文字:
 
-```
+```py
 # draw the total number of contours found in purple
 text = "I found {} objects!".format(len(cnts))
 cv2.putText(output, text, (10, 25),  cv2.FONT_HERSHEY_SIMPLEX, 0.7,
@@ -709,7 +709,7 @@ cv2.waitKey(0)
 
 为了减小前景对象的尺寸，我们可以在给定迭代次数的情况下侵蚀掉像素:
 
-```
+```py
 # we apply erosions to reduce the size of foreground objects
 mask = thresh.copy()
 mask = cv2.erode(mask, None, iterations=5)
@@ -730,7 +730,7 @@ cv2.waitKey(0)
 
 类似地，我们可以在蒙版中突出区域。要放大区域，只需使用`cv2.dilate`:
 
-```
+```py
 # similarly, dilations can increase the size of the ground objects
 mask = thresh.copy()
 mask = cv2.dilate(mask, None, iterations=5)
@@ -757,7 +757,7 @@ cv2.waitKey(0)
 
 让我们来学习如何实现这一点:
 
-```
+```py
 # a typical operation we may want to apply is to take our mask and
 # apply a bitwise AND to our input image, keeping only the masked
 # regions
@@ -778,7 +778,7 @@ cv2.waitKey(0)
 
 要运行第二个脚本，请确保您位于包含下载的源代码和 Python 脚本的文件夹中。从那里，我们将打开一个终端，提供脚本名称+ [命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 $ python opencv_tutorial_02.py --image tetris_blocks.png
 
 ```

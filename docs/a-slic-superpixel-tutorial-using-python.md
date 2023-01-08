@@ -80,7 +80,7 @@
 
 打开您最喜欢的编辑器，创建`slic.py`，让我们开始编码:
 
-```
+```py
 # import the necessary packages
 from skimage.segmentation import slic
 from skimage.segmentation import mark_boundaries
@@ -150,7 +150,7 @@ plt.show()
 
 启动一个 shell 并执行以下命令:
 
-```
+```py
 $ python superpixel.py --image raptors.png
 
 ```

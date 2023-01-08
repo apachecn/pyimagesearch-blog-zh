@@ -105,14 +105,14 @@
 
 大多数系统都有 SSH **服务器**。在 Ubuntu 上，如果需要安装 SSH 服务器，只需:
 
-```
+```py
 $ sudo apt-get install openssh-server
 
 ```
 
 在 macOS 上，你只需要开启*“远程登录”*:
 
-```
+```py
 sudo systemsetup -setremotelogin on
 
 ```
@@ -133,21 +133,21 @@ sudo systemsetup -setremotelogin on
 
 获得这些信息后，您可以使用以下命令作为模板:
 
-```
+```py
 $ ssh username@ip_address
 
 ```
 
 如果您使用的是 Amazon EC2，您可能需要提供一个私钥来代替密码:
 
-```
+```py
 $ ssh -i ~/keyfile.pem username@ip_address # AWS EC2
 
 ```
 
 例如，如果我的远程机器的 IP 地址是`10.0.0.90`，我的用户名是`adrian`，那么`ssh`命令就变成:
 
-```
+```py
 $ ssh adrian@10.0.0.90
 
 ```
@@ -170,7 +170,7 @@ $ ssh adrian@10.0.0.90
 
 您需要做的就是通过`-X`开关启用 X11 转发:
 
-```
+```py
 $ ssh -X username@ip_address
 
 ```
@@ -209,7 +209,7 @@ X11 转发对视频流有用吗？
 
 **选项 2:** 第二种方法是使用下面的命令来启用它:
 
-```
+```py
 $ sudo service ssh start
 
 ```
@@ -312,7 +312,7 @@ $ sudo service ssh start
 
 要在 Ubuntu 中安装. deb 文件，可以双击文件浏览器/桌面中的图标。或者，你可以跑。命令行中的 deb 文件:
 
-```
+```py
 $ sudo dpkg -i VNC-Server-6.4.1-Linux-x64.deb
 
 ```
@@ -367,7 +367,7 @@ Jupyter 笔记本已经成为 Python 开发的超级热门。
 
 Jupyter 笔记本电脑的优势在于，您可以通过网络浏览器访问一个交互式的空闲环境，只需将网络浏览器指向运行在远程机器上的 Jupyter 笔记本电脑的 IP 地址/端口，就可以访问它。要使用 Jupyter 笔记本，您首先需要将它安装在您的远程计算机上:
 
-```
+```py
 $ workon your_env_name
 $ pip install jupyter
 
@@ -377,7 +377,7 @@ $ pip install jupyter
 
 作为快速检查，您可以通过以下方式启动 jupyter 笔记本:
 
-```
+```py
 $ jupyter notebook
 
 ```
@@ -426,7 +426,7 @@ Jupyter 无权访问您的系统 GUI。
 
 如果您使用的是基于 Unix 的计算机，您可以使用 SCP 命令:
 
-```
+```py
 $ scp foo.py username@ip_address:~/foobar_project
 
 ```
@@ -437,7 +437,7 @@ $ scp foo.py username@ip_address:~/foobar_project
 
 **同样，我可以将文件从我的远程机器传输回我的本地机器:**
 
-```
+```py
 $ scp username@ip_address:~/foobar_project/bar.py ~/foobar_project
 
 ```
@@ -689,7 +689,7 @@ PyCharm 在您的 Raspberry Pi 上索引 Python 虚拟环境和项目文件可�
 
 首先，我将使用 SSH 登录到我的 Raspberry Pi(或 AWS 服务器):
 
-```
+```py
 $ ssh pi@192.168.1.150
 $ ls *.py
 simple_example.py
@@ -708,7 +708,7 @@ simple_example.py
 
 我将借此机会编辑这个文件，并包含一个[命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/) —代码清单现在看起来像这样:
 
-```
+```py
 # import the necessary packages
 import argparse
 
@@ -724,7 +724,7 @@ print("Hello there, {}!".format(args["name"]))
 
 我通过 Sublime Text 保存文件，然后切换回我的终端。然后，我可以通过以下方式执行 Python 脚本:
 
-```
+```py
 $ python simple_example.py --name Adrian
 Hello there, Adrian!
 

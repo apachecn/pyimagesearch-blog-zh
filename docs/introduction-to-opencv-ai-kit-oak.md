@@ -239,7 +239,7 @@ OAK developer kit 是 Luxonis 提供的所有变体中我们最喜欢的。简�
 
 **Sharma，a .**“OpenCV AI Kit(OAK)简介”， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva，R. Raha，A. Thanki 编辑。，2022 年，【https://pyimg.co/dus4w 
 
-```
+```py
 @incollection{Sharma_2022_OAK1,
   author = {Aditya Sharma},
   title = {Introduction to {OpenCV AI} Kit {(OAK)}},

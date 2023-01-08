@@ -94,7 +94,7 @@
 
 首先，打开一个新文件，命名为`detect_blinks.py`。从那里，插入以下代码:
 
-```
+```py
 # import the necessary packages
 from scipy.spatial import distance as dist
 from imutils.video import FileVideoStream
@@ -113,7 +113,7 @@ import cv2
 
 如果您的系统上没有安装`imutils`(或者如果您使用的是旧版本)，请确保使用以下命令安装/升级:
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -126,7 +126,7 @@ $ pip install --upgrade imutils
 
 接下来，我们将定义我们的`eye_aspect_ratio`函数:
 
-```
+```py
 def eye_aspect_ratio(eye):
 	# compute the euclidean distances between the two sets of
 	# vertical eye landmarks (x, y)-coordinates
@@ -155,7 +155,7 @@ def eye_aspect_ratio(eye):
 
 让我们继续分析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--shape-predictor", required=True,
@@ -173,7 +173,7 @@ args = vars(ap.parse_args())
 
 我们现在需要设置两个重要的常量，您可能需要为自己的实现进行调优，同时初始化另外两个重要的变量， ***，所以一定要注意这个解释:***
 
-```
+```py
 # define two constants, one for the eye aspect ratio to indicate
 # blink and then a second constant for the number of consecutive
 # frames the eye must be below the threshold
@@ -198,7 +198,7 @@ TOTAL = 0
 
 现在我们的导入、命令行参数和常量都已经处理好了，我们可以初始化 dlib 的面部检测器和面部标志检测器了:
 
-```
+```py
 # initialize dlib's face detector (HOG-based) and then create
 # the facial landmark predictor
 print("[INFO] loading facial landmark predictor...")
@@ -221,7 +221,7 @@ dlib 生成的面部标志遵循一个可索引列表，[正如我在本教程�
 
 因此，我们可以确定用于提取左眼和右眼的 *(x，y)*-坐标的开始和结束阵列切片索引值，如下:
 
-```
+```py
 # grab the indexes of the facial landmarks for the left and
 # right eye, respectively
 (lStart, lEnd) = face_utils.FACIAL_LANDMARKS_IDXS["left_eye"]
@@ -233,7 +233,7 @@ dlib 生成的面部标志遵循一个可索引列表，[正如我在本教程�
 
 接下来，我们需要决定我们是使用基于文件的视频流还是使用 USB/网络摄像头/Raspberry Pi 摄像头直播的视频流:
 
-```
+```py
 # start the video stream thread
 print("[INFO] starting video stream thread...")
 vs = FileVideoStream(args["video"]).start()
@@ -255,7 +255,7 @@ time.sleep(1.0)
 
 最后，我们到达了脚本的主循环:
 
-```
+```py
 # loop over frames from the video stream
 while True:
 	# if this is a file video stream, then we need to check if
@@ -285,7 +285,7 @@ while True:
 
 我们现在需要遍历帧中的每张脸，然后对每张脸应用面部标志检测:
 
-```
+```py
 	# loop over the face detections
 	for rect in rects:
 		# determine the facial landmarks for the face region, then
@@ -316,7 +316,7 @@ while True:
 
 我们的下一个代码块只是处理眼睛区域本身的面部标志的可视化:
 
-```
+```py
 		# compute the convex hull for the left and right eye, then
 		# visualize each of the eyes
 		leftEyeHull = cv2.convexHull(leftEye)
@@ -330,7 +330,7 @@ while True:
 
 在这一点上，我们已经计算了我们的(平均)眼睛纵横比，但我们还没有实际确定是否发生了眨眼——这将在下一节中讨论:
 
-```
+```py
 		# check to see if the eye aspect ratio is below the blink
 		# threshold, and if so, increment the blink frame counter
 		if ear < EYE_AR_THRESH:
@@ -361,7 +361,7 @@ while True:
 
 我们的最终代码块只是处理在输出帧上绘制眨眼次数，以及显示当前眼睛的纵横比:
 
-```
+```py
 		# draw the total number of blinks on the frame along with
 		# the computed eye aspect ratio for the frame
 		cv2.putText(frame, "Blinks: {}".format(TOTAL), (10, 30),
@@ -393,7 +393,7 @@ vs.stop()
 
 要将我们的眨眼检测器应用于示例视频，只需执行以下命令:
 
-```
+```py
 $ python detect_blinks.py \
 	--shape-predictor shape_predictor_68_face_landmarks.dat \
 	--video blink_detection_demo.mp4

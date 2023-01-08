@@ -42,7 +42,7 @@
 
 以下代码片段显示了分配给每种类型的标记字典的唯一变量标识符:
 
-```
+```py
 # define names of each possible ArUco tag OpenCV supports
 ARUCO_DICT = {
 	"DICT_4X4_50": cv2.aruco.DICT_4X4_50,
@@ -79,7 +79,7 @@ ARUCO_DICT = {
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -106,7 +106,7 @@ $ pip install opencv-contrib-python
 
 从那里，让我们检查我们项目的目录结构:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── images
@@ -128,7 +128,7 @@ $ tree . --dirsfirst
 
 打开项目目录结构中的``guess_aruco_type.py`` 文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import imutils
@@ -143,7 +143,7 @@ args = vars(ap.parse_args())
 
 我们在第 2-4 行导入我们需要的命令行参数，然后解析我们的命令行参数。
 
-```
+```py
 # define names of each possible ArUco tag OpenCV supports
 ARUCO_DICT = {
 	"DICT_4X4_50": cv2.aruco.DICT_4X4_50,
@@ -180,7 +180,7 @@ ARUCO_DICT = {
 
 说到这里，我们现在来实现这个逻辑:
 
-```
+```py
 # load the input image from disk and resize it
 print("[INFO] loading image...")
 image = cv2.imread(args["image"])
@@ -214,7 +214,7 @@ for (arucoName, arucoDict) in ARUCO_DICT.items():
 
 从那里，弹出打开一个终端，并执行以下命令:
 
-```
+```py
 $ python guess_aruco_type.py --image images/example_01.png
 [INFO] loading image...
 [INFO] detected 2 markers for 'DICT_5X5_50'
@@ -234,7 +234,7 @@ ArUco 标记属于 *5×5* 类，id 分别高达 50、100、250 或 1000。这些
 
 让我们尝试另一个示例图像:
 
-```
+```py
 $ python guess_aruco_type.py --image images/example_02.png
 [INFO] loading image...
 [INFO] detected 1 markers for 'DICT_4X4_50'
@@ -246,7 +246,7 @@ $ python guess_aruco_type.py --image images/example_02.png
 
 这里你可以看到一个包含 [Pantone 颜色匹配卡的示例图像。](https://www.pantone.com/pantone-color-match-card) OpenCV(错误地)认为这些标记*可能*属于 *4×4* 类，但是如果你放大示例图像，你会发现这不是真的，因为这些实际上是 *6×6* 标记，标记周围有一点额外的填充。
 
-```
+```py
 $ python guess_aruco_type.py --image images/example_03.png
 [INFO] loading image...
 [INFO] detected 3 markers for 'DICT_APRILTAG_36h11'

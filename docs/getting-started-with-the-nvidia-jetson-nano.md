@@ -99,7 +99,7 @@ NVIDIA 提供了用于刷新的文档。img 文件保存到 micro-SD 卡，适�
 
 让我们从安装所需的系统包开始:
 
-```
+```py
 $ sudo apt-get install git cmake
 $ sudo apt-get install libatlas-base-dev gfortran
 $ sudo apt-get install libhdf5-serial-dev hdf5-tools
@@ -115,7 +115,7 @@ $ sudo apt-get install python3-dev
 
 我们先安装`pip`，Python 的包管理器:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python3 get-pip.py
 $ rm get-pip.py
@@ -128,21 +128,21 @@ $ rm get-pip.py
 
 为了管理我们的 Python 虚拟环境，我们将使用 [virtualenv](https://virtualenv.readthedocs.io/en/latest/) 和 [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/) ，我们可以使用以下命令安装它们:
 
-```
+```py
 $ sudo pip install virtualenv virtualenvwrapper
 
 ```
 
 一旦我们安装了`virtualenv`和`virtualenvwrapper`，我们需要更新我们的`~/.bashrc`文件。我选择使用`nano`，但是你可以使用你最喜欢的编辑器:
 
-```
+```py
 $ nano ~/.bashrc
 
 ```
 
 向下滚动到`~/.bashrc`文件的底部，添加以下几行:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
@@ -154,14 +154,14 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 接下来，我们需要使用`source`命令重新加载`~/.bashrc`文件的内容:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
 
 我们现在可以使用`mkvirtualenv`命令创建一个 Python 虚拟环境——我将我的虚拟环境命名为`deep_learning`,但是您可以随意命名:
 
-```
+```py
 $ mkvirtualenv deep_learning -p python3
 
 ```
@@ -172,14 +172,14 @@ $ mkvirtualenv deep_learning -p python3
 
 首先，使用`workon`命令确保您在`deep_learning`虚拟环境中:
 
-```
+```py
 $ workon deep_learning
 
 ```
 
 从那里，您可以安装 NumPy:
 
-```
+```py
 $ pip install numpy
 
 ```
@@ -192,7 +192,7 @@ $ pip install numpy
 
 您可以使用以下命令安装正式的 Jetson Nano TensorFlow:
 
-```
+```py
 $ pip install --extra-index-url https://developer.download.nvidia.com/compute/redist/jp/v42 tensorflow-gpu==1.13.1+nv19.3
 
 ```
@@ -201,7 +201,7 @@ $ pip install --extra-index-url https://developer.download.nvidia.com/compute/re
 
 这里的最后一步是安装 SciPy 和 Keras:
 
-```
+```py
 $ pip install scipy
 $ pip install keras
 
@@ -215,7 +215,7 @@ $ pip install keras
 
 第一步是克隆出`jetson-inference`回购:
 
-```
+```py
 $ git clone https://github.com/dusty-nv/jetson-inference
 $ cd jetson-inference
 $ git submodule update --init
@@ -224,7 +224,7 @@ $ git submodule update --init
 
 然后我们可以使用`cmake`来配置构建。
 
-```
+```py
 $ mkdir build
 $ cd build
 $ cmake ..
@@ -238,7 +238,7 @@ $ cmake ..
 
 在`cmake`完成构建配置后，我们可以编译并安装 Jetson 推理引擎:
 
-```
+```py
 $ make
 $ sudo make install
 
@@ -283,28 +283,28 @@ Jetson Nano 推理库包含的示例可在`jetson-inference`中找到:
 
 首先，将目录更改为`~/jetson-inference/imagenet-camera`:
 
-```
+```py
 $ cd ~/jetson-inference/imagenet-camera
 
 ```
 
 从那里，打开`imagenet-camera.cpp`:
 
-```
+```py
 $ nano imagenet-camera.cpp
 
 ```
 
 然后，您需要向下滚动到大约 ***的第 37*** 行，在那里您将看到`DEFAULT_CAMERA`值:
 
-```
+```py
 #define DEFAULT_CAMERA -1        // -1 for onboard camera, or change to index of /dev/video V4L2 camera (>=0)    
 
 ```
 
 只需将该值从`-1`更改为 `0`:
 
-```
+```py
 #define DEFAULT_CAMERA 0        // -1 for onboard camera, or change to index of /dev/video V4L2 camera (>=0)    
 
 ```
@@ -313,7 +313,7 @@ $ nano imagenet-camera.cpp
 
 编辑完 C++文件后，您需要重新编译示例，简单如下:
 
-```
+```py
 $ cd ../build
 $ make
 $ sudo make install
@@ -324,7 +324,7 @@ $ sudo make install
 
 编译完成后，转到`aarch64/bin`目录并执行`imagenet-camera`二进制文件:
 
-```
+```py
 $ cd aarch64/bin/
 $ ./imagenet-camera
 imagenet-camera

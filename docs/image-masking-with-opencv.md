@@ -28,7 +28,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -57,7 +57,7 @@ $ pip install opencv-contrib-python
 
 您的项目文件夹应该如下所示:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── adrian.png
@@ -74,7 +74,7 @@ $ tree . --dirsfirst
 
 打开项目目录结构中的`opencv_masking.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -93,7 +93,7 @@ args = vars(ap.parse_args())
 
 现在，让我们从磁盘加载这个映像并执行屏蔽:
 
-```
+```py
 # load the original input image and display it to our screen
 image = cv2.imread(args["image"])
 cv2.imshow("Original", image)
@@ -135,7 +135,7 @@ cv2.waitKey(0)
 
 让我们来看另一个例子，但是这次使用的是一个*非矩形*遮罩:
 
-```
+```py
 # now, let's make a circular mask with a radius of 100 pixels and
 # apply the mask again
 mask = np.zeros(image.shape[:2], dtype="uint8")
@@ -166,7 +166,7 @@ cv2.waitKey(0)
 
 从那里，打开一个 shell 并执行以下命令:
 
-```
+```py
 $ python opencv_masking.py
 ```
 

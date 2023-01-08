@@ -125,7 +125,7 @@
 
 一旦 Python 3 虚拟环境准备就绪，pip 安装命令包括:
 
-```
+```py
 $ workon <env-name>
 $ pip install numpy
 $ pip install opencv-contrib-python
@@ -140,7 +140,7 @@ $ pip install scikit-learn
 
 确保使用教程的 ***“下载”*** 部分获取今天帖子的源代码和示例图片。在您将。您将看到以下项目结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── examples
@@ -234,7 +234,7 @@ $ tree --dirsfirst
 
 打开`pyimagesearch`模块中的`features.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils import paths
 import numpy as np
@@ -271,7 +271,7 @@ def quantify_image(image, bins=(4, 6, 3)):
 
 现在让我们来看看这个方法:
 
-```
+```py
 def load_dataset(datasetPath, bins):
 	# grab the paths to all images in our dataset directory, then
 	# initialize our lists of images
@@ -316,7 +316,7 @@ def load_dataset(datasetPath, bins):
 
 打开`train_anomaly_detector.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.features import load_dataset
 from sklearn.ensemble import IsolationForest
@@ -342,7 +342,7 @@ args = vars(ap.parse_args())
 
 此时，我们已经准备好加载数据集并**训练我们的隔离森林模型:**
 
-```
+```py
 # load and quantify our image dataset
 print("[INFO] preparing dataset...")
 data = load_dataset(args["dataset"], bins=(3, 3, 3))
@@ -369,7 +369,7 @@ model.fit(data)
 
 既然我们的模型已经定型，剩下的几行将异常检测器序列化到磁盘上的 pickle 文件中:
 
-```
+```py
 # serialize the anomaly detection model to disk
 f = open(args["model"], "wb")
 f.write(pickle.dumps(model))
@@ -385,7 +385,7 @@ f.close()
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python train_anomaly_detector.py --dataset forest --model anomaly_detector.model
 [INFO] preparing dataset...
 [INFO] fitting anomaly detection model...
@@ -394,7 +394,7 @@ $ python train_anomaly_detector.py --dataset forest --model anomaly_detector.mod
 
 要验证异常检测器是否已序列化到磁盘，请检查工作项目目录的内容:
 
-```
+```py
 $ ls *.model
 anomaly_detector.model
 
@@ -415,7 +415,7 @@ anomaly_detector.model
 
 继续打开`test_anomaly_detector.py`并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.features import quantify_image
 import argparse
@@ -441,7 +441,7 @@ args = vars(ap.parse_args())
 
 让我们加载我们的异常检测器并**量化我们的输入图像:**
 
-```
+```py
 # load the anomaly detection model
 print("[INFO] loading anomaly detection model...")
 model = pickle.loads(open(args["model"], "rb").read())
@@ -460,7 +460,7 @@ features = quantify_image(hsv, bins=(3, 3, 3))
 
 此时，我们准备好**进行异常预测**并显示结果:
 
-```
+```py
 # use the anomaly detector model and extracted features to determine
 # if the example image is an anomaly or not
 preds = model.predict([features])[0]
@@ -489,7 +489,7 @@ cv2.waitKey(0)
 
 在那里，您可以使用以下命令来测试异常检测器:
 
-```
+```py
 $ python test_anomaly_detector.py --model anomaly_detector.model \
 	--image examples/forest_cdmc290.jpg 
 [INFO] loading anomaly detection model...
@@ -504,7 +504,7 @@ $ python test_anomaly_detector.py --model anomaly_detector.model \
 
 现在让我们来看看这个模型如何处理一幅公路的图像，它当然不是森林:
 
-```
+```py
 $ python test_anomaly_detector.py --model anomaly_detector.model \
 	--image examples/highway_a836030.jpg
 [INFO] loading anomaly detection model...
@@ -519,7 +519,7 @@ $ python test_anomaly_detector.py --model anomaly_detector.model \
 
 作为最后的测试，让我们向异常探测器提供一个海滩/海岸的图像:
 
-```
+```py
 $ python test_anomaly_detector.py --model anomaly_detector.model \
 	--image examples/coast_osun52.jpg 
 [INFO] loading anomaly detection model...

@@ -90,7 +90,7 @@ Keras 深度神经网络有可能返回多个预测吗？
 
 继续访问这篇博客文章的 ***【下载】*** 部分，获取代码和文件。解压缩 zip 文件后，您将看到以下目录结构:
 
-```
+```py
 ├── classify.py
 ├── dataset
 │   ├── black_jeans [344 entries
@@ -149,7 +149,7 @@ Keras 深度神经网络有可能返回多个预测吗？
 
 确保你已经使用了这篇博文底部的 ***【下载】*** 部分来获取源代码+示例图片。从那里，打开`pyimagesearch`模块中的`smallervggnet.py`文件，继续执行:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import BatchNormalization
@@ -165,7 +165,7 @@ from tensorflow.keras import backend as K
 
 在**第 2-10 行**，我们导入相关的 Keras 模块，并从那里创建我们的`SmallerVGGNet`类:
 
-```
+```py
 class SmallerVGGNet:
 	@staticmethod
 	def build(width, height, depth, classes, finalAct="softmax"):
@@ -195,7 +195,7 @@ class SmallerVGGNet:
 
 让我们构建第一个`CONV => RELU => POOL`模块:
 
-```
+```py
 		# CONV => RELU => POOL
 		model.add(Conv2D(32, (3, 3), padding="same",
 			input_shape=inputShape))
@@ -212,7 +212,7 @@ class SmallerVGGNet:
 
 从那里我们有两组`(CONV => RELU) * 2 => POOL`模块:
 
-```
+```py
 		# (CONV => RELU) * 2 => POOL
 		model.add(Conv2D(64, (3, 3), padding="same"))
 		model.add(Activation("relu"))
@@ -239,7 +239,7 @@ class SmallerVGGNet:
 
 这些块后面是我们唯一的一组`FC => RELU`层:
 
-```
+```py
 		# first (and only) set of FC => RELU layers
 		model.add(Flatten())
 		model.add(Dense(1024))
@@ -268,7 +268,7 @@ class SmallerVGGNet:
 
 打开`train.py`并插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -298,7 +298,7 @@ import os
 
 现在,( a)您的环境已经准备好,( b)您已经导入了包，让我们解析命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -326,7 +326,7 @@ args = vars(ap.parse_args())
 
 让我们继续初始化一些在我们的培训过程中起关键作用的重要变量:
 
-```
+```py
 # initialize the number of epochs to train for, initial learning rate,
 # batch size, and image dimensions
 EPOCHS = 30
@@ -352,7 +352,7 @@ tf.compat.v1.disable_eager_execution()
 
 接下来的两个代码块处理训练数据的加载和预处理:
 
-```
+```py
 # grab the image paths and randomly shuffle them
 print("[INFO] loading images...")
 imagePaths = sorted(list(paths.list_images(args["dataset"])))
@@ -369,7 +369,7 @@ labels = []
 
 接下来，我们将遍历`imagePaths`，预处理图像数据，并提取多类标签。
 
-```
+```py
 # loop over the input images
 for imagePath in imagePaths:
 	# load the image, pre-process it, and store it in the data list
@@ -389,7 +389,7 @@ for imagePath in imagePaths:
 
 **第 64 行和第 65 行**处理将图像路径分割成多个标签，用于我们的多标签分类任务。在**行 64** 被执行后，一个 2 元素列表被创建，然后被添加到**行 65** 的标签列表中。这里有一个在终端中分解的例子，这样您可以看到在多标签解析期间发生了什么:
 
-```
+```py
 $ python
 >>> import os
 >>> labels = []
@@ -416,7 +416,7 @@ $ python
 
 我们还没有完成预处理:
 
-```
+```py
 # scale the raw pixel intensities to the range [0, 1]
 data = np.array(data, dtype="float") / 255.0
 labels = np.array(labels)
@@ -431,7 +431,7 @@ print("[INFO] data matrix: {} images ({:.2f}MB)".format(
 
 从那里，让我们将标签二进制化—下面的块是本周多类分类概念的 ***关键*** :
 
-```
+```py
 # binarize the labels using scikit-learn's special multi-label
 # binarizer implementation
 print("[INFO] class labels:")
@@ -448,7 +448,7 @@ for (i, label) in enumerate(mlb.classes_):
 
 下面的例子展示了`MultiLabelBinarizer`如何将一个`("red", "dress")`元组转换成一个总共有六个类别的向量:
 
-```
+```py
 $ python
 >>> from sklearn.preprocessing import MultiLabelBinarizer
 >>> labels = [
@@ -475,7 +475,7 @@ array([[0, 0, 1, 0, 1, 0]])
 
 让我们构建培训和测试拆分，并初始化数据增强器:
 
-```
+```py
 # partition the data into training and testing splits using 80% of
 # the data for training and the remaining 20% for testing
 (trainX, testX, trainY, testY) = train_test_split(data,
@@ -494,7 +494,7 @@ aug = ImageDataGenerator(rotation_range=25, width_shift_range=0.1,
 
 接下来，让我们构建模型并初始化 Adam 优化器:
 
-```
+```py
 # initialize the model using a sigmoid activation as the final layer
 # in the network so we can perform multi-label classification
 print("[INFO] compiling model...")
@@ -512,7 +512,7 @@ opt = Adam(lr=INIT_LR, decay=INIT_LR / EPOCHS)
 
 在那里，我们将编译模型并开始培训(这可能需要一段时间，具体取决于您的硬件):
 
-```
+```py
 # compile the model using binary cross-entropy rather than
 # categorical cross-entropy -- this may seem counterintuitive for
 # multi-label classification, but keep in mind that the goal here
@@ -541,7 +541,7 @@ H = model.fit(
 
 训练完成后，我们可以将模型和标签二进制化器保存到磁盘:
 
-```
+```py
 # save the model to disk
 print("[INFO] serializing network...")
 model.save(args["model"], save_format="h5")
@@ -558,7 +558,7 @@ f.close()
 
 在此基础上，我们绘制精度和损耗图:
 
-```
+```py
 # plot the training loss and accuracy
 plt.style.use("ggplot")
 plt.figure()
@@ -591,7 +591,7 @@ plt.savefig(args["plot"])
 
 如果你想自己训练模型，打开一个终端。从那里，导航到项目目录，并执行以下命令:
 
-```
+```py
 $ python train.py --dataset dataset --model fashion.model \
 	--labelbin mlb.pickle
 Using TensorFlow backend.
@@ -642,7 +642,7 @@ Epoch 30/30
 
 准备就绪后，在项目目录中打开创建一个名为`classify.py`的新文件，并插入以下代码(或者跟随 ***“下载”*** 中包含的文件):
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.models import load_model
@@ -671,7 +671,7 @@ args = vars(ap.parse_args())
 
 从那里，我们加载并预处理输入图像:
 
-```
+```py
 # load the image
 image = cv2.imread(args["image"])
 output = imutils.resize(image, width=400)
@@ -688,7 +688,7 @@ image = np.expand_dims(image, axis=0)
 
 接下来，我们加载模型+多标签二值化器，对图像进行分类:
 
-```
+```py
 # load the trained convolutional neural network and the multi-label
 # binarizer
 print("[INFO] loading network...")
@@ -714,7 +714,7 @@ idxs = np.argsort(proba)[::-1][:2]
 
 在此基础上，我们将准备分类标签+相关联的置信度值，以便叠加在输出图像上:
 
-```
+```py
 # loop over the indexes of the high confidence class labels
 for (i, j) in enumerate(idxs):
 	# build the label and draw the label on the image
@@ -744,7 +744,7 @@ cv2.waitKey(0)
 
 让我们尝试一幅红色连衣裙的图像—注意运行时处理的三个命令行参数:
 
-```
+```py
 $ python classify.py --model fashion.model --labelbin mlb.pickle \
 	--image examples/example_01.jpg
 Using TensorFlow backend.
@@ -767,7 +767,7 @@ shirt: 64.02%
 
 现在让我们试试一条蓝色的裙子:
 
-```
+```py
 $ python classify.py --model fashion.model --labelbin mlb.pickle \
 	--image examples/example_02.jpg
 Using TensorFlow backend.
@@ -788,7 +788,7 @@ shirt: 0.74%
 
 对我们的分类员来说，一件蓝色的连衣裙是没有竞争力的。我们有了一个良好的开端，所以让我们尝试一个红色衬衫的图像:
 
-```
+```py
 $ python classify.py --model fashion.model --labelbin mlb.pickle \
 	--image examples/example_03.jpg
 Using TensorFlow backend.
@@ -811,7 +811,7 @@ shirt: 100.00%
 
 一件蓝色的衬衫怎么样？
 
-```
+```py
 $ python classify.py --model fashion.model --labelbin mlb.pickle \
 	--image examples/example_04.jpg
 Using TensorFlow backend.
@@ -834,7 +834,7 @@ shirt: 82.82%
 
 让我们看看是否可以用蓝色牛仔裤欺骗我们的多标签分类器:
 
-```
+```py
 $ python classify.py --model fashion.model --labelbin mlb.pickle \
 	--image examples/example_05.jpg
 Using TensorFlow backend.
@@ -855,7 +855,7 @@ shirt: 0.00%
 
 让我们试试黑色牛仔裤:
 
-```
+```py
 $ python classify.py --model fashion.model --labelbin mlb.pickle \
 	--image examples/example_06.jpg
 Using TensorFlow backend.
@@ -878,7 +878,7 @@ shirt: 0.00%
 
 让我们试试最后一个黑色礼服的例子。虽然我们的网络已经学会预测*“黑色牛仔裤”**“蓝色牛仔裤”*以及*“蓝色连衣裙”*和*“红色连衣裙”*，但它能用来对一件*“黑色连衣裙”*进行分类吗？
 
-```
+```py
 $ python classify.py --model fashion.model --labelbin mlb.pickle \
 	--image examples/example_07.jpg
 Using TensorFlow backend.

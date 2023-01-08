@@ -137,7 +137,7 @@
 
 ##### [**INIT**](#TOC)
 
-```
+```py
  def __init__(self, image_paths):
         # Define the Transforms
         self.transform = transforms.Compose([transforms.Resize((32, 32)), transforms.ToTensor(), transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
@@ -170,7 +170,7 @@
 
 这个函数只返回图像的数量。
 
-```
+```py
 def __len__(self):
          return len(self.images)
 ```
@@ -183,7 +183,7 @@ def __len__(self):
 
 这个函数将完成您在`__init__`中定义的所有工作(例如，加载一个图像，调用转换，并获得标签)。此外，**这个函数的目的是返回给定索引的数据集的特定元素。**
 
-```
+```py
 def __getitem__(self, index):
         # Load an Image
         img = Image.open(self.images[index]).convert('RGB')
@@ -208,7 +208,7 @@ def __getitem__(self, index):
 
 最后，我们可以通过调用以下函数获得一个数据加载器:
 
-```
+```py
 train_dataloader = DataLoader(UTKFace(train_dataset), shuffle=True, batch_size=BATCH_SIZE)
 val_dataloader = DataLoader(UTKFace(valid_dataset), shuffle=False, batch_size=BATCH_SIZE)
 ```
@@ -232,7 +232,7 @@ val_dataloader = DataLoader(UTKFace(valid_dataset), shuffle=False, batch_size=BA
 
 在第一种情况下，我们会有这样简单的东西:
 
-```
+```py
 self.net = models.resnet18(pretrained=True)
 self.net.fc = nn.Linear(model.fc.in_features, 7)
 ```
@@ -250,7 +250,7 @@ self.net.fc = nn.Linear(model.fc.in_features, 7)
 
 下面是代码版本:
 
-```
+```py
 class HydraNet(nn.Module):
     def __init__(self):
         super().__init__()
@@ -272,7 +272,7 @@ class HydraNet(nn.Module):
 
 *如果我们只考虑年龄:*
 
-```
+```py
        self.net.fc1 = nn.Sequential(OrderedDict([('linear', nn.Linear(self.n_features,self.n_features)),('relu1', nn.ReLU()),('final', nn.Linear(self.n_features, 1))]))
 ```
 
@@ -280,7 +280,7 @@ class HydraNet(nn.Module):
 
 *那么，在网络中:*
 
-```
+```py
        age_head = self.net.fc1(self.net(x))
 ```
 
@@ -330,7 +330,7 @@ Loss:
 
 代码将是最少的“使它工作”，只是为了培训。
 
-```
+```py
 net = resnet34(pretrained=True)
 model = HydraNet(net).to(device=device)
 
@@ -353,7 +353,7 @@ Sig = nn.Sigmoid()
 
 *最后，循环:*
 
-```
+```py
 for epoch in range(n_epochs):
    model.train()
    total_training_loss = 0
@@ -409,7 +409,7 @@ for epoch in range(n_epochs):
 
 **科恩，J.** “使用 PyTorch 的多任务学习和消防栓”， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot 和 R. Raha 编辑。，2022 年，【https://pyimg.co/hdkl7 
 
-```
+```py
 @incollection{Cohen_2022_HydraNets,
   author = {Jeremy Cohen},
   title = {Multi-Task Learning and HydraNets with PyTorch},

@@ -26,14 +26,14 @@
 
 如果您尚未安装/升级`scikit-image`，请通过以下方式升级:
 
-```
+```py
 $ pip install --upgrade scikit-image
 
 ```
 
 同时，继续安装/升级`imutils`:
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -60,7 +60,7 @@ $ pip install --upgrade imutils
 
 打开一个新文件，将其命名为`image_diff.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from skimage.metrics import structural_similarity as compare_ssim
 import argparse
@@ -83,7 +83,7 @@ args = vars(ap.parse_args())
 
 接下来，我们将从磁盘加载每个图像，并将其转换为灰度:
 
-```
+```py
 # load the two input images
 imageA = cv2.imread(args["first"])
 imageB = cv2.imread(args["second"])
@@ -108,7 +108,7 @@ grayB = cv2.cvtColor(imageB, cv2.COLOR_BGR2GRAY)
 
 接下来，让我们计算两幅灰度图像之间的结构相似性指数(SSIM)。
 
-```
+```py
 # compute the Structural Similarity Index (SSIM) between the two
 # images, ensuring that the difference image is returned
 (score, diff) = compare_ssim(grayA, grayB, full=True)
@@ -125,7 +125,7 @@ print("SSIM: {}".format(score))
 
 现在，让我们找到轮廓，以便我们可以在被标识为“不同”的区域周围放置矩形:
 
-```
+```py
 # threshold the difference image, followed by finding contours to
 # obtain the regions of the two input images that differ
 thresh = cv2.threshold(diff, 0, 255,
@@ -148,7 +148,7 @@ cnts = imutils.grab_contours(cnts)
 
 现在我们已经将轮廓存储在列表中，让我们在每个图像的不同区域周围绘制矩形:
 
-```
+```py
 # loop over the contours
 for c in cnts:
 	# compute the bounding box of the contour and then draw the
@@ -185,7 +185,7 @@ cv2.waitKey(0)
 
 使用这个脚本和下面的命令，我们可以快速轻松地突出显示两幅图像之间的差异:
 
-```
+```py
 $ python image_diff.py --first images/original_02.png 
 	--second images/modified_02.png
 
@@ -201,7 +201,7 @@ $ python image_diff.py --first images/original_02.png
 
 通过运行下面的命令并提供相关图像，我们可以看到这里的差异更加微妙:
 
-```
+```py
 $ python image_diff.py --first images/original_03.png 
 	--second images/modified_03.png
 

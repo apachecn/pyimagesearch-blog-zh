@@ -107,7 +107,7 @@ iBUG 300-W 数据集非常适合于[训练面部标志预测器](https://pyimage
 
 pip 安装命令包括:
 
-```
+```py
 $ workon <env-name>
 $ pip install dlib
 $ pip install opencv-contrib-python
@@ -130,7 +130,7 @@ $ pip install scikit-learn
 
 **选项 1:** 使用上面的超链接下载数据集，然后将 iBug 300-W 数据集放入与本教程下载相关的文件夹中，如下所示:
 
-```
+```py
 $ unzip tune-dlib-shape-predictor.zip
 ...
 $ cd tune-dlib-shape-predictor
@@ -142,7 +142,7 @@ $ tar -xvf ibug_300W_large_face_landmark_dataset.tar.gz
 
 **选项 2:** 不要点击上面的超链接，直接使用终端中的`wget`下载数据集:
 
-```
+```py
 $ unzip tune-dlib-shape-predictor.zip
 ...
 $ cd tune-dlib-shape-predictor
@@ -160,7 +160,7 @@ $ tar -xvf ibug_300W_large_face_landmark_dataset.tar.gz
 
 从那里，继续执行`tree`命令来查看我们的项目结构:
 
-```
+```py
 % tree --dirsfirst --filelimit 10
 .
 ├── ibug_300W_large_face_landmark_dataset
@@ -225,7 +225,7 @@ $ tar -xvf ibug_300W_large_face_landmark_dataset.tar.gz
 
 在继续本教程的其余部分之前，您需要执行以下命令来准备我们的“仅供参考”的培训和测试 XML 文件:
 
-```
+```py
 $ python parse_xml.py \
 	--input ibug_300W_large_face_landmark_dataset/labels_ibug_300W_train.xml \
 	--output ibug_300W_large_face_landmark_dataset/labels_ibug_300W_train_eyes.xml
@@ -239,7 +239,7 @@ $ python parse_xml.py \
 
 现在让我们验证培训/测试文件是否已经创建。您应该检查 iBUG-300W 根数据集目录中的`labels_ibug_300W_train_eyes.xml`和`labels_ibug_300W_test_eyes.xml`文件，如下所示:
 
-```
+```py
 $ cd ibug_300W_large_face_landmark_dataset
 $ ls -lh *.xml    
 -rw-r--r--@ 1 adrian  staff    21M Aug 16  2014 labels_ibug_300W.xml
@@ -259,7 +259,7 @@ $ cd ..
 
 打开`pyimagesearch`模块中的`config.py`文件(按照上面的项目结构)并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -277,7 +277,7 @@ TEST_PATH = os.path.join("ibug_300W_large_face_landmark_dataset",
 
 让我们定义我们的培训参数:
 
-```
+```py
 # define the path to the temporary model file
 TEMP_MODEL_PATH = "temp.dat"
 
@@ -303,7 +303,7 @@ MAX_FUNC_CALLS = 100
 
 打开项目结构中的`shape_predictor_tuner.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from collections import OrderedDict
@@ -322,7 +322,7 @@ procs = config.PROCS if config.PROCS > 0 else procs
 
 现在，让我们定义一个负责使用 dlib 调整形状预测器核心的函数:
 
-```
+```py
 def test_shape_predictor_params(treeDepth, nu, cascadeDepth,
 	featurePoolSize, numTestSplits, oversamplingAmount,
 	oversamplingTransJitter, padding, lambdaParam):
@@ -363,7 +363,7 @@ def test_shape_predictor_params(treeDepth, nu, cascadeDepth,
 
 让我们完成对`test_shape_predictor_params`函数的编码:
 
-```
+```py
 	# display the current set of options to our terminal
 	print("[INFO] starting training...")
 	print(options)
@@ -398,7 +398,7 @@ def test_shape_predictor_params(treeDepth, nu, cascadeDepth,
 
 让我们定义我们的形状预测超参数集:
 
-```
+```py
 # define the hyperparameters to dlib's shape predictor that we are
 # going to explore/tune where the key to the dictionary is the
 # hyperparameter name and the value is a 3-tuple consisting of the
@@ -428,7 +428,7 @@ params = OrderedDict([
 
 从这里，我们将提取我们的上限和下限，以及超参数是否为整数:
 
-```
+```py
 # use our ordered dictionary to easily extract the lower and upper
 # boundaries of the hyperparamter range, include whether or not the
 # parameter is an integer or not
@@ -442,7 +442,7 @@ isint = [v[2] for (k, v) in params.items()]
 
 现在我们已经设置好了，让我们用 **dlib 的`find_min_global`方法**来**优化我们的形状预测器超参数**
 
-```
+```py
 # utilize dlib to optimize our shape predictor hyperparameters
 (bestParams, bestLoss) = dlib.find_min_global(
 	test_shape_predictor_params,
@@ -475,7 +475,7 @@ os.remove(config.TEMP_MODEL_PATH)
 
 假设您已经完成了这三个步骤中的每一步，现在您可以执行`shape_predictor_tune.py`脚本:
 
-```
+```py
 $ time python shape_predictor_tune.py
 [INFO] starting training...
 shape_predictor_training_options(be_verbose=1, cascade_depth=15, tree_depth=4, num_trees_per_cascade_level=500, nu=0.1005, oversampling_amount=21, oversampling_translation_jitter=0.15, feature_pool_size=550, lambda_param=0.5, num_test_splits=160, feature_pool_region_padding=0, random_seed=, num_threads=20, landmark_relative_padding_mode=1)
@@ -551,7 +551,7 @@ sys     464m33.139s
 
 要进行 make，打开`train_best_predictor.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 import multiprocessing
@@ -614,7 +614,7 @@ dlib.train_shape_predictor(config.TRAIN_PATH, args["model"], options)
 
 最后一步是执行我们的`train_best_predictor.py`文件，该文件将使用通过`find_min_global`找到的最佳超参数值来训练 dlib 形状预测器:
 
-```
+```py
 $ time python train_best_predictor.py --model best_predictor.dat
 [INFO] setting shape predictor options...
 [INFO] shape predictor options:
@@ -645,7 +645,7 @@ sys     5m39.150s
 
 命令执行完毕后，您应该在本地目录结构中有一个名为`best_predictor.dat`的文件:
 
-```
+```py
 $ ls -lh *.dat
 -rw-r--r--@ 1 adrian  staff    24M Dec 22 12:02 best_predictor.dat
 
@@ -653,7 +653,7 @@ $ ls -lh *.dat
 
 然后，您可以使用这个预测器，并使用`predict_eyes.py`脚本在实时视频中定位眼睛:
 
-```
+```py
 $ python predict_eyes.py --shape-predictor best_predictor.dat
 [INFO] loading facial landmark predictor...
 [INFO] camera sensor warming up...

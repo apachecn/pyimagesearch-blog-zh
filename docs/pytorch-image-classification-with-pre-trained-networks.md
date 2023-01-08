@@ -50,7 +50,7 @@ ImageNet 培训完成后，研究人员将他们的模型保存到磁盘上，�
 
 幸运的是，PyTorch 和 OpenCV 都非常容易使用 pip 安装:
 
-```
+```py
 $ pip install torch torchvision
 $ pip install opencv-contrib-python
 ```
@@ -80,7 +80,7 @@ $ pip install opencv-contrib-python
 
 首先访问本指南的 ***“下载”*** 部分，检索源代码和示例图像。然后，您将看到下面的目录结构。
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── images
@@ -115,7 +115,7 @@ $ tree . --dirsfirst
 
 打开`pyimagesearch`模块中的`config.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 import torch
 
@@ -143,7 +143,7 @@ IN_LABELS = "ilsvrc2012_wordnet_lemmas.txt"
 
 如果在您喜欢的文本编辑器中打开该文件，您将看到以下内容:
 
-```
+```py
 tench, Tinca_tinca
 goldfish, Carassius_auratus
 ...
@@ -160,7 +160,7 @@ toilet_tissue, toilet_paper, bathroom_tissue
 
 打开项目目录结构中的`classify_image.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from torchvision import models
@@ -180,7 +180,7 @@ import cv2
 
 考虑到我们的导入，让我们定义一个函数来接受输入图像并对其进行预处理:
 
-```
+```py
 def preprocess_image(image):
 	# swap the color channels from BGR to RGB, resize it, and scale
 	# the pixel values to [0, 1] range
@@ -217,7 +217,7 @@ def preprocess_image(image):
 
 接下来，让我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -235,7 +235,7 @@ args = vars(ap.parse_args())
 
 现在让我们定义一个`MODELS`字典，它将`--model`命令行参数的名称映射到其对应的 PyTorch 函数:
 
-```
+```py
 # define a dictionary that maps model names to their classes
 # inside torchvision
 MODELS = {
@@ -274,7 +274,7 @@ model.eval()
 
 既然我们的模型已经加载，我们需要一个输入图像——现在让我们来处理它:
 
-```
+```py
 # load the image from disk, clone it (so we can draw on it later),
 # and preprocess it
 print("[INFO] loading image...")
@@ -300,7 +300,7 @@ imagenetLabels = dict(enumerate(open(config.IN_LABELS)))
 
 我们现在准备使用我们的`model`对输入`image`进行预测:
 
-```
+```py
 # classify the image and extract the predictions
 print("[INFO] classifying image with '{}'...".format(args["model"]))
 logits = model(image)
@@ -329,7 +329,7 @@ for (i, idx) in enumerate(sortedProba[0, :5]):
 
 我们的最终代码块在输出图像上绘制了 top-1(即顶部预测标签):
 
-```
+```py
 # draw the top prediction on the image and display the image to
 # our screen
 (label, prob) = (imagenetLabels[probabilities.argmax().item()],
@@ -350,7 +350,7 @@ cv2.waitKey(0)
 
 在那里，尝试使用以下命令对输入图像进行分类:
 
-```
+```py
 $ python classify_image.py --image images/boat.png
 [INFO] loading vgg16...
 [INFO] loading image...
@@ -369,7 +369,7 @@ $ python classify_image.py --image images/boat.png
 
 让我们尝试一个不同的图像，这次使用 DenseNet 模型:
 
-```
+```py
 $ python classify_image.py --image images/bmw.png --model densenet
 [INFO] loading densenet...
 [INFO] loading image...
@@ -386,7 +386,7 @@ $ python classify_image.py --image images/bmw.png --model densenet
 
 这张图片包含了 Jemma，我家的小猎犬:
 
-```
+```py
 $ python classify_image.py --image images/jemma.png --model resnet
 [INFO] loading resnet...
 [INFO] loading image...
@@ -405,7 +405,7 @@ $ python classify_image.py --image images/jemma.png --model resnet
 
 让我们看看最后一个例子:
 
-```
+```py
 $ python classify_image.py --image images/soccer_ball.jpg --model inception
 [INFO] loading inception...
 [INFO] loading image...

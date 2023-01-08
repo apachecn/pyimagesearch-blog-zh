@@ -26,7 +26,7 @@
 
 使用`bat-country`，进行引导做梦和深度做梦一样简单。下面是一些快速示例代码:
 
-```
+```py
 # import the necessary packages
 from batcountry import BatCountry
 from PIL import Image

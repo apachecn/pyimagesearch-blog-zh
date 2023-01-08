@@ -102,7 +102,7 @@ GTSRB 数据集由 **43 个交通标志类别**和**近 50，000 张图像组成
 
 我将数据集提取到我的项目目录中，您可以在这里看到:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── examples [25 entries]
@@ -161,7 +161,7 @@ $ tree --dirsfirst --filelimit 10
 
 现在让我们安装软件包，理想情况下安装到如图所示的虚拟环境中(您需要创建环境):
 
-```
+```py
 $ workon traffic_signs
 $ pip install opencv-contrib-python
 $ pip install numpy
@@ -191,7 +191,7 @@ $ pip install tensorflow==2.0.0 # or tensorflow-gpu
 
 我已经决定将这个分类器命名为`TrafficSignNet` —打开项目目录中的`trafficsignnet.py`文件，然后插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import BatchNormalization
@@ -221,7 +221,7 @@ class TrafficSignNet:
 
 让我们定义我们的`CONV => RELU => BN => POOL`层集:
 
-```
+```py
 		# CONV => RELU => BN => POOL
 		model.add(Conv2D(8, (5, 5), padding="same",
 			input_shape=inputShape))
@@ -235,7 +235,7 @@ class TrafficSignNet:
 
 在这里，我们定义了两组`(CONV => RELU => CONV => RELU) * 2 => POOL`层:
 
-```
+```py
 		# first set of (CONV => RELU => CONV => RELU) * 2 => POOL
 		model.add(Conv2D(16, (3, 3), padding="same"))
 		model.add(Activation("relu"))
@@ -260,7 +260,7 @@ class TrafficSignNet:
 
 我们网络的头部由两组完全连接的层和一个 softmax 分类器组成:
 
-```
+```py
 		# first set of FC => RELU layers
 		model.add(Flatten())
 		model.add(Dense(128))
@@ -302,7 +302,7 @@ class TrafficSignNet:
 
 让我们开始吧——打开项目目录中的`train.py`文件，添加以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -338,7 +338,7 @@ import os
 
 让我们继续定义一个从磁盘加载数据的函数:
 
-```
+```py
 def load_split(basePath, csvPath):
 	# initialize the list of data and labels
 	data = []
@@ -360,7 +360,7 @@ def load_split(basePath, csvPath):
 
 这里可以看到第 28 行和第 29 行的结果(即，如果你通过`print(rows[:3])`打印列表中的前三行):
 
-```
+```py
 ['33,35,5,5,28,29,13,Train/13/00013_00001_00009.png',
  '36,36,5,5,31,31,38,Train/38/00038_00049_00021.png',
  '75,77,6,7,69,71,35,Train/35/00035_00039_00024.png']
@@ -371,7 +371,7 @@ def load_split(basePath, csvPath):
 
 现在让我们继续遍历`rows`,提取并预处理我们需要的数据:
 
-```
+```py
 	# loop over the rows of the CSV file
 	for (i, row) in enumerate(rows):
 		# check to see if we should show a status update
@@ -410,7 +410,7 @@ def load_split(basePath, csvPath):
 
 现在让我们通过应用 CLAHE 来预处理我们的图像:
 
-```
+```py
 		# resize the image to be 32x32 pixels, ignoring aspect ratio,
 		# and then perform Contrast Limited Adaptive Histogram
 		# Equalization (CLAHE)
@@ -440,7 +440,7 @@ def load_split(basePath, csvPath):
 
 定义了我们的`load_split`函数后，现在我们可以继续用[解析命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -461,7 +461,7 @@ args = vars(ap.parse_args())
 
 让我们初始化一些超参数并加载我们的类标签名:
 
-```
+```py
 # initialize the number of epochs to train for, base learning rate,
 # and batch size
 NUM_EPOCHS = 30
@@ -480,7 +480,7 @@ labelNames = [l.split(",")[1] for l in labelNames]
 
 现在让我们继续加载并预处理我们的数据:
 
-```
+```py
 # derive the path to the training and testing CSV files
 trainPath = os.path.sep.join([args["dataset"], "Train.csv"])
 testPath = os.path.sep.join([args["dataset"], "Test.csv"])
@@ -520,7 +520,7 @@ for i in range(0, len(classTotals)):
 
 从这里，我们将准备+训练我们的`model`:
 
-```
+```py
 # construct the image generator for data augmentation
 aug = ImageDataGenerator(
 	rotation_range=10,
@@ -560,7 +560,7 @@ H = model.fit(
 
 接下来，我们将评估`model`并将其序列化到磁盘:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(testX, batch_size=BS)
@@ -579,7 +579,7 @@ model.save(args["model"])
 
 最后，下面的代码块绘制了训练精度/损失曲线，并将该图导出到磁盘上的图像文件中:
 
-```
+```py
 # plot the training loss and accuracy
 N = np.arange(0, NUM_EPOCHS)
 plt.style.use("ggplot")
@@ -614,7 +614,7 @@ plt.savefig(args["plot"])
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python train.py --dataset gtsrb-german-traffic-sign \
 	--model output/trafficsignnet.model --plot output/plot.png
 [INFO] loading training and testing data...
@@ -715,7 +715,7 @@ End no passing veh > 3.5 tons       0.91      0.89      0.90        90
 
 为了实现这些目标，我们需要检查`predict.py`的内容:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import load_model
 from skimage import transform
@@ -739,7 +739,7 @@ import os
 
 让我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-m", "--model", required=True,
@@ -760,7 +760,7 @@ args = vars(ap.parse_args())
 
 有了`args`字典中的每一条路径，我们就可以继续了:
 
-```
+```py
 # load the traffic sign recognizer model
 print("[INFO] loading model...")
 model = load_model(args["model"])
@@ -785,7 +785,7 @@ imagePaths = imagePaths[:25]
 
 我们现在将对样本进行循环:
 
-```
+```py
 # loop over the image paths
 for (i, imagePath) in enumerate(imagePaths):
 	# load the image, resize it to 32x32 pixels, and then apply
@@ -833,7 +833,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python predict.py --model output/trafficsignnet.model \
 	--images gtsrb-german-traffic-sign/Test \
 	--examples examples

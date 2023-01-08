@@ -72,7 +72,7 @@ Arjun 并不是唯一一个在这个错误中挣扎的人。
 
 首先，让我们制作一个新的脚本，命名为`simple_example.py`:
 
-```
+```py
 # import the necessary packages
 import argparse
 
@@ -95,7 +95,7 @@ print("Hi there {}, it's nice to meet you!".format(args["name"]))
 
 来自**行 7** 的`help`字符串将在终端中给出额外的信息，如果你需要的话。要查看命令用法帮助，您可以在终端中输入以下内容(直接在下面输出):
 
-```
+```py
 $ python simple_example.py --help
 usage: simple_example.py [-h] -n NAME
 
@@ -136,7 +136,7 @@ optional arguments:
 
 在那里，我输入了以下命令并生成了相应的输出:
 
-```
+```py
 $ cd ~/Desktop/PyImageSearch
 $
 $ unzip command-line-arguments.zip
@@ -187,7 +187,7 @@ Hi there YourNameHere, it's nice to meet you!
 
 ***注意:**如果我执行**步骤 5** 而没有命令行参数(或者有不正确的参数)，我将会看到如下所示的用法/错误信息。*
 
-```
+```py
 $ python simple_example.py
 usage: simple_example.py [-h] -n NAME
 simple_example.py: error: argument -n/--name is required
@@ -212,7 +212,7 @@ simple_example.py: error: argument -n/--name is required
 
 因此，让我们创建一个名为`shape_counter.py`的新文件，并开始编码:
 
-```
+```py
 Codeblock #1: Lines 1-20# import the necessary packages
 import argparse
 import imutils
@@ -262,7 +262,7 @@ thresh = cv2.threshold(blurred, 60, 255, cv2.THRESH_BINARY)[1]
 
 我们已经准备好寻找并画出形状轮廓:
 
-```
+```py
 # extract contours from the image
 cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
 	cv2.CHAIN_APPROX_SIMPLE)
@@ -294,7 +294,7 @@ cv2.imwrite(args["output"], image)
 
 让我们用两个参数来执行命令:
 
-```
+```py
 $ python shape_counter.py --input input_01.png --output output_01.png
 
 ```
@@ -307,7 +307,7 @@ $ python shape_counter.py --input input_01.png --output output_01.png
 
 让我们使用不同的参数再次执行该命令:
 
-```
+```py
 $ python shape_counter.py --input input_02.png --output output_02.png
 
 ```
@@ -330,7 +330,7 @@ $ python shape_counter.py --input input_02.png --output output_02.png
 
 如何不解析命令行参数的一个很好的例子可以从上一节的第 6-12 行的**命令行参数开始:**
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--input", required=True,
@@ -343,7 +343,7 @@ args = vars(ap.parse_args())
 
 我见过读者错误地试图更新参数解析代码，以包含输入图像的实际路径:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "C:\example\input_image.png", required=True,
@@ -356,7 +356,7 @@ args = vars(ap.parse_args())
 
 或者在列表沟工作中，尝试使用`help`参数来包含文件路径:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--input", required=True,
@@ -375,7 +375,7 @@ args = vars(ap.parse_args())
 
 这一点在 [PyImageSearch 大师课程](https://pyimagesearch.com/pyimagesearch-gurus/)基于内容的图像检索模块的摘录中得到了证明:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True, help="Path to the directory of indexed images")

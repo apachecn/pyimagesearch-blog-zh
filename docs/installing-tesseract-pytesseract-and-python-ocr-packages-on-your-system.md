@@ -36,7 +36,7 @@
 
 从那里，你需要做的就是使用`brew`命令来安装宇宙魔方:
 
-```
+```py
  $ brew install tesseract
 ```
 
@@ -46,7 +46,7 @@
 
 在 Ubuntu 18.04 上安装 Tesseract 很容易——我们需要做的就是利用`apt-get`:
 
-```
+```py
  $ sudo apt install tesseract-ocr
 ```
 
@@ -64,7 +64,7 @@
 
 假设您能够在您的操作系统上安装 Tesseract，您可以使用`tesseract`命令验证 Tesseract 是否已安装:
 
-```
+```py
  $ tesseract -v
  tesseract 4.1.1
   leptonica-1.79.0
@@ -89,7 +89,7 @@ Python 虚拟环境是 Python 开发的最佳实践，我们建议使用它们�
 
 这两者都可以使用以下命令进行安装:
 
-```
+```py
  $ workon <name_of_your_env> # required if using virtual envs
  $ pip install numpy opencv-contrib-python
  $ pip install pytesseract
@@ -101,7 +101,7 @@ Python 虚拟环境是 Python 开发的最佳实践，我们建议使用它们�
 
 现在让我们安装一些其他支持计算机视觉和机器学习/深度学习的软件包，我们将在本教程的剩余部分中用到它们:
 
-```
+```py
  $ pip install pillow scipy
  $ pip install scikit-learn scikit-image
  $ pip install imutils matplotlib

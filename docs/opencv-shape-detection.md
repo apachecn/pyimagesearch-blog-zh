@@ -16,7 +16,7 @@
 
 在开始本教程之前，让我们快速回顾一下我们的项目结构:
 
-```
+```py
 |--- pyimagesearch
 |    |--- __init__.py
 |    |--- shapedetector.py
@@ -31,7 +31,7 @@
 
 在我们开始之前，确保您的系统上安装了 [imutils 包](https://github.com/jrosebr1/imutils)，这是一系列 OpenCV 便利函数，我们将在本教程的后面使用:
 
-```
+```py
 $ pip install imutils
 
 ```
@@ -42,7 +42,7 @@ $ pip install imutils
 
 让我们继续定义我们的`ShapeDetector`。打开`shapedetector.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import cv2
 
@@ -80,7 +80,7 @@ class ShapeDetector:
 
 给定我们的近似轮廓，我们可以继续执行形状检测:
 
-```
+```py
 		# if the shape is a triangle, it will have 3 vertices
 		if len(approx) == 3:
 			shape = "triangle"
@@ -126,7 +126,7 @@ class ShapeDetector:
 
 既然已经定义了我们的`ShapeDetector`类，让我们创建`detect_shapes.py`驱动程序脚本:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.shapedetector import ShapeDetector
 import argparse
@@ -147,7 +147,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们预处理我们的图像:
 
-```
+```py
 # load the image and resize it to a smaller factor so that
 # the shapes can be approximated better
 image = cv2.imread(args["image"])
@@ -181,7 +181,7 @@ sd = ShapeDetector()
 
 最后一步是识别每个轮廓:
 
-```
+```py
 # loop over the contours
 for c in cnts:
 	# compute the center of the contour, then detect the name of the
@@ -214,7 +214,7 @@ for c in cnts:
 
 要查看我们的形状检测器的运行情况，只需执行以下命令:
 
-```
+```py
 $ python detect_shapes.py --image shapes_and_colors.png
 
 ```

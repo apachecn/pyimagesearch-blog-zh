@@ -50,21 +50,21 @@
 
 首先，如果您还没有安装`imutils`，您可以使用`pip`来安装它:
 
-```
+```py
 $ pip install imutils
 
 ```
 
 否则，您可以通过以下方式升级到最新版本:
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
 
 正如我上面提到的，第一步是定义一个`FPS`类，我们可以用它来估算给定相机+计算机视觉处理流水线的每秒帧数:
 
-```
+```py
 # import the necessary packages
 import datetime
 
@@ -119,7 +119,7 @@ class FPS:
 
 现在我们已经定义了我们的`FPS`类(这样我们可以根据经验比较结果)，让我们定义包含实际线程摄像机读取的`WebcamVideoStream`类:
 
-```
+```py
 # import the necessary packages
 from threading import Thread
 import cv2
@@ -151,7 +151,7 @@ class WebcamVideoStream:
 
 现在，让我们继续使用 OpenCV，利用线程从视频流中读取帧:
 
-```
+```py
 	def start(self):
 		# start the thread to read frames from the video stream
 		Thread(target=self.update, args=()).start()
@@ -191,7 +191,7 @@ class WebcamVideoStream:
 
 现在我们已经定义了我们的`FPS`和`WebcamVideoStream`类，我们可以把所有的部分放在`fps_demo.py`中:
 
-```
+```py
 # import the necessary packages
 from __future__ import print_function
 from imutils.video import WebcamVideoStream
@@ -218,7 +218,7 @@ args = vars(ap.parse_args())
 
 让我们继续下一个代码块，它不执行*线程*并在从摄像机流中读取帧时使用*阻塞 I/O* 。这段代码将帮助我们获得 FPS 的*基线*:
 
-```
+```py
 # grab a pointer to the video stream and initialize the FPS counter
 print("[INFO] sampling frames from webcam...")
 stream = cv2.VideoCapture(0)
@@ -258,7 +258,7 @@ cv2.destroyAllWindows()
 
 现在，让我们看看从视频流中读取帧的*线程化*代码:
 
-```
+```py
 # created a *threaded* video stream, allow the camera sensor to warmup,
 # and start the FPS counter
 print("[INFO] sampling THREADED frames from webcam...")
@@ -299,7 +299,7 @@ vs.stop()
 
 要查看网络摄像头 I/O 线程的效果，只需执行以下命令:
 
-```
+```py
 $ python fps_demo.py
 
 ```
@@ -320,7 +320,7 @@ $ python fps_demo.py
 
 要演示`cv2.imshow` I/O 如何降低 FPS，只需发出以下命令:
 
-```
+```py
 $ python fps_demo.py --display 1
 
 ```

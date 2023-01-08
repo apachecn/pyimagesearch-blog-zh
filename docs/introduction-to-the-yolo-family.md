@@ -190,7 +190,7 @@ PyTorch 中 YOLO 的这一巨大变化使得开发人员更容易修改架构并
 
 正如您在下面的 shell 块中所看到的，您可以用 YOLOv5 和 PyTorch Hub 在仅仅五行代码中运行一个推理。是不是很神奇？
 
-```
+```py
 $ import torch
 $ model = torch.hub.load('ultralytics/yolov5', 'yolov5s')  # or yolov5m, yolov5l
 $ img = 'https://ultralytics.cimg/zidane.jpg'  # or file, Path, PIL, OpenCV
@@ -598,7 +598,7 @@ YOLOX】在 PyTorch 框架中实现，设计时考虑了开发人员和研究人
 
 ****夏尔马，a .****【YOLO 家族简介】 *PyImageSearch* ，d .查克拉博蒂，p .丘格，A. R .戈斯蒂帕蒂，s .霍特，k .基德里亚夫斯特瓦，r .拉哈，A. Thanki 合编。，2022 年，[https://pyimg.co/dgbvi](https://pyimg.co/dgbvi)
 
-```
+```py
 @incollection{Sharma_2022_YOLO_Intro,
   author = {Aditya Sharma},
   title = {Introduction to the {YOLO} Family},

@@ -133,7 +133,7 @@
 
 让我们通过为我们的项目定义目录结构来开始演示:
 
-```
+```py
 $ tree --dirsfirst -L 3
 .
 ├── images
@@ -162,7 +162,7 @@ $ tree --dirsfirst -L 3
 
 说到本地二进制模式，现在让我们继续创建描述符类:
 
-```
+```py
 # import the necessary packages
 from skimage import feature
 import numpy as np
@@ -206,7 +206,7 @@ class LocalBinaryPatterns:
 
 既然已经定义了我们的`LocalBinaryPatterns`描述符，让我们看看如何用它来识别纹理和图案。创建一个名为`recognize.py`的新文件，让我们开始编码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.localbinarypatterns import LocalBinaryPatterns
 from sklearn.svm import LinearSVC
@@ -243,7 +243,7 @@ labels = []
 
 现在是时候从我们的训练图像集中提取 LBP 特征了:
 
-```
+```py
 # loop over the training images
 for imagePath in paths.list_images(args["training"]):
 	# load the image, convert it to grayscale, and describe it
@@ -268,7 +268,7 @@ model.fit(data, labels)
 
 一旦我们的线性 SVM 被训练，我们可以用它来分类后续的纹理图像:
 
-```
+```py
 # loop over the testing images
 for imagePath in paths.list_images(args["testing"]):
 	# load the image, convert it to grayscale, describe it,
@@ -298,7 +298,7 @@ for imagePath in paths.list_images(args["testing"]):
 
 让我们通过执行以下命令来尝试我们的纹理分类系统:
 
-```
+```py
 $ python recognize.py --training images/training --testing images/testing
 
 ```

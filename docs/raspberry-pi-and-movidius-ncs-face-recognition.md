@@ -78,7 +78,7 @@
 
 从现在开始，您可以用**一个简单的命令**来*激活您的 OpenVINO* 环境(与上一步中的两个命令相反:
 
-```
+```py
 $ source ~/start_openvino.sh
 Starting Python 3.7 with OpenCV-OpenVINO 4.1.1 bindings...
 
@@ -88,7 +88,7 @@ Starting Python 3.7 with OpenCV-OpenVINO 4.1.1 bindings...
 
 打开终端并执行以下操作:
 
-```
+```py
 $ workon openvino
 $ source ~/openvino/bin/setupvars.sh
 
@@ -109,7 +109,7 @@ $ source ~/openvino/bin/setupvars.sh
 
 我们的项目按以下方式组织:
 
-```
+```py
 |-- dataset
 |   |-- abhishek
 |   |-- adrian
@@ -157,7 +157,7 @@ $ source ~/openvino/bin/setupvars.sh
 
 打开`setup.sh`并检查脚本:
 
-```
+```py
 #!/bin/sh
 
 export OPENCV_DNN_IE_VPU_TYPE=Myriad2
@@ -170,7 +170,7 @@ export OPENCV_DNN_IE_VPU_TYPE=Myriad2
 
 让我们继续执行 shell 脚本:
 
-```
+```py
 $ source setup.sh
 
 ```
@@ -179,7 +179,7 @@ $ source setup.sh
 
 如果您在下一部分遇到以下**错误信息**，请务必执行`setup.sh`:
 
-```
+```py
 Traceback (most recent call last):
        File "extract_embeddings.py", line 108 in 
 cv2.error: OpenCV(4.1.1-openvino) /home/jenkins/workspace/OpenCV/
@@ -201,7 +201,7 @@ backend: Can not init Myriad device: NC_ERROR in function 'initPlugin'
 
 让我们打开`extract_embeddings.py`来回顾一下:
 
-```
+```py
 # import the necessary packages
 from imutils import paths
 import numpy as np
@@ -239,7 +239,7 @@ args = vars(ap.parse_args())
 
 我们现在准备好**加载我们的面部*检测器*和面部*嵌入器* :**
 
-```
+```py
 # load our serialized face detector from disk
 print("[INFO] loading face detector...")
 protoPath = os.path.sep.join([args["detector"], "deploy.prototxt"])
@@ -267,7 +267,7 @@ embedder.setPreferableTarget(cv2.dnn.DNN_TARGET_MYRIAD)
 
 接下来，让我们获取图像路径并执行初始化:
 
-```
+```py
 # grab the paths to the input images in our dataset
 print("[INFO] quantifying faces...")
 imagePaths = list(paths.list_images(args["dataset"]))
@@ -290,7 +290,7 @@ total = 0
 
 让我们开始在`imagePaths`上循环——这个循环将负责从每个图像中找到的人脸中提取嵌入:
 
-```
+```py
 # loop over the image paths
 for (i, imagePath) in enumerate(imagePaths):
 	# extract the person name from the image path
@@ -311,7 +311,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 首先，我们从路径中提取人名( **Line 55** )。为了解释其工作原理，请考虑 Python shell 中的以下示例:
 
-```
+```py
 $ python
 >>> from imutils import paths
 >>> import os
@@ -334,7 +334,7 @@ $ python
 
 让我们检测和定位人脸:
 
-```
+```py
 	# construct a blob from the image
 	imageBlob = cv2.dnn.blobFromImage(
 		cv2.resize(image, (300, 300)), 1.0, (300, 300),
@@ -353,7 +353,7 @@ $ python
 
 现在，让我们来处理`detections`:
 
-```
+```py
 	# ensure at least one face was found
 	if len(detections) > 0:
 		# we're making the assumption that each image has only ONE
@@ -388,7 +388,7 @@ $ python
 
 从那里，我们将利用我们的`embedder` CNN 和**提取人脸嵌入:**
 
-```
+```py
 			# construct a blob for the face ROI, then pass the blob
 			# through our face embedding model to obtain the 128-d
 			# quantification of the face
@@ -417,7 +417,7 @@ $ python
 
 当循环结束时，剩下的就是将数据转储到磁盘:
 
-```
+```py
 # dump the facial embeddings + names to disk
 print("[INFO] serializing {} encodings...".format(total))
 data = {"embeddings": knownEmbeddings, "names": knownNames}
@@ -431,7 +431,7 @@ f.close()
 
 此时，我们已经准备好**通过执行我们的脚本**来提取嵌入。在运行嵌入脚本之前，确保您的`openvino`环境和附加环境变量已经设置，如果您在上一节中没有这样做的话。这里有一个最快的方法来提醒你:
 
-```
+```py
 $ source ~/start_openvino.sh
 Starting Python 3.7 with OpenCV-OpenVINO 4.1.1 bindings...
 $ source setup.sh
@@ -440,7 +440,7 @@ $ source setup.sh
 
 在那里，打开一个终端，执行以下命令，用 OpenCV 和 Movidius 计算人脸嵌入:
 
-```
+```py
 $ python extract_embeddings.py \
 	--dataset dataset \
 	--embeddings output/embeddings.pickle \
@@ -470,7 +470,7 @@ $ python extract_embeddings.py \
 
 正如你所看到的，我们已经为数据集中的 120 张人脸照片提取了 120 个嵌入。`embeddings.pickle`文件现在也可以在`output/`文件夹中找到:
 
-```
+```py
 ls -lh output/*.pickle
 -rw-r--r-- 1 pi pi 66K Nov 20 14:35 output/embeddings.pickle
 
@@ -494,7 +494,7 @@ ls -lh output/*.pickle
 
 打开`train_model.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import LabelEncoder
@@ -524,7 +524,7 @@ args = vars(ap.parse_args())
 
 让我们加载我们的面部嵌入和编码我们的标签:
 
-```
+```py
 # load the face embeddings
 print("[INFO] loading face embeddings...")
 data = pickle.loads(open(args["embeddings"], "rb").read())
@@ -542,7 +542,7 @@ labels = le.fit_transform(data["names"])
 
 现在是时候训练我们的 SVM 模型来识别人脸了:
 
-```
+```py
 # train the model used to accept the 128-d embeddings of the face and
 # then produce the actual face recognition
 print("[INFO] training model...")
@@ -565,7 +565,7 @@ print("[INFO] best hyperparameters: {}".format(model.best_params_))
 
 从这里开始，我们将把人脸识别器模型和标签编码器序列化到磁盘:
 
-```
+```py
 # write the actual face recognition model to disk
 f = open(args["recognizer"], "wb")
 f.write(pickle.dumps(model.best_estimator_))
@@ -580,7 +580,7 @@ f.close()
 
 要执行我们的培训脚本，请在您的终端中输入以下命令:
 
-```
+```py
 $ python train_model.py --embeddings output/embeddings.pickle \
 	--recognizer output/recognizer.pickle --le output/le.pickle
 [INFO] loading face embeddings...
@@ -592,7 +592,7 @@ $ python train_model.py --embeddings output/embeddings.pickle \
 
 现在让我们检查一下`output/`文件夹:
 
-```
+```py
 ls -lh output/*.pickle
 -rw-r--r-- 1 pi pi 66K Nov 20 14:35 output/embeddings.pickle
 -rw-r--r-- 1 pi pi 470 Nov 20 14:55 le.pickle
@@ -606,7 +606,7 @@ ls -lh output/*.pickle
 
 在本节中，我们将编写一个快速演示脚本，使用您的 PiCamera 或 USB 网络摄像头识别人脸。继续打开`recognize_video.py`并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 from imutils.video import FPS
@@ -648,7 +648,7 @@ args = vars(ap.parse_args())
 
 现在我们已经处理了导入和命令行参数，让我们将三个模型从磁盘加载到内存中:
 
-```
+```py
 # load our serialized face detector from disk
 print("[INFO] loading face detector...")
 protoPath = os.path.sep.join([args["detector"], "deploy.prototxt"])
@@ -683,7 +683,7 @@ le = pickle.loads(open(args["le"], "rb").read())
 
 让我们初始化我们的视频流:
 
-```
+```py
 # initialize the video stream, then allow the camera sensor to warm up
 print("[INFO] starting video stream...")
 #vs = VideoStream(src=0).start()
@@ -701,7 +701,7 @@ fps = FPS().start()
 
 帧处理从我们的`while`循环开始:
 
-```
+```py
 # loop over frames from the video file stream
 while True:
 	# grab the frame from the threaded video stream
@@ -729,7 +729,7 @@ while True:
 
 给定我们的新`detections`，让我们在画面中识别人脸。但是，首先我们需要过滤弱`detections`并提取人脸 ROI:
 
-```
+```py
 	# loop over the detections
 	for i in range(0, detections.shape[2]):
 		# extract the confidence (i.e., probability) associated with
@@ -761,7 +761,7 @@ while True:
 
 识别脸部 ROI 的名称只需要几个步骤:
 
-```
+```py
 			# construct a blob for the face ROI, then pass the blob
 			# through our face embedding model to obtain the 128-d
 			# quantification of the face
@@ -789,7 +789,7 @@ while True:
 
 现在，让我们显示这个特定帧的人脸识别结果:
 
-```
+```py
 			# draw the bounding box of the face along with the
 			# associated probability
 			text = "{}: {:.2f}%".format(name, proba * 100)
@@ -845,7 +845,7 @@ vs.stop()
 *   插入您的英特尔 m ovidius NC S2(NC S1 也是兼容的)。
 *   启动您的`openvino`虚拟环境，并设置如下所示的关键环境变量:
 
-```
+```py
 $ source ~/start_openvino.sh
 Starting Python 3.7 with OpenCV-OpenVINO 4.1.1 bindings...
 $ source setup.sh
@@ -856,7 +856,7 @@ $ source setup.sh
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python recognize_video.py --detector face_detection_model \
 	--embedding-model face_embedding_model/openface_nn4.small2.v1.t7 \
 	--recognizer output/recognizer.pickle \

@@ -38,7 +38,7 @@ A few weeks ago, I wrote a blog post on **[creating transparent overlays with Op
 
 打开一个新文件，命名为`watermark_dataset.py`，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 from imutils import paths
 import numpy as np
@@ -64,7 +64,7 @@ args = vars(ap.parse_args())
 
 **第 2-6 行**导入我们需要的 Python 包。我们将在这里使用 [imutils 包](https://github.com/jrosebr1/imutils)，所以如果你还没有安装它，让`pip`为你安装它:
 
-```
+```py
 $ pip install imutils
 
 ```
@@ -79,7 +79,7 @@ $ pip install imutils
 
 现在我们已经解析了我们的命令行参数，我们可以从磁盘加载我们的水印图像:
 
-```
+```py
 # load the watermark image, making sure we retain the 4th channel
 # which contains the alpha transparency
 watermark = cv2.imread(args["watermark"], cv2.IMREAD_UNCHANGED)
@@ -93,7 +93,7 @@ watermark = cv2.imread(args["watermark"], cv2.IMREAD_UNCHANGED)
 
 下一个代码块解决了我在使用 alpha transparency 和 OpenCV 时遇到的一些奇怪的问题:
 
-```
+```py
 # split the watermark into its respective Blue, Green, Red, and
 # Alpha channels; then take the bitwise AND between all channels
 # and the Alpha channels to construct the actaul watermark
@@ -120,7 +120,7 @@ if args["correct"] > 0:
 
 接下来，让我们继续处理我们的图像数据集:
 
-```
+```py
 # loop over the input images
 for imagePath in paths.list_images(args["input"]):
 	# load the input image, then add an extra dimension to the
@@ -165,7 +165,7 @@ for imagePath in paths.list_images(args["input"]):
 
 为了试试我们的`watermark_dataset.py`脚本，使用本教程底部的*“下载”*表单下载与本文相关的源代码和图片。然后，导航到代码目录并执行以下命令:
 
-```
+```py
 $ python watermark_dataset.py --watermark pyimagesearch_watermark.png \
 	--input input --output output
 
@@ -219,7 +219,7 @@ Figure 7: Creating watermarks with OpenCV is easy!
 
 再次执行`watermark_dataset.py`脚本，这次提供`--correct 0`标志来跳过逐位`AND`步骤:
 
-```
+```py
 $ python watermark_dataset.py --correct 0 --watermark pyimagesearch_watermark.png \
 	--input input --output output
 

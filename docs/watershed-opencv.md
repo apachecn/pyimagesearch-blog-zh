@@ -26,7 +26,7 @@
 
 让我们继续演示简单阈值处理和轮廓检测的局限性。打开一个新文件，命名为`contour_only.py`，让我们开始编码:
 
-```
+```py
 # import the necessary packages
 from __future__ import print_function
 from skimage.feature import peak_local_max
@@ -60,7 +60,7 @@ cv2.imshow("Input", image)
 
 现在，让我们对均值偏移图像进行阈值处理:
 
-```
+```py
 # convert the mean shift image to grayscale, then apply
 # Otsu's thresholding
 gray = cv2.cvtColor(shifted, cv2.COLOR_BGR2GRAY)
@@ -78,7 +78,7 @@ cv2.imshow("Thresh", thresh)
 
 最后，最后一步是检测阈值图像中的轮廓，并绘制每个单独的轮廓:
 
-```
+```py
 # find contours in the thresholded image
 cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
 	cv2.CHAIN_APPROX_SIMPLE)
@@ -115,7 +115,7 @@ cv2.waitKey(0)
 
 既然我们已经了解了简单阈值处理和轮廓检测的局限性，让我们继续讨论分水岭算法。打开一个新文件，将其命名为`watershed.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from skimage.feature import peak_local_max
 from skimage.morphology import watershed
@@ -148,7 +148,7 @@ cv2.imshow("Thresh", thresh)
 
 同样，我们将从**行 2-8** 开始，导入我们需要的包。我们将使用来自 [SciPy](http://www.scipy.org/) 、 [scikit-image](http://scikit-image.org/) 、 [imutils](https://github.com/jrosebr1/imutils) 和 OpenCV 的函数。如果您的系统上还没有安装 SciPy 和 scikit-image，您可以使用`pip`为您安装它们:
 
-```
+```py
 $ pip install --upgrade scipy
 $ pip install --upgrade scikit-image
 $ pip install --upgrade imutils
@@ -161,7 +161,7 @@ $ pip install --upgrade imutils
 
 给定我们的阈值图像，我们现在可以应用分水岭算法:
 
-```
+```py
 # compute the exact Euclidean distance from every binary
 # pixel to the nearest zero pixel, then find peaks in this
 # distance map
@@ -191,7 +191,7 @@ print("[INFO] {} unique segments found".format(len(np.unique(labels)) - 1))
 
 最后一步是简单地遍历唯一标签值并提取每个唯一对象:
 
-```
+```py
 # loop over the unique labels returned by the Watershed
 # algorithm
 for label in np.unique(labels):
@@ -247,7 +247,7 @@ cv2.waitKey(0)
 
 既然我们的`watershed.py`脚本已经完成，让我们将它应用到更多的图像并研究结果:
 
-```
+```py
 $ python watershed.py --image images/coins_02.png
 
 ```
@@ -258,7 +258,7 @@ $ python watershed.py --image images/coins_02.png
 
 让我们尝试另一个图像，这次是重叠的硬币:
 
-```
+```py
 $ python watershed.py --image images/coins_03.png
 
 ```
@@ -269,7 +269,7 @@ $ python watershed.py --image images/coins_03.png
 
 在下图中，我决定将分水岭算法应用于药丸计数任务:
 
-```
+```py
 $ python watershed.py --image images/pills_01.png
 
 ```
@@ -280,7 +280,7 @@ $ python watershed.py --image images/pills_01.png
 
 这张图片也是如此:
 
-```
+```py
 $ python watershed.py --image images/pills_02.png
 
 ```

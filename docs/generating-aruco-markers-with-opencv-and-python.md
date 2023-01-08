@@ -105,7 +105,7 @@
 
 OpenCV 库中内置了 21 种不同的 ArUco 词典。我在下面的 Python 字典中列出了它们:
 
-```
+```py
 ARUCO_DICT = {
 	"DICT_4X4_50": cv2.aruco.DICT_4X4_50,
 	"DICT_4X4_100": cv2.aruco.DICT_4X4_100,
@@ -161,7 +161,7 @@ ARUCO_DICT = {
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -188,7 +188,7 @@ $ pip install opencv-contrib-python
 
 使用本教程的 ***“下载”*** 部分将源代码和示例图像下载到本教程。从那里，让我们检查我们有什么:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── tags
@@ -212,7 +212,7 @@ $ tree . --dirsfirst
 
 打开项目目录结构中的`opencv_generate_aruco.py`文件，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -220,7 +220,7 @@ import cv2
 import sys
 ```
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-o", "--output", required=True,
@@ -233,7 +233,7 @@ ap.add_argument("-t", "--type", type=str,
 args = vars(ap.parse_args())
 ```
 
-```
+```py
 # define names of each possible ArUco tag OpenCV supports
 ARUCO_DICT = {
 	"DICT_4X4_50": cv2.aruco.DICT_4X4_50,
@@ -264,7 +264,7 @@ ARUCO_DICT = {
 
 定义了`ARUCO_DICT`映射后，现在让我们使用 OpenCV 加载 ArUco 字典:
 
-```
+```py
 # verify that the supplied ArUCo tag exists and is supported by
 # OpenCV
 if ARUCO_DICT.get(args["type"], None) is None:
@@ -276,7 +276,7 @@ if ARUCO_DICT.get(args["type"], None) is None:
 arucoDict = cv2.aruco.Dictionary_get(ARUCO_DICT[args["type"]])
 ```
 
-```
+```py
 # allocate memory for the output ArUCo tag and then draw the ArUCo
 # tag on the output image
 print("[INFO] generating ArUCo tag type '{}' with ID '{}'".format(
@@ -303,31 +303,31 @@ cv2.waitKey(0)
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python opencv_generate_aruco.py --id 24 --type DICT_5X5_100 \
 	--output tags/DICT_5X5_100_id24.png
 [INFO] generating ArUCo tag type 'DICT_5X5_100' with ID '24'
 ```
 
-```
+```py
 $ python opencv_generate_aruco.py --id 42 --type DICT_5X5_100 \
 	--output tags/DICT_5X5_100_id42.png
 [INFO] generating ArUCo tag type 'DICT_5X5_100' with ID '42'
 ```
 
-```
+```py
 $ python opencv_generate_aruco.py --id 66 --type DICT_5X5_100 \
 	--output tags/DICT_5X5_100_id66.png
 [INFO] generating ArUCo tag type 'DICT_5X5_100' with ID '66'
 ```
 
-```
+```py
 $ python opencv_generate_aruco.py --id 87 --type DICT_5X5_100 \
 	--output tags/DICT_5X5_100_id87.png
 [INFO] generating ArUCo tag type 'DICT_5X5_100' with ID '87'
 ```
 
-```
+```py
 $ python opencv_generate_aruco.py --id 70 --type DICT_5X5_100 \
 	--output tags/DICT_5X5_100_id70.png
 [INFO] generating ArUCo tag type 'DICT_5X5_100' with ID '70'

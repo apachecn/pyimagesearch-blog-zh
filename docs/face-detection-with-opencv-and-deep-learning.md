@@ -60,7 +60,7 @@ OpenCV 的深度学习人脸检测器基于具有 ResNet 基础网络的单镜�
 
 打开一个新文件，将其命名为`detect_faces.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -92,7 +92,7 @@ args = vars(ap.parse_args())
 
 从那里，让我们加载我们的模型，并从我们的图像创建一个斑点:
 
-```
+```py
 # load our serialized model from disk
 print("[INFO] loading model...")
 net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
@@ -114,7 +114,7 @@ blob = cv2.dnn.blobFromImage(cv2.resize(image, (300, 300)), 1.0,
 
 接下来，我们将应用面部检测:
 
-```
+```py
 # pass the blob through the network and obtain the detections and
 # predictions
 print("[INFO] computing object detections...")
@@ -127,7 +127,7 @@ detections = net.forward()
 
 从这里开始，我们将在`detections`上循环，并在检测到的人脸周围绘制方框:
 
-```
+```py
 # loop over the detections
 for i in range(0, detections.shape[2]):
 	# extract the confidence (i.e., probability) associated with the
@@ -186,7 +186,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python detect_faces.py --image rooster.jpg --prototxt deploy.prototxt.txt \
 	--model res10_300x300_ssd_iter_140000.caffemodel
 
@@ -198,7 +198,7 @@ $ python detect_faces.py --image rooster.jpg --prototxt deploy.prototxt.txt \
 
 现在我们来看看另一个例子是如何工作的，这次有三张脸:
 
-```
+```py
 $ python detect_faces.py --image iron_chic.jpg --prototxt deploy.prototxt.txt \
 	--model res10_300x300_ssd_iter_140000.caffemodel
 
@@ -210,7 +210,7 @@ $ python detect_faces.py --image iron_chic.jpg --prototxt deploy.prototxt.txt \
 
 同样，这只是表明深度学习 OpenCV 人脸检测器比库附带的标准 Haar cascade 检测器好多少(在准确性方面)。
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 import numpy as np
@@ -235,7 +235,7 @@ args = vars(ap.parse_args())
 
 如果您的虚拟环境中没有`imutils`，您可以通过以下方式安装:
 
-```
+```py
 $ pip install imutils
 
 ```
@@ -244,7 +244,7 @@ $ pip install imutils
 
 从那里，我们将加载我们的模型并初始化视频流:
 
-```
+```py
 # load our serialized model from disk
 print("[INFO] loading model...")
 net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
@@ -269,7 +269,7 @@ time.sleep(2.0)
 
 从那里，我们循环遍历帧，并使用 OpenCV 计算人脸检测:
 
-```
+```py
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the threaded video stream and resize it
@@ -295,7 +295,7 @@ while True:
 
 我们现在可以循环检测，与置信度阈值进行比较，并在屏幕上绘制面部框+置信度值:
 
-```
+```py
 	# loop over the detections
 	for i in range(0, detections.shape[2]):
 		# extract the confidence (i.e., probability) associated with the
@@ -327,7 +327,7 @@ while True:
 
 既然我们的 OpenCV 人脸检测已经完成，让我们在屏幕上显示该帧并等待按键:
 
-```
+```py
 	# show the output frame
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
@@ -354,7 +354,7 @@ vs.stop()
 
 下载完文件后，使用这个简单的命令就可以轻松运行带有网络摄像头的深度学习 OpenCV 人脸检测器:
 
-```
+```py
 $ python detect_faces_video.py --prototxt deploy.prototxt.txt \
 	--model res10_300x300_ssd_iter_140000.caffemodel
 

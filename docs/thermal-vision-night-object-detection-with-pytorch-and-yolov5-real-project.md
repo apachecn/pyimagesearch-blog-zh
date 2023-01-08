@@ -75,7 +75,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -108,7 +108,7 @@ $ pip install opencv-contrib-python
 
 从这里，看一下目录结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 └── yolov5
@@ -126,7 +126,7 @@ $ tree --dirsfirst
 
 我们通过克隆官方的 YOLOv5 库来建立这个结构。
 
-```
+```py
 # clone the yolov5 repository from GitHub and install some necessary packages (requirements.txt file)
 !git clone https://github.com/ultralytics/yolov5
 %cd yolov5
@@ -152,7 +152,7 @@ $ tree --dirsfirst
 
 `thermal_imaging_video_test.mp4`是视频文件，我们将在其上测试我们的热目标检测模型。它包含 4，224 个以 30 帧/秒的速度获取的带有街道和高速公路场景的热帧。
 
-```
+```py
 # import PyTorch and check versions
 import torch
 from yolov5 import utils
@@ -175,7 +175,7 @@ display = utils.notebook_init()
 
 在设置好环境并满足所有要求后，让我们来训练我们的预训练模型！
 
-```
+```py
 # train pretrained YOLOv5s model on the custom thermal imaging dataset,
 # basic parameters:
 #  - image size (img): image size of the thermal dataset is 640 x 512, 640 passed
@@ -232,7 +232,7 @@ display = utils.notebook_init()
 
 为此，我们将使用位于项目根的`thermal_imaging_video_test.mp4`，通过 Python 文件`detect.py`将它传递到我们的模型层。
 
-```
+```py
 # test the trained model (night_object_detector.pt) on a thermal imaging video,
 # parameters:
 #  - trained model (weights): model trained in the previous step, night_object_detector.pt passed
@@ -285,7 +285,7 @@ PyImageSearch 团队希望您已经喜欢并深入理解了本**红外视觉基�
 
 **Garcia-Martin，R.** “热视觉:用 PyTorch 和 YOLOv5 进行夜间目标探测”(真实项目)， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva 和 R. Raha 编辑。，2022 年，【https://pyimg.co/p2zsm 
 
-```
+```py
 @incollection{RGM_2022_PYTYv5,
   author = {Raul Garcia-Martin},
   title = {Thermal Vision: Night Object Detection with {PyTorch} and {YOLOv5} (real project)},

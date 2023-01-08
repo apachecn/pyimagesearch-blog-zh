@@ -67,7 +67,7 @@ Keras 提供了三个函数，可以用来训练你自己的深度学习模型:
 
 让我们先给`.fit`打个电话:
 
-```
+```py
 model.fit(trainX, trainY, batch_size=32, epochs=50)
 
 ```
@@ -104,7 +104,7 @@ model.fit(trainX, trainY, batch_size=32, epochs=50)
 
 在这些情况下，我们需要利用 Keras 的`.fit_generator`功能:
 
-```
+```py
 # initialize the number of epochs and batch size
 EPOCHS = 100
 BS = 32
@@ -164,7 +164,7 @@ H = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),
 
 对于深度学习实践者来说，如果他们正在寻找对训练 Keras 模型的最细粒度控制，你可能希望使用`.train_on_batch`函数:
 
-```
+```py
 model.train_on_batch(batchX, batchY)
 
 ```
@@ -227,7 +227,7 @@ model.train_on_batch(batchX, batchY)
 
 让我们检查一下今天示例的项目树:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── pyimagesearch
@@ -265,7 +265,7 @@ $ tree --dirsfirst
 
 这些包中的每一个都可以通过 pip 安装在您的虚拟环境中。如果您安装了 virtualenvwrapper，您可以使用`mkvirtualenv`创建一个环境，并使用`workon`命令激活您的环境。在那里，您可以使用 pip 来设置您的环境:
 
-```
+```py
 $ mkvirtualenv cv -p python3
 $ workon cv
 $ pip install numpy
@@ -280,7 +280,7 @@ $ pip install matplotlib
 
 打开`train.py`文件并插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -302,7 +302,7 @@ import numpy as np
 
 让我们定义一下`csv_image_generator`函数:
 
-```
+```py
 def csv_image_generator(inputPath, bs, lb, mode="train", aug=None):
 	# open the CSV file for reading
 	f = open(inputPath, "r")
@@ -323,7 +323,7 @@ def csv_image_generator(inputPath, bs, lb, mode="train", aug=None):
 
 让我们开始遍历数据行:
 
-```
+```py
 	# loop indefinitely
 	while True:
 		# initialize our batches of images and labels
@@ -344,7 +344,7 @@ CSV 文件中的每一行数据都包含一个序列化为文本字符串的图�
 
 从这里开始，我们将开始向这些列表添加图像和标签，直到达到我们的批量大小:
 
-```
+```py
 		# keep looping until we reach our batch size
 		while len(images) < bs:
 			# attempt to read the next line of the CSV file
@@ -390,7 +390,7 @@ CSV 文件中的每一行数据都包含一个序列化为文本字符串的图�
 
 准备好我们的图像批次和相应的标签后，我们现在可以在生成批次之前采取两个步骤:
 
-```
+```py
 		# one-hot encode the labels
 		labels = lb.transform(np.array(labels))
 
@@ -413,7 +413,7 @@ CSV 文件中的每一行数据都包含一个序列化为文本字符串的图�
 
 让我们初始化我们的训练参数:
 
-```
+```py
 # initialize the paths to our training and testing CSV files
 TRAIN_CSV = "flowers17_training.csv"
 TEST_CSV = "flowers17_testing.csv"
@@ -436,7 +436,7 @@ NUM_TEST_IMAGES = 0
 
 让我们看看下一段代码:
 
-```
+```py
 # open the training CSV file, then initialize the unique set of class
 # labels in the dataset along with the testing labels
 f = open(TRAIN_CSV, "r")
@@ -476,7 +476,7 @@ f.close()
 
 让我们构建我们的`LabelBinarizer`对象，并构建数据扩充对象:
 
-```
+```py
 # create the label binarizer for one-hot encoding labels, then encode
 # the testing labels
 lb = LabelBinarizer()
@@ -498,7 +498,7 @@ aug = ImageDataGenerator(rotation_range=20, zoom_range=0.15,
 
 现在让我们初始化我们的训练和测试图像生成器:
 
-```
+```py
 # initialize both the training and testing image generators
 trainGen = csv_image_generator(TRAIN_CSV, BS, lb,
 	mode="train", aug=aug)
@@ -516,7 +516,7 @@ testGen = csv_image_generator(TEST_CSV, BS, lb,
 
 让我们用 Keras 初始化+编译我们的 MiniVGGNet 模型，并开始训练:
 
-```
+```py
 # initialize our Keras model and compile it
 model = MiniVGGNet.build(64, 64, 3, len(lb.classes_))
 opt = SGD(lr=1e-2, momentum=0.9, decay=1e-2 / NUM_EPOCHS)
@@ -546,7 +546,7 @@ H = model.fit(
 
 现在让我们来评估培训的结果:
 
-```
+```py
 # re-initialize our testing data generator, this time for evaluating
 testGen = csv_image_generator(TEST_CSV, BS, lb,
 	mode="eval", aug=None)
@@ -571,7 +571,7 @@ print(classification_report(testLabels.argmax(axis=1), predIdxs,
 
 最后一步，我们将使用我们的训练历史字典`H`，用 matplotlib 生成一个图:
 
-```
+```py
 # plot the training loss and accuracy
 N = NUM_EPOCHS
 plt.style.use("ggplot")
@@ -598,7 +598,7 @@ plt.savefig("plot.png")
 
 从那里，打开一个终端，导航到您下载源代码+数据集的位置，并执行以下命令:
 
-```
+```py
 $ python train.py
 Using TensorFlow backend.
 [INFO] training w/ generator...
@@ -664,7 +664,7 @@ weighted avg       0.76      0.72      0.71       340
 
 您可以使用`pip freeze`检查您的 TensorFlow 版本，然后查找您的 TensorFlow 版本:
 
-```
+```py
 $ pip freeze | grep 'tensorflow'
 tensorflow==2.4.1
 tensorflow-estimator==2.4.0

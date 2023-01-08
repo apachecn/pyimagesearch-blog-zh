@@ -242,7 +242,7 @@ the **camera intrinsic** since it represents values like focal length and center
 
 为了更好地理解 json 文件，我们可以打开一个[空白的 Colab 笔记本](https://research.google.com/colaboratory/)，上传`transforms_train.json`。我们现在可以对它进行探索性的数据分析。
 
-```
+```py
 # import the necessary packages
 import json
 import numpy as np
@@ -273,7 +273,7 @@ JSON 文件有两个父键，分别叫做`camera_angle_x`和`frames`。我们看
 
 让我们再深入调查一下`frames`。
 
-```
+```py
 # grab the first frame
 firstFrame = jsonTrainData["frames"][0]
 
@@ -319,7 +319,7 @@ print(fName)
 
 **gothipaty，A. R .，和 Raha， **R.**** “使用 TensorFlow 和 Keras 的 NeRF 的计算机图形学和深度学习:第 1 部分”， *PyImageSearch* ，2021，[https://PyImageSearch . com/2021/11/10/Computer-Graphics-and-Deep-Learning-with-NeRF-using-tensor flow-and-Keras-Part-1/](https://pyimagesearch.com/2021/11/10/computer-graphics-and-deep-learning-with-nerf-using-tensorflow-and-keras-part-1/)
 
-```
+```py
 @article{Gosthipaty_Raha_2021_pt1,
     author = {Aritra Roy Gosthipaty and Ritwik Raha},
     title = {Computer Graphics and Deep Learning with {NeRF} using {TensorFlow} and {Keras}: Part 1},

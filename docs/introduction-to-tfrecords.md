@@ -34,7 +34,7 @@
 
 幸运的是，两者都是 pip 可安装的:
 
-```
+```py
 $ pip install tensorflow
 $ pip install tensorflow-datasets
 ```
@@ -66,7 +66,7 @@ $ pip install tensorflow-datasets
 
 从这里，看一下目录结构:
 
-```
+```py
 .
 ├── create_tfrecords.py
 ├── example_tf_record.py
@@ -122,7 +122,7 @@ TFRecords 最重要的一个用例是当我们使用 TPU 训练一个模型时�
 
 先说简单的。我们将创建二进制记录(字节字符串)，然后使用 API 将它们保存到 TFRecord 中。这将使我们了解如何将大型数据集保存到 TFRecords 中。
 
-```
+```py
 # USAGE
 # python single_tf_record.py
 
@@ -180,7 +180,7 @@ for element in dataset:
 
 让我们看看这个脚本的输出。
 
-```
+```py
 $ python single_tf_record.py
 
 Original data: 12345
@@ -207,7 +207,7 @@ TensorFlow 有两个公共 API，负责在二进制记录中编码和解码数�
 
 让我们用这个例子来弄脏我们的手。
 
-```
+```py
 # USAGE
 # python serialization.py
 
@@ -246,7 +246,7 @@ print(f"Decoded Data: {parsedData}\n")
 
 **第 2 行** **第 4 行** **-第 26 行**是帮助我们可视化流程的打印语句。我们来看看输出。
 
-```
+```py
 $ python serialization.py
 
 Original Data: [1 2 3 4]
@@ -274,7 +274,7 @@ Decoded Data: [1 2 3 4]
 
 让我们通过下面的例子来看看如何做到这一点。
 
-```
+```py
 # import the necessary packages
 import tensorflow as tf
 from pyimagesearch import config
@@ -316,7 +316,7 @@ def save_image(image, saveImagePath, title=None):
 
 现在让我们看看如何从磁盘加载一个原始图像，并将其序列化为 TFRecord 格式。然后，我们将看到如何加载序列化的 TFRecord 并反序列化图像。
 
-```
+```py
 # USAGE
 # python example_tf_record.py
 
@@ -340,7 +340,7 @@ import os
 
 从**行** **5** **-19** ，我们导入所有需要的包。
 
-```
+```py
 # a single instance of structured data will consist of an image and its
 # corresponding class name
 imagePath = get_file(
@@ -386,7 +386,7 @@ example = Example(features=features)
 
 现在我们有了自己的个体`Feature`，我们需要将它包装成一个名为`Features`的集合。**第 53-56 行**构建一个`Features`，由一个`Feature`的字典组成。最后，**第 57 行**通过将`Features`包装成一个`Example`结束了我们的旅程。
 
-```
+```py
 # serialize the entire example
 serializedExample = example.SerializeToString()
 
@@ -435,7 +435,7 @@ for element in dataset:
 
 现在让我们看看如何生成高级 TFRecords。在本节中，我们将使用`tfds`(代表`tensorflow_datasets`，即用型数据集的集合)加载 div2k 数据集，对其进行预处理，然后将预处理后的数据集序列化为 TFRecords。
 
-```
+```py
 # USAGE
 # python create_tfrecords.py
 
@@ -457,7 +457,7 @@ AUTO = tf.data.AUTOTUNE
 
 从**第 5-14 行**，我们导入所有必需的包，包括我们的配置文件、tensorflow 数据集集合，以及将数据集序列化为 TFrecords 所需的其他 TensorFlow 子模块。在第 17 行的**上，我们定义了`tf.data.AUTOTUNE`用于优化目的。**
 
-```
+```py
 def pre_process(element):
 	# grab the low and high resolution images
 	lrImage = element["lr"]
@@ -474,7 +474,7 @@ def pre_process(element):
 
 在**的第 19-30 行**，我们定义了我们的`pre_process`函数，它接受一个由低分辨率和高分辨率图像组成的元素作为输入。在**第 21 和 22 行**，我们抓取低分辨率和高分辨率图像。在**第 26 行和第 27 行**，我们将低分辨率和高分辨率图像从 tensors 转换为序列化 TensorProto 类型。最后，在**第 30 行**，我们返回低分辨率和高分辨率图像。
 
-```
+```py
 def create_dataset(dataDir, split, shardSize):
 	# load the dataset, save it to disk, and preprocess it
 	ds = tfds.load(config.DATASET, split=split, data_dir=dataDir)
@@ -489,7 +489,7 @@ def create_dataset(dataDir, split, shardSize):
 
 在**的第 32-41 行**，我们定义了我们的`create_dataset`函数，它将存储数据集、数据集分割和碎片大小的目录路径作为输入。在**第 34 行**，我们加载 div2k 数据集并将其存储在磁盘上。在**第 35-38 行**，我们预处理数据集和批量大小。最后，在**第 41 行**，我们返回 TensorFlow 数据集对象。
 
-```
+```py
 def create_serialized_example(lrByte, hrByte):
 	# create low and high resolution image byte list
 	lrBytesList = BytesList(value=[lrByte])
@@ -517,7 +517,7 @@ def create_serialized_example(lrByte, hrByte):
 
 在**的第 43-65 行**，我们定义了我们的`create_serialized_example`函数，它以字节形式接受低分辨率和高分辨率图像作为输入。在**第 45 和 46 行**，我们创建了低分辨率和高分辨率图像字节列表对象。在**第 49-56 行**上，我们从字节列表构建低分辨率和高分辨率图像特征，并从低分辨率和高分辨率图像特征构建后续图像特征图。在**第 60-62 行**，我们从特征映射中构建一个特征集合，然后从特征中构建一个例子并序列化这个例子。最后，在**第 65 行**上，我们返回序列化的例子。
 
-```
+```py
 def prepare_tfrecords(dataset, outputDir, name, printEvery=50):
 	# check whether output directory exists
 	if not os.path.exists(outputDir):
@@ -546,7 +546,7 @@ def prepare_tfrecords(dataset, outputDir, name, printEvery=50):
 
 在**第 67-90 行**上，我们定义了`prepare_tfrecords`函数，它主要以 TensorFlow 数据集和输出目录路径作为输入。在**第 69 行和第 70 行**，我们检查输出目录是否存在，如果不存在，我们就创建它。在第 73 行**，我们开始遍历数据集，抓取索引和图像。在第 75-77 行**上，我们设置了分片大小、输出 TFRecord 名称和输出 TFrecord 的路径。在**第 80-90 行**，我们打开一个空的 TFRecord，并开始向其中写入序列化的示例。
 
-```
+```py
 # create training and validation dataset of the div2k images
 print("[INFO] creating div2k training and testing dataset...")
 trainDs = create_dataset(dataDir=config.DIV2K_PATH, split="train",
@@ -593,7 +593,7 @@ TFRecord 格式的两个主要优点是，它帮助我们高效地存储数据�
 
 A. R. Gosthipaty 和 A. Thanki。“TF records 简介”， *PyImageSearch* ，D. Chakraborty，P. Chugh，S. Huot，K. Kidriavsteva，R. Raha 编辑。，2022 年，【https://pyimg.co/s5p1b 
 
-```
+```py
 @incollection{ARG-AT_2022_TFRecords,
   author = {Aritra Roy Gosthipaty and Abhishek Thanki},
   title = {Introduction to TFRecords},

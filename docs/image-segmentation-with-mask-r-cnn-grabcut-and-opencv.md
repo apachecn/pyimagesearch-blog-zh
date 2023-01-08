@@ -66,7 +66,7 @@ Mask R-CNN 是一种最先进的深度神经网络架构，用于图像分割。
 
 继续从这篇博文的 ***【下载】*** 部分抓取代码并屏蔽 R-CNN 深度学习模型。一旦你提取了。zip，您将看到以下文件:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── mask-rcnn-coco
@@ -86,7 +86,7 @@ $ tree --dirsfirst
 
 打开一个新文件，将其命名为`mask_rcnn_grabcut.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as rnp
 import argparse
@@ -113,7 +113,7 @@ args = vars(ap.parse_args())
 
 在导入必要的包(**第 2-6 行**)之后，我们定义我们的[命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/) ( **第 9-22 行**):
 
-```
+```py
 # load the COCO class labels our Mask R-CNN was trained on
 labelsPath = os.path.sep.join([args["mask_rcnn"],
 	"object_detection_classes_coco.txt"])
@@ -125,7 +125,7 @@ COLORS = np.random.randint(0, 255, size=(len(LABELS), 3),
 	dtype="uint8")
 ```
 
-```
+```py
 # derive the paths to the Mask R-CNN weights and model configuration
 weightsPath = os.path.sep.join([args["mask_rcnn"],
 	"frozen_inference_graph.pb"])
@@ -149,7 +149,7 @@ if args["use_gpu"]:
 
 既然我们的模型已经加载，我们也准备加载我们的图像并执行推理:
 
-```
+```py
 # load our input image from disk and display it to our screen
 image = cv2.imread(args["image"])
 image = imutils.resize(image, width=600)
@@ -174,7 +174,7 @@ net.setInput(blob)
 
 让我们开始循环检测:
 
-```
+```py
 # loop over the number of detected objects
 for i in range(0, boxes.shape[2]):
 	# extract the class ID of the detection along with the
@@ -209,7 +209,7 @@ for i in range(0, boxes.shape[2]):
 
 从这里开始，我们准备开始制作我们的 R-CNN 蒙版和蒙版图像:
 
-```
+```py
 		# extract the pixel-wise segmentation for the object, resize
 		# the mask such that it's the same dimensions as the bounding
 		# box, and then finally threshold to create a *binary* mask
@@ -233,7 +233,7 @@ for i in range(0, boxes.shape[2]):
 		cv2.waitKey(0)
 ```
 
-```
+```py
 		# clone the Mask R-CNN mask (so we can use it when applying
 		# GrabCut) and set any mask values greater than zero to be
 		# "probable foreground" (otherwise they are "definite
@@ -270,7 +270,7 @@ for i in range(0, boxes.shape[2]):
 
 让我们继续并生成我们的**最后两个输出图像:**
 
-```
+```py
 		# set all definite background and probable background pixels
 		# to 0 while definite foreground and probable foreground
 		# pixels are set to 1, then scale the mask from the range
@@ -304,7 +304,7 @@ for i in range(0, boxes.shape[2]):
 
 打开终端，执行以下命令:
 
-```
+```py
 $ python mask_rcnn_grabcut.py --mask-rcnn mask-rcnn-coco --image example.jpg
 [INFO] loading Mask R-CNN from disk...
 [INFO] showing output for 'horse'...

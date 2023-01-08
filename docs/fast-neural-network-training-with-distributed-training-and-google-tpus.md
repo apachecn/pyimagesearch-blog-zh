@@ -24,7 +24,7 @@
 
 幸运的是，这些包是 pip 可安装的:
 
-```
+```py
 $ pip install tensorflow
 $ pip install tensorflow-datasets
 ```
@@ -50,7 +50,7 @@ $ pip install tensorflow-datasets
 
 然后，您将看到以下目录结构:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── outputs
@@ -110,7 +110,7 @@ $ tree . --dirsfirst
 
 让我们用 TensorFlow 测试一下我们的 CPU 执行矩阵乘法的速度。打开 Google Colab 笔记本，粘贴以下代码，亲自查看结果。
 
-```
+```py
 # import the necessary packages
 import tensorflow as tf
 import time
@@ -147,7 +147,7 @@ print(f"time taken: {(end-start):.2f} sec")
 
 下面的代码和用 CPU 做的一样。这里的变化与所使用的硬件有关。我们在这里使用 GPU 来运行代码。结果，代码比 CPU 少花了大约`~99%`时间。这表明了我们的 GPU 有多么强大，以及并行性如何产生巨大的差异。我强烈推荐在带有 GPU 运行时的 Google Colab 笔记本中运行以下代码。
 
-```
+```py
 # import the necessary packages
 import tensorflow as tf
 import time

@@ -53,7 +53,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -80,7 +80,7 @@ $ pip install opencv-contrib-python
 
 首先访问本教程的 ***“下载”*** 部分，检索源代码和示例图像:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── images
@@ -109,7 +109,7 @@ $ tree . --dirsfirst
 
 打开项目目录结构中的`haar_face_detector.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 import argparse
 import imutils
@@ -134,7 +134,7 @@ args = vars(ap.parse_args())
 
 解析完命令行参数后，我们可以从磁盘加载 Haar cascade:
 
-```
+```py
 # load the haar cascade face detector from
 print("[INFO] loading face detector...")
 detector = cv2.CascadeClassifier(args["cascade"])
@@ -152,7 +152,7 @@ gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 最后一步是检测和注释:
 
-```
+```py
 # detect faces in the input image using the haar cascade face
 # detector
 print("[INFO] performing face detection...")
@@ -189,7 +189,7 @@ cv2.waitKey(0)
 
 从那里，您可以打开一个 shell 并执行以下命令:
 
-```
+```py
 $ python haar_face_detector.py --image images/messi.png
 [INFO] loading face detector...
 [INFO] performing face detection...
@@ -200,7 +200,7 @@ $ python haar_face_detector.py --image images/messi.png
 
 让我们尝试另一个图像:
 
-```
+```py
 $ python haar_face_detector.py --image images/adrian_01.png
 [INFO] loading face detector...
 [INFO] performing face detection...
@@ -211,7 +211,7 @@ $ python haar_face_detector.py --image images/adrian_01.png
 
 下图提出了一点问题，并展示了哈尔级联的最大限制之一，即*假阳性检测:*
 
-```
+```py
 $ python haar_face_detector.py --image images/adrian_02.png
 [INFO] loading face detector...
 [INFO] performing face detection...
@@ -226,7 +226,7 @@ $ python haar_face_detector.py --image images/adrian_02.png
 
 例如，我们的*原始*对`detectMultiScale`的调用如下所示:
 
-```
+```py
 rects = detector.detectMultiScale(gray, scaleFactor=1.05,
 	minNeighbors=5, minSize=(30, 30),
 	flags=cv2.CASCADE_SCALE_IMAGE)
@@ -234,7 +234,7 @@ rects = detector.detectMultiScale(gray, scaleFactor=1.05,
 
 通过实验，我发现当*通过将`minNeighbors`从`5`更新为`7`来消除假阳性*时，我仍然能够*检测到我的面部*:
 
-```
+```py
 rects = detector.detectMultiScale(gray, scaleFactor=1.05,
 	minNeighbors=7, minSize=(30, 30),
 	flags=cv2.CASCADE_SCALE_IMAGE)
@@ -242,7 +242,7 @@ rects = detector.detectMultiScale(gray, scaleFactor=1.05,
 
 这样做之后，我们获得了正确的结果:
 
-```
+```py
 $ python haar_face_detector.py --image images/adrian_02.png
 [INFO] loading face detector...
 [INFO] performing face detection...
@@ -271,7 +271,7 @@ $ python haar_face_detector.py --image images/adrian_02.png
 
 现在让我们了解如何在实时视频流中执行人脸检测:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 import argparse
@@ -284,7 +284,7 @@ import cv2
 
 我们只有一个命令行参数需要解析:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-c", "--cascade", type=str,
@@ -297,7 +297,7 @@ args = vars(ap.parse_args())
 
 然后，我们加载人脸检测器并初始化视频流:
 
-```
+```py
 # load the haar cascade face detector from
 print("[INFO] loading face detector...")
 detector = cv2.CascadeClassifier(args["cascade"])
@@ -310,7 +310,7 @@ time.sleep(2.0)
 
 让我们开始从视频流中读取帧:
 
-```
+```py
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the video stream, resize it, and convert it
@@ -335,7 +335,7 @@ while True:
 
 最后一步是在我们的`frame`上绘制检测到的人脸的边界框:
 
-```
+```py
 	# loop over the bounding boxes
 	for (x, y, w, h) in rects:
 		# draw the face bounding box on the image
@@ -371,7 +371,7 @@ vs.stop()
 
 从那里，打开一个 shell 并执行以下命令:
 
-```
+```py
 $ python video_face_detector.py
 [INFO] loading face detector...
 [INFO] starting video stream...

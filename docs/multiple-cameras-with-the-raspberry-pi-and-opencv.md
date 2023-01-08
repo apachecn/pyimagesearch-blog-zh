@@ -71,7 +71,7 @@ Raspberry Pi 摄像头模块指向我的公寓大门，以监控任何进出的�
 
 让我们从打开一个新文件开始，将其命名为`basicmotiondetector.py`，并添加以下代码:
 
-```
+```py
 # import the necessary packages
 import imutils
 import cv2
@@ -101,7 +101,7 @@ class BasicMotionDetector:
 
 让我们继续我们的`update`方法:
 
-```
+```py
 	def update(self, image):
 		# initialize the list of locations containing motion
 		locs = []
@@ -128,7 +128,7 @@ class BasicMotionDetector:
 
 然而，为了实际上*检测我们的 delta 图像中包含运动的*区域，我们首先需要应用阈值和轮廓检测:
 
-```
+```py
 		# threshold the delta image and apply a series of dilations
 		# to help fill in holes
 		thresh = cv2.threshold(frameDelta, self.deltaThresh, 255,
@@ -169,7 +169,7 @@ class BasicMotionDetector:
 
 让我们开始定义我们的驱动程序脚本:
 
-```
+```py
 # import the necessary packages
 from __future__ import print_function
 from pyimagesearch.basicmotiondetector import BasicMotionDetector
@@ -198,7 +198,7 @@ total = 0
 
 `VideoStream`类是 [imutils 包](https://github.com/jrosebr1/imutils)的一部分，所以如果您还没有安装它，只需执行以下命令:
 
-```
+```py
 $ pip install imutils
 
 ```
@@ -207,7 +207,7 @@ $ pip install imutils
 
 如果您*不想*使用 Raspberry Pi 摄像头模块，而是想利用两个 USB 摄像头，只需将**的第 13 行和第 14 行**更改为:
 
-```
+```py
 webcam1 = VideoStream(src=0).start()
 webcam2 = VideoStream(src=1).start()
 
@@ -219,7 +219,7 @@ webcam2 = VideoStream(src=1).start()
 
 我们现在准备在两个视频源中执行运动检测:
 
-```
+```py
 # loop over frames from the video streams
 while True:
 	# initialize the list of frames that have been processed
@@ -256,7 +256,7 @@ while True:
 
 在我们允许 32 帧被传递到我们的`BasicMotionDetector`之后，我们可以检查是否检测到任何运动:
 
-```
+```py
 		# otherwise, check to see if motion was detected
 		if len(locs) > 0:
 			# initialize the minimum and maximum (x, y)-coordinates,
@@ -290,7 +290,7 @@ while True:
 
 最后一步是在屏幕上显示我们的`frames`:
 
-```
+```py
 	# increment the total number of frames read and grab the 
 	# current timestamp
 	total += 1
@@ -329,7 +329,7 @@ picam.stop()
 
 要查看我们在 Raspberry Pi 上运行的多摄像机运动检测器，只需执行以下命令:
 
-```
+```py
 $ python multi_cam_motion.py
 
 ```

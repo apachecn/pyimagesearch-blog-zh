@@ -41,7 +41,7 @@
 
 准备好之后，继续更新您的系统:
 
-```
+```py
 $ sudo apt-get update
 $ sudo apt-get upgrade
 
@@ -49,7 +49,7 @@ $ sudo apt-get upgrade
 
 让我们安装开发工具、图像和视频 I/O 库、GUI 包、优化库和其他包:
 
-```
+```py
 $ sudo apt-get install build-essential cmake unzip pkg-config
 $ sudo apt-get install libxmu-dev libxi-dev libglu1-mesa libglu1-mesa-dev
 $ sudo apt-get install libjpeg-dev libpng-dev libtiff-dev
@@ -66,7 +66,7 @@ $ sudo apt-get install python3-dev python3-tk python-imaging-tk
 
 **GPU 用户:** CUDA 9 需要 gcc v6，但 Ubuntu 18.04 附带 gcc v7，因此我们需要安装 gcc 和 g++ v6:
 
-```
+```py
 $ sudo apt-get install gcc-6 g++-6
 
 ```
@@ -83,7 +83,7 @@ $ sudo apt-get install gcc-6 g++-6
 
 让我们继续将 NVIDIA PPA 库添加到 Ubuntu 的 Aptitude 包管理器中:
 
-```
+```py
 $ sudo add-apt-repository ppa:graphics-drivers/ppa
 $ sudo apt-get update
 
@@ -91,21 +91,21 @@ $ sudo apt-get update
 
 现在，我们可以非常方便地安装我们的 NVIDIA 驱动程序:
 
-```
+```py
 $ sudo apt install nvidia-driver-396
 
 ```
 
 继续并重新启动，以便在机器启动时激活驱动程序:
 
-```
+```py
 $ sudo reboot now
 
 ```
 
 一旦您的计算机启动，您回到终端或重新建立了 SSH 会话，您将需要验证 NVIDIA 驱动程序是否已成功安装:
 
-```
+```py
 $ nvidia-smi
 +-----------------------------------------------------------------------------+
 | NVIDIA-SMI 396.54                 Driver Version: 396.54                    |
@@ -162,7 +162,7 @@ NVIDIA 尚未正式支持 Ubuntu 18.04，但 Ubuntu 17.04 驱动程序仍将工�
 
 您可能只想将链接复制到剪贴板，并使用 wget 命令下载运行文件:
 
-```
+```py
 $ wget https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_384.81_linux-run
 
 ```
@@ -173,7 +173,7 @@ $ wget https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_
 
 从那里开始安装，让我们继续安装 CUDA 工具包。这要求我们首先通过`chmod`命令给脚本*可执行文件*权限，然后我们使用超级用户的凭证(可能会提示您输入 root 密码):
 
-```
+```py
 $ chmod +x cuda_9.0.176_384.81_linux-run
 $ sudo ./cuda_9.0.176_384.81_linux-run --override
 
@@ -190,14 +190,14 @@ $ sudo ./cuda_9.0.176_384.81_linux-run --override
 
 现在我们需要更新我们的 ~/。包含 CUDA 工具包的 bashrc 文件:
 
-```
+```py
 $ nano ~/.bashrc
 
 ```
 
 nano 文本编辑器非常简单，但是您可以随意使用您喜欢的编辑器，如 vim 或 emacs。滚动到底部并添加以下行:
 
-```
+```py
 # NVIDIA CUDA Toolkit
 export PATH=/usr/local/cuda-9.0/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda-9.0/lib64
@@ -212,14 +212,14 @@ export LD_LIBRARY_PATH=/usr/local/cuda-9.0/lib64
 
 保存并关闭 bash 概要文件后，继续重新加载文件:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
 
 从这里您可以确认 CUDA 工具包已经成功安装:
 
-```
+```py
 $ nvcc -V
 nvcc: NVIDIA (R) Cuda compiler driver
 Copyright (c) 2005-2017 NVIDIA Corporation
@@ -252,7 +252,7 @@ Cuda compilation tools, release 9.0, V9.0.176
 
 一旦文件驻留在您的个人计算机上，您可能需要将它们放置到您的 GPU 系统中。您可以使用以下命令将文件 SCP 到您的 GPU 机器上(如果您使用 EC2 密钥对):
 
-```
+```py
 $ scp -i EC2KeyPair.pem ~/Downloads/cudnn-9.0-linux-x64-v7.4.1.5.tgz \
 	username@your_ip_address:~
 
@@ -260,7 +260,7 @@ $ scp -i EC2KeyPair.pem ~/Downloads/cudnn-9.0-linux-x64-v7.4.1.5.tgz \
 
 在 GPU 系统上(通过 SSH 或在桌面上)，以下命令会将 cuDNN 安装到 Ubuntu 18.04 系统的正确位置:
 
-```
+```py
 $ cd ~
 $ tar -zxf cudnn-9.0-linux-x64-v7.4.1.5.tgz
 $ cd cuda
@@ -310,7 +310,7 @@ $ cd ~
 
 首先，让我们安装 pip，一个 Python 包管理工具:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python3 get-pip.py
 
@@ -318,7 +318,7 @@ $ sudo python3 get-pip.py
 
 现在已经安装了 pip，让我们继续安装我推荐的两个虚拟环境工具— virtualenv 和 virtualenvwrapper :
 
-```
+```py
 $ sudo pip install virtualenv virtualenvwrapper
 $ sudo rm -rf ~/get-pip.py ~/.cache/pip
 
@@ -328,7 +328,7 @@ $ sudo rm -rf ~/get-pip.py ~/.cache/pip
 
 请打开您的 ~/。bashrc 文件，并在最底部添加以下几行:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
@@ -342,7 +342,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 让我们继续加载我们的 ~/。bashrc 文件:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
@@ -358,7 +358,7 @@ $ source ~/.bashrc
 
 使用上面列表中的第一个命令，让我们继续用 Python 3:
 
-```
+```py
 $ mkvirtualenv dl4cv -p python3
 
 ```
@@ -371,7 +371,7 @@ $ mkvirtualenv dl4cv -p python3
 
 如果您的环境不是活动的，只需使用`workon`命令:
 
-```
+```py
 $ workon dl4cv
 
 ```
@@ -382,7 +382,7 @@ $ workon dl4cv
 
 既然我们的 Python 虚拟环境已经创建并处于活动状态，让我们使用 pip 安装 NumPy 和 OpenCV:
 
-```
+```py
 $ pip install numpy
 $ pip install opencv-contrib-python
 
@@ -392,7 +392,7 @@ $ pip install opencv-contrib-python
 
 让我们安装额外的计算机视觉、图像处理和机器学习所需的库:
 
-```
+```py
 $ pip install scipy matplotlib pillow
 $ pip install imutils h5py requests progressbar2
 $ pip install scikit-learn scikit-image
@@ -405,7 +405,7 @@ $ pip install scikit-learn scikit-image
 
 **选项#1:** 安装 tensor flow*T3*GPU 支持:
 
-```
+```py
 $ pip install tensorflow-gpu==1.12.0
 
 ```
@@ -414,7 +414,7 @@ $ pip install tensorflow-gpu==1.12.0
 
 **选项#2:** 安装 tensor flow*T3【无 GPU 支持:*
 
-```
+```py
 $ pip install tensorflow
 
 ```
@@ -423,7 +423,7 @@ $ pip install tensorflow
 
 继续验证 TensorFlow 是否安装在您的`dl4cv`虚拟环境中:
 
-```
+```py
 $ python
 >>> import tensorflow
 >>>
@@ -434,14 +434,14 @@ $ python
 
 我们将再次使用 pip 将 [Keras](https://keras.io/) 安装到`dl4cv`环境中:
 
-```
+```py
 $ pip install keras
 
 ```
 
 您可以通过启动 Python shell 来验证 Keras 是否已安装:
 
-```
+```py
 $ python
 >>> import keras
 Using TensorFlow backend.
@@ -451,7 +451,7 @@ Using TensorFlow backend.
 
 现在，让我们退出 Python shell，然后在进入*“第 7 步”*之前停用环境:
 
-```
+```py
 >>> exit()
 $ deactivate
 
@@ -481,7 +481,7 @@ $ deactivate
 
 让我们继续下载 OpenCV(我们将使用版本 3.4.4):
 
-```
+```py
 $ cd ~
 $ wget -O opencv.zip https://github.com/opencv/opencv/archive/3.4.4.zip
 $ wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/3.4.4.zip
@@ -490,7 +490,7 @@ $ wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/3.
 
 然后解压缩归档文件:
 
-```
+```py
 $ unzip opencv.zip
 $ unzip opencv_contrib.zip
 
@@ -498,7 +498,7 @@ $ unzip opencv_contrib.zip
 
 我喜欢重命名目录，这样我们的路径将是相同的，即使您使用的是 OpenCV 3 . 4 . 4 以外的版本:
 
-```
+```py
 $ mv opencv-3.4.4 opencv
 $ mv opencv_contrib-3.4.4 opencv_contrib
 
@@ -508,7 +508,7 @@ $ mv opencv_contrib-3.4.4 opencv_contrib
 
 `mxnet`虚拟环境将包含完全独立于我们的`dl4cv`环境的包:
 
-```
+```py
 $ mkvirtualenv mxnet -p python3
 
 ```
@@ -521,7 +521,7 @@ $ mkvirtualenv mxnet -p python3
 
 我们可以继续将 DL4CV 所需的软件包安装到环境中:
 
-```
+```py
 $ pip install numpy scipy matplotlib pillow
 $ pip install imutils h5py requests progressbar2
 $ pip install scikit-learn scikit-image
@@ -530,7 +530,7 @@ $ pip install scikit-learn scikit-image
 
 让我们用 cmake 配置 OpenCV:
 
-```
+```py
 $ cd ~/opencv
 $ mkdir build
 $ cd build
@@ -551,7 +551,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 假设您的输出与我的匹配，让我们开始编译过程:
 
-```
+```py
 $ make -j4
 
 ```
@@ -560,7 +560,7 @@ $ make -j4
 
 当 OpenCV 被 100%编译后，还有一些子步骤要执行，从我们实际的安装命令开始:
 
-```
+```py
 $ sudo make install
 $ sudo ldconfig
 
@@ -568,7 +568,7 @@ $ sudo ldconfig
 
 您可以通过以下方式确认 OpenCV 已成功安装:
 
-```
+```py
 $ pkg-config --modversion opencv
 3.4.4
 
@@ -580,7 +580,7 @@ $ pkg-config --modversion opencv
 
 让我们现在就着手解决这个问题:
 
-```
+```py
 $ cd /usr/local/python/cv2/python-3.6
 $ ls
 cv2.cpython-36m-x86_64-linux-gnu.so
@@ -589,7 +589,7 @@ cv2.cpython-36m-x86_64-linux-gnu.so
 
 现在让我们把。因此，文件到一些更有意义的东西+创建一个符号链接到我们的 mxnet 站点包:
 
-```
+```py
 $ sudo mv cv2.cpython-36m-x86_64-linux-gnu.so cv2.opencv3.4.4.so
 $ cd ~/.virtualenvs/mxnet/lib/python3.6/site-packages
 $ ln -s /usr/local/python/cv2/python-3.6/cv2.opencv3.4.4.so cv2.so
@@ -600,7 +600,7 @@ $ ln -s /usr/local/python/cv2/python-3.6/cv2.opencv3.4.4.so cv2.so
 
 为了测试 OpenCV 是否正确安装和链接，在 mxnet 环境中启动一个 Python shell:
 
-```
+```py
 $ cd ~
 $ workon mxnet
 $ python
@@ -618,7 +618,7 @@ $ python
 
 解决方案是移除 gcc 和 g++ 符号链接:
 
-```
+```py
 $ cd /usr/bin
 $ sudo rm gcc g++
 
@@ -626,7 +626,7 @@ $ sudo rm gcc g++
 
 然后创建新的，这次指向 gcc-6 和`g++-6`:
 
-```
+```py
 $ sudo ln -s gcc-6 gcc
 $ sudo ln -s g++-6 g++
 
@@ -636,7 +636,7 @@ $ sudo ln -s g++-6 g++
 
 继续克隆 mxnet 存储库，并检查版本 1.3:
 
-```
+```py
 $ cd ~
 $ git clone --recursive --no-checkout https://github.com/apache/incubator-mxnet.git mxnet
 $ cd mxnet
@@ -647,7 +647,7 @@ $ git submodule update --init
 
 随着 mxnet 1.3 版本的发布，我们将编译支持 BLAS、OpenCV、CUDA 和 cuDNN 的 mxnet:
 
-```
+```py
 $ workon mxnet
 $ make -j4 USE_OPENCV=1 USE_BLAS=openblas USE_CUDA=1 USE_CUDA_PATH=/usr/local/cuda USE_CUDNN=1
 
@@ -657,7 +657,7 @@ $ make -j4 USE_OPENCV=1 USE_BLAS=openblas USE_CUDA=1 USE_CUDA_PATH=/usr/local/cu
 
 然后，我们将为 mxnet 创建一个到虚拟环境站点包的符号链接:
 
-```
+```py
 $ cd ~/.virtualenvs/mxnet/lib/python3.6/site-packages/
 $ ln -s ~/mxnet/python/mxnet mxnet
 
@@ -667,7 +667,7 @@ $ ln -s ~/mxnet/python/mxnet mxnet
 
 让我们继续测试我们的 mxnet 安装:
 
-```
+```py
 $ workon mxnet
 $ cd ~
 $ python
@@ -680,7 +680,7 @@ $ python
 
 现在 mxnet 已经完成了编译，我们可以重置我们的 gcc 和 g++ 符号链接来使用 v7:
 
-```
+```py
 $ cd /usr/bin
 $ sudo rm gcc g++
 $ sudo ln -s gcc-7 gcc
@@ -690,7 +690,7 @@ $ sudo ln -s g++-7 g++
 
 我们也可以从我们的主文件夹中删除 OpenCV 源代码:
 
-```
+```py
 $ cd ~
 $ rm -rf opencv/
 $ rm -rf opencv_contrib/
@@ -709,7 +709,7 @@ $ rm -rf opencv_contrib/
 
 让我们回顾一下 CMake 标志:
 
-```
+```py
 $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 	-D CMAKE_INSTALL_PREFIX=/usr/local \
 	-D INSTALL_PYTHON_EXAMPLES=ON \
@@ -728,7 +728,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 一旦安装完毕(通过`make`命令)，我们需要将文件`opencv4.pc`从`/usr/local/lib`符号链接到默认的`/usr/share/pkgconfig`文件夹:
 
-```
+```py
 $ cd /usr/share/pkgconfig
 $ ln -s /usr/local/lib/opencv4.pc opencv4.pc
 

@@ -80,7 +80,7 @@ SRGANs 中的**突出因素**是感知损失函数。虽然生成器和鉴别器
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 $ pip install tensorflow
 ```
@@ -114,7 +114,7 @@ $ pip install tensorflow
 
 从这里，看一下目录结构:
 
-```
+```py
 !tree .
 .
 ├── create_tfrecords.py
@@ -157,7 +157,7 @@ $ pip install tensorflow
 
 在实施 SRGAN 时，有许多因素在起作用。为此，我们创建了一个在整个项目中使用的全局配置文件。让我们转到位于`pyimagesearch`目录中的`config.py`文件。
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -211,7 +211,7 @@ STEPS_PER_EPOCH = 10
 *   `FINETUNE_EPOCHS`:用于微调的时期数
 *   `STEPS_PER_EPOCH`:定义每个时期运行的步数
 
-```
+```py
 # define the path to the dataset
 BASE_DATA_PATH = "dataset"
 DIV2K_PATH = os.path.join(BASE_DATA_PATH, "div2k")
@@ -269,7 +269,7 @@ GRID_IMAGE_PATH = os.path.join(BASE_IMAGE_PATH, "grid.png")
 
 我们创建了一系列函数来帮助我们扩充数据集。
 
-```
+```py
 # import the necessary packages
 from tensorflow.io import FixedLenFeature
 from tensorflow.io import parse_single_example
@@ -321,7 +321,7 @@ def random_crop(lrImage, hrImage, hrCropSize=96, scale=4):
 
 使用这些值，我们裁剪出低分辨率图像及其对应的高分辨率图像并返回它们(**第 28-34 行**)。
 
-```
+```py
 def get_center_crop(lrImage, hrImage, hrCropSize=96, scale=4):
     # calculate the low resolution image crop size and image shape
     lrCropSize = hrCropSize // scale
@@ -360,7 +360,7 @@ def get_center_crop(lrImage, hrImage, hrCropSize=96, scale=4):
 
 在第**行第 50-53** 行，我们得到低分辨率和高分辨率图像的中心裁剪并返回它们。
 
-```
+```py
 def random_flip(lrImage, hrImage):
     # calculate a random chance for flip
     flipProb = tf.random.uniform(shape=(), maxval=1)
@@ -376,7 +376,7 @@ def random_flip(lrImage, hrImage):
 
 基于使用`tf.random.uniform`的翻转概率值，我们翻转我们的图像并返回它们。
 
-```
+```py
 def random_rotate(lrImage, hrImage):
     # randomly generate the number of 90 degree rotations
     n = tf.random.uniform(shape=(), maxval=4, dtype=tf.int32)
@@ -391,7 +391,7 @@ def random_rotate(lrImage, hrImage):
 
 **行 68** 上的`random_rotate`功能将根据`tf.random.uniform` ( **行 70-77** )产生的值随机旋转一对高分辨率和低分辨率图像。
 
-```
+```py
 def read_train_example(example):
     # get the feature template and  parse a single image according to
     # the feature template
@@ -410,7 +410,7 @@ def read_train_example(example):
 
 我们从示例集中解析低分辨率和高分辨率图像(**第 86-90 行**)。
 
-```
+```py
     # perform data augmentation
     (lrImage, hrImage) = random_crop(lrImage, hrImage)
     (lrImage, hrImage) = random_flip(lrImage, hrImage)
@@ -428,7 +428,7 @@ def read_train_example(example):
 
 一旦我们的图像被增强，我们就将图像重新整形为我们需要的输入和输出大小(**行 98 和 99** )。
 
-```
+```py
 def read_test_example(example):
     # get the feature template and  parse a single image according to
     # the feature template
@@ -455,7 +455,7 @@ def read_test_example(example):
 
 我们创建一个类似的函数`read_test_example`，来读取一个推理图像集。从先前创建的`read_train_example`开始重复所有步骤。例外的是，由于这是为了我们的推断，我们不对数据进行任何扩充(**行 **104-125**** )。
 
-```
+```py
 def load_dataset(filenames, batchSize, train=False):
     # get the TFRecords from the filenames
     dataset = tf.data.TFRecordDataset(filenames, 
@@ -506,7 +506,7 @@ def load_dataset(filenames, batchSize, train=False):
 
 为此，让我们转到位于`pyimagesearch`目录中的`losses.py`脚本。
 
-```
+```py
 # import necessary packages
 from tensorflow.keras.losses import MeanSquaredError
 from tensorflow.keras.losses import BinaryCrossentropy
@@ -533,7 +533,7 @@ class Losses:
 
 创建一个二元交叉熵对象，并计算损失(**第 13 行和第 14 行**)。然后计算整批的损失(**第 17 行**)。
 
-```
+```py
     def mse_loss(self, real, pred):
         # compute mean squared error loss without reduction
         MSE = MeanSquaredError(reduction=Reduction.NONE)
@@ -556,7 +556,7 @@ class Losses:
 
 为了开始实现 SRGAN 架构，让我们转到位于`pyimagesearch`目录中的`srgan.py`。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.layers import BatchNormalization
 from tensorflow.keras.layers import GlobalAvgPool2D
@@ -588,7 +588,7 @@ class SRGAN(object):
 
 在**的第 18 行和第 19 行**，我们定义了生成器的输入，并将像素重新缩放到`0`和`1`的范围。
 
-```
+```py
         # pass the input through CONV => PReLU block
         xIn = Conv2D(featureMaps, 9, padding="same")(xIn)
         xIn = PReLU(shared_axes=[1, 2])(xIn)
@@ -608,7 +608,7 @@ class SRGAN(object):
 
 这里的最后一步是将我们的输入`xIn`与剩余块输出`x`相加，以完成剩余块网络(**行 31** )。
 
-```
+```py
         # create a number of residual blocks
         for _ in range(residualBlocks - 1):
             x = Conv2D(featureMaps, 3, padding="same")(xSkip)
@@ -628,7 +628,7 @@ class SRGAN(object):
 
 一旦在循环之外，我们在添加跳过连接(**第 43-45 行**)之前添加最后的`Conv2D`和批处理规范化层。
 
-```
+```py
         # upscale the image with pixel shuffle
         x = Conv2D(featureMaps * (scalingFactor // 2), 3, padding="same")(x)
         x = depth_to_space(x, 2)
@@ -661,7 +661,7 @@ class SRGAN(object):
 
 这就结束了我们的生成器，所以我们简单地初始化生成器并返回它(**第 63-66 行**)。
 
-```
+```py
     @staticmethod
     def discriminator(featureMaps, leakyAlpha, discBlocks):
         # initialize the input layer and process it with conv kernel
@@ -689,7 +689,7 @@ class SRGAN(object):
 
 接下来，我们创建一个 3 层的组合:第`Conv2D`层，接着是批量标准化，最后是一个`LeakyReLU`函数(**第 80-82 行**)。你会发现这种组合重复了很多次。
 
-```
+```py
         # create a number of discriminator blocks
         for i in range(1, discBlocks):
             # first CONV => BN => LeakyReLU block
@@ -706,7 +706,7 @@ class SRGAN(object):
 
 基于之前的`discBlocks`值，我们开始一个循环，并不断添加鉴别器块。每个鉴别器块包含重复两次的`Conv2D` → `BatchNormalization` → `LeakyReLU`组合(**第 85-95 行**)。
 
-```
+```py
         # process the feature maps with global average pooling
         x = GlobalAvgPool2D()(x)
         x = LeakyReLU(leakyAlpha)(x)
@@ -731,7 +731,7 @@ class SRGAN(object):
 
 正如本博客开头所解释的，SRGAN 训练需要同时进行两次损失；VGG 含量的损失以及 GAN 的损失。让我们转到`pyimagesearch`目录中的`srgan_training`脚本。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras import Model
 from tensorflow import GradientTape
@@ -762,7 +762,7 @@ class SRGANTraining(Model):
 
 在第**行第 14-17** 行，我们简单地通过将类的生成器、鉴别器、VGG 和批处理大小值赋给参数来初始化它们。
 
-```
+```py
     def compile(self, gOptimizer, dOptimizer, bceLoss, mseLoss):
         super().compile()
         # initialize the optimizers for the generator 
@@ -784,7 +784,7 @@ class SRGANTraining(Model):
 
 该函数的其余部分初始化相应的类变量(**第 23-28 行**)。
 
-```
+```py
     def train_step(self, images):
         # grab the low and high resolution images
         (lrImages, hrImages) = images
@@ -813,7 +813,7 @@ class SRGANTraining(Model):
 
 对于我们的鉴别器训练，我们必须为这组组合图像创建标签。生成器生成的假图像将有一个标签`0`，而真正的高分辨率图像将有一个标签`1` ( **第 45-47 行**)。
 
-```
+```py
         # train the discriminator
         with GradientTape() as tape:
             # get the discriminator predictions
@@ -844,7 +844,7 @@ class SRGANTraining(Model):
 
 为了计算发电机重量，我们必须将发电机生成的图像标记为真实图像(**行 68** )。
 
-```
+```py
         # train the generator (note that we should *not* update the
         #  weights of the discriminator)!
         with GradientTape() as tape:
@@ -907,7 +907,7 @@ class SRGANTraining(Model):
 
 首先，让我们转到位于`pyimagesearch`目录中的`vgg.py`脚本。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.applications import VGG19
 from tensorflow.keras import Model
@@ -930,7 +930,7 @@ class VGG:
 
 在培训结束前，我们还有一个脚本要检查。为了帮助评估我们的输出图像，我们创建了一个放大脚本。为此，让我们转到位于`pyimagesearch`目录中的`utils.py`。
 
-```
+```py
 # import the necessary packages
 from . import config
 from matplotlib.pyplot import subplots
@@ -993,7 +993,7 @@ def zoom_into_images(image, imageTitle):
 
 完成所有必需的脚本后，最后一步是执行培训流程。为此，让我们进入根目录中的`train_srgan.py`脚本。
 
-```
+```py
 # USAGE
 # python train_srgan.py --device tpu
 # python train_srgan.py --device gpu
@@ -1028,7 +1028,7 @@ args = vars(ap.parse_args())
 
 创建一个参数解析器来接收来自用户的设备选择输入(**行 26-30** )。
 
-```
+```py
 # check if we are using TPU, if so, initialize the TPU strategy
 if args["device"] == "tpu":
     # initialize the TPUs
@@ -1082,7 +1082,7 @@ else:
 
 如果用户既没有给出`gpu`也没有给出`tpu`选择，程序简单地退出(**第 64-67 行**)。
 
-```
+```py
 # display the number of accelerators
 print("[INFO] number of accelerators: {}..."
     .format(strategy.num_replicas_in_sync))
@@ -1123,7 +1123,7 @@ with strategy.scope():
 
 为了获得更好的结果，我们在**线 99 和 100** 上对发电机网络进行了预处理。
 
-```
+```py
 # check whether output model directory exists, if it doesn't, then
 # create it
 if args["device"] == "gpu" and not os.path.exists(config.BASE_OUTPUT_PATH):
@@ -1185,7 +1185,7 @@ srgan.generator.save(genPath)
 
 我们的训练结束了，让我们看看结果吧！为此，我们将转向`inference.py`脚本。
 
-```
+```py
 # USAGE
 # python inference.py --device gpu
 # python inference.py --device tpu
@@ -1215,7 +1215,7 @@ args = vars(ap.parse_args())
 
 正如在训练脚本中所做的，我们需要创建另一个参数解析器，它从用户那里接受设备(TPU 或 GPU)的选择(**行 21-25** )。
 
-```
+```py
 # check if we are using TPU, if so, initialize the strategy
 # accordingly
 if args["device"] == "tpu":
@@ -1257,7 +1257,7 @@ else:
 
 下一步同样与训练步骤相同。根据设备的选择，我们初始化集群(用于 TPU)、策略(用于 GPU 和 TPU)和路径，同时为脚本设置退出子句(**第 27-63 行**)。
 
-```
+```py
 # get the dataset
 print("[INFO] loading the test dataset...")
 testTfr = glob(tfrTestPath + "/*.tfrec")
@@ -1283,7 +1283,7 @@ with strategy.scope():
 
 使用`next(iter())`，我们得到第一批测试图像(**第 71 行**)。接下来，预训练的 SRGAN 和完全训练的 SRGAN 模型权重被加载和初始化，第一个低分辨率图像通过它们(**第 74-83 行**)。
 
-```
+```py
 # plot the respective predictions
 print("[INFO] plotting the SRGAN predictions...")
 (fig, axes) = subplots(nrows=config.INFER_BATCH_SIZE, ncols=4,
@@ -1311,7 +1311,7 @@ for (ax, lowRes, srPreIm, srGanIm, highRes) in zip(axes, lrImage,
 
 在第 87 和 88 行上，我们初始化子情节。然后，循环子图的列，我们绘制低分辨率图像、SRGAN 预训练结果、完全 SRGAN 超分辨率图像和原始高分辨率图像(**第 91-107 行**)。
 
-```
+```py
 # check whether output image directory exists, if it doesn't, then
 # create it
 if not os.path.exists(config.BASE_IMAGE_PATH):
@@ -1354,7 +1354,7 @@ SRGANs 通过将传统 GAN 元素与旨在提高视觉性能的配方相结合�
 
 ****Chakraborty，D.**** 【超分辨率生成对抗网络(SRGAN)】*PyImageSearch*，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva，R. Raha，A. Thanki 合编。，2022 年，[https://pyimg.co/lgnrx](https://pyimg.co/lgnrx)
 
-```
+```py
 @incollection{Chakraborty_2022_SRGAN,
   author = {Devjyoti Chakraborty},
   title = {Super-Resolution Generative Adversarial Networks {(SRGAN)}},

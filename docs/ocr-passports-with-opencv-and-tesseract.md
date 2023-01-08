@@ -66,7 +66,7 @@ MRZs 允许 TSA 代理快速扫描您的信息，验证您的身份，并使您�
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -95,7 +95,7 @@ $ pip install opencv-contrib-python
 
 在我们构建 MRZ 阅读器和扫描护照图像之前，让我们先回顾一下这个项目的目录结构:
 
-```
+```py
 |-- passports
 |   |-- passport_01.png
 |   |-- passport_02.png
@@ -112,7 +112,7 @@ $ pip install opencv-contrib-python
 
 打开项目目录结构中的`ocr_passport.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils.contours import sort_contours
 import numpy as np
@@ -139,7 +139,7 @@ args = vars(ap.parse_args())
 
 完成导入和命令行参数后，我们可以继续加载输入图像，并为 MRZ 检测做准备:
 
-```
+```py
 # load the input image, convert it to grayscale, and grab its
 # dimensions
 image = cv2.imread(args["image"])
@@ -170,7 +170,7 @@ blackhat 算子用于显示亮背景(即护照背景)下的暗区域(即 MRZ 文
 
 MRZ 检测的下一步是使用 Scharr 算子计算 blackhat 图像的梯度幅度表示:
 
-```
+```py
 # compute the Scharr gradient of the blackhat image and scale the
 # result into the range [0, 255]
 grad = cv2.Sobel(blackhat, ddepth=cv2.CV_32F, dx=1, dy=0, ksize=-1)
@@ -185,7 +185,7 @@ cv2.imshow("Gradient", grad)
 
 下一步是尝试检测 MRZ 的实际*线*:
 
-```
+```py
 # apply a closing operation using the rectangular kernel to close
 # gaps in between letters -- then apply Otsu's thresholding method
 grad = cv2.morphologyEx(grad, cv2.MORPH_CLOSE, rectKernel)
@@ -211,7 +211,7 @@ cv2.imshow("Square Close", thresh)
 
 现在我们的 MRZ 区域可见了，让我们在`thresh`图像中找到轮廓——这个过程将允许我们检测和提取 MRZ 区域:
 
-```
+```py
 # find contours in the thresholded image and sort them from bottom
 # to top (since the MRZ will always be at the bottom of the passport)
 cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
@@ -233,7 +233,7 @@ mrzBox = None
 
 我们将尝试在下面的代码块中找到`mrzBox`:
 
-```
+```py
 # loop over the contours
 for c in cnts:
 	# compute the bounding box of the contour and then derive the
@@ -258,7 +258,7 @@ for c in cnts:
 
 我们现在可以继续处理 MRZ 地区本身:
 
-```
+```py
 # if the MRZ was not found, exit the script
 if mrzBox is None:
 	print("[INFO] MRZ could not be found")
@@ -288,7 +288,7 @@ mrz = image[y:y + h, x:x + w]
 
 提取 MRZ 后，最后一步是应用 Tesseract 对其进行 OCR:
 
-```
+```py
 # OCR the MRZ region of interest using Tesseract, removing any
 # occurrences of spaces
 mrzText = pytesseract.image_to_string(mrz)
@@ -310,7 +310,7 @@ cv2.waitKey(0)
 
 打开终端并执行以下命令:
 
-```
+```py
 $ python ocr_passport.py --image passports/passport_01.png
 P<GBRJENNINGS<<PAUL<MICHAEL<<<<<<<<<<<<<<<<<
 0123456784GBR5011025M0810050<<<<<<<<<<<<<<00
@@ -320,7 +320,7 @@ P<GBRJENNINGS<<PAUL<MICHAEL<<<<<<<<<<<<<<<<<
 
 让我们尝试另一个护照图像，这是一个有三条 MRZ 线而不是两条的 Type-1 护照:
 
-```
+```py
 $ python ocr_passport.py --image passports/passport_02.png
 IDBEL590335801485120100200<<<<
 8512017F0901015BEL<<<<<<<<<<<7

@@ -41,7 +41,7 @@ and ![t_y](img/8d27e3785797f44734d90a888804bc13.png "t_y")values:
 
  *例如，假设我们想将一幅图像向右*移动 25 像素*，向下移动 50 像素*。我们的转换矩阵如下所示(实现为 NumPy 数组):*
 
-```
+```py
 M = np.float32([
 	[1, 0, 25],
 	[0, 1, 50]
@@ -50,7 +50,7 @@ M = np.float32([
 
 现在，如果我们想将一幅图像向左*移动 7 个像素*并向上*移动 23 个像素*，我们的平移矩阵将如下所示:
 
-```
+```py
 M = np.float32([
 	[1, 0, -7],
 	[0, 1, -23]
@@ -59,7 +59,7 @@ M = np.float32([
 
 作为最后一个例子，假设我们想把我们的图像向左*平移 30 像素*，向下*平移 12 像素*:
 
-```
+```py
 M = np.float32([
 	[1, 0, -30],
 	[0, 1, 12]
@@ -70,7 +70,7 @@ M = np.float32([
 
 一旦定义了变换矩阵，我们就可以使用`cv2.warpAffine`函数简单地执行图像转换，就像这样:
 
-```
+```py
 shifted = cv2.warpAffine(image, M, (image.shape[1], image.shape[0]))
 ```
 
@@ -82,7 +82,7 @@ shifted = cv2.warpAffine(image, M, (image.shape[1], image.shape[0]))
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -107,7 +107,7 @@ $ pip install opencv-contrib-python
 
 在我们使用 OpenCV 执行图像翻译之前，让我们首先回顾一下我们的项目目录结构:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── opencv_logo.png
@@ -128,7 +128,7 @@ $ tree . --dirsfirst
 
 通过一些代码可以更好地解释这个概念:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -142,13 +142,13 @@ import cv2
 
 如果您的机器上还没有安装`imutils`，您可以使用`pip`安装它:
 
-```
+```py
 $ pip install imutils
 ```
 
 现在让我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", type=str, default="opencv_logo.png",
@@ -160,7 +160,7 @@ args = vars(ap.parse_args())
 
 现在让我们从磁盘加载我们的映像，并执行我们的第一次转换:
 
-```
+```py
 # load the image and display it to our screen
 image = cv2.imread(args["image"])
 cv2.imshow("Original", image)
@@ -177,7 +177,7 @@ cv2.imshow("Shifted Down and Right", shifted)
 
 这个矩阵告诉我们图像向左*或向右*或*移动了多少像素，然后图像向上*或向下*移动了多少像素，再次记住平移矩阵的形式为:*
 
-```
+```py
 M = np.float32([
 	[1, 0, shiftX],
 	[0, 1, shiftY]
@@ -204,7 +204,7 @@ and ![t_{y}=50](img/7c555c824931bb218b45749229a55725.png "t_{y}=50"), indicating
 
 让我们研究另一个使用 OpenCV 进行图像翻译的例子。
 
-```
+```py
 # now, let's shift the image 50 pixels to the left and 90 pixels
 # up by specifying negative values for the x and y directions,
 # respectively
@@ -227,7 +227,7 @@ and ![t_{y}](img/c8fd8078898468bb9a226eb3e483eb9d.png "t_{y}"):
 
 这就是我的`imutils`包进来的地方。每次我们想翻译一幅图像时，不必定义我们的矩阵`M`并调用`cv2.warpAffine`，相反，我们可以调用`imutils.translate`来为我们处理操作:
 
-```
+```py
 # use the imutils helper function to translate the image 100 pixels
 # down in a single function call
 shifted = imutils.translate(image, 0, 100)
@@ -247,7 +247,7 @@ cv2.waitKey(0)
 
 然后，您可以执行以下命令:
 
-```
+```py
 $ python opencv_translate.py
 ```
 

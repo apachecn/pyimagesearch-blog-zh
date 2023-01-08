@@ -2,7 +2,7 @@
 
 > 原文：<https://pyimagesearch.com/2016/03/07/transparent-overlays-with-opencv/>
 
-```
+```py
 # import the necessary packages
 from __future__ import print_function
 import numpy as np
@@ -19,7 +19,7 @@ image = cv2.imread("mexico.jpg")
 
 下一步是在范围*【0，1.0】*之间循环不同的 alpha 透明度值，让我们可以直观地理解`alpha`值如何影响我们的输出图像:
 
-```
+```py
 # loop over the alpha transparency values
 for alpha in np.arange(0, 1.1, 0.1)[::-1]:
 	# create two copies of the original image -- one for
@@ -46,7 +46,7 @@ for alpha in np.arange(0, 1.1, 0.1)[::-1]:
 
 我们现在准备使用`cv2.addWeighted`函数应用透明叠加:
 
-```
+```py
 	# apply the overlay
 	cv2.addWeighted(overlay, alpha, output, 1 - alpha,
 		0, output)
@@ -69,7 +69,7 @@ for alpha in np.arange(0, 1.1, 0.1)[::-1]:
 
 我们的最后一个代码块处理向屏幕显示最终输出图像，以及显示相关的 *alpha* 和 *beta* 值:
 
-```
+```py
 	# show the output image
 	print("alpha={}, beta={}".format(alpha, 1 - alpha))
 	cv2.imshow("Output", output)
@@ -79,7 +79,7 @@ for alpha in np.arange(0, 1.1, 0.1)[::-1]:
 
 要执行我们的 Python 脚本，将源代码+示例图像下载到本文(使用本课底部的 ***“下载”*** 表单)并执行以下命令:
 
-```
+```py
 $ python overlay.py
 
 ```

@@ -42,7 +42,7 @@ We have now reached the final installment in our three part series on *measuring
 
 让我们开始这个例子。打开一个新文件，将其命名为`distance_between.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from scipy.spatial import distance as dist
 from imutils import perspective
@@ -67,14 +67,14 @@ args = vars(ap.parse_args())
 
 我们这里的代码与上周几乎相同。我们从在第 2-8 行导入我们需要的 Python 包开始。如果你还没有安装 [imutils 包](https://github.com/jrosebr1/imutils)，现在停止安装它:
 
-```
+```py
 $ pip install imutils
 
 ```
 
 否则，您应该升级到最新版本(`0.3.6`在撰写本文时)，这样您就有了更新的[订单积分函数](https://pyimagesearch.com/2016/03/21/ordering-coordinates-clockwise-with-python-and-opencv/):
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -83,7 +83,7 @@ $ pip install --upgrade imutils
 
 接下来，我们需要预处理我们的图像:
 
-```
+```py
 # load the image, convert it to grayscale, and blur it slightly
 image = cv2.imread(args["image"])
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -117,7 +117,7 @@ refObj = None
 
 然后我们初始化一个用于绘制距离的列表`colors`以及`refObj`变量，它将存储我们的*边界框*、*质心*和*参考对象的每公制像素*值。
 
-```
+```py
 # loop over the contours individually
 for c in cnts:
 	# if the contour is not sufficiently large, ignore it
@@ -151,7 +151,7 @@ for c in cnts:
 
 下一步是校准我们的`refObj`:
 
-```
+```py
 	# if this is the first contour we are examining (i.e.,
 	# the left-most contour), we presume this is the
 	# reference object
@@ -188,7 +188,7 @@ for c in cnts:
 
 我们的下一个代码块处理围绕我们的*参考对象*和我们当前正在检查的*对象*绘制轮廓，然后构造`refCoords`和`objCoords`，使得(1)边界框坐标和(2)质心的 *(x，y)* 坐标包含在相同的数组中:
 
-```
+```py
 	# draw the contours on the image
 	orig = image.copy()
 	cv2.drawContours(orig, [box.astype("int")], -1, (0, 255, 0), 2)
@@ -203,7 +203,7 @@ for c in cnts:
 
 我们现在准备计算图像中各个角和物体质心之间的距离:
 
-```
+```py
 	# loop over the original points
 	for ((xA, yA), (xB, yB), color) in zip(refCoords, objCoords, colors):
 		# draw circles corresponding to the current points and
@@ -241,7 +241,7 @@ for c in cnts:
 
 为了尝试一下我们的距离测量脚本，请使用本教程底部的“下载”表单下载源代码和相应的图片。解压缩`.zip`文件，将目录切换到`distance_between.py`脚本，然后执行以下命令:
 
-```
+```py
 $ python distance_between.py --image images/example_01.png --width 0.955
 
 ```
@@ -258,7 +258,7 @@ $ python distance_between.py --image images/example_01.png --width 0.955
 
 下面是第二个例子，这次计算我们的参考对象和一组药丸之间的距离:
 
-```
+```py
 $ python distance_between.py --image images/example_02.png --width 0.955
 
 ```
@@ -271,7 +271,7 @@ $ python distance_between.py --image images/example_02.png --width 0.955
 
 我们的最后一个例子计算了我们的参考对象(一张 3.5 英寸 x 2 英寸的名片)和一套 7 英寸的黑胶唱片以及一个信封之间的距离:
 
-```
+```py
 $ python distance_between.py --image images/example_03.png --width 3.5
 
 ```

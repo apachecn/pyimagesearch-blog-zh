@@ -303,7 +303,7 @@ HackerFactor 的 Neal Krawetz 博士认为，具有差异 *> 10* 位的散列最
 
 首先，确保您已经安装了我的 [imutils 包](https://github.com/jrosebr1/imutils)，这是一系列方便的函数，可以使 OpenCV 的使用更加容易(并且确保您可以访问您的 Python 虚拟环境，假设您正在使用它):
 
-```
+```py
 $ workon cv
 $ pip install imutils
 
@@ -311,7 +311,7 @@ $ pip install imutils
 
 从那里，打开一个新文件，命名为`hash_and_search.py`，我们将得到编码:
 
-```
+```py
 # import the necessary packages
 from imutils import paths
 import argparse
@@ -326,7 +326,7 @@ import os
 
 从这里开始，让我们定义`dhash`函数，它将包含我们的*差分散列*实现:
 
-```
+```py
 def dhash(image, hashSize=8):
 	# resize the input image, adding a single column (width) so we
 	# can compute the horizontal gradient
@@ -353,7 +353,7 @@ def dhash(image, hashSize=8):
 
 既然已经定义了我们的`dhash`函数，让我们继续解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-a", "--haystack", required=True,
@@ -373,7 +373,7 @@ args = vars(ap.parse_args())
 
 现在让我们开始加载`--haystack`和`--needles`图像路径:
 
-```
+```py
 # grab the paths to both the haystack and needle images 
 print("[INFO] computing hashes for haystack...")
 haystackPaths = list(paths.list_images(args["haystack"]))
@@ -395,7 +395,7 @@ if sys.platform != "win32":
 
 ***注意:**Windows 操作系统使用`\`来分隔路径，而 Unix 系统使用`/`。Windows 系统在路径中自然会有一个`\`，因此我在**行 36** 上做了这个检查。我还没有在 Windows 上测试过这段代码——这只是我对它在 Windows 中应该如何处理的“最佳猜测”。用户小心。*
 
-```
+```py
 # grab the base subdirectories for the needle paths, initialize the
 # dictionary that will map the image hash to corresponding image,
 # hashes, then start the timer
@@ -411,7 +411,7 @@ start = time.time()
 
 我们现在准备为我们的`haystackPaths`提取图像散列:
 
-```
+```py
 # loop over the haystack paths
 for p in haystackPaths:
 	# load the image from disk
@@ -441,7 +441,7 @@ for p in haystackPaths:
 
 下一个代码块显示了散列过程的一些诊断信息:
 
-```
+```py
 # show timing for hashing haystack images, then start computing the
 # hashes for needle images
 print("[INFO] processed {} images in {:.2f} seconds".format(
@@ -452,7 +452,7 @@ print("[INFO] computing hashes for needles...")
 
 然后我们可以继续从我们的`needlePaths`中提取哈希值:
 
-```
+```py
 # loop over the needle paths
 for p in needlePaths:
 	# load the image from disk
@@ -498,7 +498,7 @@ for p in needlePaths:
 
 我们的最终代码块遍历了`BASE_PATHS`中所有剩余的子目录，并让我知道哪些仍然需要手动调查并添加到 iPhoto 中:
 
-```
+```py
 # display directories to check
 print("[INFO] check the following directories...")
 
@@ -525,7 +525,7 @@ for b in BASE_PATHS:
 
 为了确定我还需要检查哪些目录(即“needles”)并在以后添加到“haystack”中，我打开了一个终端并执行了以下命令:
 
-```
+```py
 $ python hash_and_search.py --haystack haystack --needles needles
 [INFO] computing hashes for haystack...
 [INFO] processed 7466 images in 1111.63 seconds
@@ -544,7 +544,7 @@ $ python hash_and_search.py --haystack haystack --needles needles
 
 正如我上面提到的，我是*而不是*，包括我在本帖*【下载】*中的个人照片档案。如果您对我在下载中提供的示例执行`hash_and_search.py`脚本，您的结果将如下所示:
 
-```
+```py
 $ python hash_and_search.py --haystack haystack --needles needles
 [INFO] computing hashes for haystack...
 [INFO] processed 1000 images in 7.43 seconds

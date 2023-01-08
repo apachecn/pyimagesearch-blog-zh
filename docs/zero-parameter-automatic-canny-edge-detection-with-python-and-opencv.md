@@ -45,7 +45,7 @@ Canny 边缘检测算法可以分为 5 个步骤:
 
 让我们开始吧。在您最喜欢的代码编辑器中打开一个新文件，命名为`auto_canny.py`，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -82,7 +82,7 @@ def auto_canny(image, sigma=0.33):
 
 让我们继续看这个例子，看看如何将它应用到我们的图像中:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--images", required=True,
@@ -127,7 +127,7 @@ for imagePath in glob.glob(args["images"] + "/*.jpg"):
 
 打开终端并执行以下命令:
 
-```
+```py
 $ python auto_canny.py --images images
 
 ```

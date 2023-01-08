@@ -81,7 +81,7 @@
 
 一旦你下载了这篇博文的归档文件，把它解压到一个方便的地方。从这里我们来看一下项目目录结构:
 
-```
+```py
 $ tree --filelimit 10
 .
 ├── kaggle_dogs_vs_cats
@@ -136,7 +136,7 @@ Kaggle 数据集包含在`kaggle_dogs_vs_cats/train`目录中(它来自 [Kaggle 
 
 打开一个新文件，命名为`knn_classifier.py`，让我们开始编码:
 
-```
+```py
 # import the necessary packages
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
@@ -155,14 +155,14 @@ import os
 
 其次，我们将使用 [imutils 库](https://github.com/jrosebr1/imutils)，这是我创建的一个包，用来存储常见的计算机视觉处理函数。如果您还没有安装`imutils`,您现在就想安装:
 
-```
+```py
 $ pip install imutils
 
 ```
 
 接下来，我们将定义两种方法来获取输入图像并将其转换为[特征向量](https://pyimagesearch.com/2014/03/03/charizard-explains-describe-quantify-image-using-feature-vectors/)，或者量化图像内容的数字列表。第一种方法如下图所示:
 
-```
+```py
 def image_to_feature_vector(image, size=(32, 32)):
 	# resize the image to a fixed size, then flatten the image into
 	# a list of raw pixel intensities
@@ -182,7 +182,7 @@ def image_to_feature_vector(image, size=(32, 32)):
 
 然后我们定义第二个方法，这个方法叫做`extract_color_histogram`:
 
-```
+```py
 def extract_color_histogram(image, bins=(8, 8, 8)):
 	# extract a 3D color histogram from the HSV color space using
 	# the supplied number of `bins` per channel
@@ -214,7 +214,7 @@ def extract_color_histogram(image, bins=(8, 8, 8)):
 
 接下来，让我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -237,7 +237,7 @@ args = vars(ap.parse_args())
 
 我们现在准备好为特征提取准备我们的图像:
 
-```
+```py
 # grab the list of images that we'll be describing
 print("[INFO] describing images...")
 imagePaths = list(paths.list_images(args["dataset"]))
@@ -256,7 +256,7 @@ labels = []
 
 让我们继续从数据集中提取要素:
 
-```
+```py
 # loop over the input images
 for (i, imagePath) in enumerate(imagePaths):
 	# load the image and extract the class label (assuming that our
@@ -292,7 +292,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 您可能会好奇我们的`rawImages`和`features`矩阵占用了多少内存——下面的代码块会在执行时告诉我们:
 
-```
+```py
 # show some information on the memory consumed by the raw images
 # matrix and features matrix
 rawImages = np.array(rawImages)
@@ -309,7 +309,7 @@ print("[INFO] features matrix: {:.2f}MB".format(
 
 接下来，我们需要将我们的数据分区分成两部分——一部分用于*训练*，另一部分用于*测试*:
 
-```
+```py
 # partition the data into training and testing splits, using 75%
 # of the data for training and the remaining 25% for testing
 (trainRI, testRI, trainRL, testRL) = train_test_split(
@@ -323,7 +323,7 @@ print("[INFO] features matrix: {:.2f}MB".format(
 
 让我们将 k-NN 分类器应用于原始像素强度:
 
-```
+```py
 # train and evaluate a k-NN classifer on the raw pixel intensities
 print("[INFO] evaluating raw pixel accuracy...")
 model = KNeighborsClassifier(n_neighbors=args["neighbors"],
@@ -340,7 +340,7 @@ print("[INFO] raw pixel accuracy: {:.2f}%".format(acc * 100))
 
 以类似的方式，我们也可以在直方图表示上训练和评估 k-NN 分类器:
 
-```
+```py
 # train and evaluate a k-NN classifer on the histogram
 # representations
 print("[INFO] evaluating histogram accuracy...")
@@ -360,7 +360,7 @@ print("[INFO] histogram accuracy: {:.2f}%".format(acc * 100))
 
 从那里，只需执行以下命令:
 
-```
+```py
 $ python knn_classifier.py --dataset kaggle_dogs_vs_cats
 
 ```

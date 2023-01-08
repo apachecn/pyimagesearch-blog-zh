@@ -54,7 +54,7 @@ Mask R-CNN 算法基于之前更快的 R-CNN，使网络不仅能够执行*对�
 
 继续使用今天博客文章的 ***【下载】*** 部分下载代码和预先训练好的模型。让我们检查一下我们的 Keras Mask R-CNN 项目结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── images
@@ -84,7 +84,7 @@ Keras + Mask R-CNN 安装过程用 pip、git 和`setup.py`直接引用。我建�
 
 首先，安装所需的 Python 包:
 
-```
+```py
 $ pip install numpy scipy
 $ pip install pillow scikit-image matplotlib imutils
 $ pip install "IPython[all]"
@@ -97,14 +97,14 @@ $ pip install keras h5py
 
 从那里，继续安装 OpenCV，或者通过 pip 编译[或者从源代码](https://pyimagesearch.com/2018/09/19/pip-install-opencv/)编译[:](https://pyimagesearch.com/opencv-tutorials-resources-guides/)
 
-```
+```py
 $ pip install opencv-contrib-python
 
 ```
 
 接下来，我们将在 Keras 中安装掩码 R-CNN 的 [Matterport 实现:](https://github.com/matterport/Mask_RCNN)
 
-```
+```py
 $ git clone https://github.com/matterport/Mask_RCNN.git
 $ cd Mask_RCNN
 $ python setup.py install
@@ -113,7 +113,7 @@ $ python setup.py install
 
 最后，在您的虚拟环境中启动一个 Python 解释器，以验证 Mask R-CNN + Keras 和 OpenCV 已经成功安装:
 
-```
+```py
 $ python
 >>> import mrcnn
 >>> import cv2
@@ -139,7 +139,7 @@ $ python
 
 打开`maskrcnn_predict.py`并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from mrcnn.config import Config
 from mrcnn import model as modellib
@@ -160,7 +160,7 @@ import os
 
 让我们继续[解析我们的命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-w", "--weights", required=True,
@@ -181,7 +181,7 @@ args = vars(ap.parse_args())
 
 使用第二个参数，让我们继续为每个变量加载我们的`CLASS_NAMES`和`COLORS`:
 
-```
+```py
 # load the class label names from disk, one label per line
 CLASS_NAMES = open(args["labels"]).read().strip().split("\n")
 
@@ -200,7 +200,7 @@ random.shuffle(COLORS)
 
 让我们继续构建我们的`SimpleConfig`类:
 
-```
+```py
 class SimpleConfig(Config):
 	# give the configuration a recognizable name
 	NAME = "coco_inference"
@@ -229,7 +229,7 @@ class SimpleConfig(Config):
 
 接下来，我们将初始化我们的配置并加载我们的模型:
 
-```
+```py
 # initialize the inference configuration
 config = SimpleConfig()
 
@@ -248,7 +248,7 @@ model.load_weights(args["weights"], by_name=True)
 
 让我们继续**执行实例分段:**
 
-```
+```py
 # load the input image, convert it from BGR to RGB channel
 # ordering, and resize the image
 image = cv2.imread(args["image"])
@@ -267,7 +267,7 @@ r = model.detect([image], verbose=1)[0]
 
 剩下的两个代码块将处理结果，以便我们可以使用 OpenCV 可视化对象的边界框和遮罩:
 
-```
+```py
 # loop over of the detected object's bounding boxes and masks
 for i in range(0, r["rois"].shape[0]):
 	# extract the class ID and mask for the current detection, then
@@ -290,7 +290,7 @@ for i in range(0, r["rois"].shape[0]):
 
 从这里开始，我们将为图像中的每个对象绘制边界框和类标签+分数文本:
 
-```
+```py
 # convert the image back to BGR so we can use OpenCV's drawing
 # functions
 image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
@@ -339,7 +339,7 @@ cv2.waitKey()
 
 准备就绪后，打开终端并执行以下命令:
 
-```
+```py
 $ python maskrcnn_predict.py --weights mask_rcnn_coco.h5 --labels coco_labels.txt \
 	--image images/30th_birthday.jpg
 Using TensorFlow backend.
@@ -363,7 +363,7 @@ anchors                  shape: (1, 261888, 4)        min:   -0.35390  max:    1
 
 让我们试试另一个图像:
 
-```
+```py
 $ python maskrcnn_predict.py --weights mask_rcnn_coco.h5 --labels coco_labels.txt \
 	--image images/couch.jpg
 Using TensorFlow backend.
@@ -391,7 +391,7 @@ Mask R-CNN 唯一不能正确标记的图像部分是沙发的背部，它误认
 
 下面是使用 Keras + Mask R-CNN 进行实例分割的另一个示例:
 
-```
+```py
 $ python maskrcnn_predict.py --weights mask_rcnn_coco.h5 --labels coco_labels.txt \
 	--image images/page_az.jpg
 Using TensorFlow backend.
@@ -413,7 +413,7 @@ anchors                  shape: (1, 261888, 4)        min:   -0.35390  max:    1
 
 让我们将遮罩 R-CNN 应用于一个最终图像:
 
-```
+```py
 $ python maskrcnn_predict.py --weights mask_rcnn_coco.h5 --labels coco_labels.txt \
 	--image images/ybor_city.jpg
 Using TensorFlow backend.

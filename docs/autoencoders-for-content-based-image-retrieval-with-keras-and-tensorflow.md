@@ -65,7 +65,7 @@
 
 继续从 ***“下载”*** 部分获取本教程的文件。从那里，提取。zip，并打开文件夹进行检查:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── output
@@ -99,7 +99,7 @@ $ tree --dirsfirst
 
 在`pyimagesearch`模块中打开`convautoencoder.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.layers import BatchNormalization
 from tensorflow.keras.layers import Conv2D
@@ -117,7 +117,7 @@ import numpy as np
 
 导入包括来自`tf.keras`和 NumPy 的选择。接下来我们将继续定义我们的 autoencoder 类:
 
-```
+```py
 class ConvAutoencoder:
 	@staticmethod
 	def build(width, height, depth, filters=(32, 64), latentDim=16):
@@ -154,7 +154,7 @@ class ConvAutoencoder:
 
 从这里开始，我们将构建网络解码器部分的输入:
 
-```
+```py
 		# start building the decoder model which will accept the
 		# output of the encoder as its inputs
 		x = Dense(np.prod(volumeSize[1:]))(latent)
@@ -197,7 +197,7 @@ class ConvAutoencoder:
 
 打开`train_autoencoder.py`脚本，插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -216,7 +216,7 @@ import cv2
 
 为了可视化，我们将在`visualize_predictions`助手函数中使用 OpenCV:
 
-```
+```py
 def visualize_predictions(decoded, gt, samples=10):
 	# initialize our list of output images
 	outputs = None
@@ -257,7 +257,7 @@ def visualize_predictions(decoded, gt, samples=10):
 
 我们需要一些命令行参数来让我们的脚本从我们的终端/命令行运行:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-m", "--model", type=str, required=True,
@@ -277,7 +277,7 @@ args = vars(ap.parse_args())
 
 既然我们的导入、助手函数和命令行参数已经准备好了，我们将准备训练我们的自动编码器:
 
-```
+```py
 # initialize the number of epochs to train for, initial learning rate,
 # and batch size
 EPOCHS = 20
@@ -321,7 +321,7 @@ H = autoencoder.fit(
 
 一旦模型被训练好，我们就可以用它来做预测:
 
-```
+```py
 # use the convolutional autoencoder to make predictions on the
 # testing images, construct the visualization, and then save it
 # to disk
@@ -359,7 +359,7 @@ autoencoder.save(args["model"], save_format="h5")
 
 确保使用本教程的 ***【下载】*** 部分下载源代码，并从那里执行以下命令开始训练过程:
 
-```
+```py
 $ python train_autoencoder.py --model output/autoencoder.h5 \
     --vis output/recon_vis.png --plot output/plot.png
 [INFO] loading MNIST dataset...
@@ -414,7 +414,7 @@ Epoch 20/20
 
 打开目录结构中的`index_images.py`文件，我们将开始:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Model
 from tensorflow.keras.models import load_model
@@ -441,7 +441,7 @@ args = vars(ap.parse_args())
 
 从这里，我们将加载并预处理我们的 MNIST 数字数据:
 
-```
+```py
 # load the MNIST dataset
 print("[INFO] loading MNIST training split...")
 ((trainX, _), (testX, _)) = mnist.load_data()
@@ -456,7 +456,7 @@ trainX = trainX.astype("float32") / 255.0
 
 然后我们将加载我们的自动编码器:
 
-```
+```py
 # load our autoencoder from disk
 print("[INFO] loading autoencoder model...")
 autoencoder = load_model(args["model"])
@@ -479,7 +479,7 @@ features = encoder.predict(trainX)
 
 最后，我们构建了特征数据的字典映射:
 
-```
+```py
 # construct a dictionary that maps the index of the MNIST training
 # image to its corresponding latent-space representation
 indexes = list(range(0, trainX.shape[0]))
@@ -507,7 +507,7 @@ f.close()
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python index_images.py --model output/autoencoder.h5 \
 	--index output/index.pickle
 [INFO] loading MNIST training split...
@@ -518,7 +518,7 @@ $ python index_images.py --model output/autoencoder.h5 \
 
 如果您检查您的`output`目录的内容，您现在应该看到您的`index.pickle`文件:
 
-```
+```py
 $ ls output/*.pickle
 output/index.pickle
 ```
@@ -529,7 +529,7 @@ output/index.pickle
 
 打开`search.py`脚本，插入以下内容:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Model
 from tensorflow.keras.models import load_model
@@ -545,7 +545,7 @@ import cv2
 
 让我们定义一个函数来计算两个特征向量之间的相似性:
 
-```
+```py
 def euclidean(a, b):
 	# compute and return the euclidean distance between two vectors
 	return np.linalg.norm(a - b)
@@ -557,7 +557,7 @@ def euclidean(a, b):
 
 接下来，我们将定义我们的搜索函数:
 
-```
+```py
 def perform_search(queryFeatures, index, maxResults=64):
 	# initialize our list of results
 	results = []
@@ -597,7 +597,7 @@ def perform_search(queryFeatures, index, maxResults=64):
 
 定义了距离度量和搜索工具后，我们现在准备好[解析命令行参数](https://pyimagesearch.com/pyimagesearch-gurus/):
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-m", "--model", type=str, required=True,
@@ -617,7 +617,7 @@ args = vars(ap.parse_args())
 
 现在，让我们加载并预处理我们的数字数据:
 
-```
+```py
 # load the MNIST dataset
 print("[INFO] loading MNIST dataset...")
 ((trainX, _), (testX, _)) = mnist.load_data()
@@ -632,7 +632,7 @@ testX = testX.astype("float32") / 255.0
 
 然后我们将加载我们的自动编码器和索引:
 
-```
+```py
 # load the autoencoder model and index from disk
 print("[INFO] loading autoencoder and index...")
 autoencoder = load_model(args["model"])
@@ -656,7 +656,7 @@ features = encoder.predict(testX)
 
 我们现在将随机抽取一些图像样本，将它们标记为查询:
 
-```
+```py
 # randomly sample a set of testing query image indexes
 queryIdxs = list(range(0, testX.shape[0]))
 queryIdxs = np.random.choice(queryIdxs, size=args["sample"],
@@ -722,7 +722,7 @@ for i in queryIdxs:
 
 从那里，您可以执行`search.py`脚本来执行搜索:
 
-```
+```py
 $ python search.py --model output/autoencoder.h5 \
 	--index output/index.pickle
 [INFO] loading MNIST dataset...

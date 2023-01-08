@@ -42,7 +42,7 @@ OpenCV 4 带有新功能，特别是在深度学习的 DNN 模块中。
 
 Xcode 安装后，我们需要接受许可协议。启动终端并输入以下命令:
 
-```
+```py
 $ sudo xcodebuild -license
 
 ```
@@ -51,7 +51,7 @@ $ sudo xcodebuild -license
 
 一旦你接受了许可协议，让我们安装苹果命令行工具。**这需要****这样你就有了`make``gcc``clang`等等。您可以通过以下方式安装工具:**
 
-```
+```py
 $ sudo xcode-select --install
 
 ```
@@ -68,7 +68,7 @@ $ sudo xcode-select --install
 
 家酿运行在 Ruby 上，这是一种流行的编程语言。准备好之后，复制下面的整个命令来安装 Homebrew:
 
-```
+```py
 $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 ```
@@ -77,7 +77,7 @@ $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/inst
 
 让我们更新自制软件的定义:
 
-```
+```py
 $ brew update
 
 ```
@@ -86,14 +86,14 @@ $ brew update
 
 使用以下命令用 nano 编辑 bash 概要文件:
 
-```
+```py
 $ nano ~/.bash_profile
 
 ```
 
 一旦您正在编辑文件，在末尾添加以下几行来更新您的`PATH`:
 
-```
+```py
 # Homebrew
 export PATH=/usr/local/bin:$PATH
 
@@ -103,7 +103,7 @@ export PATH=/usr/local/bin:$PATH
 
 回到 bash 后，获取 bash 概要文件:
 
-```
+```py
 $ source ~/.bash_profile
 
 ```
@@ -118,7 +118,7 @@ $ source ~/.bash_profile
 
  *这些命令将安装 Python 3.6.5_1:
 
-```
+```py
 $ brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/f2a764ef944b1080be64bd88dca9a1d80130c558/Formula/python.rb
 $ brew switch python 3.6.5_1
 
@@ -128,7 +128,7 @@ $ brew switch python 3.6.5_1
 
 让我们验证一下:
 
-```
+```py
 $ python3
 Python 3.6.5 (default, Jun 17 2018, 12:13:06) 
 [GCC 4.2.1 Compatible Apple LLVM 9.1.0 (clang-902.0.39.2)] on darwin
@@ -141,7 +141,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 让我们再验证一件事:
 
-```
+```py
 $ which python3
 /usr/local/bin/python3
 
@@ -157,7 +157,7 @@ OpenCV 要求在我们编译它之前安装一些先决条件。这些软件包�
 
 要在 macOS 上安装 OpenCV 的这些必备组件，请执行以下命令:
 
-```
+```py
 $ brew install cmake pkg-config
 $ brew install jpeg libpng libtiff openexr
 $ brew install eigen tbb
@@ -166,7 +166,7 @@ $ brew install eigen tbb
 
 你将学会爱上的一个工具是`wget`。所有的`wget`都是从命令行下载文件。我们可以用自制软件安装 wget:
 
-```
+```py
 $ brew install wget
 
 ```
@@ -177,7 +177,7 @@ $ brew install wget
 
 利用我们刚刚安装的`wget`工具，让我们下载并安装 pip(一个 Python 包管理器):
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python3 get-pip.py
 
@@ -191,7 +191,7 @@ $ sudo python3 get-pip.py
 
 让我们安装`virtualenv`和`virtualenvwrapper`，然后做一些清理:
 
-```
+```py
 $ sudo pip3 install virtualenv virtualenvwrapper
 $ sudo rm -rf ~/get-pip.py ~/.cache/pip
 
@@ -201,14 +201,14 @@ $ sudo rm -rf ~/get-pip.py ~/.cache/pip
 
 启动 nano(或您喜欢的文本编辑器):
 
-```
+```py
 $ nano ~/.bash_profile
 
 ```
 
 然后将这几行添加到文件的末尾:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
@@ -222,7 +222,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 提示:您可以使用 bash 命令在不打开编辑器的情况下向文件追加内容:
 
-```
+```py
 $ echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.bash_profile
 $ echo "export WORKON_HOME=$HOME/.virtualenvs" >> ~/.bash_profile
 $ echo "export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3" >> ~/.bash_profile
@@ -232,7 +232,7 @@ $ echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bash_profile
 
 然后对文件进行源文件处理:
 
-```
+```py
 $ source ~/.bash_profile
 
 ```
@@ -249,7 +249,7 @@ $ source ~/.bash_profile
 
 让我们利用第一个命令为 OpenCV 创建一个 Python 虚拟环境:
 
-```
+```py
 $ mkvirtualenv cv -p python3
 Running virtualenv with interpreter /usr/local/bin/python3
 Using base prefix '/usr/local/Cellar/python/3.6.5_1/Frameworks/Python.framework/Versions/3.6'
@@ -282,7 +282,7 @@ virtualenvwrapper.user_scripts creating /Users/admin/.virtualenvs/cv/bin/get_env
 
 很可能，环境已经是活动的了(由 bash 提示符前的`(cv)`表示)。为了以防万一，让我们`workon`(激活)环境:
 
-```
+```py
 $ workon cv
 
 ```
@@ -295,7 +295,7 @@ $ workon cv
 
 现在我们的环境已经激活，我们可以安装 NumPy:
 
-```
+```py
 $ pip install numpy
 
 ```
@@ -316,7 +316,7 @@ $ pip install numpy
 
 当你准备好了，就跟着下载`opencv`和`opencv_contrib`代码:
 
-```
+```py
 $ cd ~
 $ wget -O opencv.zip https://github.com/opencv/opencv/archive/4.0.0.zip
 $ wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.0.0.zip
@@ -327,7 +327,7 @@ $ wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.
 
 从那里，让我们解压缩档案:
 
-```
+```py
 $ unzip opencv.zip
 $ unzip opencv_contrib.zip
 
@@ -335,7 +335,7 @@ $ unzip opencv_contrib.zip
 
 我也喜欢重命名目录:
 
-```
+```py
 $ mv opencv-4.0.0 opencv
 $ mv opencv_contrib-4.0.0 opencv_contrib
 
@@ -351,7 +351,7 @@ $ mv opencv_contrib-4.0.0 opencv_contrib
 
 导航回 OpenCV repo 并创建+输入一个`build`目录:
 
-```
+```py
 $ cd ~/opencv
 $ mkdir build
 $ cd build
@@ -360,7 +360,7 @@ $ cd build
 
 现在我们准备好了。**在执行`cmake`命令之前，一定要使用`workon`** **命令，如图:**
 
-```
+```py
 $ workon cv
 $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
     -D CMAKE_INSTALL_PREFIX=/usr/local \
@@ -397,7 +397,7 @@ Figure 6: Verify that the “Non-free algorithms” will be installed in OpenCV 
 
 如果您的 CMake 输出可以运行，您可以通过以下方式开始编译:
 
-```
+```py
 $ make -j4
 
 ```
@@ -414,7 +414,7 @@ $ make -j4
 
 如果您已经达到 100%，那么在**步骤#6** 之前还有一个额外的命令来安装 OpenCV 4:
 
-```
+```py
 $ sudo make install
 
 ```
@@ -425,7 +425,7 @@ $ sudo make install
 
 在我们创建一个符号链接将 OpenCV 4 链接到我们的 Python 虚拟环境之前，让我们确定一下我们的 Python 版本:
 
-```
+```py
 $ workon cv
 $ python --version
 Python 3.6
@@ -438,7 +438,7 @@ Python 3.6
 
 此时，OpenCV 的 Python 3 绑定应该位于以下文件夹中:
 
-```
+```py
 $ ls /usr/local/python/cv2/python-3.6
 cv2.cpython-36m-darwin.so
 
@@ -446,7 +446,7 @@ cv2.cpython-36m-darwin.so
 
 让我们简单地将它们重命名为`cv2.so`:
 
-```
+```py
 $ cd /usr/local/python/cv2/python-3.6
 $ sudo mv cv2.cpython-36m-darwin.so cv2.so
 
@@ -456,7 +456,7 @@ $ sudo mv cv2.cpython-36m-darwin.so cv2.so
 
 我们的最后一个子步骤是将 OpenCV `cv2.so`绑定符号链接到我们的`cv`虚拟环境中:
 
-```
+```py
 $ cd ~/.virtualenvs/cv/lib/python3.6/site-packages/
 $ ln -s /usr/local/python/cv2/python-3.6/cv2.so cv2.so
 
@@ -473,7 +473,7 @@ $ ln -s /usr/local/python/cv2/python-3.6/cv2.so cv2.so
 
 如果你经常访问我的博客，我也建议你安装我自己的 [imutils](https://pyimagesearch.com/2015/02/02/just-open-sourced-personal-imutils-package-series-opencv-convenience-functions/) 包，因为我们经常使用它:
 
-```
+```py
 $ workon cv
 $ pip install imutils
 
@@ -485,7 +485,7 @@ $ pip install imutils
 
 我喜欢在虚拟环境中启动 Python shell，并检查它是否正确导入，以及版本是否符合我的意图:
 
-```
+```py
 $ workon cv
 $ python
 >>> import cv2
@@ -513,7 +513,7 @@ $ python
 
 在那里，只需输入以下命令进行准备:
 
-```
+```py
 $ workon cv
 $ unzip document-scanner.zip
 $ cd document-scanner
@@ -535,14 +535,14 @@ $ tree
 
 我们需要在我们的环境中添加一个额外的库:Scikit-image。要安装它，只需使用画中画。如果您之前没有安装 imutils，那么现在也安装它:
 
-```
+```py
 $ pip install scikit-image imutils
 
 ```
 
 在那里，您可以执行以下命令来对 OpenCV 4 进行测试:
 
-```
+```py
 $ python scan.py --image images/receipt.jpg
 STEP 1: Edge Detection
 STEP 2: Find contours of paper
@@ -599,7 +599,7 @@ STEP 3: Apply perspective transform
 
 ***A.*** 不幸的是，如果不在你的系统上，这种情况很难诊断。很多事情都可能出错。最可能的失败点是符号链接步骤。我建议您执行以下操作来检查符号链接:
 
-```
+```py
 $ cd ~/.virtualenvs/cv/lib/python3.6/site-packages
 $ ls -al cv2*
 lrwxr-xr-x  1 admin  _developer  21 Nov 30 11:31 cv2.so -> /usr/local/python/cv2/python-3.6/cv2.so

@@ -63,7 +63,7 @@
 
 生成我的结果的代码还不太好看(将在下一篇文章中介绍)，但是我想展示一些初步的结果:
 
-```
+```py
 RBM + LOGISTIC REGRESSION ON ORIGINAL DATASET
              precision    recall  f1-score   support
 
@@ -94,7 +94,7 @@ avg / total       0.93      0.93      0.93      2000
 
 这些移位的图像虽然与人眼几乎相同，但对管道来说是一个挑战，精度下降了 5%。
 
-```
+```py
 RBM + LOGISTIC REGRESSION ON NUDGED DATASET
              precision    recall  f1-score   support
 

@@ -46,7 +46,7 @@ FCN 分割模型旨在利用这一事实，并遵循一种基于重新利用已�
 
 幸运的是，使用 pip 很容易安装这些包:
 
-```
+```py
 $ pip install torch torchvision
 $ pip install matplotlib
 ```
@@ -76,7 +76,7 @@ $ pip install matplotlib
 
 从这里，看一下目录结构:
 
-```
+```py
 .
 ├── dataset
 │   ├── test_set
@@ -106,7 +106,7 @@ $ pip install matplotlib
 
 我们从讨论`config.py`文件开始，它包含我们将在教程中使用的参数配置。
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -155,7 +155,7 @@ Torch Hub 上托管的 FCN 模型在 COCO train2017 的一个子集上进行预�
 
 让我们从项目目录的 pyimagesearch 文件夹中打开`utils.py`文件，并从定义函数开始，这些函数将帮助我们从我们的 FCN 分割模型中绘制和可视化我们的分割任务预测。
 
-```
+```py
 # import the necessary packages
 from torchvision.utils import draw_segmentation_masks
 import torchvision.transforms.functional as F
@@ -233,7 +233,7 @@ def visualize_segmentation_masks(allClassMask, images, numClasses,
 
 让我们打开`predict.py`文件开始吧。
 
-```
+```py
 # USAGE
 # python predict.py
 
@@ -254,7 +254,7 @@ import os
 
 最后，我们从`torchvision`导入`transforms`模块来应用图像转换，同时加载图像(**第 10 行**)以及 PyTorch 和 os 库，用于基于张量和文件处理的功能(**第 11 行和第 12 行**)。
 
-```
+```py
 # create image transformations and inverse transformation
 imageTransforms = transforms.Compose([
 	transforms.Resize((config.IMAGE_SIZE, config.IMAGE_SIZE)),
@@ -339,7 +339,7 @@ for image in images:
 
 此外，我们还将图像的数据类型设置为`torch.uint8`，这是我们的可视化函数所期望的。
 
-```
+```py
 # create the output directory if not already exists
 if not os.path.exists(config.BASE_OUTPUT):
 	os.makedirs(config.BASE_OUTPUT)
@@ -414,7 +414,7 @@ save_image(generatedMasks.float() / 255,
 
 **钱德霍克，S.** “火炬中心系列#6:图像分割”， *PyImageSearch* ，2022，【https://pyimg.co/uk1oa】T4
 
-```
+```py
 @article{Chandhok_2022_THS6,
   author = {Shivam Chandhok},
   title = {Torch Hub Series \#6: Image Segmentation},

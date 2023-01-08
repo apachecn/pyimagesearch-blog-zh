@@ -52,7 +52,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -79,7 +79,7 @@ $ pip install opencv-contrib-python
 
 让我们从查看视频 OCR 项目的目录结构开始:
 
-```
+```py
 |-- pyimagesearch
 |   |-- __init__.py
 |   |-- helpers.py
@@ -121,7 +121,7 @@ $ pip install opencv-contrib-python
 
  **现在让我们开始实现我们的视频作者实用程序。打开我们项目的`video_ocr`目录下的`visualization.py`文件，我们开始吧:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 
@@ -136,7 +136,7 @@ class VideoOCROutputBuilder:
 
 考虑到我们的构造函数，让我们创建负责构造你在图 2 中看到的可视化的`build`方法。
 
-```
+```py
 def build(self, frame, card=None, ocr=None):
 		# grab the input frame dimensions and  initialize the card
 		# image dimensions along with the OCR image dimensions
@@ -166,7 +166,7 @@ def build(self, frame, card=None, ocr=None):
 
 我们现在可以开始构建我们的`output`可视化:
 
-```
+```py
 		# compute the spatial dimensions of the output frame
 		outputW = max([frameW, cardW, ocrW])
 		outputH = frameH + cardH + ocrH
@@ -193,7 +193,7 @@ def build(self, frame, card=None, ocr=None):
 
 我们的下一个代码块处理将`card`和`ocr`图像添加到`output`帧:
 
-```
+```py
 		# if the card is not empty, add it to the output image
 		if card is not None:
 			output[frameH:frameH + cardH, 0:cardW] = card
@@ -218,7 +218,7 @@ def build(self, frame, card=None, ocr=None):
 
 我们现在准备实现我们的`ocr_video.py`脚本。让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.video_ocr import VideoOCROutputBuilder
 from pyimagesearch.blur_detection import detect_blur_fft
@@ -244,7 +244,7 @@ import cv2
 
 考虑到我们的导入，让我们继续我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--input", type=str,
@@ -264,7 +264,7 @@ args = vars(ap.parse_args())
 
 现在我们可以继续初始化了:
 
-```
+```py
 # initialize our video OCR output builder used to easily visualize
 # output to our screen
 outputBuilder = None
@@ -282,7 +282,7 @@ outputH = None
 
 让我们继续访问我们的视频流:
 
-```
+```py
 # create a named window for our output OCR visualization (a named
 # window is required here so that we can automatically position it
 # on our screen)
@@ -310,7 +310,7 @@ else:
 
 访问我们的视频流后，现在是开始循环播放帧的时候了:
 
-```
+```py
 # loop over frames from the video stream
 while True:
 	# grab the next frame and handle if we are reading from either
@@ -341,7 +341,7 @@ while True:
 
 接下来是更多的初始化，然后是模糊检测:
 
-```
+```py
 	# initialize our card and OCR output ROIs
 	card = None
 	ocr = None
@@ -367,7 +367,7 @@ while True:
 
 让我们继续我们的视频 OCR 管道:
 
-```
+```py
 	# only continue to process the frame for OCR if the image is
 	# *not* blurry
 	if not blurry:
@@ -411,7 +411,7 @@ while True:
 
 如果我们找到了我们的名片轮廓，我们现在尝试 OCR 它:
 
-```
+```py
 		# ensure that the business card contour was found
 		if cardCnt is not None:
 			# draw the outline of the business card on the frame so
@@ -441,7 +441,7 @@ while True:
 
 下一步是用 OCR 文本本身注释输出`ocr`可视化:
 
-```
+```py
 			# loop over each of the individual text localizations
 			for i in range(0, len(results["text"])):
 				# extract the bounding box coordinates of the text
@@ -482,7 +482,7 @@ while True:
 
 本例中的其余代码块更侧重于簿记变量和输出:
 
-```
+```py
 	# build our final video OCR output visualization
 	output = outputBuilder.build(frame, card, ocr)
 
@@ -524,7 +524,7 @@ while True:
 
 我们的最后一个代码块释放了视频指针:
 
-```
+```py
 # if we are using a webcam, stop the camera video stream
 if webcam:
 	vs.stop()
@@ -543,7 +543,7 @@ cv2.destroyAllWindows()
 
 我们现在准备好测试我们的视频 OCR 脚本了！打开终端并执行以下命令:
 
-```
+```py
 $ python ocr_video.py --input video/business_card.mp4 --output output/ocr_video_output.avi
 [INFO] opening video file...
 ```
@@ -570,7 +570,7 @@ $ python ocr_video.py --input video/business_card.mp4 --output output/ocr_video_
 
 **Rosebrock，a .**“OCR ' ing Video Streams”， *PyImageSearch* ，D. Chakraborty，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva，R. Raha 和 A. Thanki 编辑。，2022 年，【https://pyimg.co/k43vd 
 
-```
+```py
 @incollection{Rosebrock_2022_OCR_Video_Streams,
   author = {Adrian Rosebrock},
   title = {{OCR}’ing Video Streams},

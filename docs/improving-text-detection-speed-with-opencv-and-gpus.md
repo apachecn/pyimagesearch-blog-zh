@@ -44,7 +44,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -73,7 +73,7 @@ $ pip install opencv-contrib-python
 
 从这里，看一下目录结构:
 
-```
+```py
 |-- pyimagesearch
 |   |-- __init__.py
 |   |-- east
@@ -99,7 +99,7 @@ $ pip install opencv-contrib-python
 
 要找到答案，请打开我们项目目录中的`text_detection_speed.py`文件，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.east import EAST_OUTPUT_LAYERS
 import numpy as np
@@ -112,7 +112,7 @@ import cv2
 
 接下来，我们有命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -140,7 +140,7 @@ args = vars(ap.parse_args())
 
 考虑到我们的命令行参数，我们现在可以加载 EAST text 检测模型，并设置我们是使用 CPU 还是 GPU:
 
-```
+```py
 # load the pre-trained EAST text detector
 print("[INFO] loading EAST text detector...")
 net = cv2.dnn.readNet(args["east"])
@@ -165,7 +165,7 @@ else:
 
 接下来，让我们从磁盘加载示例图像:
 
-```
+```py
 # load the input image and then set the new width and height values
 # based on our command line arguments
 image = cv2.imread(args["image"])
@@ -189,7 +189,7 @@ timings = []
 
 在下面的代码块中，我们对`500`试验执行文本检测，记录每个预测需要多长时间:
 
-```
+```py
 # loop over 500 trials to obtain a good approximation to how long
 # each forward pass will take
 for i in range(0, 500):
@@ -210,7 +210,7 @@ print("[INFO] avg. text detection took {:.6f} seconds".format(avg))
 
 现在让我们在没有 GPU(即运行在 CPU 上)的情况下测量我们的 EAST text detection FPS 吞吐率*:*
 
-```
+```py
 $ python text_detection_speed.py --image images/car_wash.png --east ../models/east/frozen_east_text_detection.pb
 [INFO] loading EAST text detector...
 [INFO] using CPU for inference...
@@ -224,7 +224,7 @@ $ python text_detection_speed.py --image images/car_wash.png --east ../models/ea
 
 现在让我们来看看 GPU:
 
-```
+```py
 $ python text_detection_speed.py --image images/car_wash.png --east ../models/east/frozen_east_text_detection.pb --use-gpu 1
 [INFO] loading EAST text detector...
 [INFO] setting preferable backend and target to CUDA...
@@ -240,7 +240,7 @@ $ python text_detection_speed.py --image images/car_wash.png --east ../models/ea
 
 打开项目目录中的`text_detection_video.py`文件，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.east import EAST_OUTPUT_LAYERS
 from pyimagesearch.east import decode_predictions
@@ -259,7 +259,7 @@ import cv2
 
 现在让我们继续我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--input", type=str,
@@ -283,7 +283,7 @@ args = vars(ap.parse_args())
 
 接下来，我们进行一些初始化:
 
-```
+```py
 # initialize the original frame dimensions, new frame dimensions,
 # and ratio between the dimensions
 (W, H) = (None, None)
@@ -295,7 +295,7 @@ args = vars(ap.parse_args())
 
 下一个代码块处理从磁盘加载 EAST text 检测模型，然后设置我们是使用 CPU 还是 GPU 进行推理:
 
-```
+```py
 # load the pre-trained EAST text detector
 print("[INFO] loading EAST text detector...")
 net = cv2.dnn.readNet(args["east"])
@@ -314,7 +314,7 @@ else:
 
 我们的文本检测模型需要帧来操作，所以下一个代码块访问我们的网络摄像头或驻留在磁盘上的视频文件，这取决于是否提供了`--input`命令行参数:
 
-```
+```py
 # if a video path was not supplied, grab the reference to the webcam
 if not args.get("input", False):
 	print("[INFO] starting video stream...")
@@ -333,7 +333,7 @@ fps = FPS().start()
 
 现在让我们开始循环视频流中的帧:
 
-```
+```py
 # loop over frames from the video stream
 while True:
 	# grab the current frame, then handle if we are using a
@@ -365,7 +365,7 @@ while True:
 
 现在我们已经有了这些维度，我们可以构造我们对东方文本检测器的输入:
 
-```
+```py
 	# construct a blob from the image and then perform a forward pass
 	# of the model to obtain the two output layer sets
 	blob = cv2.dnn.blobFromImage(frame, 1.0, (newW, newH),
@@ -392,7 +392,7 @@ while True:
 
 在非最大值抑制(NMS)之后，我们现在可以在每个边界框上循环:
 
-```
+```py
 	# ensure that at least one text bounding box was found
 	if len(idxs) > 0:
 		# loop over the valid bounding box indexes after applying NMS
@@ -428,7 +428,7 @@ while True:
 
 这里的最后一步是停止我们的 FPS 时间，估算吞吐率，并释放任何视频文件指针:
 
-```
+```py
 # stop the timer and display FPS information
 fps.stop()
 print("[INFO] elapsed time: {:.2f}".format(fps.elapsed()))
@@ -452,7 +452,7 @@ cv2.destroyAllWindows()
 
 这一部分需要在配有 GPU 的机器上本地执行。在 NVIDIA RTX 2070 超级 GPU(配有 i9 9900K 处理器)上运行`text_detection_video.py`脚本后，我获得了`~97` FPS:
 
-```
+```py
 $ python text_detection_video.py --east ../models/east/frozen_east_text_detection.pb --use-gpu 1
 [INFO] loading EAST text detector...
 [INFO] setting preferable backend and target to CUDA...
@@ -463,7 +463,7 @@ $ python text_detection_video.py --east ../models/east/frozen_east_text_detectio
 
 当我在不使用任何 GPU 的情况下运行同样的脚本*时，我达到了`~23`的 FPS，比上面的结果慢了`~77%`*。**
 
-```
+```py
 $ python text_detection_video.py --east ../models/east/frozen_east_text_detection.pb
 [INFO] loading EAST text detector...
 [INFO] using CPU for inference...
@@ -486,7 +486,7 @@ $ python text_detection_video.py --east ../models/east/frozen_east_text_detectio
 
 **Rosebrock，A.** “使用 OpenCV 和 GPU 提高文本检测速度”， *PyImageSearch* ，D. Chakraborty，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva，R. Raha，A. Thanki，eds .，2022 年，【https://pyimg.co/9wde6 
 
-```
+```py
 @incollection{Rosebrock_2022_Improving_Text,
   author = {Adrian Rosebrock},
   title = {Improving Text Detection Speed with {OpenCV} and {GPUs}},

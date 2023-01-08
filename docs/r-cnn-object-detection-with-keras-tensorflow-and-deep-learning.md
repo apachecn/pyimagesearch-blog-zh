@@ -109,7 +109,7 @@
 
 在里面，您会发现以下内容:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── dataset
@@ -143,7 +143,7 @@ $ tree --dirsfirst --filelimit 10
 
 打开`pyimagesearch`模块中的`config.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -158,7 +158,7 @@ ORIG_ANNOTS = os.path.sep.join([ORIG_BASE_PATH, "annotations"])
 
 接下来，我们定义即将构建的数据集的路径:
 
-```
+```py
 # define the base path to the *new* dataset after running our dataset
 # builder scripts and then use the base path to derive the paths to
 # our output class label directories
@@ -167,7 +167,7 @@ POSITVE_PATH = os.path.sep.join([BASE_PATH, "raccoon"])
 NEGATIVE_PATH = os.path.sep.join([BASE_PATH, "no_raccoon"])
 ```
 
-```
+```py
 # define the number of max proposals used when running selective
 # search for (1) gathering training data and (2) performing inference
 MAX_PROPOSALS = 2000
@@ -176,7 +176,7 @@ MAX_PROPOSALS_INFER = 200
 
 然后设置构建数据集时要使用的正负区域的最大数量:
 
-```
+```py
 # define the maximum number of positive and negative images to be
 # generated from each image
 MAX_POSITIVE = 30
@@ -185,7 +185,7 @@ MAX_NEGATIVE = 10
 
 最后，我们总结了特定于模型的常数:
 
-```
+```py
 # initialize the input dimensions to the network
 INPUT_DIMS = (224, 224)
 
@@ -222,7 +222,7 @@ IoU 方法计算*预测*边界框和*地面实况*边界框之间重叠面积与
 
 否则，现在让我们简要回顾一下我们的 IoU 实现——打开`pyimagesearch`目录中的`iou.py`文件，并插入以下代码:
 
-```
+```py
 def compute_iou(boxA, boxB):
 	# determine the (x, y)-coordinates of the intersection rectangle
 	xA = max(boxA[0], boxB[0])
@@ -277,7 +277,7 @@ def compute_iou(boxA, boxB):
 
 现在，我们已经在较高的层次上理解了数据集构建器，让我们来实现它。打开`build_dataset.py`文件，按照以下步骤操作:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.iou import compute_iou
 from pyimagesearch import config
@@ -291,7 +291,7 @@ import os
 
 现在我们的导入已经完成，让我们创建两个空目录并构建一个包含所有浣熊图像的列表:
 
-```
+```py
 # loop over the output positive and negative directories
 for dirPath in (config.POSITVE_PATH, config.NEGATIVE_PATH):
 	# if the output directory does not exist yet, create it
@@ -309,7 +309,7 @@ totalNegative = 0
 
 我们的正面和负面目录将很快包含我们的*浣熊*或*无浣熊*图像。**第 10-13 行**创建这些目录，如果它们还不存在的话。
 
-```
+```py
 # loop over the image paths
 for (i, imagePath) in enumerate(imagePaths):
 	# show a progress report
@@ -334,7 +334,7 @@ for (i, imagePath) in enumerate(imagePaths):
 	h = int(soup.find("height").string)
 ```
 
-```
+```py
 	# loop over all 'object' elements
 	for o in soup.find_all("object"):
 		# extract the label and bounding box coordinates
@@ -355,7 +355,7 @@ for (i, imagePath) in enumerate(imagePaths):
 		gtBoxes.append((xMin, yMin, xMax, yMax))
 ```
 
-```
+```py
 	# load the input image from disk
 	image = cv2.imread(imagePath)
 
@@ -374,7 +374,7 @@ for (i, imagePath) in enumerate(imagePaths):
 		proposedRects.append((x, y, x + w, y + h))
 ```
 
-```
+```py
 	# initialize counters used to count the number of positive and
 	# negative ROIs saved thus far
 	positiveROIs = 0
@@ -401,7 +401,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 从第**行第 88** 开始，我们循环通过选择性搜索生成的区域建议(直到我们定义的最大建议数)。在内部，我们:
 
-```
+```py
 			# check to see if the IOU is greater than 70% *and* that
 			# we have not hit our positive count limit
 			if iou > 0.7 and positiveROIs <= config.MAX_POSITIVE:
@@ -419,7 +419,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 假设这个特定区域通过了检查，以查看我们是否有 IoU > 70% *和*我们还没有达到当前图像的正面例子的极限(**行 105** ，我们简单地:
 
-```
+```py
 			# determine if the proposed bounding box falls *within*
 			# the ground-truth bounding box
 			fullOverlap = propStartX >= gtStartX
@@ -428,7 +428,7 @@ for (i, imagePath) in enumerate(imagePaths):
 			fullOverlap = fullOverlap and propEndY <= gtEndY
 ```
 
-```
+```py
 			# check to see if there is not full overlap *and* the IoU
 			# is less than 5% *and* we have not hit our negative
 			# count limit
@@ -452,7 +452,7 @@ for (i, imagePath) in enumerate(imagePaths):
 2.  欠条足够小
 3.  没有超过我们对当前图像的反面例子数量的限制
 
-```
+```py
 			# check to see if both the ROI and output path are valid
 			if roi is not None and outputPath is not None:
 				# resize the ROI to the input dimensions of the CNN
@@ -471,7 +471,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ time python build_dataset.py
 [INFO] processing image 1/200...
 [INFO] processing image 2/200...
@@ -486,7 +486,7 @@ user	6m50.769s
 sys     1m23.245s
 ```
 
-```
+```py
 $ ls -l dataset/raccoon/*.png | wc -l
     1560
 $ ls -l dataset/no_raccoon/*.png | wc -l
@@ -518,7 +518,7 @@ $ ls -l dataset/no_raccoon/*.png | wc -l
 *   *[使用 Keras 的迁移学习和深度学习](https://pyimagesearch.com/2019/05/20/transfer-learning-with-keras-and-deep-learning/)* (确保至少从头至尾阅读*“两种类型的迁移学习:特征提取和微调”*部分)
 *   *[【Keras 微调】深度学习](https://pyimagesearch.com/2019/06/03/fine-tuning-with-keras-and-deep-learning/)* (我强烈推荐完整阅读本教程)
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
@@ -545,7 +545,7 @@ import pickle
 import os
 ```
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--plot", type=str, default="plot.png",
@@ -565,7 +565,7 @@ BS = 32
 
 加载我们的数据集很简单，因为我们已经在**步骤#1** 中完成了所有的艰苦工作:
 
-```
+```py
 # grab the list of images in our dataset directory, then initialize
 # the list of data (i.e., images) and class labels
 print("[INFO] loading images...")
@@ -588,7 +588,7 @@ for imagePath in imagePaths:
 	labels.append(label)
 ```
 
-```
+```py
 # convert the data and labels to NumPy arrays
 data = np.array(data, dtype="float32")
 labels = np.array(labels)
@@ -614,7 +614,7 @@ aug = ImageDataGenerator(
 	fill_mode="nearest")
 ```
 
-```
+```py
 # load the MobileNetV2 network, ensuring the head FC layer sets are
 # left off
 baseModel = MobileNetV2(weights="imagenet", include_top=False,
@@ -639,7 +639,7 @@ for layer in baseModel.layers:
 	layer.trainable = False
 ```
 
-```
+```py
 # compile our model
 print("[INFO] compiling model...")
 opt = Adam(lr=INIT_LR)
@@ -656,7 +656,7 @@ H = model.fit(
 	epochs=EPOCHS)
 ```
 
-```
+```py
 # make predictions on the testing set
 print("[INFO] evaluating network...")
 predIdxs = model.predict(testX, batch_size=BS)
@@ -670,7 +670,7 @@ print(classification_report(testY.argmax(axis=1), predIdxs,
 	target_names=lb.classes_))
 ```
 
-```
+```py
 # serialize the model to disk
 print("[INFO] saving mask detector model...")
 model.save(config.MODEL_PATH, save_format="h5")
@@ -682,7 +682,7 @@ f.write(pickle.dumps(lb))
 f.close()
 ```
 
-```
+```py
 # plot the training loss and accuracy
 N = EPOCHS
 plt.style.use("ggplot")
@@ -708,7 +708,7 @@ plt.savefig(args["plot"])
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ time python fine_tune_rcnn.py
 [INFO] loading images...
 [INFO] compiling model...
@@ -769,7 +769,7 @@ sys     33m53.058s
 
 现在让我们实现 R-CNN 对象检测管道—打开一个新文件，将其命名为`detect_object_rcnn.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.nms import non_max_suppression
 from pyimagesearch import config
@@ -789,7 +789,7 @@ ap.add_argument("-i", "--image", required=True,
 args = vars(ap.parse_args())
 ```
 
-```
+```py
 # load the our fine-tuned model and label binarizer from disk
 print("[INFO] loading model and label binarizer...")
 model = load_model(config.MODEL_PATH)
@@ -808,7 +808,7 @@ ss.switchToSelectiveSearchFast()
 rects = ss.process()
 ```
 
-```
+```py
 # initialize the list of region proposals that we'll be classifying
 # along with their associated bounding boxes
 proposals = []
@@ -834,7 +834,7 @@ for (x, y, w, h) in rects[:config.MAX_PROPOSALS_INFER]:
 	boxes.append((x, y, x + w, y + h))
 ```
 
-```
+```py
 # convert the proposals and bounding boxes into NumPy arrays
 proposals = np.array(proposals, dtype="float32")
 boxes = np.array(boxes, dtype="int32")
@@ -845,7 +845,7 @@ print("[INFO] classifying proposals...")
 proba = model.predict(proposals)
 ```
 
-```
+```py
 # find the index of all predictions that are positive for the
 # "raccoon" class
 print("[INFO] applying NMS...")
@@ -864,7 +864,7 @@ boxes = boxes[idxs]
 proba = proba[idxs]
 ```
 
-```
+```py
 # clone the original image so that we can draw on it
 clone = image.copy()
 
@@ -887,7 +887,7 @@ cv2.imshow("Before NMS", clone)
 
 让我们应用 NMS，看看结果如何比较:
 
-```
+```py
 # run non-maxima suppression on the bounding boxes
 boxIdxs = non_max_suppression(boxes, proba)
 
@@ -923,7 +923,7 @@ cv2.waitKey(0)
 
 从那里，您可以执行以下命令:
 
-```
+```py
 $ python detect_object_rcnn.py --image images/raccoon_01.jpg
 [INFO] loading model and label binarizer...
 [INFO] running selective search...
@@ -938,7 +938,7 @@ $ python detect_object_rcnn.py --image images/raccoon_01.jpg
 
 让我们尝试另一个图像:
 
-```
+```py
 $ python detect_object_rcnn.py --image images/raccoon_02.jpg
 [INFO] loading model and label binarizer...
 [INFO] running selective search...
@@ -953,7 +953,7 @@ $ python detect_object_rcnn.py --image images/raccoon_02.jpg
 
 让我们看最后一个例子:
 
-```
+```py
 $ python detect_object_rcnn.py --image images/raccoon_03.jpg
 [INFO] loading model and label binarizer...
 [INFO] running selective search...

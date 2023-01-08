@@ -50,7 +50,7 @@ dlib 库只有四个主要的先决条件:
 
 安装 CMake，Boost，Boost。Python 和 X11 可以通过`apt-get`轻松实现:
 
-```
+```py
 $ sudo apt-get install build-essential cmake
 $ sudo apt-get install libgtk-3-dev
 $ sudo apt-get install libboost-all-dev
@@ -59,7 +59,7 @@ $ sudo apt-get install libboost-all-dev
 
 我假设您的机器上已经安装了`pip`(用于管理、安装和升级 Python 包)，但是如果没有，您可以通过以下方式安装`pip`:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python get-pip.py
 
@@ -73,7 +73,7 @@ $ sudo python get-pip.py
 
 如果您尚未安装 Homebrew，可以通过执行以下命令来安装:
 
-```
+```py
 $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 $ brew update
 
@@ -83,14 +83,14 @@ $ brew update
 
 既然已经安装了 Homebrew，打开您的`~/.bash_profile`文件(如果它不存在，创建它):
 
-```
+```py
 $ nano ~/.bash_profile
 
 ```
 
 在检查你系统的其他部分之前，更新你的`PATH`变量来检查自制软件*安装的软件包:*
 
-```
+```py
 # Homebrew
 export PATH=/usr/local/bin:$PATH
 
@@ -104,7 +104,7 @@ export PATH=/usr/local/bin:$PATH
 
 我们现在需要通过`source`命令重新加载`~/.bash_profile`文件的内容:
 
-```
+```py
 $ source ~/.bash_profile
 
 ```
@@ -113,7 +113,7 @@ $ source ~/.bash_profile
 
  *接下来，让我们安装 Python 2.7 和 Python 3:
 
-```
+```py
 $ brew install python
 $ brew install python3
 
@@ -121,7 +121,7 @@ $ brew install python3
 
 然后，我们可以安装 CMake、Boost 和 Boost。Python:
 
-```
+```py
 $ brew install cmake
 $ brew install boost
 $ brew install boost-python --with-python3
@@ -134,7 +134,7 @@ $ brew install boost-python --with-python3
 
 作为健全性检查，我建议在继续之前验证您已经安装了`boost`和`boost-python`:
 
-```
+```py
 $ brew list | grep 'boost'
 boost
 boost-python
@@ -159,14 +159,14 @@ boost-python
 
 如果您想将 dlib 安装到一个预先存在的 Python 虚拟环境中，请使用`workon`命令:
 
-```
+```py
 $ workon <your virtualenv name>
 
 ```
 
 例如，如果我想访问一个名为`cv`的 Python 虚拟环境，我会使用以下命令:
 
-```
+```py
 $ workon cv
 
 ```
@@ -179,14 +179,14 @@ $ workon cv
 
 否则，我可以使用`mkvirtualenv`命令创建一个完全独立的虚拟环境——下面的命令创建一个名为`py2_dlib`的 Python 2.7 虚拟环境:
 
-```
+```py
 $ mkvirtualenv py2_dlib
 
 ```
 
 虽然这个命令将创建一个名为`py3_dlib`的 Python 3 虚拟环境:
 
-```
+```py
 $ mkvirtualenv py3_dlib -p python3
 
 ```
@@ -205,7 +205,7 @@ dlib 库没有任何真正的 Python 先决条件，但是如果您计划将 dli
 
 这些软件包可以通过`pip`安装:
 
-```
+```py
 $ pip install numpy
 $ pip install scipy
 $ pip install scikit-image
@@ -214,7 +214,7 @@ $ pip install scikit-image
 
 几年前，我们必须从源代码手动编译 dlib(类似于我们如何安装 OpenCV)。然而，我们现在也可以使用`pip`来安装 dlib:
 
-```
+```py
 $ pip install dlib
 
 ```
@@ -241,7 +241,7 @@ $ pip install dlib
 
 要测试您的 dlib 安装，只需打开一个 Python shell(确保访问您的虚拟环境，如果您使用它们的话)，并尝试导入`dlib`库:
 
-```
+```py
 $ python
 Python 3.6.0 (default, Mar  4 2017, 12:32:34) 
 [GCC 4.2.1 Compatible Apple LLVM 8.0.0 (clang-800.0.42.1)] on darwin
@@ -257,7 +257,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 如果您已经在安装 OpenCV 的同一个 Python 虚拟环境中安装了 dlib，那么您也可以通过您的`cv2`绑定来访问 OpenCV。下面是我的 Ubuntu 机器上的一个例子:
 
-```
+```py
 $ python
 Python 2.7.12 (default, Jul  1 2016, 15:12:24) 
 [GCC 5.4.0 20160609] on linux2

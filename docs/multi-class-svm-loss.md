@@ -112,7 +112,7 @@ are displayed in the body of the matrix. The *larger* the scores are, the more *
 
 for the “dog” class. Given a two class problem, this is trivially easy:
 
-```
+```py
 >>> max(0, 1.33 - 4.26 + 1)
 0
 >>>
@@ -123,7 +123,7 @@ for the “dog” class. Given a two class problem, this is trivially easy:
 
 同样，我们可以对第二张图片做同样的操作，这张图片包含一只猫:
 
-```
+```py
 >>> max(0, 3.76 - (-1.2) + 1)
 5.96
 >>>
@@ -134,7 +134,7 @@ for the “dog” class. Given a two class problem, this is trivially easy:
 
 然后，我们通过取平均值获得两幅示例图像的总损失:
 
-```
+```py
 >>> (0 + 5.96) / 2
 2.98
 >>
@@ -151,7 +151,7 @@ for the “dog” class. Given a two class problem, this is trivially easy:
 
 让我们再次计算狗类的损失:
 
-```
+```py
 >>> max(0, 1.49 - (-0.39) + 1) + max(0, 4.21 - (-0.39) + 1)
 8.48
 >>>
@@ -162,7 +162,7 @@ for the “dog” class. Given a two class problem, this is trivially easy:
 
  *同样，我们可以计算 cat 类的损失:
 
-```
+```py
 >>> max(0, -4.61 - 3.28 + 1) + max(0, 1.46 - 3.28 + 1)
 0
 >>>
@@ -171,7 +171,7 @@ for the “dog” class. Given a two class problem, this is trivially easy:
 
 最后是马类的损失:
 
-```
+```py
 >>> max(0, 1.03 - (-2.27) + 1) + max(0, -2.37 - (-2.27) + 1)
 5.199999999999999
 >>>
@@ -180,7 +180,7 @@ for the “dog” class. Given a two class problem, this is trivially easy:
 
 因此，总损失为:
 
-```
+```py
 >>> (8.48 + 0.0 + 5.2) / 3
 4.56
 >>>

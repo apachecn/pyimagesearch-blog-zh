@@ -35,7 +35,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -96,7 +96,7 @@ E-ZPass 让过路费变成了一个“愉快”得多的过程(如果有这种�
 
 为了构建验证码破解系统，我们需要更新`pyimagesearch.utils`子模块并包含一个名为`captchahelper.py`的新文件:
 
-```
+```py
 |--- pyimagesearch
 |    |--- __init__.py
 |    |--- datasets
@@ -111,7 +111,7 @@ E-ZPass 让过路费变成了一个“愉快”得多的过程(如果有这种�
 
 我们还将在我们的 *pyimagesearch* 模块之外创建第二个目录，这个目录名为`captcha_breaker`，包含以下文件和子目录:
 
-```
+```py
 |--- captcha_breaker
 |    |--- dataset/
 |    |--- downloads/
@@ -124,13 +124,13 @@ E-ZPass 让过路费变成了一个“愉快”得多的过程(如果有这种�
 
 目录是我们所有的项目代码存储的地方，用来破解图像验证码。`dataset`目录是我们存储*标记的*数字的地方，我们将手工标记这些数字。我喜欢使用以下目录结构模板来组织我的数据集:
 
-```
+```py
 root_directory/class_name/image_filename.jpg
 ```
 
 因此，我们的`dataset`目录将具有以下结构:
 
-```
+```py
 dataset/{1-9}/example.jpg
 ```
 
@@ -150,7 +150,7 @@ dataset/{1-9}/example.jpg
 
 要自动获取新的验证码图片并保存到磁盘，我们可以使用`download_images.py`:
 
-```
+```py
 # import the necessary packages
 import argparse
 import requests
@@ -168,7 +168,7 @@ args = vars(ap.parse_args())
 
 **第 2-5 行**导入我们需要的 Python 包。`requests`库使得使用 HTTP 连接变得容易，并且在 Python 生态系统中被大量使用。如果您的系统上尚未安装`requests`，您可以通过以下方式安装:
 
-```
+```py
 $ pip install requests
 ```
 
@@ -178,7 +178,7 @@ $ pip install requests
 
 我们的下一个代码块初始化我们将要下载的验证码图片的 URL，以及到目前为止生成的图片总数:
 
-```
+```py
 # initialize the URL that contains the captcha images that we will
 # be downloading along with the total number of images downloaded
 # thus far
@@ -188,7 +188,7 @@ total = 0
 
 我们现在可以下载验证码图片了:
 
-```
+```py
 # loop over the number of images to download
 for i in range(0, args["num_images"]):
 	try:
@@ -218,7 +218,7 @@ for i in range(0, args["num_images"]):
 
 您可以使用以下命令执行`download_images.py`:
 
-```
+```py
 $ python download_images.py --output downloads
 ```
 
@@ -226,7 +226,7 @@ $ python download_images.py --output downloads
 
 一旦程序执行完毕，您会看到您的`download`目录中充满了图像:
 
-```
+```py
 $ ls -l downloads/*.jpg | wc -l
 500
 ```
@@ -239,7 +239,7 @@ $ ls -l downloads/*.jpg | wc -l
 
  *相反，更好的方法是使用 OpenCV 库中的基本图像处理技术来帮助我们。要了解如何更有效地标记数据集，请打开一个新文件，将其命名为`annotate.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils import paths
 import argparse
@@ -263,7 +263,7 @@ args = vars(ap.parse_args())
 
 我们的下一个代码块获取`--input`目录中所有图像的路径，并初始化一个名为`counts`的字典，该字典将存储给定数字(键)被标记的总次数(值):
 
-```
+```py
 # grab the image paths then initialize the dictionary of character
 # counts
 imagePaths = list(paths.list_images(args["input"]))
@@ -272,7 +272,7 @@ counts = {}
 
 实际的注释过程从下面开始:
 
-```
+```py
 # loop over the image paths
 for (i, imagePath) in enumerate(imagePaths):
 	# display an update to the user
@@ -295,7 +295,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 我们现在准备通过 Otsu 的阈值方法对输入图像进行二值化:
 
-```
+```py
   		# threshold the image to reveal the digits
 		thresh = cv2.threshold(gray, 0, 255,
 			cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)[1]
@@ -305,7 +305,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 对图像进行阈值处理是我们图像处理流程中的关键步骤，因为我们现在需要找到每个数字的*轮廓*:
 
-```
+```py
 		# find contours in the image, keeping only the four largest
 		# ones
 		cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
@@ -318,7 +318,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 给定我们的轮廓，我们可以通过计算边界框来提取每个轮廓:
 
-```
+```py
   		# loop over the contours
 		for c in cnts:
 			# compute the bounding box for the contour then extract
@@ -338,7 +338,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 要了解如何通过`cv2.waitKey`调用进行标记，请看下面的代码块:
 
-```
+```py
   			# if the '`' key is pressed, then ignore the character
 			if key == ord("`"):
 				print("[INFO] ignoring character")
@@ -358,7 +358,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 例如，如果我按下键盘上的`7`键，`dirPath`将会是:
 
-```
+```py
 dataset/7
 ```
 
@@ -366,7 +366,7 @@ dataset/7
 
 一旦我们确保`dirPath`正确存在，我们只需将示例数字写入文件:
 
-```
+```py
   			# write the labeled character to file
 			count = counts.get(key, 1)
 			p = os.path.sep.join([dirPath, "{}.png".format(
@@ -379,7 +379,7 @@ dataset/7
 
 **第 74 行**为当前数字获取目前为止写入磁盘的示例总数。然后，我们使用`dirPath`构建示例数字的输出路径。在执行**第 75 行和第 76 行**之后，我们的输出路径`p`可能看起来像:
 
-```
+```py
 datasets/7/000001.png
 ```
 
@@ -387,7 +387,7 @@ datasets/7/000001.png
 
 如果在处理图像时出现错误，我们的最后一个代码块处理我们是否想从脚本中`control-c`退出*或*:
 
-```
+```py
   	# we are trying to control-c out of the script, so break from the
 	# loop (you still need to press a key for the active window to
 	# trigger this)
@@ -406,7 +406,7 @@ datasets/7/000001.png
 
 要标记您从 E-ZPass NY 网站下载的图像，只需执行以下命令:
 
-```
+```py
 $ python annotate.py --input downloads --annot dataset
 ```
 
@@ -418,7 +418,7 @@ $ python annotate.py --input downloads --annot dataset
 
 记住，实际上*获得*你的标签数据集是成功的一半。从那里可以开始实际的工作。幸运的是，我已经为你标记了数字！如果您查看本教程附带下载中包含的`dataset`目录，您会发现整个数据集已经准备就绪:
 
-```
+```py
 $ ls dataset/
 1  2  3  4  5  6  7  8  9
 $ ls -l dataset/1/*.png | wc -l
@@ -433,7 +433,7 @@ $ ls -l dataset/1/*.png | wc -l
 
 我们可以通过在`captchahelper.py`中定义一个`preprocess`函数来调整图像的大小和填充图像，同时保持纵横比:
 
-```
+```py
 # import the necessary packages
 import imutils
 import cv2
@@ -464,7 +464,7 @@ def preprocess(image, width, height):
 
 然而，相反的维度比它应该的要小。要解决这个问题，我们可以沿着较短的维度“填充”图像，以获得固定的大小:
 
-```
+```py
   	# determine the padding values for the width and height to
 	# obtain the target dimensions
 	padW = int((width - image.shape[1]) / 2.0)
@@ -488,7 +488,7 @@ def preprocess(image, width, height):
 
 既然已经定义了我们的`preprocess`函数，我们就可以继续在图像 captcha 数据集上训练 LeNet 了。打开`train_model.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.model_selection import train_test_split
@@ -509,7 +509,7 @@ import os
 
 接下来，让我们回顾一下命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -526,7 +526,7 @@ args = vars(ap.parse_args())
 
 我们现在可以从磁盘加载数据和相应的标签:
 
-```
+```py
 # initialize the data and labels
 data = []
 labels = []
@@ -550,7 +550,7 @@ for imagePath in paths.list_images(args["dataset"]):
 
 以下列格式组织数据集目录结构的主要好处之一是:
 
-```
+```py
 root_directory/class_label/image_filename.jpg
 ```
 
@@ -558,7 +558,7 @@ root_directory/class_label/image_filename.jpg
 
 我们的下一个代码块处理将原始像素亮度值归一化到范围`[0, 1]`，随后构建训练和测试分割，并对标签进行一键编码:
 
-```
+```py
 # scale the raw pixel intensities to the range [0, 1]
 data = np.array(data, dtype="float") / 255.0
 labels = np.array(labels)
@@ -576,7 +576,7 @@ testY = lb.transform(testY)
 
 然后，我们可以初始化 LeNet 模型和 SGD 优化器:
 
-```
+```py
 # initialize the model
 print("[INFO] compiling model...")
 model = LeNet.build(width=28, height=28, depth=1, classes=9)
@@ -589,7 +589,7 @@ model.compile(loss="categorical_crossentropy", optimizer=opt,
 
 给定初始化的模型和优化器，我们可以训练网络 15 个时期，评估它，并将其序列化到磁盘:
 
-```
+```py
 # train the network
 print("[INFO] training network...")
 H = model.fit(trainX, trainY,  validation_data=(testX, testY),
@@ -608,7 +608,7 @@ model.save(args["model"])
 
 我们的最后一个代码块将处理绘制训练集和测试集随时间的准确性和损失:
 
-```
+```py
 # plot the training + testing loss and accuracy
 plt.style.use("ggplot")
 plt.figure()
@@ -625,7 +625,7 @@ plt.show()
 
 要在我们的自定义 captcha 数据集上使用 SGD 优化器来训练 LeNet 架构，只需执行以下命令:
 
-```
+```py
 $ python train_model.py --dataset dataset --model output/lenet.hdf5
 [INFO] compiling model...
 [INFO] training network...
@@ -661,7 +661,7 @@ avg / total       1.00      1.00      1.00       503
 
 如果您检查`output`目录，您还会看到序列化的`lenet.hdf5`文件:
 
-```
+```py
 $ ls -l output/
 total 9844
 -rw-rw-r-- 1 adrian adrian 10076992 May  3 12:56 lenet.hdf5
@@ -673,7 +673,7 @@ total 9844
 
 现在我们的验证码破解程序已经训练好了，让我们在一些示例图片上测试一下。打开`test_model.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.models import load_model
@@ -690,7 +690,7 @@ import cv2
 
 接下来，我们将解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--input", required=True,
@@ -704,7 +704,7 @@ args = vars(ap.parse_args())
 
 我们现在可以加载我们预先训练好的 CNN，随机抽取 10 张验证码图片进行分类:
 
-```
+```py
 # load the pre-trained network
 print("[INFO] loading pre-trained network...")
 model = load_model(args["model"])
@@ -717,7 +717,7 @@ imagePaths = np.random.choice(imagePaths, size=(10,),
 
 有趣的部分来了——破解验证码:
 
-```
+```py
 # loop over the image paths
 for imagePath in imagePaths:
 	# load the image and convert it to grayscale, then pad the image
@@ -739,7 +739,7 @@ for imagePath in imagePaths:
 
 我们现在需要找到`thresh`图像中手指的轮廓:
 
-```
+```py
   	# find contours in the image, keeping only the four largest ones,
 	# then sort them from left-to-right
 	cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
@@ -762,7 +762,7 @@ for imagePath in imagePaths:
 
 鉴于验证码中数字的轮廓，我们现在可以破解它:
 
-```
+```py
   	# loop over the contours
 	for c in cnts:
 		# compute the bounding box for the contour then extract the
@@ -791,7 +791,7 @@ for imagePath in imagePaths:
 
 我们的最后一个代码块处理将破解的验证码作为字符串写入我们的终端，并显示`output`图像:
 
-```
+```py
   	# show the output image
 	print("[INFO] captcha: {}".format("".join(predictions)))
 	cv2.imshow("Output", output)
@@ -800,7 +800,7 @@ for imagePath in imagePaths:
 
 要查看我们的验证码破解程序，只需执行以下命令:
 
-```
+```py
 $ python test_model.py --input downloads --model output/lenet.hdf5
 Using TensorFlow backend.
 [INFO] loading pre-trained network...

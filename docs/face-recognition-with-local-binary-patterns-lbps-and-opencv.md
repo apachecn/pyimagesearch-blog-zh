@@ -70,7 +70,7 @@ distance and a nearest neighbor classifier:
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 $ pip install scikit-image
 ```
@@ -106,7 +106,7 @@ $ pip install scikit-image
 
 首先访问本教程的 ***“下载”*** 部分，以检索源代码、预训练的人脸检测器和示例加州理工学院人脸数据集:
 
-```
+```py
 $ tree --dirsfirst --filelimit 20
 .
 ├── caltech_faces [26 entries exceeds filelimit, not opening dir]
@@ -125,7 +125,7 @@ $ tree --dirsfirst --filelimit 20
 
 我们将对`caltech_faces`数据集中的每张图像应用人脸检测器模型。该目录中有一个子目录，包含我们想要识别的每个人的图像:
 
-```
+```py
 $ ls -l caltech_faces/
 abraham
 alberta
@@ -184,7 +184,7 @@ caltech_faces/abraham/image_0041.jpg
 
 让我们学习如何应用 OpenCV 人脸检测器来检测图像中的人脸。打开`pyimagesearch`模块中的`faces.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from imutils import paths
 import numpy as np
@@ -196,7 +196,7 @@ import os
 
 现在让我们定义`detect_faces`函数:
 
-```
+```py
 def detect_faces(net, image, minConfidence=0.5):
 	# grab the dimensions of the image and then construct a blob
 	# from it
@@ -215,7 +215,7 @@ def detect_faces(net, image, minConfidence=0.5):
 
 随着`blob`的创建，我们将其设置为面部检测器的输入并执行推断:
 
-```
+```py
 	# pass the blob through the network to obtain the face detections,
 	# then initialize a list to store the predicted bounding boxes
 	net.setInput(blob)
@@ -227,7 +227,7 @@ def detect_faces(net, image, minConfidence=0.5):
 
 说到这里，现在让我们循环我们的`detections`并填充`boxes`列表:
 
-```
+```py
 	# loop over the detections
 	for i in range(0, detections.shape[2]):
 		# extract the confidence (i.e., probability) associated with
@@ -274,7 +274,7 @@ def detect_faces(net, image, minConfidence=0.5):
 
 让我们现在就开始实现`load_face_dataset`。再次打开`pyimagesearch`模块中的`faces.py`文件，并在文件底部添加以下代码:
 
-```
+```py
 def load_face_dataset(inputPath, net, minConfidence=0.5,
 	minSamples=15):
 	# grab the paths to all images in our input directory, extract
@@ -305,7 +305,7 @@ def load_face_dataset(inputPath, net, minConfidence=0.5,
 
 让我们现在处理我们的每一个图像:
 
-```
+```py
 	# initialize lists to store our extracted faces and associated
 	# labels
 	faces = []
@@ -336,7 +336,7 @@ def load_face_dataset(inputPath, net, minConfidence=0.5,
 
 否则，我们假设通过了最小测试，然后继续处理图像:
 
-```
+```py
 		# perform face detection
 		boxes = detect_faces(net, image, minConfidence)
 
@@ -377,7 +377,7 @@ def load_face_dataset(inputPath, net, minConfidence=0.5,
 
 打开项目目录结构中的`lbp_face_reco.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
@@ -399,7 +399,7 @@ import os
 
 现在让我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--input", type=str, required=True,
@@ -420,7 +420,7 @@ args = vars(ap.parse_args())
 
 考虑到我们的命令行参数，我们可以从磁盘加载面部检测器:
 
-```
+```py
 # load our serialized face detector model from disk
 print("[INFO] loading face detector model...")
 prototxtPath = os.path.sep.join([args["face"], "deploy.prototxt"])
@@ -431,7 +431,7 @@ net = cv2.dnn.readNet(prototxtPath, weightsPath)
 
 从那里，我们应用`load_face_dataset`函数来加载我们的面部数据:
 
-```
+```py
 # load the CALTECH faces dataset
 print("[INFO] loading dataset...")
 (faces, labels) = load_face_dataset(args["input"], net,
@@ -453,7 +453,7 @@ labels = le.fit_transform(labels)
 
 我们现在准备使用 LBPs 和 OpenCV 来训练我们人脸识别器:
 
-```
+```py
 # train our LBP face recognizer
 print("[INFO] training face recognizer...")
 recognizer = cv2.face.LBPHFaceRecognizer_create(
@@ -480,7 +480,7 @@ print("[INFO] training took {:.4f} seconds".format(end - start))
 
 现在让我们使用 LBP 面部识别器来收集预测:
 
-```
+```py
 # initialize the list of predictions and confidence scores
 print("[INFO] gathering predictions...")
 predictions = []
@@ -516,7 +516,7 @@ distance between the current testing vector and the closest data point in the tr
 
 我们的最后一步是可视化人脸识别结果的子集:
 
-```
+```py
 # generate a sample of testing data
 idxs = np.random.choice(range(0, len(testY)), size=10, replace=False)
 
@@ -568,7 +568,7 @@ for i in idxs:
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python lbp_face_reco.py --input caltech_faces
 [INFO] loading face detector model...
 [INFO] loading dataset...
@@ -613,7 +613,7 @@ weighted avg       0.98      0.98      0.98       100
 
 现在，让我们将我们的 LBP 人脸识别器应用于单独的图像:
 
-```
+```py
 [INFO] prediction: jacques, actual: jacques, confidence: 163.11
 [INFO] prediction: jacques, actual: jacques, confidence: 164.36
 [INFO] prediction: allen, actual: allen, confidence: 192.58

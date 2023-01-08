@@ -45,7 +45,7 @@ k-means 的一个注意事项是，我们需要提前 指定我们想要生成�
 
 好了，让我们动手使用 OpenCV、Python 和 k-means 对像素强度进行聚类:
 
-```
+```py
 # import the necessary packages
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
@@ -84,7 +84,7 @@ plt.imshow(image)
 
 为了做到这一点，我们需要将我们的图像重塑为一系列像素，而不是像素的矩阵:
 
-```
+```py
 # reshape the image to be a list of pixels
 image = image.reshape((image.shape[0] * image.shape[1], 3))
 
@@ -96,7 +96,7 @@ image = image.reshape((image.shape[0] * image.shape[1], 3))
 
 既然已经准备好了数据点，我们可以使用 k-means 来编写这些 **2 行代码**以找到图像中最主要的颜色:
 
-```
+```py
 # cluster the pixel intensities
 clt = KMeans(n_clusters = args["clusters"])
 clt.fit(image)
@@ -117,7 +117,7 @@ Scikit-learn 为我们打理一切。
 
 让我们打开一个新文件`utils.py`，并定义`centroid_histogram`函数:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import cv2
@@ -147,7 +147,7 @@ k-means 算法将图像中的每个像素分配到最近的聚类中。我们在
 
 现在是我们的第二个助手函数，`plot_colors`:
 
-```
+```py
 def plot_colors(hist, centroids):
 	# initialize the bar chart representing the relative frequency
 	# of each of the colors
@@ -178,7 +178,7 @@ def plot_colors(hist, centroids):
 
 现在我们已经定义了两个助手函数，我们可以把所有东西粘在一起了:
 
-```
+```py
 # build a histogram of clusters and then create a figure
 # representing the number of pixels labeled to each color
 hist = utils.centroid_histogram(clt)
@@ -198,7 +198,7 @@ plt.show()
 
 要执行我们的脚本，发出以下命令:
 
-```
+```py
 $ python color_kmeans.py --image images/jp.png --clusters 3
 
 ```

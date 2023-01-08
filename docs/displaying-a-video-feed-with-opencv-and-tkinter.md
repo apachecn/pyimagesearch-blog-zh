@@ -56,7 +56,7 @@
 
 现在我们已经创建了项目的模型，让我们继续并开始编码 GUI。打开一个新文件，将其命名为`photoboothapp.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from __future__ import print_function
 from PIL import Image
@@ -78,14 +78,14 @@ import os
 
 最后，我们将需要 [imutils](https://github.com/jrosebr1/imutils) ，我的便利函数集合用来使 OpenCV 工作更容易。如果您的系统上还没有安装`imutils`，让`pip`为您安装软件包:
 
-```
+```py
 $ pip install imutils
 
 ```
 
 让我们继续我们的`PhotoBoothApp`类的定义:
 
-```
+```py
 class PhotoBoothApp:
 	def __init__(self, vs, outputPath):
 		# store the video stream object and output path, then initialize
@@ -111,7 +111,7 @@ class PhotoBoothApp:
 
 我们继续下面的构造函数的定义:
 
-```
+```py
 		# create a button, that when pressed, will take the current
 		# frame and save it to file
 		btn = tki.Button(self.root, text="Snapshot!",
@@ -139,7 +139,7 @@ class PhotoBoothApp:
 
 接下来，让我们定义`videoLoop`函数，顾名思义，它监视视频流中的新帧:
 
-```
+```py
 	def videoLoop(self):
 		# DISCLAIMER:
 		# I'm not a GUI developer, nor do I even pretend to be. This
@@ -190,7 +190,7 @@ class PhotoBoothApp:
 
 现在，让我们来看看`takeSnapshot`回调:
 
-```
+```py
 	def takeSnapshot(self):
 		# grab the current timestamp and use it to construct the
 		# output path
@@ -210,7 +210,7 @@ class PhotoBoothApp:
 
 最后，我们可以定义我们的最后一个方法，`onClose`:
 
-```
+```py
 	def onClose(self):
 		# set the stop event, cleanup the camera, and allow the rest of
 		# the quit process to continue
@@ -227,7 +227,7 @@ class PhotoBoothApp:
 
 创建 Photo Booth 的最后一步是构建驱动程序脚本，用于初始化`VideoStream`和`PhotoBoothApp`。为了创建驱动程序脚本，我将下面的代码添加到一个名为`photo_booth.py`的文件中:
 
-```
+```py
 # import the necessary packages
 from __future__ import print_function
 from pyimagesearch.photoboothapp import PhotoBoothApp
@@ -266,7 +266,7 @@ pba.root.mainloop()
 
 要运行我们的 photo booth 应用程序，请确保您已经安装了必要的库和包(详见[之前的博文](https://pyimagesearch.com/2016/05/23/opencv-with-tkinter/))。确保系统配置正确后，执行以下命令:
 
-```
+```py
 $ python photo_booth.py --output output
 
 ```

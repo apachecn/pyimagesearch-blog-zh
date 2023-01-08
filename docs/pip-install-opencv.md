@@ -54,14 +54,14 @@
 
 我们需要用 [apt-get](https://help.ubuntu.com/community/AptGet/Howto) 包管理器刷新/升级预安装的包/库:
 
-```
+```py
 $ sudo apt-get update
 $ sudo apt-get upgrade
 ```
 
 然后安装两个必需的包:
 
-```
+```py
 $ sudo apt-get install python3-dev
 $ sudo apt-get install libgl1-mesa-glx
 ```
@@ -70,7 +70,7 @@ $ sudo apt-get install libgl1-mesa-glx
 
 如果您没有 pip，您需要先获得它:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python3 get-pip.py
 
@@ -82,7 +82,7 @@ $ sudo python3 get-pip.py
 
 让我们在我们的系统上安装 opencv-contrib-python:
 
-```
+```py
 $ sudo pip install opencv-contrib-python
 
 ```
@@ -101,14 +101,14 @@ Python 虚拟环境有巨大的好处。
 
 下面介绍如何安装`virtualenv`和`virtualenvwrapper`，它们都将驻留在您的 ***系统*** `site-packages`中，并管理每个项目的 ***虚拟环境*** 站点包:
 
-```
+```py
 $ pip install virtualenv virtualenvwrapper
 
 ```
 
 在我们继续之前，您首先需要在您的`~/.bashrc`个人资料中添加一些行。使用`nano`、`vim`或`emacs`打开文件，并将这些行附加到末尾:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.local/bin/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
@@ -118,7 +118,7 @@ source $HOME/.local/bin/virtualenvwrapper.sh
 
 保存文件。然后在您的终端中“搜索它”:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
@@ -133,14 +133,14 @@ $ source ~/.bashrc
 
 让我们**为 OpenCV 创建**一个 Python 3 虚拟环境，名为 CV:
 
-```
+```py
 $ mkvirtualenv cv -p python3
 
 ```
 
 现在有了魔棒(pip)，您可以在几秒钟内将 OpenCV 安装到您的新环境中:
 
-```
+```py
 $ pip install opencv-contrib-python
 
 ```
@@ -158,7 +158,7 @@ MacOS 的 pip 类似于 Ubuntu 安装 OpenCV。
 
 如果您没有 pip，您需要先获得它:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python3 get-pip.py
 
@@ -172,7 +172,7 @@ $ sudo python3 get-pip.py
 
 好吧，如果你坚持在你的 macOS 系统上安装，那么就像 pip 通过以下方式安装 OpenCV 一样简单:
 
-```
+```py
 $ sudo pip install opencv-contrib-python
 
 ```
@@ -191,7 +191,7 @@ $ sudo pip install opencv-contrib-python
 
 下面介绍如何安装 virtualenv 和 virtualenvwrapper，它们都将驻留在您的 ***系统*** 站点包中，并管理每个项目的 ***虚拟环境*** 站点包:
 
-```
+```py
 $ pip install virtualenv virtualenvwrapper
 
 ```
@@ -200,14 +200,14 @@ $ pip install virtualenv virtualenvwrapper
 
 使用`nano`、`vim`或`emacs`(大多数系统都有`nano`)打开文件:
 
-```
+```py
 $ nano ~/.bash_profile
 
 ```
 
 …并将这几行附加到末尾:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
@@ -219,7 +219,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 然后在您的终端中“搜索它”:
 
-```
+```py
 $ source ~/.bash_profile
 
 ```
@@ -234,14 +234,14 @@ $ source ~/.bash_profile
 
 让我们**为 OpenCV 创建**一个 Python 3 虚拟环境，名为 CV:
 
-```
+```py
 $ mkvirtualenv cv -p python3
 
 ```
 
 现在，使用 pip，只需一眨眼的时间，您就可以在几秒钟内将 OpenCV 安装到您的新环境中:
 
-```
+```py
 $ pip install opencv-contrib-python
 
 ```
@@ -272,7 +272,7 @@ $ pip install opencv-contrib-python
 
 Raspberry Pi 要求您在开始之前安装几个系统包:
 
-```
+```py
 $ sudo apt-get install libhdf5-dev libhdf5-serial-dev libhdf5-103
 $ sudo apt-get install libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5
 $ sudo apt-get install libatlas-base-dev
@@ -284,7 +284,7 @@ $ sudo apt-get install libjasper-dev
 
 Python 包管理器“pip”可以通过 wget 获得:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python3 get-pip.py
 
@@ -305,7 +305,7 @@ $ sudo python3 get-pip.py
 
 要在您的 Raspberry Pi 系统上 pip 安装 OpenCV，请确保像这样使用 sudo:
 
-```
+```py
 $ sudo pip install opencv-contrib-python==4.1.0.25
 
 ```
@@ -320,14 +320,14 @@ $ sudo pip install opencv-contrib-python==4.1.0.25
 
 下面是如何安装 virtualenv 和 virtualenvwrapper，我用来完成它的工具:
 
-```
+```py
 $ pip install virtualenv virtualenvwrapper
 
 ```
 
 然后，您需要在您的`~/.bashrc`中添加以下几行。使用`nano`、`vim`或`emacs`打开文件，并将这些行附加到末尾:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.local/bin/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
@@ -337,7 +337,7 @@ source $HOME/.local/bin/virtualenvwrapper.sh
 
 保存文件。然后在您的终端中“搜索它”:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
@@ -354,21 +354,21 @@ $ source ~/.bashrc
 
 要**创建**一个 Python 3 虚拟环境，其中将包含 OpenCV 和您安装的其他包，只需使用 mkvirtualenv 和下面的命令:
 
-```
+```py
 $ mkvirtualenv cv -p python3
 
 ```
 
 现在您有了一个名为`cv`的虚拟环境。您可以通过以下方式随时激活它:
 
-```
+```py
 $ workon cv
 
 ```
 
 现在手腕一翻，你就可以 **pip 安装 OpenCV** 到`cv`:
 
-```
+```py
 $ pip install opencv-contrib-python==4.1.0.25
 
 ```
@@ -379,7 +379,7 @@ $ pip install opencv-contrib-python==4.1.0.25
 
 我打赌你在用 **PiCamera** 作为你的成像传感器。您可以使用以下命令安装 Python 模块(注意引号):
 
-```
+```py
 $ pip install "picamera[array]"
 
 ```
@@ -394,7 +394,7 @@ $ pip install "picamera[array]"
 
 以下是您需要首先安装的内容(假设有一个`cv`虚拟环境):
 
-```
+```py
 $ workon cv
 $ pip install imutils
 $ pip install "picamera[array]" # if you're using a Raspberry Pi
@@ -403,7 +403,7 @@ $ pip install "picamera[array]" # if you're using a Raspberry Pi
 
 现在，打开一个 Python shell，仔细检查您是否准备好了所有软件:
 
-```
+```py
 $ workon cv
 $ python
 Python 3.6.3 (default, Oct  4 2017, 06:09:15) 
@@ -425,7 +425,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 从那里，执行以下命令:
 
-```
+```py
 $ python real_time_object_detection.py \
 	--prototxt MobileNetSSD_deploy.prototxt.txt \
 	--model MobileNetSSD_deploy.caffemodel
@@ -444,7 +444,7 @@ $ python real_time_object_detection.py \
 
 树莓 pi 是资源受限的，因此我们可以利用一些技巧来制造高 FPS 的假象。如果你在 **Raspberry Pi** 上，执行以下命令:
 
-```
+```py
 $ python pi_object_detection.py \
 	--prototxt MobileNetSSD_deploy.prototxt.txt \
 	--model MobileNetSSD_deploy.caffemodel

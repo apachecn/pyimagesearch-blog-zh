@@ -141,7 +141,7 @@
 
 请务必访问本指南的 ***“下载”*** 部分以检索源代码:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── pyimagesearch
@@ -179,7 +179,7 @@ $ tree . --dirsfirst
 
 打开您的`pyimagesearch`模块中的`simplecnn.py`文件，您会发现以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import BatchNormalization
@@ -194,7 +194,7 @@ from tensorflow.keras.layers import Dense
 
 然后我们定义`SimpleCNN`架构。
 
-```
+```py
 class SimpleCNN:
 	@staticmethod
 	def build(width, height, depth, classes):
@@ -239,7 +239,7 @@ class SimpleCNN:
 
 如果您在`pyimagesearch`模块中打开`fgsm.py`文件，您会发现以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.losses import MSE
 import tensorflow as tf
@@ -291,7 +291,7 @@ def generate_image_adversary(model, image, label, eps=2 / 255.0):
 
 现在让我们来看看我们的定制数据生成器。在我们的项目目录结构中打开`datagen.py`文件，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from .fgsm import generate_image_adversary
 import numpy as np
@@ -317,7 +317,7 @@ def generate_adversarial_batch(model, total, images, labels, dims,
 
 现在让我们构建数据生成器本身:
 
-```
+```py
 	# we're constructing a data generator here so we need to loop
 	# indefinitely
 	while True:
@@ -339,7 +339,7 @@ def generate_adversarial_batch(model, total, images, labels, dims,
 
 我们现在可以循环这些随机选择的图像的索引:
 
-```
+```py
 		# loop over the indexes
 		for i in idxs:
 			# grab the current image and label
@@ -381,7 +381,7 @@ def generate_adversarial_batch(model, total, images, labels, dims,
 
 打开项目结构中的`train_adverserial_defense.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.simplecnn import SimpleCNN
 from pyimagesearch.datagen import generate_adversarial_batch
@@ -395,7 +395,7 @@ import numpy as np
 
 然后，我们继续加载 MNIST 数据集并对其进行预处理:
 
-```
+```py
 # load MNIST dataset and scale the pixel values to the range [0, 1]
 print("[INFO] loading MNIST dataset...")
 (trainX, trainY), (testX, testY) = mnist.load_data()
@@ -413,7 +413,7 @@ testY = to_categorical(testY, 10)
 
 加载 MNIST 数据集后，我们可以编译模型并在训练集上对其进行训练:
 
-```
+```py
 # initialize our optimizer and model
 print("[INFO] compiling model...")
 opt = Adam(lr=1e-3)
@@ -432,7 +432,7 @@ model.fit(trainX, trainY,
 
 下一步是在测试集上评估模型:
 
-```
+```py
 # make predictions on the testing set for the model trained on
 # non-adversarial images
 (loss, acc) = model.evaluate(x=testX, y=testY, verbose=0)
@@ -462,7 +462,7 @@ print("[INFO] loss: {:.4f}, acc: {:.4f}\n".format(loss, acc))
 
 一个基本的解决方案是在对立图像上微调我们的模型:
 
-```
+```py
 # lower the learning rate and re-compile the model (such that we can
 # fine-tune it on the adversarial images)
 print("[INFO] re-compiling model...")
@@ -484,7 +484,7 @@ model.fit(advX, advY,
 
 最后，我们将进行最后一组评估:
 
-```
+```py
 # now that our model is fine-tuned we should evaluate it on the test
 # set (i.e., non-adversarial) again to see if performance has degraded
 (loss, acc) = model.evaluate(x=testX, y=testY, verbose=0)
@@ -508,7 +508,7 @@ print("[INFO] loss: {:.4f}, acc: {:.4f}".format(loss, acc))
 
 首先访问本指南的 ***“下载”*** 部分以检索源代码。从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ time python train_adversarial_defense.py
 [INFO] loading MNIST dataset...
 [INFO] compiling model...
@@ -534,7 +534,7 @@ Epoch 20/20
 
 然而，当我们生成一组 10，000 张敌对图像并要求 CNN 对它们进行分类时，这种“高精度”模型是可悲的*不充分*和*不准确*:
 
-```
+```py
 [INFO] generating adversarial examples with FGSM...
 
 [INFO] adversarial testing images:
@@ -547,7 +547,7 @@ Epoch 20/20
 
 也就是说，希望并没有消失！现在让我们对 CNN 的 10，000 张敌对图片进行微调:
 
-```
+```py
 [INFO] re-compiling model...
 [INFO] fine-tuning network on adversarial examples...
 Epoch 1/10
@@ -571,7 +571,7 @@ Epoch 10/10
 
 现在让我们回过头来，重新评估 CNN 关于*原始测试集和我们的对抗图像:*
 
-```
+```py
 [INFO] normal testing images *after* fine-tuning:
 [INFO] loss: 0.0594, acc: 0.9844
 

@@ -8,7 +8,7 @@
 
 使用 OpenCV 的 GPU 优化的`dnn`模块，我们能够将一个给定网络的计算从 CPU 推送到 GPU **，只需要*三行*代码:**
 
-```
+```py
 # load the model from disk and set the backend target to a
 # CUDA-enabled GPU
 net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
@@ -44,7 +44,7 @@ net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 
 从那里，解压缩文件并在终端中使用`tree`命令检查项目层次结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── example_videos
@@ -102,7 +102,7 @@ $ tree --dirsfirst
 
 打开项目目录结构中的`ssd_object_detection.py`文件，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils.video import FPS
 import numpy as np
@@ -143,7 +143,7 @@ args = vars(ap.parse_args())
 
 接下来，我们将指定我们的类和相关的随机颜色:
 
-```
+```py
 # initialize the list of class labels MobileNet SSD was trained to
 # detect, then generate a set of bounding box colors for each class
 CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
@@ -155,7 +155,7 @@ COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
 然后我们将加载基于 Caffe 的模型:
 
-```
+```py
 # load our serialized model from disk
 net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
 
@@ -173,7 +173,7 @@ if args["use_gpu"]:
 
 让我们开始处理帧，并使用我们的 GPU 执行对象检测**(当然，前提是`--use-gpu`命令行参数打开):**
 
-```
+```py
 # initialize the video stream and pointer to output video file, then
 # start the FPS timer
 print("[INFO] accessing video stream...")
@@ -240,7 +240,7 @@ while True:
 
 最后，我们总结一下:
 
-```
+```py
 	# check to see if the output frame should be displayed to our
 	# screen
 	if args["display"] > 0:
@@ -289,7 +289,7 @@ print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
 
 从那里，执行下面的命令，通过在我们的 **CPU:** 上运行它，为我们的 SSD 获得一个*基线*
 
-```
+```py
 $ python ssd_object_detection.py \
 	--prototxt MobileNetSSD_deploy.prototxt \
 	--model MobileNetSSD_deploy.caffemodel \
@@ -305,7 +305,7 @@ $ python ssd_object_detection.py \
 
 为了看到探测器*真的飞起来*，让我们提供`--use-gpu 1`命令行参数，**指示 OpenCV 将`dnn`计算推送到我们的 NVIDIA Tesla V100 GPU:**
 
-```
+```py
 $ python ssd_object_detection.py \
 	--prototxt MobileNetSSD_deploy.prototxt \
 	--model MobileNetSSD_deploy.caffemodel \
@@ -335,7 +335,7 @@ $ python ssd_object_detection.py \
 
 让我们看看如何将 YOLO 物体检测器(`yolo_object_detection.py`)与 OpenCV 的支持 CUDA 的`dnn`模块一起使用:
 
-```
+```py
 # import the necessary packages
 from imutils.video import FPS
 import numpy as np
@@ -376,7 +376,7 @@ args = vars(ap.parse_args())
 
 接下来，我们将加载我们的类标签并分配随机颜色:
 
-```
+```py
 # load the COCO class labels our YOLO model was trained on
 labelsPath = os.path.sep.join([args["yolo"], "coco.names"])
 LABELS = open(labelsPath).read().strip().split("\n")
@@ -387,7 +387,7 @@ COLORS = np.random.randint(0, 255, size=(len(LABELS), 3),
 	dtype="uint8")
 ```
 
-```
+```py
 # derive the paths to the YOLO weights and model configuration
 weightsPath = os.path.sep.join([args["yolo"], "yolov3.weights"])
 configPath = os.path.sep.join([args["yolo"], "yolov3.cfg"])
@@ -404,7 +404,7 @@ if args["use_gpu"]:
 	net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 ```
 
-```
+```py
 # determine only the *output* layer names that we need from YOLO
 ln = net.getLayerNames()
 ln = [ln[i[0] - 1] for i in net.getUnconnectedOutLayers()]
@@ -443,7 +443,7 @@ while True:
 	layerOutputs = net.forward(ln)
 ```
 
-```
+```py
 	# initialize our lists of detected bounding boxes, confidences,
 	# and class IDs, respectively
 	boxes = []
@@ -504,7 +504,7 @@ while True:
 				cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 ```
 
-```
+```py
 	# check to see if the output frame should be displayed to our
 	# screen
 	if args["display"] > 0:
@@ -538,7 +538,7 @@ print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
 print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
 ```
 
-```
+```py
 $ python yolo_object_detection.py --yolo yolo-coco \
 	--input ../example_videos/janie.mp4 \
 	--output ../output_videos/yolo_janie.avi \
@@ -549,7 +549,7 @@ $ python yolo_object_detection.py --yolo yolo-coco \
 [INFO] approx. FPS: 2.47
 ```
 
-```
+```py
 $ python yolo_object_detection.py --yolo yolo-coco \
 	--input ../example_videos/janie.mp4 \
 	--output ../output_videos/yolo_janie.avi \
@@ -578,7 +578,7 @@ $ python yolo_object_detection.py --yolo yolo-coco \
 
     打开目录结构中的`mask_rcnn_segmentation.py`,了解如何:
 
-    ```
+    ```py
     # import the necessary packages
     from imutils.video import FPS
     import numpy as np
@@ -619,7 +619,7 @@ $ python yolo_object_detection.py --yolo yolo-coco \
 
     有了导入和命令行参数，现在我们将加载类标签并分配随机颜色:
 
-    ```
+    ```py
     # load the COCO class labels our Mask R-CNN was trained on
     labelsPath = os.path.sep.join([args["mask_rcnn"],
     	"object_detection_classes_coco.txt"])
@@ -633,7 +633,7 @@ $ python yolo_object_detection.py --yolo yolo-coco \
 
     从那里我们将加载我们的模型。
 
-    ```
+    ```py
     # derive the paths to the Mask R-CNN weights and model configuration
     weightsPath = os.path.sep.join([args["mask_rcnn"],
     	"frozen_inference_graph.pb"])
@@ -659,7 +659,7 @@ $ python yolo_object_detection.py --yolo yolo-coco \
 
     让我们开始处理帧:
 
-    ```
+    ```py
     # initialize the video stream and pointer to output video file, then
     # start the FPS timer
     print("[INFO] accessing video stream...")
@@ -691,7 +691,7 @@ $ python yolo_object_detection.py --yolo yolo-coco \
 
     现在我们准备处理我们的结果:
 
-    ```
+    ```py
     	# loop over the number of detected objects
     	for i in range(0, boxes.shape[2]):
     		# extract the class ID of the detection along with the
@@ -754,7 +754,7 @@ $ python yolo_object_detection.py --yolo yolo-coco \
 
     从这里开始，我们将继续完成我们的循环，计算 FPS 统计，并清理:
 
-    ```
+    ```py
     	# check to see if the output frame should be displayed to our
     	# screen
     	if args["display"] > 0:
@@ -800,7 +800,7 @@ $ python yolo_object_detection.py --yolo yolo-coco \
 
     然后你可以打开一个命令行，在 **CPU:** 上*测试*屏蔽 R-CNN 模型
 
-    ```
+    ```py
     $ python mask_rcnn_segmentation.py \
     	--mask-rcnn mask-rcnn-coco \
     	--input ../example_videos/dog_park.mp4 \
@@ -820,7 +820,7 @@ $ python yolo_object_detection.py --yolo yolo-coco \
 
     要回答这个问题，只需向`mask_rcnn_segmentation.py`脚本提供`--use-gpu 1`命令行参数:
 
-    ```
+    ```py
     $ python mask_rcnn_segmentation.py \
     	--mask-rcnn mask-rcnn-coco \
     	--input ../example_videos/dog_park.mp4 \
@@ -846,7 +846,7 @@ $ python yolo_object_detection.py --yolo yolo-coco \
 
     **这三点整齐地翻译成*只有三行代码:***
 
-    ```
+    ```py
     net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
     net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
     net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)

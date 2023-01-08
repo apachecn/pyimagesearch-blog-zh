@@ -58,7 +58,7 @@ PyImageSearch 读者 Bryan 想知道是否有更好、更简化的方法:
 
 去拿今天的。这篇博文的 ***【下载】*** 部分的 zip 文件。提取文件后，您将看到一个特别简单的项目布局:
 
-```
+```py
 % tree
 .
 ├── apple_support.png
@@ -69,7 +69,7 @@ PyImageSearch 读者 Bryan 想知道是否有更好、更简化的方法:
 
 ## 使用 Tesseract 实现文本本地化、文本检测和 OCR
 
-```
+```py
 # import the necessary packages
 from pytesseract import Output
 import pytesseract
@@ -89,7 +89,7 @@ args = vars(ap.parse_args())
 
 接下来，我们解析两个[命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # load the input image, convert it from BGR to RGB channel ordering,
 # and use Tesseract to localize each area of text in the input image
 image = cv2.imread(args["image"])
@@ -97,7 +97,7 @@ rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 results = pytesseract.image_to_data(rgb, output_type=Output.DICT)
 ```
 
-```
+```py
 # loop over each of the individual text localizations
 for i in range(0, len(results["text"])):
 	# extract the bounding box coordinates of the text region from
@@ -113,7 +113,7 @@ for i in range(0, len(results["text"])):
 	conf = int(results["conf"][i])
 ```
 
-```
+```py
 # filter out weak confidence text localizations
 	if conf > args["min_conf"]:
 		# display the confidence and text to our terminal
@@ -144,7 +144,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python localize_text_tesseract.py --image apple_support.png
 Confidence: 26
 Text: a
@@ -158,7 +158,7 @@ Text: Support
 Confidence: 96
 ```
 
-```
+```py
 $ python localize_text_tesseract.py --image apple_support.png --min-conf 50
 Confidence: 96
 Text: Apple

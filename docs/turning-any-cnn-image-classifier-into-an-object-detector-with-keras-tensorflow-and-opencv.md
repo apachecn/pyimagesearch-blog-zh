@@ -153,7 +153,7 @@
 
 一旦你提取了。zip 从这篇博文的 ***【下载】*** 部分，你的目录将被组织如下:
 
-```
+```py
 .
 ├── images
 │   ├── hummingbird.jpg
@@ -173,7 +173,7 @@
 
 现在让我们实现这个助手函数——打开`pyimagesearch`模块中的`detection_helpers.py`文件，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import imutils
 
@@ -185,7 +185,7 @@ def sliding_window(image, step, ws):
 			yield (x, y, image[y:y + ws[1], x:x + ws[0]])
 ```
 
-```
+```py
 def image_pyramid(image, scale=1.5, minSize=(224, 224)):
 	# yield the original image
 	yield image
@@ -209,7 +209,7 @@ def image_pyramid(image, scale=1.5, minSize=(224, 224)):
 
 ### **使用 Keras 和 TensorFlow 将预先训练的图像分类器转变为对象检测器**
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.applications import ResNet50
 from tensorflow.keras.applications.resnet import preprocess_input
@@ -225,7 +225,7 @@ import time
 import cv2
 ```
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -239,7 +239,7 @@ ap.add_argument("-v", "--visualize", type=int, default=-1,
 args = vars(ap.parse_args())
 ```
 
-```
+```py
 # initialize variables used for the object detection procedure
 WIDTH = 600
 PYR_SCALE = 1.5
@@ -252,7 +252,7 @@ INPUT_SIZE = (224, 224)
 
 让我们加载我们的 ResNet 分类 CNN 并输入图像:
 
-```
+```py
 # load our network weights from disk
 print("[INFO] loading network...")
 model = ResNet50(weights="imagenet", include_top=True)
@@ -266,7 +266,7 @@ orig = imutils.resize(orig, width=WIDTH)
 
 **36 线**加载 [ImageNet](http://www.image-net.org/) 上预训练的 ResNet。如果您选择使用不同的预训练分类器，您可以在这里为您的特定项目替换一个。要学习如何训练自己的分类器，建议你阅读 *[用 Python 进行计算机视觉的深度学习](https://pyimagesearch.com/deep-learning-computer-vision-python-book/)* 。
 
-```
+```py
 # initialize the image pyramid
 pyramid = image_pyramid(orig, scale=PYR_SCALE, minSize=ROI_SIZE)
 
@@ -281,7 +281,7 @@ locs = []
 start = time.time()
 ```
 
-```
+```py
 # loop over the image pyramid
 for image in pyramid:
 	# determine the scale factor between the *original* image
@@ -309,7 +309,7 @@ for image in pyramid:
 		locs.append((x, y, x + w, y + h))
 ```
 
-```
+```py
 		# check to see if we are visualizing each of the sliding
 		# windows in the image pyramid
 		if args["visualize"] > 0:
@@ -325,7 +325,7 @@ for image in pyramid:
 			cv2.waitKey(0)
 ```
 
-```
+```py
 # show how long it took to loop over the image pyramid layers and
 # sliding window locations
 end = time.time()
@@ -350,7 +350,7 @@ preds = imagenet_utils.decode_predictions(preds, top=1)
 labels = {}
 ```
 
-```
+```py
 # loop over the predictions
 for (i, p) in enumerate(preds):
 	# grab the prediction information for the current ROI
@@ -370,7 +370,7 @@ for (i, p) in enumerate(preds):
 		labels[label] = L
 ```
 
-```
+```py
 # loop over the labels for each of detected objects in the image
 for label in labels.keys():
 	# clone the original image so that we can draw on it
@@ -391,7 +391,7 @@ for label in labels.keys():
 	clone = orig.copy()
 ```
 
-```
+```py
 	# extract the bounding boxes and associated prediction
 	# probabilities, then apply non-maxima suppression
 	boxes = np.array([p[0] for p in labels[label]])
@@ -427,7 +427,7 @@ for label in labels.keys():
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python detect_with_classifier.py --image images/stingray.jpg --size "(300, 150)"
 [INFO] loading network...
 [INFO] looping over pyramid/windows took 0.19142 seconds
@@ -446,7 +446,7 @@ $ python detect_with_classifier.py --image images/stingray.jpg --size "(300, 150
 
 让我们尝试另一个图像，这是一只蜂鸟(同样，在 ImageNet 上训练的网络将能够识别):
 
-```
+```py
 $ python detect_with_classifier.py --image images/hummingbird.jpg --size "(250, 250)"
 [INFO] loading network...
 [INFO] looping over pyramid/windows took 0.07845 seconds
@@ -461,7 +461,7 @@ $ python detect_with_classifier.py --image images/hummingbird.jpg --size "(250, 
 
 但是，现在让我们尝试一个示例图像，其中我们的对象检测算法没有以最佳方式执行:
 
-```
+```py
 $ python detect_with_classifier.py --image images/lawn_mower.jpg --size "(200, 200)"
 [INFO] loading network...
 [INFO] looping over pyramid/windows took 0.13851 seconds
@@ -475,7 +475,7 @@ $ python detect_with_classifier.py --image images/lawn_mower.jpg --size "(200, 2
 
 但是对于一辆*“半履带”*(一辆前面有普通车轮，后面有坦克状履带的军用车辆)，实际上有一个*秒*检测:
 
-```
+```py
 $ python detect_with_classifier.py --image images/lawn_mower.jpg --size "(200, 200)" --min-conf 0.95
 [INFO] loading network...
 [INFO] looping over pyramid/windows took 0.13618 seconds

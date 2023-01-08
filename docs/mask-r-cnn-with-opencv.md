@@ -167,7 +167,7 @@ CONV 图层的输出是蒙版本身。
 
 我按照以下方式组织了项目(如直接在终端中输出的`tree`命令所示):
 
-```
+```py
 $ tree
 .
 ├── mask-rcnn-coco
@@ -216,7 +216,7 @@ $ tree
 
 从那里，打开`mask_rcnn.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -231,7 +231,7 @@ import os
 
 从那里，我们将解析我们的[命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -258,7 +258,7 @@ args = vars(ap.parse_args())
 
 现在我们的命令行参数存储在`args`字典中，让我们加载标签和颜色:
 
-```
+```py
 # load the COCO class labels our Mask R-CNN was trained on
 labelsPath = os.path.sep.join([args["mask_rcnn"],
 	"object_detection_classes_coco.txt"])
@@ -279,7 +279,7 @@ COLORS = np.array(COLORS, dtype="uint8")
 
 让我们加载我们的模型:
 
-```
+```py
 # derive the paths to the Mask R-CNN weights and model configuration
 weightsPath = os.path.sep.join([args["mask_rcnn"],
 	"frozen_inference_graph.pb"])
@@ -297,7 +297,7 @@ net = cv2.dnn.readNetFromTensorflow(weightsPath, configPath)
 
 在下一个模块中，我们将通过 Mask R-CNN 神经网络加载并传递一幅图像:
 
-```
+```py
 # load our input image and grab its spatial dimensions
 image = cv2.imread(args["image"])
 (H, W) = image.shape[:2]
@@ -327,7 +327,7 @@ print("[INFO] masks shape: {}".format(masks.shape))
 
 既然我们已经在图像上执行了掩膜 R-CNN 的正向传递，我们将想要过滤+可视化我们的结果。这正是下一个 for 循环要完成的任务。它很长，所以我把它分成*五个代码块*，从这里开始:
 
-```
+```py
 # loop over the number of detected objects
 for i in range(0, boxes.shape[2]):
 	# extract the class ID of the detection along with the confidence
@@ -363,7 +363,7 @@ for i in range(0, boxes.shape[2]):
 
 图像分割要求我们找到物体所在的所有像素。因此，我们将在对象的顶部放置一个透明的覆盖层，以观察我们的算法执行得有多好。为了做到这一点，我们将计算一个掩码:
 
-```
+```py
 		# extract the pixel-wise segmentation for the object, resize
 		# the mask such that it's the same dimensions of the bounding
 		# box, and then finally threshold to create a *binary* mask
@@ -385,7 +385,7 @@ for i in range(0, boxes.shape[2]):
 
 为了方便起见，如果通过命令行参数设置了`--visualize`标志，则下一个块实现了对`mask`、`roi`和分段`instance`的可视化:
 
-```
+```py
 		# check to see if are going to visualize how to extract the
 		# masked region itself
 		if args["visualize"] > 0:
@@ -413,7 +413,7 @@ for i in range(0, boxes.shape[2]):
 
 现在让我们继续视觉化:
 
-```
+```py
 		# now, extract *only* the masked region of the ROI by passing
 		# in the boolean mask array as our slice condition
 		roi = roi[mask]
@@ -437,7 +437,7 @@ for i in range(0, boxes.shape[2]):
 
 最后，我们将在图像上绘制矩形和文本类标签+置信度值，并显示结果！
 
-```
+```py
 		# draw the bounding box of the instance on the image
 		color = [int(c) for c in color]
 		cv2.rectangle(clone, (startX, startY), (endX, endY), color, 2)
@@ -464,7 +464,7 @@ for i in range(0, boxes.shape[2]):
 
 确保您已经使用教程的 ***【下载】*** 部分下载了源代码、经过训练的掩码 R-CNN 和示例图像。从那里，打开您的终端并执行以下命令:
 
-```
+```py
 $ python mask_rcnn.py --mask-rcnn mask-rcnn-coco --image images/example_01.jpg
 [INFO] loading Mask R-CNN from disk...
 [INFO] Mask R-CNN took 0.761193 seconds
@@ -487,7 +487,7 @@ $ python mask_rcnn.py --mask-rcnn mask-rcnn-coco --image images/example_01.jpg
 
 让我们尝试另一个示例图像:
 
-```
+```py
 $ python mask_rcnn.py --mask-rcnn mask-rcnn-coco --image images/example_02.jpg \
 	--confidence 0.6
 [INFO] loading Mask R-CNN from disk...
@@ -505,7 +505,7 @@ $ python mask_rcnn.py --mask-rcnn mask-rcnn-coco --image images/example_02.jpg \
 
 在我们继续在视频中使用屏蔽 R-CNN 之前，这里是最后一个例子:
 
-```
+```py
 $ python mask_rcnn.py --mask-rcnn mask-rcnn-coco --image images/example_03.jpg 
 [INFO] loading Mask R-CNN from disk...
 [INFO] Mask R-CNN took 0.680739 seconds
@@ -528,7 +528,7 @@ $ python mask_rcnn.py --mask-rcnn mask-rcnn-coco --image images/example_03.jpg
 
 打开`mask_rcnn_video.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -562,7 +562,7 @@ args = vars(ap.parse_args())
 
 现在让我们加载我们的类`LABELS`、`COLORS`，并屏蔽 R-CNN 神经`net`:
 
-```
+```py
 # load the COCO class labels our Mask R-CNN was trained on
 labelsPath = os.path.sep.join([args["mask_rcnn"],
 	"object_detection_classes_coco.txt"])
@@ -592,7 +592,7 @@ net = cv2.dnn.readNetFromTensorflow(weightsPath, configPath)
 
 现在让我们初始化我们的视频流和视频编写器:
 
-```
+```py
 # initialize the video stream and pointer to output video file
 vs = cv2.VideoCapture(args["input"])
 writer = None
@@ -618,7 +618,7 @@ except:
 
 让我们开始我们的帧处理循环:
 
-```
+```py
 # loop over frames from the video file stream
 while True:
 	# read the next frame from the file
@@ -648,7 +648,7 @@ while True:
 
 现在让我们开始循环检测到的对象:
 
-```
+```py
 	# loop over the number of detected objects
 	for i in range(0, boxes.shape[2]):
 		# extract the class ID of the detection along with the
@@ -688,7 +688,7 @@ while True:
 
 现在让我们绘制对象的透明覆盖图、边框和标签+置信度:
 
-```
+```py
 			# grab the color used to visualize this particular class,
 			# then create a transparent overlay by blending the color
 			# with the ROI
@@ -717,7 +717,7 @@ while True:
 
 最后，让我们写入视频文件并清理:
 
-```
+```py
 	# check if the video writer is None
 	if writer is None:
 		# initialize our video writer
@@ -764,7 +764,7 @@ vs.release()
 
  **从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python mask_rcnn_video.py --input videos/cats_and_dogs.mp4 \
 	--output output/cats_and_dogs_output.avi --mask-rcnn mask-rcnn-coco
 [INFO] loading Mask R-CNN from disk...

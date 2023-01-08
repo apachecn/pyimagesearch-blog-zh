@@ -40,7 +40,7 @@
 
 幸运的是，TensorFlow 可以在 pip 上安装:
 
-```
+```py
 $ pip install tensorflow
 ```
 
@@ -71,7 +71,7 @@ $ pip install tensorflow
 
 接下来，让我们来看看目录结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── dataset
@@ -137,7 +137,7 @@ $ tree --dirsfirst
 
 `NeRF_Trainer`写在`pyimagesearch/nerf_trainer.py`中。让我们打开文件，仔细阅读脚本，以便更好地理解它。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.metrics import Mean
 import tensorflow as tf
@@ -145,7 +145,7 @@ import tensorflow as tf
 
 我们从第 2-3 行中的必要导入开始。
 
-```
+```py
 class Nerf_Trainer(tf.keras.Model):
 	def __init__(self, coarseModel, fineModel, lxyz, lDir, 
 		encoderFn, renderImageDepth, samplePdf, nF):
@@ -182,7 +182,7 @@ class Nerf_Trainer(tf.keras.Model):
 *   `samplePdf`:分级采样的效用函数
 *   `nF`:精细模型样本数
 
-```
+```py
 	def compile(self, optimizerCoarse, optimizerFine, lossFn):
 		super().compile()
 		# define the optimizer for the coarse and fine model
@@ -205,7 +205,7 @@ class Nerf_Trainer(tf.keras.Model):
 
 在**的第 39 和 40 行，**我们定义了两个跟踪器，即`lossTracker`和`psnrTracker`。我们使用这些跟踪器来跟踪原始图像和预测图像之间的模型损失和 PSNR。
 
-```
+```py
 	def train_step(self, inputs):
 		# get the images and the rays
 		(elements, images) = inputs
@@ -229,7 +229,7 @@ class Nerf_Trainer(tf.keras.Model):
 *   **第 48 行和第 49 行**为粗略模型生成光线。
 *   **第 52-56 行**使用位置编码功能对光线和方向进行编码。
 
-```
+```py
 		# keep track of our gradients
 		with tf.GradientTape() as coarseTape:
 			# compute the predictions from the coarse model
@@ -249,7 +249,7 @@ class Nerf_Trainer(tf.keras.Model):
 *   这些输出(`rgb`和`sigma`)然后通过`renderImageDepth`函数(用于体绘制)并产生图像深度图和权重(**第 65-67 行**)。
 *   在**行 70** 上，我们计算粗略模型的目标图像和渲染图像之间的均方误差。
 
-```
+```py
 		# compute the middle values of t vals
 		tValsCoarseMid = (0.5 * 
 			(tValsCoarse[..., 1:] + tValsCoarse[..., :-1]))
@@ -276,7 +276,7 @@ class Nerf_Trainer(tf.keras.Model):
 *   在**第 73-81 行**，我们使用`sample_pdf`函数计算精细模型的`tValsFine`
 *   接下来，我们为精细模型建立光线和方向(**行 84-92** )。
 
-```
+```py
 		# keep track of our gradients
 		with tf.GradientTape() as fineTape:
 			# compute the predictions from the fine model
@@ -293,7 +293,7 @@ class Nerf_Trainer(tf.keras.Model):
 
 *   **第 94-105 行**用于定义精细模型的正向传递。这与粗略模型的正向传递相同。
 
-```
+```py
 		# get the trainable variables from the coarse model and
 		# apply back propagation
 		tvCoarse = self.coarseModel.trainable_variables
@@ -321,7 +321,7 @@ class Nerf_Trainer(tf.keras.Model):
 *   然后对精细模型的参数重复相同的操作(**行 116-119** )。
 *   **线 122 和 123** 用于更新损耗和峰值信噪比(PSNR)跟踪器，然后通过**线 126 和 127** 返回。
 
-```
+```py
 	def test_step(self, inputs):
 		# get the images and the rays
 		(elements, images) = inputs
@@ -409,7 +409,7 @@ class Nerf_Trainer(tf.keras.Model):
 
 我们打开`pyimagesearch/train_monitor.py`开始挖吧。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.preprocessing.image import array_to_img
 from tensorflow.keras.callbacks import Callback
@@ -419,7 +419,7 @@ import tensorflow as tf
 
 我们首先为这个脚本导入必要的包(**第 2-5 行**)。
 
-```
+```py
 def get_train_monitor(testDs, encoderFn, lxyz, lDir, imagePath):
 	# grab images and rays from the testing dataset
 	(tElements, tImages) = next(iter(testDs))
@@ -443,7 +443,7 @@ def get_train_monitor(testDs, encoderFn, lxyz, lDir, imagePath):
 *   接下来在**第 13 行和第 14 行**、**、**我们为粗略模型生成光线。
 *   在第**行第 18-22** 、**和**行，我们使用位置编码对粗略模型的光线和方向进行编码。
 
-```
+```py
 	class TrainMonitor(Callback):
 		def on_epoch_end(self, epoch, logs=None):
 			# compute the coarse model prediction
@@ -532,7 +532,7 @@ def get_train_monitor(testDs, encoderFn, lxyz, lDir, imagePath):
 
 有了所有的组件，我们将最终能够使用下面给出的脚本来训练我们的 NeRF 模型。我们打开`train.py`开始翻吧。
 
-```
+```py
 # USAGE
 # python train.py
 
@@ -558,7 +558,7 @@ import os
 
 在第 6 行的**上，我们设置了用于再现性的随机种子。接下来，我们开始导入必要的包(**第 5-21 行**)。**
 
-```
+```py
 # get the train validation and test data
 print("[INFO] grabbing the data from json files...")
 jsonTrainData = read_json(config.TRAIN_JSON)
@@ -575,7 +575,7 @@ print(f"[INFO] focal length of the camera: {focalLength}...")
 
 在**第 25-27 行**，我们从各自的`json`文件中提取训练、测试和验证数据。然后我们计算相机的焦距(**第 29-34 行**)并打印出来。
 
-```
+```py
 # get the train, validation, and test image paths and camera2world
 # matrices
 print("[INFO] grabbing the image paths and camera2world matrices...")
@@ -610,7 +610,7 @@ testImageDs = (
 
 接下来，我们构建`tf.data`图像数据集(**第 52-63 行**)。这些分别包括训练、测试和验证数据集。
 
-```
+```py
 # instantiate the GetRays object
 getRays = GetRays(focalLength=focalLength, imageWidth=config.IMAGE_WIDTH,
 	imageHeight=config.IMAGE_HEIGHT, near=config.NEAR, far=config.FAR,
@@ -634,7 +634,7 @@ testRayDs = (
 
 在**的第 66-68 行**，我们实例化了一个`GetRays`类的对象。然后我们创建`tf.data`训练、验证和测试射线数据集(**第 72-83 行**)。
 
-```
+```py
 # zip the images and rays dataset together
 trainDs = tf.data.Dataset.zip((trainRayDs, trainImageDs))
 valDs = tf.data.Dataset.zip((valRayDs, valImageDs))
@@ -664,7 +664,7 @@ testDs = (
 
 然后将图像和光线数据集压缩在一起(**第 86-88 行**)。所有的数据集(训练、验证和测试)然后被混洗、分批、重复和预取(**第 91-109 行**)。
 
-```
+```py
 # instantiate the coarse model
 coarseModel = get_model(lxyz=config.L_XYZ, lDir=config.L_DIR,
 	batchSize=config.BATCH_SIZE, denseUnits=config.DENSE_UNITS,
@@ -690,7 +690,7 @@ nerfTrainerModel.compile(optimizerCoarse=Adam(),optimizerFine=Adam(),
 
 在**的第 128 行和第 129 行**，我们用合适的优化器(这里是`Adam`)和损失函数(这里是均方误差)编译`nerfTrainerModel`。
 
-```
+```py
 # check if the output image directory already exists, if it doesn't,
 # then create it
 if not os.path.exists(config.IMAGE_PATH):
@@ -737,7 +737,7 @@ and ![\phi](img/b537ddf31e737dd0d7700bea4e30b058.png "\phi")axes in the 3D coord
 
 让我们打开`inference.py`来想象绕θ轴的完整旋转。
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from pyimagesearch.utils import pose_spherical
@@ -757,7 +757,7 @@ import os
 
 我们从通常必需的进口商品开始(**第 2-15 行**)。
 
-```
+```py
 # create a camera2world matrix list to store the novel view
 # camera2world matrices
 c2wList = []
@@ -802,7 +802,7 @@ fineModel = load_model(config.FINE_PATH, compile=False)
 
 在**第 51 行和第 52 行，**我们加载预训练的粗略和精细模型。
 
-```
+```py
 # create a list to hold all the novel view from the nerf model
 print("[INFO] grabbing the novel views...")
 frameList = []
@@ -871,7 +871,7 @@ for element in tqdm(ds):
 *   在**行 92-100** 上，我们构建精细模型光线并对其进行位置编码，然后对精细光线的方向重复同样的操作。
 *   我们使用来自精细模型的预测来渲染精细图像。新的视图然后被附加到`frameList` ( **第 103-111 行**)。
 
-```
+```py
 # check if the output video directory exists, if it does not, then
 # create it
 if not os.path.exists(config.VIDEO_PATH):
@@ -905,7 +905,7 @@ NeRF 是深度学习和计算机图形学领域开创性研究的典范。它取
 
 **gothipaty，A. R .和 Raha，R.** “使用 TensorFlow 和 Keras 的 NeRF 的计算机图形学和深度学习:第 3 部分”， *PyImageSearch* ，2021 年，[https://PyImageSearch . com/2021/11/24/Computer-Graphics-and-Deep-Learning-with-NeRF-using-tensor flow-and-Keras-Part-3/](https://pyimagesearch.com/2021/11/24/computer-graphics-and-deep-learning-with-nerf-using-tensorflow-and-keras-part-3/)
 
-```
+```py
 @article{Gosthipaty_Raha_2021_pt3,
   author = {Aritra Roy Gosthipaty and Ritwik Raha},
   title = {Computer Graphics and Deep Learning with {NeRF} using {TensorFlow} and {Keras}: Part 3},

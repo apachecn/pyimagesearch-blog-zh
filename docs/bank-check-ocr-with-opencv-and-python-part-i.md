@@ -83,7 +83,7 @@ MICR 的 E-13B 变体包含 14 个字符:
 
 让我们开始解决这个问题，打开一个新文件，命名为`bank_check_ocr.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from skimage.segmentation import clear_border
 from imutils import contours
@@ -105,7 +105,7 @@ import cv2
 
 既然我们已经导入了相关的包(并在需要时安装了它们)，让我们构建一个从 MICR 字体中提取字符的函数:
 
-```
+```py
 def extract_digits_and_symbols(image, charCnts, minW=5, minH=15):
 	# grab the internal Python iterator for the list of character
 	# contours, then  initialize the character ROI and location
@@ -133,7 +133,7 @@ def extract_digits_and_symbols(image, charCnts, minW=5, minH=15):
 
 让我们开始循环，看看迭代器是如何工作的:
 
-```
+```py
 	# keep looping over the character contours until we reach the end
 	# of the list
 	while True:
@@ -156,7 +156,7 @@ def extract_digits_and_symbols(image, charCnts, minW=5, minH=15):
 
 接下来，我们将检查边界框的宽度和高度，并采取相应的措施:
 
-```
+```py
 			# check to see if the width and height are sufficiently
 			# large, indicating that we have found a digit
 			if cW >= minW and cH >= minH:
@@ -175,7 +175,7 @@ def extract_digits_and_symbols(image, charCnts, minW=5, minH=15):
 
 否则，我们假设我们正在使用 MICR E-13B 字符符号，并需要应用一组更高级的处理操作:
 
-```
+```py
 			# otherwise, we are examining one of the special symbols
 			else:
 				# MICR symbols include three separate parts, so we
@@ -215,7 +215,7 @@ if-else 的`else`块具有分析特殊符号的逻辑，这些特殊符号包含
 
 函数的剩余代码块处理 while 循环退出条件和返回语句。
 
-```
+```py
 		# we have reached the end of the iterator; gracefully break
 		# from the loop
 		except StopIteration:
@@ -232,7 +232,7 @@ if-else 的`else`块具有分析特殊符号的逻辑，这些特殊符号包含
 
 现在，我们已经准备好解析命令行参数，并继续执行脚本:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -250,7 +250,7 @@ args = vars(ap.parse_args())
 
 接下来，我们将为每个符号/字符创建“名称”,并将它们存储在一个列表中。
 
-```
+```py
 # initialize the list of reference character names, in the same
 # order as they appear in the reference image where the digits
 # their names and:
@@ -269,7 +269,7 @@ charNames = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
 
 接下来，我们将把参考图像加载到内存中，并执行一些预处理:
 
-```
+```py
 # load the reference MICR image from disk, convert it to grayscale,
 # and threshold it, such that the digits appear as *white* on a
 # *black* background
@@ -298,7 +298,7 @@ ref = cv2.threshold(ref, 0, 255, cv2.THRESH_BINARY_INV |
 
  **对于这两个部分，我们将使用一些共同的数据，包括`ref`(我们刚刚预处理的参考图像)和`refCnts`(我们即将提取的参考轮廓)。
 
-```
+```py
 # find contours in the MICR image (i.e,. the outlines of the
 # characters) and sort them from left to right
 refCnts = cv2.findContours(ref.copy(), cv2.RETR_EXTERNAL,
@@ -342,7 +342,7 @@ cv2.waitKey(0)
 
 更高级的方法如下所示:
 
-```
+```py
 # extract the digits and symbols from the list of contours, then
 # initialize a dictionary to map the character name to the ROI
 (refROIs, refLocs) = extract_digits_and_symbols(ref, refCnts,
@@ -404,7 +404,7 @@ cv2.waitKey(0)
 
 从那里，执行以下脚本:
 
-```
+```py
 $ python bank_check_ocr.py --image example_check.png \
 	--reference micr_e13b_reference.png
 

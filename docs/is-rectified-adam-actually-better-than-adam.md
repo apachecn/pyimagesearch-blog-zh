@@ -139,7 +139,7 @@
 
 继续抓取 ***【下载】*** ，然后用`tree`命令检查项目目录:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── output [48 entries]
@@ -187,7 +187,7 @@ $ tree --dirsfirst --filelimit 10
 
 现在让我们继续执行`train.py`脚本:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.minigooglenet import MiniGoogLeNet
 from pyimagesearch.minivggnet import MiniVGGNet
@@ -212,7 +212,7 @@ import cv2
 
 让我们[解析命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--history", required=True,
@@ -244,7 +244,7 @@ args = vars(ap.parse_args())
 
 在这里，我们将设置两个常数，并初始化数据集的默认通道数:
 
-```
+```py
 # initialize the batch size and number of epochs to train
 BATCH_SIZE = 128
 NUM_EPOCHS = 60
@@ -256,7 +256,7 @@ numChans = 1
 
 如果我们的`--dataset`是 MNIST 或时尚 MNIST，我们将以下列方式加载数据集:
 
-```
+```py
 # check if we are using either the MNIST or Fashion MNIST dataset
 if args["dataset"] in ("mnist", "fashion_mnist"):
 	# check if we are using MNIST
@@ -294,7 +294,7 @@ if args["dataset"] in ("mnist", "fashion_mnist"):
 
 否则，我们需要加载一个 CIFAR 变量`--dataset`:
 
-```
+```py
 # otherwise, we must be using a variant of CIFAR
 else:
 	# update the number of channels in the images
@@ -343,7 +343,7 @@ CIFAR 数据集包含 3 通道彩色图像(**第 77 行**)。这些数据集已�
 
 从这里开始，我们将扩展我们的数据并确定类的总数:
 
-```
+```py
 # scale the data to the range [0, 1]
 trainX = trainX.astype("float32") / 255.0
 testX = testX.astype("float32") / 255.0
@@ -356,7 +356,7 @@ print("[INFO] {} classes in dataset".format(numClasses))
 
 随后初始化本实验的**深度学习优化器:**
 
-```
+```py
 # check if we are using Adam
 if args["optimizer"] == "adam":
 	# initialize the Adam optimizer
@@ -375,7 +375,7 @@ else:
 
 然后，根据`--model`命令行参数构建我们的`model`:
 
-```
+```py
 # check if we are using the ResNet architecture
 if args["model"] == "resnet":
 	# utilize the ResNet architecture
@@ -401,7 +401,7 @@ else:
 
 一旦构建了 ResNet、GoogLeNet 或 MiniVGGNet，我们将二进制化我们的标签并构建我们的[数据扩充](https://pyimagesearch.com/2019/07/08/keras-imagedatagenerator-and-data-augmentation/)对象:
 
-```
+```py
 # convert the labels from integers to vectors
 lb = LabelBinarizer()
 trainY = lb.fit_transform(trainY)
@@ -416,7 +416,7 @@ aug = ImageDataGenerator(rotation_range=18, zoom_range=0.15,
 
 然后编译我们的模型并训练网络:
 
-```
+```py
 # compile the model and train the network
 print("[INFO] training network...")
 model.compile(loss="categorical_crossentropy", optimizer=opt,
@@ -432,7 +432,7 @@ H = model.fit_generator(
 
 然后，我们评估经过训练的模型，并将训练历史转储到磁盘:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(testX, batch_size=BATCH_SIZE)
@@ -471,7 +471,7 @@ f.close()
 
 打开`combinations.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import os
@@ -493,7 +493,7 @@ args = vars(ap.parse_args())
 
 让我们打开一个新文件进行写入:
 
-```
+```py
 # open the output shell script for writing, then write the header
 f = open(args["script"], "w")
 f.write("#!/bin/sh\n\n")
@@ -511,7 +511,7 @@ optimizers = ["adam", "radam"]
 
 我们将在嵌套循环中从这些列表中形成所有可能的实验组合:
 
-```
+```py
 # loop over all combinations of datasets, models, and optimizers
 for dataset in datasets:
 	for model in models:
@@ -556,7 +556,7 @@ f.close()
 
 从那里，打开一个终端并执行`combinations.py`脚本:
 
-```
+```py
 $ python combinations.py --output output --script experiments.sh
 
 ```
@@ -565,7 +565,7 @@ $ python combinations.py --output output --script experiments.sh
 
 现在就开始调查`experiments.sh`:
 
-```
+```py
 #!/bin/sh
 
 python train.py --history output/resnet_adam_mnist.pickle --report output/resnet_adam_mnist.txt --dataset mnist  --model resnet --optimizer adam
@@ -611,14 +611,14 @@ python train.py --history output/minivggnet_radam_cifar100.pickle --report outpu
 
 要自己启动实验，只需运行以下命令:
 
-```
+```py
 $ ./experiments.sh
 
 ```
 
 脚本运行完成后，您的`output/`目录中应该会充满`.pickle`和`.txt`文件:
 
-```
+```py
 $ ls -l output/
 googlenet_adam_cifar10.pickle
 googlenet_adam_cifar10.txt
@@ -644,7 +644,7 @@ resnet_radam_mnist.txt
 
 打开`plot.py`并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import matplotlib.pyplot as plt
 import numpy as np
@@ -697,7 +697,7 @@ Adam 和修正的 Adam 训练历史曲线均由作为参数传递给函数的`ad
 
 让我们来处理解析命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--input", required=True,
@@ -719,7 +719,7 @@ models = ["resnet", "googlenet", "minivggnet"]
 
 **第 47 和 48 行**列出了我们的`datasets`和`models`。我们将遍历数据集和模型的组合来生成我们的图:
 
-```
+```py
 # loop over all combinations of datasets and models
 for dataset in datasets:
 	for model in models:
@@ -772,14 +772,14 @@ for dataset in datasets:
 
 从那里，执行以下命令:
 
-```
+```py
 $ python plot.py --input output --plots plots
 
 ```
 
 然后，您可以检查`plots/`目录，并确保它已经填充了培训历史数据:
 
-```
+```py
 $ ls -l plots/
 googlenet_cifar10.png
 googlenet_cifar100.png
@@ -816,7 +816,7 @@ resnet_mnist.png
 
 下面是 **Adam 优化器的输出分类报告:**
 
-```
+```py
               precision    recall  f1-score   support
 
            0       0.99      1.00      1.00       980
@@ -838,7 +838,7 @@ weighted avg       0.99      0.99      0.99     10000
 
 以及**修正的 Adam 优化器的分类报告:**
 
-```
+```py
               precision    recall  f1-score   support
 
            0       0.99      1.00      0.99       980
@@ -878,7 +878,7 @@ weighted avg       0.99      0.99      0.99     10000
 
 下面是 **Adam 优化器的输出:**
 
-```
+```py
               precision    recall  f1-score   support
 
            0       1.00      1.00      1.00       980
@@ -900,7 +900,7 @@ weighted avg       0.99      0.99      0.99     10000
 
 以及经过**修正的 Adam 优化器的输出:**
 
-```
+```py
               precision    recall  f1-score   support
 
            0       1.00      1.00      1.00       980
@@ -934,7 +934,7 @@ weighted avg       0.99      0.99      0.99     10000
 
 鉴于 MNIST 不是一个非常具有挑战性的数据集，我们为 **Adam 优化器**获得了 **99%的准确率**
 
-```
+```py
               precision    recall  f1-score   support
 
            0       1.00      1.00      1.00       980
@@ -956,7 +956,7 @@ weighted avg       0.99      0.99      0.99     10000
 
 以及**整改后的 Adam 优化器:**
 
-```
+```py
               precision    recall  f1-score   support
 
            0       1.00      1.00      1.00       980
@@ -1000,7 +1000,7 @@ weighted avg       0.99      0.99      0.99     10000
 
 下面你可以找到使用 **Adam 优化器的训练输出:**
 
-```
+```py
               precision    recall  f1-score   support
 
          top       0.95      0.71      0.81      1000
@@ -1022,7 +1022,7 @@ weighted avg       0.92      0.90      0.90     10000
 
 以及**整改后的 Adam 优化器:**
 
-```
+```py
               precision    recall  f1-score   support
 
          top       0.85      0.85      0.85      1000
@@ -1058,7 +1058,7 @@ weighted avg       0.90      0.89      0.89     10000
 
 下面是来自 **Adam 优化器的分类报告:**
 
-```
+```py
               precision    recall  f1-score   support
 
          top       0.84      0.89      0.86      1000
@@ -1080,7 +1080,7 @@ weighted avg       0.93      0.92      0.92     10000
 
 以及来自**整流 Adam 优化器的输出:**
 
-```
+```py
               precision    recall  f1-score   support
 
          top       0.91      0.83      0.87      1000
@@ -1118,7 +1118,7 @@ weighted avg       0.93      0.92      0.92     10000
 
 下面是 **Adam 优化器的输出:**
 
-```
+```py
               precision    recall  f1-score   support
 
          top       0.89      0.83      0.86      1000
@@ -1140,7 +1140,7 @@ weighted avg       0.92      0.91      0.91     10000
 
 下面是经过**修正的 Adam 优化器的输出:**
 
-```
+```py
               precision    recall  f1-score   support
 
          top       0.88      0.86      0.87      1000
@@ -1188,7 +1188,7 @@ weighted avg       0.92      0.92      0.92     10000
 
 下面是使用 **Adam 优化器的训练输出:**
 
-```
+```py
               precision    recall  f1-score   support
 
     airplane       0.90      0.79      0.84      1000
@@ -1210,7 +1210,7 @@ weighted avg       0.84      0.83      0.83     10000
 
 这是经过**整流的 Adam:** 的输出
 
-```
+```py
               precision    recall  f1-score   support
 
     airplane       0.84      0.72      0.78      1000
@@ -1244,7 +1244,7 @@ weighted avg       0.74      0.71      0.71     10000
 
 下面是**亚当的输出:**
 
-```
+```py
               precision    recall  f1-score   support
 
     airplane       0.89      0.92      0.91      1000
@@ -1266,7 +1266,7 @@ weighted avg       0.90      0.90      0.90     10000
 
 这里是经过**整流的 Adam 的输出:**
 
-```
+```py
               precision    recall  f1-score   support
 
     airplane       0.88      0.88      0.88      1000
@@ -1304,7 +1304,7 @@ Adam 优化器获得了 **90%的准确性**，略微超过了修正 Adam 的 87%
 
 下面你可以找到标准的 **Adam 优化器的输出:**
 
-```
+```py
               precision    recall  f1-score   support
 
     airplane       0.80      0.92      0.86      1000
@@ -1326,7 +1326,7 @@ weighted avg       0.88      0.87      0.87     10000
 
 以及来自**整流 Adam:** 的输出
 
-```
+```py
               precision    recall  f1-score   support
 
     airplane       0.86      0.86      0.86      1000
@@ -1372,7 +1372,7 @@ weighted avg       0.84      0.84      0.83     10000
 
 下面是来自 **Adam 优化器的输出:**
 
-```
+```py
                precision    recall  f1-score   support
 
         apple       0.94      0.76      0.84       100
@@ -1420,7 +1420,7 @@ aquarium_fish       0.69      0.66      0.67       100
 
 这是经过**整流的 Adam:** 的输出
 
-```
+```py
                precision    recall  f1-score   support
 
         apple       0.82      0.70      0.76       100
@@ -1480,7 +1480,7 @@ Adam 优化器是明显的赢家( **58%的准确度**)超过了修正的 Adam (4
 
 下面是来自 **Adam 优化器的输出:**
 
-```
+```py
                precision    recall  f1-score   support
 
         apple       0.95      0.80      0.87       100
@@ -1528,7 +1528,7 @@ aquarium_fish       0.88      0.66      0.75       100
 
 这是经过**整流的 Adam:** 的输出
 
-```
+```py
                precision    recall  f1-score   support
 
         apple       0.93      0.76      0.84       100
@@ -1586,7 +1586,7 @@ Adam 优化器获得了 **66%的准确率**，比修正后的 Adam 的 59%要好
 
 下面我们可以在 CIFAR-100 数据集上使用 **Adam** 找到训练 ResNet 的输出:
 
-```
+```py
                precision    recall  f1-score   support
 
         apple       0.80      0.89      0.84       100
@@ -1634,7 +1634,7 @@ aquarium_fish       0.86      0.75      0.80       100
 
 这里是经过**整流的 Adam 的输出:**
 
-```
+```py
                precision    recall  f1-score   support
 
         apple       0.86      0.72      0.78       100

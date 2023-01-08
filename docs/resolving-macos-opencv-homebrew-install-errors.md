@@ -37,7 +37,7 @@
 
 假设您遵循了我的[原始家酿+ OpenCV 安装帖子](https://pyimagesearch.com/2016/12/19/install-opencv-3-on-macos-with-homebrew-the-easy-way/)，您可能在尝试安装 OpenCV 时遇到了以下错误:
 
-```
+```py
 $ brew install opencv3 --with-contrib --with-python3 --HEAD
 ...
 Error: opencv3: Does not support building both Python 2 and 3 wrappers
@@ -57,7 +57,7 @@ Error: opencv3: Does not support building both Python 2 and 3 wrappers
 
 第一种方法可以说更简单，**，但是没有解决真正的问题**。这里我们只是更新了`brew install opencv3`命令，以表明我们想要在没有 Python 3 绑定 的情况下构建 OpenCV 3 ***:***
 
-```
+```py
 $ brew install opencv3 --with-contrib
 
 ```
@@ -66,7 +66,7 @@ $ brew install opencv3 --with-contrib
 
 类似地，如果我们想用 Python 3 绑定 构建 OpenCV 3 ***，我们应该将`brew install opencv3`命令更新为:***
 
-```
+```py
 $ brew install opencv3 --with-contrib --with-python3 --without-python
 
 ```
@@ -83,14 +83,14 @@ $ brew install opencv3 --with-contrib --with-python3 --without-python
 
 要编辑 OpenCV 3 Homebrew 安装公式，请执行以下命令:
 
-```
+```py
 $ brew edit opencv3
 
 ```
 
 然后找到下面的配置块:
 
-```
+```py
 if build.with?("python3") && build.with?("python")
   # Opencv3 Does not support building both Python 2 and 3 versions
   odie "opencv3: Does not support building both Python 2 and 3 wrappers"
@@ -106,7 +106,7 @@ end
 
 找到这一部分后，请将这四行注释掉:
 
-```
+```py
 #if build.with?("python3") && build.with?("python")
 #  # Opencv3 Does not support building both Python 2 and 3 versions
 #  odie "opencv3: Does not support building both Python 2 and 3 wrappers"
@@ -124,7 +124,7 @@ end
 
 从那里，您应该能够使用以下命令通过 Homebrew 成功安装 OpenCV 3:
 
-```
+```py
 $ brew install opencv3 --with-contrib --with-python3
 
 ```
@@ -155,14 +155,14 @@ OpenCV 3 安装完成后，[回到最初的教程](https://pyimagesearch.com/201
 
 例如，如果您之前的 OpenCV 3 + Homebrew 安装命令是:
 
-```
+```py
 $ brew install opencv3 --with-contrib --with-python3 --HEAD
 
 ```
 
 只需将其更新为:
 
-```
+```py
 $ brew install opencv3 --with-contrib --with-python3
 
 ```
@@ -175,7 +175,7 @@ $ brew install opencv3 --with-contrib --with-python3
 
 您可以使用以下命令检查您的 Python 2.7 版本:
 
-```
+```py
 $ python --version
 Python 2.7.13
 
@@ -183,7 +183,7 @@ Python 2.7.13
 
 类似地，该命令将为您提供 Python 3 版本:
 
-```
+```py
 $ python3 --version
 Python 3.6.1
 
@@ -197,14 +197,14 @@ Python 3.6.1
 
 例如，如果我告诉您检查 Python 3 安装的`site-packages`目录，并提供一个示例命令:
 
-```
+```py
 $ ls /usr/local/opt/opencv3/lib/python3.5/site-packages/
 
 ```
 
 你应该*首先*检查你的 Python 3 版本。上面执行的命令假设 Python 3.5。但是，如果在运行`python3 --version`之后，您发现您正在使用 Python 3.6，则需要将您的路径更新为:
 
-```
+```py
 $ ls /usr/local/opt/opencv3/lib/python3.6/site-packages/
 
 ```

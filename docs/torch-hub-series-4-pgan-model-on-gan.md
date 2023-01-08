@@ -93,7 +93,7 @@ is initially low, the gradients flow through the convolution layer. As the train
 
 幸运的是，使用 pip 很容易安装这些包:
 
-```
+```py
 $ pip install torch torchvision
 $ pip install matplotlib
 ```
@@ -119,7 +119,7 @@ $ pip install matplotlib
 
 既然我们已经讨论了 PGAN 和渐进式增长技术背后的直觉，我们就准备深入代码，看看我们的 PGAN 模型在起作用。我们从描述目录的项目结构开始。
 
-```
+```py
 ├── output
 ├── pyimagesearch
 │   ├── config.py
@@ -139,7 +139,7 @@ $ pip install matplotlib
 
 我们从讨论`config.py`文件开始，它包含我们将在教程中使用的参数配置。
 
-```
+```py
 # import the necessary packages
 import torch
 import os
@@ -176,7 +176,7 @@ INTERPOLATE_PLOT_PATH = os.path.sep.join([BASE_OUTPUT,
 
 让我们从项目目录中打开`predict.py`文件并开始吧。
 
-```
+```py
 # USAGE
 # python predict.py
 
@@ -263,7 +263,7 @@ through the PGAN to get the corresponding image on the line joining ![I_1](img/6
 
 接下来，让我们打开`analyze.py`文件并在代码中实现它，以分析我们的 PGAN 学习到的结构。
 
-```
+```py
 # USAGE
 # python analyze.py
 
@@ -353,7 +353,7 @@ and ![\mathbf{z_2}](img/ed84fbf1ef540f01ae60637e75f8faec.png "\mathbf{z_2}")are 
 
 **Chandhok，S.** “火炬中心系列#4: PGAN”， *PyImageSearch* ，2022 年，[https://PyImageSearch . com/2022/01/10/Torch-Hub-Series-4-pgan-model-on-gan/](https://pyimagesearch.com/2022/01/10/torch-hub-series-4-pgan-model-on-gan/)
 
-```
+```py
 @article{shivam_2022_THS4,
   author = {Shivam Chandhok},
   title = {Torch Hub Series \#4: {PGAN}},

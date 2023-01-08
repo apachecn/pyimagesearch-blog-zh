@@ -41,7 +41,7 @@
 
 幸运的是，它是 pip 可安装的:
 
-```
+```py
 $ pip install pytorch
 ```
 
@@ -70,7 +70,7 @@ $ pip install pytorch
 
 从这里，看一下目录结构:
 
-```
+```py
 $ tree .
 .
 ├── inference.py
@@ -125,7 +125,7 @@ ResNet 被证明是机器学习社区的一次巨大飞跃。ResNet 不仅在构
 
 首先，让我们进入存储在`pyimagesearch`目录中的`config.py`脚本。该脚本将包含完整的训练和推理管道配置值。
 
-```
+```py
 # import the necessary packages
 import torch
 import os
@@ -166,7 +166,7 @@ MODEL_PATH = os.path.join("output", "model.pth")
 
 我们创建了一些函数来帮助我们处理数据管道，并在`datautils.py`脚本中对它们进行分组，以便更好地处理我们的数据。
 
-```
+```py
 # import the necessary packages
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
@@ -182,7 +182,7 @@ def get_dataloader(dataset, batchSize, shuffle=True):
 
 我们的第一个效用函数是`get_dataloader`函数。它将数据集、批处理大小和一个布尔变量`shuffle`作为其参数(**第 6 行**)，并返回一个 PyTorch `dataloader`实例(**第 11 行**)。
 
-```
+```py
 def train_val_split(dataset, valSplit=0.2):
 	# grab the total size of the dataset
 	totalSize = len(dataset)
@@ -205,7 +205,7 @@ def train_val_split(dataset, valSplit=0.2):
 
 我们的下一个任务是为猫狗数据集创建一个分类器。请记住，我们不是从零开始训练我们的调用模型，而是对它进行微调。为此，我们将继续下一个脚本，即`classifier.py`。
 
-```
+```py
 # import the necessary packages
 from torch.nn import Linear
 from torch.nn import Module
@@ -236,7 +236,7 @@ class Classifier(Module):
 
 注意，对于 VGGnet，我们使用命令`baseModel.classifier[6].out_features`，而对于 ResNet，我们使用`baseModel.fc.out_features`。这是因为这些模型有不同的命名模块和层。所以我们必须使用不同的命令来访问每一层的最后一层。因此，`model`变量对于我们的代码工作非常重要。
 
-```
+```py
 	def forward(self, x):
 		# pass the inputs through the base model to get the features
 		# and then pass the features through of fully connected layer
@@ -254,7 +254,7 @@ class Classifier(Module):
 
 先决条件排除后，我们继续进行`train.py`。首先，我们将训练我们的分类器来区分猫和狗。
 
-```
+```py
 # USAGE
 # python train.py --model vgg
 # python train.py --model resnet
@@ -292,7 +292,7 @@ args = vars(ap.parse_args())
 
 接下来的一系列代码块是我们项目中非常重要的部分。例如，为了微调模型，我们通常冻结预训练模型的层。然而，在消融不同的场景时，我们注意到保持卷积层冻结，但是完全连接的层解冻以用于进一步的训练，这有助于我们的结果。
 
-```
+```py
 # check if the name of the backbone model is VGG
 if args["model"] == "vgg":
 	# load VGG-11 model
@@ -306,7 +306,7 @@ if args["model"] == "vgg":
 
 从火炬中心调用的 VGG 模型架构(**线 34 和 35** )被分成几个子模块，以便于访问。卷积层被分组在一个名为`features`的模块下，而下面完全连接的层被分组在一个名为`classifier`的模块下。由于我们只需要冻结卷积层，我们直接访问第 38 行**上的参数，并通过将`requires_grad`设置为`False`来冻结它们，保持`classifier`模块层不变。**
 
-```
+```py
 # otherwise, the backbone model we will be using is a ResNet
 elif args["model"] == "resnet":
 	# load ResNet 18 model
@@ -338,7 +338,7 @@ elif args["model"] == "resnet":
 
 在第 52 行**的 ResNet 的可用层上循环，我们冻结所有层，除了最后一层(**行 55-65** )。**
 
-```
+```py
 # define the transform pipelines
 trainTransform = Compose([
 	RandomResizedCrop(config.IMAGE_SIZE),
@@ -356,7 +356,7 @@ trainDataset = ImageFolder(config.TRAIN_PATH, trainTransform)
 
 我们通过使用另一个名为`ImageFolder`的 PyTorch 实用函数来完成它，该函数将自动创建输入和目标数据，前提是目录设置正确(**第 77 行**)。
 
-```
+```py
 # create training and validation data split
 (trainDataset, valDataset) = train_val_split(dataset=trainDataset)
 
@@ -367,7 +367,7 @@ valLoader = get_dataloader(valDataset, config.BATCH_SIZE)
 
 使用我们的`train_val_split`效用函数，我们将训练数据集分成一个训练和验证集(**第 80 行**)。接下来，我们使用来自`datautils.py`的`get_dataloader`实用函数来创建我们数据的 PyTorch `dataloader`实例(**第 83 行和第 84 行**)。这将允许我们以一种类似生成器的方式无缝地向模型提供数据。
 
-```
+```py
 # build the custom model
 model = Classifier(baseModel=baseModel.to(config.DEVICE),
 	numClasses=2, model=args["model"])
@@ -386,7 +386,7 @@ softmax = Softmax()
 
 我们已经使用交叉熵作为我们今天任务的损失函数和 Adam 优化器(**第 92-94 行**)。此外，我们使用单独的`softmax`损失来帮助我们增加培训损失(**第 97 行**)。
 
-```
+```py
 # calculate steps per epoch for training and validation set
 trainSteps = len(trainDataset) // config.BATCH_SIZE
 valSteps = len(valDataset) // config.BATCH_SIZE
@@ -402,7 +402,7 @@ H = {
 
 训练时期之前的最后一步是设置训练步骤和验证步骤值，然后创建一个存储所有训练历史的字典(**行 100-109** )。
 
-```
+```py
 # loop over epochs
 print("[INFO] training the network...")
 for epoch in range(config.EPOCHS):
@@ -421,7 +421,7 @@ for epoch in range(config.EPOCHS):
 
 在训练循环中，我们首先将模型设置为训练模式( **Line 115** )。接下来，我们初始化训练损失、确认损失、训练和确认精度变量(**第 118-124 行**)。
 
-```
+```py
 	# loop over the training set
 	for (image, target) in tqdm(trainLoader):
 		# send the input to the device
@@ -452,7 +452,7 @@ for epoch in range(config.EPOCHS):
 
 接下来，我们将损失添加到我们的总训练损失中(**行 145** )，通过 softmax 传递模型输出以获得孤立的预测值，然后将其添加到`trainCorrect`变量中。
 
-```
+```py
 	# switch off autograd
 	with torch.no_grad():
 		# set the model in evaluation mode
@@ -482,7 +482,7 @@ for epoch in range(config.EPOCHS):
 *   模型被设置为评估模式(**行 152** )
 *   权重没有更新
 
-```
+```py
 	# calculate the average training and validation loss
 	avgTrainLoss = totalTrainLoss / trainSteps
 	avgValLoss = totalValLoss / valSteps
@@ -507,7 +507,7 @@ for epoch in range(config.EPOCHS):
 
 然后，我们继续将这些值添加到我们的训练历史字典中(**行 181-184** )。
 
-```
+```py
 # plot the training loss and accuracy
 plt.style.use("ggplot")
 plt.figure()
@@ -531,7 +531,7 @@ torch.save(model.module.state_dict(), config.MODEL_PATH)
 
 让我们看看每个时期的值是什么样的！
 
-```
+```py
 [INFO] training the network...
 100%|██████████| 50/50 [01:24<00:00,  1.68s/it]
 100%|██████████| 13/13 [00:19<00:00,  1.48s/it]
@@ -574,7 +574,7 @@ Val loss: 0.153363, Val accuracy: 0.9313
 
 随着我们的模型准备就绪，我们将继续我们的推理脚本，`inference.py`。
 
-```
+```py
 # USAGE
 # python inference.py --model vgg
 # python inference.py --model resnet
@@ -605,7 +605,7 @@ args = vars(ap.parse_args())
 
 因为我们必须在加载权重之前初始化我们的模型，所以我们需要正确的模型参数。为此，我们在第 23-26 行的**中创建了一个参数解析器。**
 
-```
+```py
 # initialize test transform pipeline
 testTransform = Compose([
 	Resize((config.IMAGE_SIZE, config.IMAGE_SIZE)),
@@ -633,7 +633,7 @@ testLoader = get_dataloader(testDataset, config.PRED_BATCH_SIZE)
 
 使用`ImageFolder`实用函数，我们创建我们的测试数据集实例，并将其提供给之前为测试`dataLoader`实例创建的`get_dataloader`函数(**第 43-46 行**)。
 
-```
+```py
 # check if the name of the backbone model is VGG
 if args["model"] == "vgg":
 	# load VGG-11 model
@@ -649,7 +649,7 @@ elif args["model"] == "resnet":
 
 如前所述，由于我们必须再次初始化模型，我们检查给定的模型参数，并相应地使用 Torch Hub 加载模型(**第 49-58 行**)。
 
-```
+```py
 # build the custom model
 model = Classifier(baseModel=baseModel.to(config.DEVICE),
 	numClasses=2, vgg = False)
@@ -670,7 +670,7 @@ soft = Softmax()
 
 正如我们在`train.py`脚本中所做的，我们选择交叉熵作为我们的损失函数(**第 67 行**，并初始化测试损失和准确性(**第 71 行和第 72 行**)。
 
-```
+```py
 # switch off autograd
 with torch.no_grad():
 	# set the model in evaluation mode
@@ -699,7 +699,7 @@ with torch.no_grad():
 
 通过 softmax 函数(**第 95 和 96 行)**传递预测来计算精确度。
 
-```
+```py
 # print test data accuracy		
 print(testCorrect/len(testDataset))
 
@@ -716,7 +716,7 @@ fig = plt.figure("Results", figsize=(10, 10 ))
 
 现在我们将看看测试数据的一些具体情况并显示它们。为此，我们在**行 102** 上初始化一个可迭代变量，并抓取一批数据(**行 105** )。
 
-```
+```py
 # switch off autograd
 with torch.no_grad():
 	# send the images to the device
@@ -782,7 +782,7 @@ with torch.no_grad():
 
 **Chakraborty，D.** “火炬中心系列#2: VGG 和雷斯内特”， *PyImageSearch* ，2021，[https://PyImageSearch . com/2021/12/27/Torch-Hub-Series-2-vgg-and-ResNet/](https://pyimagesearch.com/2021/12/27/torch-hub-series-2-vgg-and-resnet/)
 
-```
+```py
 @article{dev_2021_THS2,
   author = {Devjyoti Chakraborty},
   title = {{Torch Hub} Series \#2: {VGG} and {ResNet}},

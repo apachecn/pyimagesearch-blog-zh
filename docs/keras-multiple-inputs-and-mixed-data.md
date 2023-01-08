@@ -84,7 +84,7 @@ Keras 能够通过其**功能 API 处理多个输入(甚至[多个输出](https:
 
 **例如，我们可以将简单的序列神经网络定义为:**
 
-```
+```py
 model = Sequential()
 model.add(Dense(8, input_shape=(10,), activation="relu"))
 model.add(Dense(4, activation="relu"))
@@ -96,7 +96,7 @@ model.add(Dense(1, activation="linear"))
 
 **我们可以使用函数 API 定义样本神经网络:**
 
-```
+```py
 inputs = Input(shape=(10,))
 x = Dense(8, activation="relu")(inputs)
 x = Dense(4, activation="relu")(x)
@@ -109,7 +109,7 @@ model = Model(inputs, x)
 
 **要了解 Keras 函数 API 的强大功能，请考虑下面的代码，我们在其中创建了一个接受多个输入的模型:**
 
-```
+```py
 # define two sets of inputs
 inputA = Input(shape=(32,))
 inputB = Input(shape=(128,))
@@ -209,7 +209,7 @@ model = Model(inputs=[x.input, y.input], outputs=z)
 
 要获取今天这篇文章的源代码，请使用 ***“下载”*** 部分。获得 zip 文件后，导航到下载该文件的位置，并将其解压缩:
 
-```
+```py
 $ cd path/to/zip
 $ unzip keras-multi-input.zip
 $ cd keras-multi-input
@@ -218,7 +218,7 @@ $ cd keras-multi-input
 
 在那里，您可以通过以下方式下载房价数据集:
 
-```
+```py
 $ git clone https://github.com/emanhamed/Houses-dataset
 
 ```
@@ -240,7 +240,7 @@ $ git clone https://github.com/emanhamed/Houses-dataset
 
 让我们看看今天的项目是如何组织的:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── Houses-dataset
@@ -276,7 +276,7 @@ Houses-dataset 文件夹包含我们在本系列中使用的房价数据集。�
 
 打开`datasets.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.preprocessing import MinMaxScaler
@@ -321,7 +321,7 @@ def load_house_attributes(inputPath):
 
 现在让我们定义`process_house_attributes`函数:
 
-```
+```py
 def process_house_attributes(df, train, test):
 	# initialize the column names of the continuous data
 	continuous = ["bedrooms", "bathrooms", "area"]
@@ -367,7 +367,7 @@ def process_house_attributes(df, train, test):
 
 下一步是定义一个助手函数来加载我们的输入图像。再次打开`datasets.py`文件并插入以下代码:
 
-```
+```py
 def load_house_images(df, inputPath):
 	# initialize our images array (i.e., the house images themselves)
 	images = []
@@ -397,7 +397,7 @@ def load_house_images(df, inputPath):
 
 让我们在循环中不断进步:
 
-```
+```py
 		# initialize our list of input images along with the output image
 		# after *combining* the four input images
 		inputImages = []
@@ -476,7 +476,7 @@ def load_house_images(df, inputPath):
 
 打开`models.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import BatchNormalization
@@ -524,7 +524,7 @@ MLP ***支路*** 在**线路 24** 返回。
 
 现在让我们定义一下我们网络的右上角的分支，CNN:
 
-```
+```py
 def create_cnn(width, height, depth, filters=(16, 32, 64), regress=False):
 	# initialize the input shape and channel dimension, assuming
 	# TensorFlow/channels-last ordering
@@ -565,7 +565,7 @@ def create_cnn(width, height, depth, filters=(16, 32, 64), regress=False):
 
 让我们完成我们网络的 CNN 分支:
 
-```
+```py
 	# flatten the volume, then FC => RELU => BN => DROPOUT
 	x = Flatten()(x)
 	x = Dense(16)(x)
@@ -608,7 +608,7 @@ def create_cnn(width, height, depth, filters=(16, 32, 64), regress=False):
 
 创建一个名为`mixed_training.py`的新文件，打开它，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import datasets
 from pyimagesearch import models
@@ -644,7 +644,7 @@ args = vars(ap.parse_args())
 
 让我们加载数值/分类数据和图像数据:
 
-```
+```py
 # construct the path to the input .txt file that contains information
 # on each house in the dataset and then load the dataset
 print("[INFO] loading house attributes...")
@@ -667,7 +667,7 @@ images = images / 255.0
 
 既然我们的数据已经加载，我们将构建我们的培训/测试分割，调整价格，并处理房屋属性:
 
-```
+```py
 # partition the data into training and testing splits using 75% of
 # the data for training and the remaining 25% for testing
 print("[INFO] processing data...")
@@ -699,7 +699,7 @@ testY = testAttrX["price"] / maxPrice
 
 好吧，我撒谎了。在下一个代码块中实际上没有任何“魔法”在进行！但是我们将`concatenate`我们网络的分支并完成我们的多输入 Keras 网络:
 
-```
+```py
 # create the MLP and CNN models
 mlp = models.create_mlp(trainAttrX.shape[1], regress=False)
 cnn = models.create_cnn(64, 64, 3, regress=False)
@@ -736,7 +736,7 @@ model = Model(inputs=[mlp.input, cnn.input], outputs=x)
 
 让我们继续编译、训练和评估我们新成立的`model`:
 
-```
+```py
 # compile the model using mean absolute percentage error as our loss,
 # implying that we seek to minimize the absolute percentage difference
 # between our price *predictions* and the *actual prices*
@@ -762,7 +762,7 @@ preds = model.predict([testAttrX, testImagesX])
 
 在我们的测试数据上调用`model.predict`(**第 84 行**)允许我们获取评估我们模型的预测。现在让我们进行评估:
 
-```
+```py
 # compute the difference between the *predicted* house prices and the
 # *actual* house prices, then compute the percentage difference and
 # the absolute percentage difference
@@ -804,7 +804,7 @@ print("[INFO] mean: {:.2f}%, std: {:.2f}%".format(mean, std))
 
 从那里，打开一个终端并执行以下命令开始训练网络:
 
-```
+```py
 $ python mixed_training.py --dataset Houses-dataset/Houses\ Dataset/
 [INFO] loading house attributes...
 [INFO] loading house images...

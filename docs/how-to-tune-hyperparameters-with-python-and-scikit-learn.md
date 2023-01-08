@@ -55,7 +55,7 @@
 
 打开一个新文件，将其命名为`knn_tune.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.grid_search import RandomizedSearchCV
@@ -75,14 +75,14 @@ import os
 
 我们还将使用我的个人 [imutils 库](https://github.com/jrosebr1/imutils)，所以请确保您也安装了它:
 
-```
+```py
 $ pip install imutils
 
 ```
 
 接下来，我们将定义我们的`extract_color_histogram`函数:
 
-```
+```py
 def extract_color_histogram(image, bins=(8, 8, 8)):
 	# extract a 3D color histogram from the HSV color space using
 	# the supplied number of `bins` per channel
@@ -112,7 +112,7 @@ def extract_color_histogram(image, bins=(8, 8, 8)):
 
 关于这个方法更详细的回顾，[请参考上周的博文](https://pyimagesearch.com/2016/08/08/k-nn-classifier-for-image-classification/)。
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -140,7 +140,7 @@ labels = []
 
 接下来，我们可以循环我们的`imagePaths`并描述它们:
 
-```
+```py
 # loop over the input images
 for (i, imagePath) in enumerate(imagePaths):
 	# load the image and extract the class label (assuming that our
@@ -168,7 +168,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 为了训练和评估我们的 k-NN 分类器，我们需要将我们的`data`分成两部分:一个*训练部分*和一个*测试部分*:
 
-```
+```py
 # partition the data into training and testing splits, using 75%
 # of the data for training and the remaining 25% for testing
 print("[INFO] constructing training/testing split...")
@@ -181,7 +181,7 @@ print("[INFO] constructing training/testing split...")
 
 最后，让我们定义一组要优化的超参数:
 
-```
+```py
 # construct the set of hyperparameters to tune
 params = {"n_neighbors": np.arange(1, 31, 2),
 	"metric": ["euclidean", "cityblock"]}
@@ -205,7 +205,7 @@ params = {"n_neighbors": np.arange(1, 31, 2),
 
 您可以在下面的代码段中看到网格搜索是如何执行的:
 
-```
+```py
 # tune the hyperparameters via a cross-validated grid search
 print("[INFO] tuning hyperparameters via grid search")
 model = KNeighborsClassifier(n_jobs=args["jobs"])
@@ -241,7 +241,7 @@ print("[INFO] grid search best parameters: {}".format(
 
 您可以在下面找到对 k-NN 算法的超参数进行随机搜索的代码:
 
-```
+```py
 # tune the hyperparameters via a randomized search
 grid = RandomizedSearchCV(model, params)
 start = time.time()
@@ -267,7 +267,7 @@ print("[INFO] randomized search best parameters: {}".format(
 
 从那里，您可以执行以下命令来优化超参数:
 
-```
+```py
 $ python knn_tune.py --dataset kaggle_dogs_vs_cats
 
 ```

@@ -143,14 +143,14 @@ NCS 应该*而不是*用于训练神经网络模型，而是为可部署模型�
 
 让我们更新系统:
 
-```
+```py
 $ sudo apt-get update && sudo apt-get upgrade
 
 ```
 
 然后让我们安装一堆软件包:
 
-```
+```py
 $ sudo apt-get install -y libusb-1.0-0-dev libprotobuf-dev
 $ sudo apt-get install -y libleveldb-dev libsnappy-dev
 $ sudo apt-get install -y libopencv-dev
@@ -178,14 +178,14 @@ $ sudo apt-get install -y python3-six python3-networkx
 
 由于我们使用 OpenCV 和 Python，我们将需要`python-opencv`绑定。Movidius 博客上的安装说明不包括这个工具。您可以通过输入以下内容来安装`python-opencv`绑定:
 
-```
+```py
 $ sudo apt-get install -y python-opencv
 
 ```
 
 让我们也安装 imutils 和 picamera API:
 
-```
+```py
 $ pip install imutils
 $ pip install “picamera[array]”
 
@@ -195,7 +195,7 @@ $ pip install “picamera[array]”
 
 从这里，让我们创建一个工作区目录并克隆 NCSDK:
 
-```
+```py
 $ cd ~
 $ mkdir workspace
 $ cd workspace
@@ -205,21 +205,21 @@ $ git clone https://github.com/movidius/ncsdk
 
 现在，让我们克隆 NC 应用程序 Zoo，因为我们以后会用到它。
 
-```
+```py
 $ git clone https://github.com/movidius/ncappzoo
 
 ```
 
 从那里，导航到以下目录:
 
-```
+```py
 $ cd ~/workspace/ncsdk/api/src
 
 ```
 
 在该目录中，我们将使用 Makefile 以纯 API 模式安装 SDK:
 
-```
+```py
 $ make
 $ sudo make install
 
@@ -229,7 +229,7 @@ $ sudo make install
 
 让我们使用 NC 应用程序 Zoo 中的代码来测试安装。确保 NCS 在这一点上插入到您的 Pi 中。
 
-```
+```py
 $ cd ~/workspace/ncappzoo/apps/hello_ncs_py
 $ make run
 
@@ -265,7 +265,7 @@ NCS device working.
 
 让我们回顾一下名为`pi_ncs_deep_learning.py`的*修改后的*文件的不同之处:
 
-```
+```py
 # import the necessary packages
 from mvnc import mvncapi as mvnc
 import numpy as np
@@ -279,7 +279,7 @@ import cv2
 
 从那里，我们需要解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -304,7 +304,7 @@ args = vars(ap.parse_args())
 
 接下来，我们将从磁盘加载类标签和输入图像:
 
-```
+```py
 # load the class labels from disk
 rows = open(args["labels"]).read().strip().split("\n")
 classes = [r[r.find(" ") + 1:].split(",")[0] for r in rows]
@@ -331,7 +331,7 @@ image = image.astype(np.float32)
 
 接下来，我们执行均值减法，但我们将以稍微不同的方式进行:
 
-```
+```py
 # load the mean file and normalize
 ilsvrc_mean = np.load("ilsvrc_2012_mean.npy").mean(1).mean(1)
 image[:,:,0] = (image[:,:,0] - ilsvrc_mean[0])
@@ -346,7 +346,7 @@ image[:,:,2] = (image[:,:,2] - ilsvrc_mean[2])
 
 从那里，我们需要与 NCS 建立通信，并将图形加载到 NCS 中:
 
-```
+```py
 # grab a list of all NCS devices plugged in to USB
 print("[INFO] finding NCS devices...")
 devices = mvnc.EnumerateDevices()
@@ -391,7 +391,7 @@ graph = device.AllocateGraph(graph_in_memory)
 
 如果你读了前一篇文章，你会认出下面的代码块，但是你会注意到三个变化:
 
-```
+```py
 # set the image as input to the network and perform a forward-pass to
 # obtain our output classification
 start = time.time()
@@ -421,7 +421,7 @@ idxs = np.argsort(preds[0])[::-1][:5]
 
 从这里开始，我们还有一个剩余的块来将我们的图像显示到屏幕上(有一个非常小的变化):
 
-```
+```py
 # loop over the top-5 predictions and display them
 for (i, idx) in enumerate(idxs):
 	# draw the top prediction on the input image
@@ -472,7 +472,7 @@ cv2.waitKey(0)
 
 下面是**个 CPU 命令**(尽管文件名中有`pi`，但实际上你可以在你的 Pi 或台式机/笔记本电脑上运行这个命令):
 
-```
+```py
 # SqueezeNet with OpenCV DNN module using the CPU
 $ python pi_deep_learning.py --prototxt models/squeezenet_v1.0.prototxt \
 	--model models/squeezenet_v1.0.caffemodel --dim 227 \
@@ -503,7 +503,7 @@ $ python pi_deep_learning.py --prototxt models/bvlc_alexnet.prototxt \
 
 这里是 **NCS 命令**，使用我们刚刚走过的新的*修改过的*脚本(你实际上可以在你的 Pi 或你的桌面/笔记本电脑上运行这个，尽管文件名中有`pi`):
 
-```
+```py
 # SqueezeNet on NCS
 $ python pi_ncs_deep_learning.py --graph graphs/squeezenetgraph \
 	--dim 227 --labels synset_words.txt --image images/barbershop.png

@@ -58,7 +58,7 @@ OpenCV 提供了四个连通分量分析函数:
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -85,7 +85,7 @@ $ pip install opencv-contrib-python
 
 首先访问本教程的 ***“下载”*** 部分，检索源代码和示例图像:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── basic_connected_components.py
@@ -108,7 +108,7 @@ $ tree . --dirsfirst
 
 打开项目文件夹中的`basic_connected_components.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -131,7 +131,7 @@ args = vars(ap.parse_args())
 
 让我们继续预处理我们的输入图像:
 
-```
+```py
 # load the input image from disk, convert it to grayscale, and
 # threshold it
 image = cv2.imread(args["image"])
@@ -154,7 +154,7 @@ thresh = cv2.threshold(gray, 0, 255,
 
 但是在我们开始之前，让我们先来学习如何使用`cv2.connectedComponentsWithStats`函数:
 
-```
+```py
 # apply connected component analysis to the thresholded image
 output = cv2.connectedComponentsWithStats(
 	thresh, args["connectivity"], cv2.CV_32S)
@@ -176,7 +176,7 @@ output = cv2.connectedComponentsWithStats(
 
 现在让我们学习如何解析这些值:
 
-```
+```py
 # loop over the number of unique connected component labels
 for i in range(0, numLabels):
 	# if this is the first component then we examine the
@@ -221,7 +221,7 @@ for i in range(0, numLabels):
 
 现在让我们来看一下当前组件的边界框和质心:
 
-```
+```py
 	# clone our original image (so we can draw on it) and then draw
 	# a bounding box surrounding the connected component along with
 	# a circle corresponding to the centroid
@@ -234,7 +234,7 @@ for i in range(0, numLabels):
 
 我们的最后一个代码块演示了如何为当前连接的组件创建一个遮罩:
 
-```
+```py
 	# construct a mask for the current connected component by
 	# finding a pixels in the labels array that have the current
 	# connected component ID
@@ -256,7 +256,7 @@ for i in range(0, numLabels):
 
 请务必访问本教程的 ***“下载”*** 部分，以检索源代码和示例图像:
 
-```
+```py
 $ python basic_connected_components.py --image license_plate.png
 [INFO] examining component 1/17 (background)
 [INFO] examining component 2/17
@@ -297,7 +297,7 @@ $ python basic_connected_components.py --image license_plate.png
 
 现在让我们来学习如何过滤连接的组件:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -318,7 +318,7 @@ args = vars(ap.parse_args())
 
 从那里，我们加载我们的图像，预处理它，并应用连接组件分析:
 
-```
+```py
 # load the input image from disk, convert it to grayscale, and
 # threshold it
 image = cv2.imread(args["image"])
@@ -342,7 +342,7 @@ mask = np.zeros(gray.shape, dtype="uint8")
 
 说到这里，我们现在来看一下每个独特的标签:
 
-```
+```py
 # loop over the number of unique connected component labels, skipping
 # over the first label (as label zero is the background)
 for i in range(1, numLabels):
@@ -361,7 +361,7 @@ for i in range(1, numLabels):
 
 我们现在准备过滤我们连接的组件:
 
-```
+```py
 	# ensure the width, height, and area are all neither too small
 	# nor too big
 	keepWidth = w > 5 and w < 50
@@ -388,7 +388,7 @@ for i in range(1, numLabels):
 
 最后，我们在屏幕上显示我们的输入`image`并输出牌照字符`mask`。
 
-```
+```py
 # show the original input image and the mask for the license plate
 # characters
 cv2.imshow("Image", image)
@@ -404,7 +404,7 @@ cv2.waitKey(0)
 
 请务必访问本指南的 ***“下载”*** 部分，以检索源代码和示例图像—从那里，您可以执行以下命令:
 
-```
+```py
 $ python filtering_connected_components.py --image license_plate.png
 [INFO] keeping connected component 7
 [INFO] keeping connected component 8

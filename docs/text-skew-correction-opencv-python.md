@@ -36,7 +36,7 @@
 
 四个文件的文件名如下:
 
-```
+```py
 $ ls images/
 neg_28.png	neg_4.png	pos_24.png	pos_41.png
 
@@ -56,7 +56,7 @@ neg_28.png	neg_4.png	pos_24.png	pos_41.png
 
 从那里，插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -81,7 +81,7 @@ image = cv2.imread(args["image"])
 
 我们的下一步是分离图像中的文本:
 
-```
+```py
 # convert the image to grayscale and flip the foreground
 # and background to ensure foreground is now "white" and
 # the background is "black"
@@ -107,7 +107,7 @@ thresh = cv2.threshold(gray, 0, 255,
 
 给定这个阈值图像，我们现在可以计算包含文本区域的最小旋转边界框:
 
-```
+```py
 # grab the (x, y) coordinates of all pixel values that
 # are greater than zero, then use these coordinates to
 # compute a rotated bounding box that contains all
@@ -143,7 +143,7 @@ else:
 
 既然我们已经确定了文本倾斜角度，我们需要应用仿射变换来校正倾斜:
 
-```
+```py
 # rotate the image to deskew it
 (h, w) = image.shape[:2]
 center = (w // 2, h // 2)
@@ -157,7 +157,7 @@ rotated = cv2.warpAffine(image, M, (w, h),
 
 最后，我们将结果显示在屏幕上:
 
-```
+```py
 # draw the correction angle on the image so we can validate it
 cv2.putText(rotated, "Angle: {:.2f} degrees".format(angle),
 	(10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
@@ -180,7 +180,7 @@ cv2.waitKey(0)
 
 从那里，执行以下命令来纠正我们的`neg_4.png`图像的倾斜:
 
-```
+```py
 $ python correct_skew.py --image images/neg_4.png 
 [INFO] angle: -4.086
 
@@ -194,7 +194,7 @@ $ python correct_skew.py --image images/neg_4.png
 
 这是另一个例子，这次逆时针倾斜 28 度:
 
-```
+```py
 $ python correct_skew.py --image images/neg_28.png 
 [INFO] angle: -28.009
 
@@ -208,7 +208,7 @@ $ python correct_skew.py --image images/neg_28.png
 
 这一次，让我们试试顺时针倾斜:
 
-```
+```py
 $ python correct_skew.py --image images/pos_24.png 
 [INFO] angle: 23.974
 
@@ -220,7 +220,7 @@ $ python correct_skew.py --image images/pos_24.png
 
 最后是更极端的 41 度顺时针倾斜:
 
-```
+```py
 $ python correct_skew.py --image images/pos_41.png 
 [INFO] angle: 41.037
 

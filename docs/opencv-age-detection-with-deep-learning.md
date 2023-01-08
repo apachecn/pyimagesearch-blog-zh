@@ -123,7 +123,7 @@
 
 一定要从这篇博文的 ***“下载”*** 部分获取代码、模型和图片。提取文件后，您的项目将如下所示:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── age_detector
@@ -159,7 +159,7 @@ $ tree --dirsfirst
 
 打开项目目录中的`detect_age.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -194,7 +194,7 @@ args = vars(ap.parse_args())
 
 正如我们在上面了解到的，我们的年龄检测器是一个分类器，它根据预定义的桶使用一个人的面部 ROI 来预测他的年龄——我们不把这当作一个回归问题。现在让我们来定义这些年龄范围:
 
-```
+```py
 # define the list of age buckets our age detector will predict
 AGE_BUCKETS = ["(0-2)", "(4-6)", "(8-12)", "(15-20)", "(25-32)",
 	"(38-43)", "(48-53)", "(60-100)"]
@@ -204,7 +204,7 @@ AGE_BUCKETS = ["(0-2)", "(4-6)", "(8-12)", "(15-20)", "(25-32)",
 
 给定我们的导入、命令行参数和年龄桶，我们现在准备加载我们的两个预训练模型:
 
-```
+```py
 # load our serialized face detector model from disk
 print("[INFO] loading face detector model...")
 prototxtPath = os.path.sep.join([args["face"], "deploy.prototxt"])
@@ -228,7 +228,7 @@ ageNet = cv2.dnn.readNet(prototxtPath, weightsPath)
 
 现在我们所有的初始化都已经完成了，让我们从磁盘加载一个图像并检测面部感兴趣区域:
 
-```
+```py
 # load the input image and construct an input blob for the image
 image = cv2.imread(args["image"])
 (h, w) = image.shape[:2]
@@ -245,7 +245,7 @@ detections = faceNet.forward()
 
 为了让**在我们的图像**中检测人脸，我们通过 CNN 发送`blob`，产生一个`detections`列表。现在让我们循环一下面部 ROI 检测:
 
-```
+```py
 # loop over the detections
 for i in range(0, detections.shape[2]):
 	# extract the confidence (i.e., probability) associated with the
@@ -274,7 +274,7 @@ for i in range(0, detections.shape[2]):
 
 现在我们将**执行年龄检测:**
 
-```
+```py
 		# make predictions on the age and find the age bucket with
 		# the largest corresponding probability
 		ageNet.setInput(faceBlob)
@@ -312,7 +312,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python detect_age.py --image images/adrian.png --face face_detector --age age_detector
 [INFO] loading face detector model...
 [INFO] loading age detector model...
@@ -328,7 +328,7 @@ $ python detect_age.py --image images/adrian.png --face face_detector --age age_
 
 让我们再举一个例子，这个著名的演员之一，尼尔·帕特里克·哈里斯小时候:
 
-```
+```py
 $ python detect_age.py --image images/neil_patrick_harris.png --face face_detector --age age_detector
 [INFO] loading face detector model...
 [INFO] loading age detector model...
@@ -344,7 +344,7 @@ $ python detect_age.py --image images/neil_patrick_harris.png --face face_detect
 
 让我们尝试另一个图像；这张照片是我最喜欢的演员之一，臭名昭著的塞缪尔·L·杰克逊:
 
-```
+```py
 $ python detect_age.py --image images/samuel_l_jackson.png --face face_detector --age age_detector
 [INFO] loading face detector model...
 [INFO] loading age detector model...
@@ -378,7 +378,7 @@ $ python detect_age.py --image images/samuel_l_jackson.png --face face_detector 
 
 要看视频中如何进行年龄识别，先来看看`detect_age_video.py`。
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 import numpy as np
@@ -393,7 +393,7 @@ import os
 
 我决定定义一个方便的函数来接受一个`frame`，定位人脸，预测年龄。通过将检测和预测逻辑放在这里，我们的帧处理循环将变得不那么臃肿(您也可以将此功能卸载到一个单独的文件中)。现在让我们深入了解一下这个实用程序:
 
-```
+```py
 def detect_and_predict_age(frame, faceNet, ageNet, minConf=0.5):
 	# define the list of age buckets our age detector will predict
 	AGE_BUCKETS = ["(0-2)", "(4-6)", "(8-12)", "(15-20)", "(25-32)",
@@ -430,7 +430,7 @@ def detect_and_predict_age(frame, faceNet, ageNet, minConf=0.5):
 
 接下来，我们将处理每个`detections`:
 
-```
+```py
 	# loop over the detections
 	for i in range(0, detections.shape[2]):
 		# extract the confidence (i.e., probability) associated with
@@ -462,7 +462,7 @@ def detect_and_predict_age(frame, faceNet, ageNet, minConf=0.5):
 
 为了完成我们的助手工具，我们将**执行年龄识别**并返回我们的结果:
 
-```
+```py
 			# construct a blob from *just* the face ROI
 			faceBlob = cv2.dnn.blobFromImage(face, 1.0, (227, 227),
 				(78.4263377603, 87.7689143744, 114.895847746),
@@ -497,7 +497,7 @@ def detect_and_predict_age(frame, faceNet, ageNet, minConf=0.5):
 
 定义了我们的助手函数后，现在我们可以继续处理视频流了。但是首先，我们需要定义命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-f", "--face", required=True,
@@ -517,7 +517,7 @@ args = vars(ap.parse_args())
 
 从这里，我们将加载我们的模型并初始化我们的视频流:
 
-```
+```py
 # load our serialized face detector model from disk
 print("[INFO] loading face detector model...")
 prototxtPath = os.path.sep.join([args["face"], "deploy.prototxt"])
@@ -543,7 +543,7 @@ time.sleep(2.0)
 
 一旦我们的网络摄像头预热，我们将开始处理帧:
 
-```
+```py
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the threaded video stream and resize it
@@ -599,7 +599,7 @@ vs.stop()
 
 从那里，打开一个终端，并发出以下命令:
 
-```
+```py
 $ python detect_age_video.py --face face_detector --age age_detector
 [INFO] loading face detector model...
 [INFO] loading age detector model...

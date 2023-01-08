@@ -33,7 +33,7 @@
 
 从那里，您可以使用`tree`命令来查看我们的项目结构:
 
-```
+```py
 $ tree
 .
 ├── mobilenet_ssd
@@ -71,7 +71,7 @@ $ tree
 
 首先，打开`multi_object_tracking_slow.py`脚本并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils.video import FPS
 import numpy as np
@@ -88,14 +88,14 @@ import cv2
 
 要安装`imutils`，只需在终端中使用 pip:
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
 
 现在我们(a)已经安装了软件，并且(b)已经在脚本中放置了相关的导入语句，让我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--prototxt", required=True,
@@ -124,7 +124,7 @@ args = vars(ap.parse_args())
 
 让我们定义该模型支持的`CLASSES`列表，并从磁盘加载我们的模型:
 
-```
+```py
 # initialize the list of class labels MobileNet SSD was trained to
 # detect
 CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
@@ -148,7 +148,7 @@ MobileNet SSD 预训练 Caffe 模型支持 20 个类和 1 个后台类。`CLASSE
 
 我们还需要执行一些初始化:
 
-```
+```py
 # initialize the video stream and output video writer
 print("[INFO] starting video stream...")
 vs = cv2.VideoCapture(args["video"])
@@ -174,7 +174,7 @@ fps = FPS().start()
 
 我们已经准备好开始处理我们的视频:
 
-```
+```py
 # loop over frames from the video file stream
 while True:
 	# grab the next frame from the video file
@@ -208,7 +208,7 @@ while True:
 
 让我们开始**物体*探测*阶段:**
 
-```
+```py
 	# if there are no object trackers we first need to detect objects
 	# and then create a tracker for each object
 	if len(trackers) == 0:
@@ -234,7 +234,7 @@ while True:
 
 接下来，我们继续循环检测以找到属于`"person"`类的对象，因为我们的输入视频是一场人类竞走:
 
-```
+```py
 		# loop over the detections
 		for i in np.arange(0, detections.shape[2]):
 			# extract the confidence (i.e., probability) associated
@@ -262,7 +262,7 @@ while True:
 
 现在我们已经在帧中定位了每个`"person"`，让我们实例化我们的跟踪器并绘制我们的初始边界框+类标签:
 
-```
+```py
 				# compute the (x, y)-coordinates of the bounding box
 				# for the object
 				box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
@@ -303,7 +303,7 @@ while True:
 
 如果我们的检测列表的长度大于零，我们知道我们处于**对象*跟踪*阶段:**
 
-```
+```py
 	# otherwise, we've already performed detection so let's track
 	# multiple objects
 	else:
@@ -336,7 +336,7 @@ while True:
 
 帧处理循环中的其余步骤包括写入输出视频(如有必要)并显示结果:
 
-```
+```py
 	# check to see if we should write the frame to disk
 	if writer is not None:
 		writer.write(frame)
@@ -362,7 +362,7 @@ while True:
 
 剩下的步骤是在终端中打印 FPS 吞吐量信息并释放指针:
 
-```
+```py
 # stop the timer and display FPS information
 fps.stop()
 print("[INFO] elapsed time: {:.2f}".format(fps.elapsed()))
@@ -386,7 +386,7 @@ vs.release()
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python multi_object_tracking_slow.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt \
 	--model mobilenet_ssd/MobileNetSSD_deploy.caffemodel \
 	--video race.mp4 --output race_output_slow.avi
@@ -417,7 +417,7 @@ $ python multi_object_tracking_slow.py --prototxt mobilenet_ssd/MobileNetSSD_dep
 
 否则，打开`mutli_object_tracking_fast.py`并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils.video import FPS
 import multiprocessing
@@ -435,7 +435,7 @@ import cv2
 
  *为了生成这个流程，我们需要提供一个 Python 可以调用的函数，然后 Python 将获取并创建一个全新的流程+执行它:
 
-```
+```py
 def start_tracker(box, label, rgb, inputQueue, outputQueue):
 	# construct a dlib rectangle object from the bounding box
 	# coordinates and then start the correlation tracker
@@ -462,7 +462,7 @@ def start_tracker(box, label, rgb, inputQueue, outputQueue):
 
 现在让我们开始一个无限循环，它将在这个过程中运行:
 
-```
+```py
 	# loop indefinitely -- this function will be called as a daemon
 	# process so we don't need to worry about joining it
 	while True:
@@ -498,7 +498,7 @@ def start_tracker(box, label, rgb, inputQueue, outputQueue):
 
 回到父进程，我们将解析我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--prototxt", required=True,
@@ -519,7 +519,7 @@ args = vars(ap.parse_args())
 
 让我们初始化输入和输出队列:
 
-```
+```py
 # initialize our lists of queues -- both input queue and output queue
 # for *every* object that we will be tracking
 inputQueues = []
@@ -534,7 +534,7 @@ outputQueues = []
 
 下一个代码块与我们之前的脚本相同:
 
-```
+```py
 # initialize the list of class labels MobileNet SSD was trained to
 # detect
 CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
@@ -564,7 +564,7 @@ fps = FPS().start()
 
 现在让我们开始循环视频流中的帧:
 
-```
+```py
 # loop over frames from the video file stream
 while True:
 	# grab the next frame from the video file
@@ -592,7 +592,7 @@ while True:
 
 现在让我们来处理没有`inputQueues`的情况:
 
-```
+```py
 	# if our list of queues is empty then we know we have yet to
 	# create our first object tracker
 	if len(inputQueues) == 0:
@@ -633,7 +633,7 @@ while True:
 
 假设我们已经找到了一个`"person"`，我们将创建队列并生成跟踪流程:
 
-```
+```py
 				# compute the (x, y)-coordinates of the bounding box
 				# for the object
 				box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
@@ -673,7 +673,7 @@ while True:
 
 否则，我们已经执行了对象检测，因此我们需要将每个 dlib 对象跟踪器应用于该帧:
 
-```
+```py
 	# otherwise, we've already performed detection so let's track
 	# multiple objects
 	else:
@@ -706,7 +706,7 @@ while True:
 
 让我们完成循环和脚本:
 
-```
+```py
 	# check to see if we should write the frame to disk
 	if writer is not None:
 		writer.write(frame)
@@ -749,7 +749,7 @@ vs.release()
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python multi_object_tracking_fast.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt \
 	--model mobilenet_ssd/MobileNetSSD_deploy.caffemodel \
 	--video race.mp4 --output race_output_fast.avi

@@ -68,7 +68,7 @@ Min-Jun 是正确的——我在社交媒体上看到过许多社交距离检测
 
 一定要从这篇博文的 ***【下载】*** 部分抓取代码。从那里，提取文件，并使用`tree`命令查看我们的项目是如何组织的:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── pyimagesearch
@@ -94,7 +94,7 @@ $ tree --dirsfirst
 
 现在让我们来看看它们——打开`pyimagesearch`模块中的`social_distancing_config.py`文件，看一看:
 
-```
+```py
 # base path to YOLO directory
 MODEL_PATH = "yolo-coco"
 
@@ -108,7 +108,7 @@ NMS_THRESH = 0.3
 
 我们还要定义两个配置常数:
 
-```
+```py
 # boolean indicating if NVIDIA CUDA GPU should be used
 USE_GPU = False
 
@@ -123,7 +123,7 @@ MIN_DISTANCE = 50
 
 ### 用 OpenCV 检测图像和视频流中的人物
 
-```
+```py
 # import the necessary packages
 from .social_distancing_config import NMS_THRESH
 from .social_distancing_config import MIN_CONF
@@ -131,7 +131,7 @@ import numpy as np
 import cv2
 ```
 
-```
+```py
 def detect_people(frame, net, ln, personIdx=0):
 	# grab the dimensions of the frame and  initialize the list of
 	# results
@@ -139,7 +139,7 @@ def detect_people(frame, net, ln, personIdx=0):
 	results = []
 ```
 
-```
+```py
 	# construct a blob from the input frame and then perform a forward
 	# pass of the YOLO object detector, giving us our bounding boxes
 	# and associated probabilities
@@ -155,7 +155,7 @@ def detect_people(frame, net, ln, personIdx=0):
 	confidences = []
 ```
 
-```
+```py
 	# loop over each of the layer outputs
 	for output in layerOutputs:
 		# loop over each of the detections
@@ -190,7 +190,7 @@ def detect_people(frame, net, ln, personIdx=0):
 				confidences.append(float(confidence))
 ```
 
-```
+```py
 	# apply non-maxima suppression to suppress weak, overlapping
 	# bounding boxes
 	idxs = cv2.dnn.NMSBoxes(boxes, confidences, MIN_CONF, NMS_THRESH)
@@ -215,7 +215,7 @@ def detect_people(frame, net, ln, personIdx=0):
 
 ### 利用 OpenCV 和深度学习实现社交距离检测器
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import social_distancing_config as config
 from pyimagesearch.detection import detect_people
@@ -227,7 +227,7 @@ import cv2
 import os
 ```
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--input", type=str, default="",
@@ -239,7 +239,7 @@ ap.add_argument("-d", "--display", type=int, default=1,
 args = vars(ap.parse_args())
 ```
 
-```
+```py
 # load the COCO class labels our YOLO model was trained on
 labelsPath = os.path.sep.join([config.MODEL_PATH, "coco.names"])
 LABELS = open(labelsPath).read().strip().split("\n")
@@ -253,7 +253,7 @@ configPath = os.path.sep.join([config.MODEL_PATH, "yolov3.cfg"])
 
 使用 YOLO 路径，现在我们可以将模型加载到内存中:
 
-```
+```py
 # load our YOLO object detector trained on COCO dataset (80 classes)
 print("[INFO] loading YOLO from disk...")
 net = cv2.dnn.readNetFromDarknet(configPath, weightsPath)
@@ -266,7 +266,7 @@ if config.USE_GPU:
 	net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 ```
 
-```
+```py
 # determine only the *output* layer names that we need from YOLO
 ln = net.getLayerNames()
 ln = [ln[i[0] - 1] for i in net.getUnconnectedOutLayers()]
@@ -277,7 +277,7 @@ vs = cv2.VideoCapture(args["input"] if args["input"] else 0)
 writer = None
 ```
 
-```
+```py
 # loop over the frames from the video stream
 while True:
 	# read the next frame from the file
@@ -298,7 +298,7 @@ while True:
 	violate = set()
 ```
 
-```
+```py
 	# ensure there are *at least* two people detections (required in
 	# order to compute our pairwise distance maps)
 	if len(results) >= 2:
@@ -324,7 +324,7 @@ while True:
 
 我说，一点也不好玩！因此，让我们用矩形、圆形和文本来注释我们的框架:
 
-```
+```py
 	# loop over the results
 	for (i, (prob, bbox, centroid)) in enumerate(results):
 		# extract the bounding box and centroid coordinates, then
@@ -350,7 +350,7 @@ while True:
 		cv2.FONT_HERSHEY_SIMPLEX, 0.85, (0, 0, 255), 3)
 ```
 
-```
+```py
 	# check to see if the output frame should be displayed to our
 	# screen
 	if args["display"] > 0:
@@ -384,7 +384,7 @@ while True:
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ time python social_distance_detector.py --input pedestrians.mp4  \
 	--output output.avi --display 0
 [INFO] loading YOLO from disk...
@@ -403,12 +403,12 @@ sys     0m25.824s
 
 如果你已经安装了 OpenCV 并支持 NVIDIA GPU，你需要做的就是在你的`social_distancing_config.py`文件中设置`USE_GPU = True`:
 
-```
+```py
 # boolean indicating if NVIDIA CUDA GPU should be used
 USE_GPU = True
 ```
 
-```
+```py
 $ time python social_distance_detector.py --input pedestrians.mp4 \
 	--output output.avi --display 0
 [INFO] loading YOLO from disk...

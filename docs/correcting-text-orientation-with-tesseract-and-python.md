@@ -27,7 +27,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -73,7 +73,7 @@ $ pip install opencv-contrib-python
 
 让我们深入了解一下这个项目的目录结构:
 
-```
+```py
 |-- images
 |   |-- normal.png
 |   |-- rotated_180.png
@@ -91,7 +91,7 @@ $ pip install opencv-contrib-python
 
 打开一个新文件，将其命名为`detect_orientation.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pytesseract import Output
 import pytesseract
@@ -110,7 +110,7 @@ args = vars(ap.parse_args())
 
 我们唯一的命令行参数是要进行 OCR 的输入`--image`。现在让我们加载输入:
 
-```
+```py
 # load the input image, convert it from BGR to RGB channel ordering,
 # and use Tesseract to determine the text orientation
 image = cv2.imread(args["image"])
@@ -135,7 +135,7 @@ print("[INFO] detected script: {}".format(results["script"]))
 
 根据这些信息，接下来，我们将更正文本方向:
 
-```
+```py
 # rotate the image to correct the orientation
 rotated = imutils.rotate_bound(image, angle=results["rotate"])
 
@@ -152,7 +152,7 @@ cv2.waitKey(0)
 
 我们现在准备应用文本 OSD！打开终端并执行以下命令:
 
-```
+```py
 $ python detect_orientation.py --image images/normal.png
 [INFO] detected orientation: 0
 [INFO] rotate by 0 degrees to correct
@@ -163,7 +163,7 @@ $ python detect_orientation.py --image images/normal.png
 
 让我们试试另一张图片，这张图片带有旋转的文字:
 
-```
+```py
 $ python detect_orientation.py --image images/rotated_90_clockwise.png
 [INFO] detected orientation: 90
 [INFO] rotate by 270 degrees to correct
@@ -174,7 +174,7 @@ $ python detect_orientation.py --image images/rotated_90_clockwise.png
 
  *我们将用最后一个非拉丁语文本的例子来结束本教程:
 
-```
+```py
 $ python detect_orientation.py \
     --image images/rotated_90_counter_clockwise_hebrew.png
 [INFO] detected orientation: 270

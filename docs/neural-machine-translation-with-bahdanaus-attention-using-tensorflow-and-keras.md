@@ -55,7 +55,7 @@
 
 幸运的是，TensorFlow 可以在 pip 上安装:
 
-```
+```py
 $ pip install tensorflow==2.8.0
 $ pip install tensorflow-text==2.8.0
 ```
@@ -87,7 +87,7 @@ $ pip install tensorflow-text==2.8.0
 
 从这里，看一下目录结构:
 
-```
+```py
 ├── download.sh
 ├── inference.py
 ├── output
@@ -208,7 +208,7 @@ and the previously decoded hidden state ![s_{t-1}](img/45c9d3f3cb2b0bb42ae57ea25
 
 在我们开始实现之前，让我们检查一下项目的配置管道。为此，我们将转到位于`pyimagesearch`目录中的`config.py`脚本。
 
-```
+```py
 # define the data file name
 DATA_FNAME = "fra.txt"
 
@@ -264,7 +264,7 @@ OUTPUT_PATH = "output"
 
 如前所述，我们需要一个包含源语言-目标语言句子对的数据集。为了配置和预处理这样的数据集，我们准备了位于`pyimagesearch`目录中的`dataset.py`脚本。
 
-```
+```py
 # import the necessary packages
 import tensorflow_text as tf_text
 import tensorflow as tf
@@ -302,7 +302,7 @@ def load_data(fname):
 
 为了减少偏差，我们在第 19 行随机洗牌。我们将拆分后的源语句和目标语句存储到相应的变量中并返回它们(**第 23-27 行**)。
 
-```
+```py
 def splitting_dataset(source, target):
         # calculate the training and validation size
         trainSize = int(len(source) * 0.8)
@@ -326,7 +326,7 @@ def splitting_dataset(source, target):
 
 在第 29 行的**上，我们有`splitting_dataset`函数，它接收源句子和目标句子。下一步是计算训练数据集和验证数据集的大小(**第 31 行和第 32 行**)。使用这些值，我们将源句子和目标句子分成训练集、测试集和验证集(**第 35-47 行**)。**
 
-```
+```py
 def make_dataset(splits, batchSize, train=False):
         # build a TensorFlow dataset from the input and target
         (source, target) = splits 
@@ -364,7 +364,7 @@ def make_dataset(splits, batchSize, train=False):
 
 在**的第 56-62 行**，我们有一个 if 语句来检查`train` bool 是否被设置为 true。如果满足条件，我们将对数据集进行洗牌、批处理和预取。`else`条件是针对测试和验证集的，在这里我们只批处理和预取数据集(**第 65-73 行**)。
 
-```
+```py
 def tf_lower_and_split_punct(text):
         # split accented characters
         text = tf_text.normalize_utf8(text, "NFKD")
@@ -394,7 +394,7 @@ def tf_lower_and_split_punct(text):
 
 随着我们的数据集实用程序脚本的完成，现在的重点是神经机器翻译模型本身。为此，我们将跳转到`pyimagesearch`目录中的`models.py`脚本。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.layers import AdditiveAttention
 from tensorflow.keras.layers import Bidirectional
@@ -445,7 +445,7 @@ class Encoder(Layer):
 
 `build`函数接受输入形状(`tf`自定义层在函数调用中需要此参数，但不强制在函数内部使用)作为其参数(**第 21 行**)。该函数首先创建一个嵌入层(**第 23-27 行**)，然后是`GRU`层，它将依次处理嵌入向量(**第 30-38 行**)。隐藏层尺寸在提供给`GRU`层的`units`参数的`__init__`函数中设置。
 
-```
+```py
         def get_config(self):
                 # return the configuration of the encoder layer
                 return {
@@ -485,7 +485,7 @@ class Encoder(Layer):
 
 嵌入向量然后通过`GRU`层，并且获得由编码器输出、编码器前向状态和编码器后向状态(双向)组成的前向传递(**行 57-61** )。
 
-```
+```py
 class BahdanauAttention(Layer):
         def __init__(self, attnUnits, **kwargs):
                 super().__init__(**kwargs)
@@ -511,7 +511,7 @@ class BahdanauAttention(Layer):
 
 在`build`函数(**第 73 行**)中，编码器和解码器注释的密集层以及附加注意层被初始化(**第 75-85 行**)。
 
-```
+```py
         def get_config(self):
                 # return the configuration of the layer
                 return {
@@ -550,7 +550,7 @@ class BahdanauAttention(Layer):
 
 该函数返回从关注层获得的上下文向量和关注权重(**行 110** )。
 
-```
+```py
 class Decoder(Layer):
         def __init__(self, targetVocabSize, embeddingDim, decUnits, **kwargs):
                 super().__init__(**kwargs)
@@ -581,7 +581,7 @@ class Decoder(Layer):
 
 在**的第 121** 行，我们有`get_config`函数，它返回先前在`__init__`函数中创建的类变量。
 
-```
+```py
 def build(self, inputShape):
     # build the embedding layer which converts token IDs to
     # embedding vectors
@@ -618,7 +618,7 @@ def build(self, inputShape):
 
 正如我们在这个脚本中遇到的前面的`build`函数一样，`inputShape`参数需要包含在函数调用中(**第 129 行**)。类似于`encoder`，我们将首先构建嵌入空间，然后是`GRU`层(**行 132-145** )。这里额外增加的是`BahdanauAttention`层以及我们输出的最终前馈神经网络(**第 148-160 行**)。
 
-```
+```py
          def call(self, inputs, state=None):
                 # grab the target tokens, encoder output, and source mask
                 targetTokens = inputs[0]
@@ -673,7 +673,7 @@ def build(self, inputShape):
 
 我们的模型输入序列使用了大量的掩蔽。为此，我们需要确保我们的损失函数也是适当的。让我们转到`pyimagesearch`目录中的`loss.py`脚本。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.losses import SparseCategoricalCrossentropy
 from tensorflow.keras.losses import Loss
@@ -712,7 +712,7 @@ class MaskedLoss(Loss):
 
 为了确保我们的培训效率达到最高，我们创建了`schedule.py`脚本。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.optimizers.schedules import LearningRateSchedule
 import tensorflow as tf
@@ -739,7 +739,7 @@ class WarmUpCosine(LearningRateSchedule):
 
 在这个函数中，创建了这些参数的类变量，以及一个`pi`变量(**第 9-13 行**)。
 
-```
+```py
        def __call__(self, step):
                 # check whether the total number of steps is larger than the 
                 # warmup steps. If not, then throw a value error
@@ -767,7 +767,7 @@ class WarmUpCosine(LearningRateSchedule):
 
 接下来，我们建立一个图表，该图表最初增加到`1`，但后来衰减到`-1`，从而保持我们的 LR 值动态(**第 26-33 行**)。
 
-```
+```py
                 # check whether warmup steps is more than 0.
                 if self.warmupSteps > 0:
                         # throw a value error is max lr is smaller than start lr
@@ -808,7 +808,7 @@ class WarmUpCosine(LearningRateSchedule):
 
 #### [**列车翻译员**](#TOC)
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.layers import StringLookup
 from tensorflow import keras
@@ -818,7 +818,7 @@ import numpy as np
 
 我们从导入必要的包开始(**第 2-5 行**)。
 
-```
+```py
 class TrainTranslator(keras.Model):
     def __init__(self, encoder, decoder, sourceTextProcessor,
             targetTextProcessor, **kwargs):
@@ -835,7 +835,7 @@ class TrainTranslator(keras.Model):
 
 在`__init__`函数中，我们初始化编码器、解码器、源文本处理器和目标文本处理器(**第 13-16 行**)。
 
-```
+```py
  def _preprocess(self, sourceText, targetText):
         # convert the text to token IDs
         sourceTokens = self.sourceTextProcessor(sourceText)
@@ -847,7 +847,7 @@ class TrainTranslator(keras.Model):
 
 接下来，我们有`_preprocess`函数(**第 18 行**)，它将源文本和目标文本作为输入。它将第 20 行**和第 21 行**上的文本转换为源文本和目标文本的令牌 id，然后在第 24 行上返回它们。
 
-```
+```py
  def _calculate_loss(self, sourceTokens, targetTokens):
         # encode the input text token IDs
         (encOutput, encFwdState, encBckState, sourceMask) = self.encoder(
@@ -882,7 +882,7 @@ class TrainTranslator(keras.Model):
 
 在**第 41-43 行**上，我们使用目标令牌和检索到的逻辑来计算批次损失，然后在**第 46 行**上返回。
 
-```
+```py
  @tf.function(
     input_signature=[[
         tf.TensorSpec(dtype=tf.string, shape=[None]),
@@ -928,7 +928,7 @@ class TrainTranslator(keras.Model):
 
 最后，在第 72-76 行上，我们将损失标准化。然后，我们对所有可训练变量应用优化步骤(**第 79-81 行)**，并在**第 84 行**返回归一化损失。
 
-```
+```py
  @tf.function(
     input_signature=[[
         tf.TensorSpec(dtype=tf.string, shape=[None]),
@@ -969,7 +969,7 @@ class TrainTranslator(keras.Model):
 
 #### [**译者**](#TOC)
 
-```
+```py
 class Translator(tf.Module):
     def __init__(self, encoder, decoder, sourceTextProcessor,
         targetTextProcessor):
@@ -1017,7 +1017,7 @@ class Translator(tf.Module):
 *   使用**行 141-146** 上的`indexFromString`层生成屏蔽令牌的 id。
 *   初始化令牌掩码、开始令牌和结束令牌(**行 149-151** )。
 
-```
+```py
     def tokens_to_text(self, resultTokens):
         # decode the token from index to string
         resultTextTokens = self.stringFromIndex(resultTokens)
@@ -1033,7 +1033,7 @@ class Translator(tf.Module):
 
 在**的第 153-163** 行，我们创建了`tokens_to_text`函数，它使用`stringFromIndex`层将令牌从索引解码回字符串格式。
 
-```
+```py
     def sample(self, logits, temperature):
         # reshape the token mask
         tokenMask = self.tokenMask[tf.newaxis, tf.newaxis, :]
@@ -1070,7 +1070,7 @@ class Translator(tf.Module):
 
 最后，我们在**行 192** 返回`newTokens`。
 
-```
+```py
     @tf.function(input_signature=[tf.TensorSpec(dtype=tf.string,
         shape=[None])])
     def translate(self, sourceText, maxLength=50, returnAttention=True,
@@ -1090,7 +1090,7 @@ class Translator(tf.Module):
 
 首先，我们从第 199 行的**向量中提取`batchSize`。接下来，在**的第 203-206 行**，我们将源文本编码成标记，并通过编码器传递它们。**
 
-```
+```py
         # initialize the decoder state and the new tokens
         decState = tf.concat([encFwdState, encBckState], axis=-1)
         newTokens = tf.fill([batchSize, 1], self.startToken)
@@ -1169,7 +1169,7 @@ class Translator(tf.Module):
 
 创建完所有的块后，我们最终从`train.py`开始。
 
-```
+```py
 # USAGE
 # python train.py
 
@@ -1218,7 +1218,7 @@ testDs = make_dataset(splits=test, batchSize=config.BATCH_SIZE,
 
 我们分别在**行 **37、39 和 41** 、**上创建每个的张量流数据集。
 
-```
+```py
 # create source text processing layer and adapt on the training
 # source sentences
 print("[INFO] performing text vectorization...")
@@ -1239,7 +1239,7 @@ targetTextProcessor.adapt(train[1])
 
 接下来，我们创建源文本处理层，并将其应用于第 47-51 行的训练源句子。在**的第 55-59 行**，我们对目标句子做同样的处理。
 
-```
+```py
 # build the encoder and the decoder
 print("[INFO] building the encoder and decoder models...")
 encoder = Encoder(
@@ -1267,7 +1267,7 @@ translatorTrainer = TrainTranslator(
 
 最后，我们初始化名为`TrainTranslator` ( **第 76 行**)的训练器模块。我们通过编码器、解码器、源和目标文本处理器在第 77-81 行上构建它。
 
-```
+```py
 # get the total number of steps for training.
 totalSteps = int(trainDs.cardinality() * config.EPOCHS)
 
@@ -1304,7 +1304,7 @@ earlyStoppingCallback = EarlyStopping(
 
 接下来，我们用我们在第 106-110 行上配置的耐心来构建提前停止回调。
 
-```
+```py
 # train the model
 print("[INFO] training the translator model...")
 history = translatorTrainer.fit(
@@ -1353,7 +1353,7 @@ tf.saved_model.save(
 
 训练完成后，我们终于可以转到我们的推理脚本，看看我们的模型作为翻译器表现如何。
 
-```
+```py
 # USAGE
 # python inference.py -s "input sentence"
 
@@ -1407,7 +1407,7 @@ print("[INFO] french translation: {}".format(translatedText))
 
 A. R. Gosthipaty 和 R. Raha。“使用 TensorFlow 和 Keras 的 Bahdanau 注意力的神经机器翻译”， *PyImageSearch* ，P. Chugh，S. Huot，K. Kidriavsteva，A. Thanki，eds .，2022 年，【https://pyimg.co/kf8ma 
 
-```
+```py
 @incollection{ARG-RR_2022_Bahdanau,
   author = {Aritra Roy Gosthipaty and Ritwik Raha},
   title = {Neural Machine Translation with {Bahdanau's} Attention Using TensorFlow and Keras},

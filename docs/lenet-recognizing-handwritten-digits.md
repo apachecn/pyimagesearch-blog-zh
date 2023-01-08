@@ -16,7 +16,7 @@ LeNet 架构*简单*和*小*(就内存占用而言)，使其*成为教授 CNN �
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -43,7 +43,7 @@ LeNet 架构(**图 2** )是第一个优秀的“真实世界”网络。这个�
 
 此外，LeNet + MNIST 的组合能够轻松地在 CPU 上运行，使初学者能够轻松地迈出深度学习和 CNN 的第一步。在许多方面，LeNet + MNIST 是应用于图像分类的深度学习的*“你好，世界”*。LeNet 架构由以下层组成，使用来自 **[卷积神经网络(CNN)的`CONV => ACT => POOL`模式和](https://pyimagesearch.com/2021/05/14/convolutional-neural-networks-cnns-and-layer-types/)** 层类型:
 
-```
+```py
 INPUT => CONV => TANH => POOL => CONV => TANH => POOL =>
 	FC => TANH => FC
 ```
@@ -60,7 +60,7 @@ INPUT => CONV => TANH => POOL => CONV => TANH => POOL =>
 
 给定**表 1** ，我们现在准备使用 Keras 库实现开创性的 LeNet 架构。首先在`pyimagesearch.nn.conv`子模块中添加一个名为`lenet.py`的新文件——这个文件将存储我们实际的 LeNet 实现:
 
-```
+```py
 --- pyimagesearch
 |    |--- __init__.py
 |    |--- nn
@@ -74,7 +74,7 @@ INPUT => CONV => TANH => POOL => CONV => TANH => POOL =>
 
 从那里，打开`lenet.py`，我们可以开始编码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D
@@ -89,7 +89,7 @@ from tensorflow.keras import backend as K
 
 然后我们定义下面`LeNet`的`build`方法，用于实际构建网络架构:
 
-```
+```py
 class LeNet:
 	@staticmethod
 	def build(width, height, depth, classes):
@@ -113,7 +113,7 @@ class LeNet:
 
 第一组`CONV => RELU => POOL`层定义如下:
 
-```
+```py
   		# first set of CONV => RELU => POOL layers
 		model.add(Conv2D(20, (5, 5), padding="same",
 			input_shape=inputShape))
@@ -125,7 +125,7 @@ class LeNet:
 
 然后应用另一组`CONV => RELU => POOL`层，这次学习 50 个过滤器而不是 20 个:
 
-```
+```py
   		# second set of CONV => RELU => POOL layers
 		model.add(Conv2D(50, (5, 5), padding="same"))
 		model.add(Activation("relu"))
@@ -134,7 +134,7 @@ class LeNet:
 
 然后可以展平输入体积，并且可以应用具有 500 个节点的完全连接的层:
 
-```
+```py
   		# first (and only) set of FC => RELU layers
 		model.add(Flatten())
 		model.add(Dense(500))
@@ -143,7 +143,7 @@ class LeNet:
 
 接着是最终的 softmax 分类器:
 
-```
+```py
   		# softmax classifier
 		model.add(Dense(classes))
 		model.add(Activation("softmax"))
@@ -165,7 +165,7 @@ class LeNet:
 
 为了在 MNIST 上训练和评估 LeNet，创建一个名为`lenet_mnist.py`的新文件，我们可以开始了:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.nn.conv import LeNet
 from tensorflow.keras.optimizers import SGD
@@ -186,7 +186,7 @@ import numpy as np
 
 同样，几乎所有的例子都将遵循这种导入模式，除此之外还有一些额外的类来帮助完成某些任务(比如预处理图像)。MNIST 数据集已经过预处理，因此我们可以通过以下函数调用进行加载:
 
-```
+```py
 # grab the MNIST dataset (if this is your first time using this
 # dataset then the 11MB download may take a minute)
 print("[INFO] accessing MNIST...")
@@ -197,7 +197,7 @@ print("[INFO] accessing MNIST...")
 
 需要注意的是，`data`中的每个 MNIST 样本都由一个 28*×28*灰度图像的 784-d 矢量(即原始像素亮度)表示。因此，我们需要根据我们使用的是“信道优先”还是“信道最后”排序来重塑`data`矩阵:
 
-```
+```py
 # if we are using "channels first" ordering, then reshape the
 # design matrix such that the matrix is:
 # num_samples x depth x rows x columns
@@ -216,7 +216,7 @@ else:
 
 既然我们的数据矩阵已经成形，我们可以将图像像素强度调整到范围`[0, 1]`:
 
-```
+```py
 # scale data to the range of [0, 1]
 trainData = trainData.astype("float32") / 255.0
 testData = testData.astype("float32") / 255.0
@@ -233,7 +233,7 @@ testLabels = le.transform(testLabels)
 
 注意向量中的所有条目都是零*，除了第四个索引的*现在被设置为 1(记住数字`0`是第一个索引，因此为什么第三个是第四个索引*)。现在的舞台是在 MNIST 训练 LeNet:*
 
-```
+```py
 # initialize the optimizer and model
 print("[INFO] compiling model...")
 opt = SGD(lr=0.01)
@@ -254,7 +254,7 @@ H = model.fit(trainData, trainLabels,
 
 最后，我们可以评估我们网络的性能，并在下面的最终代码块中绘制损耗和精度随时间的变化图:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(testData, batch_size=128)
@@ -282,13 +282,13 @@ plt.show()
 
 要执行我们的脚本，只需发出以下命令:
 
-```
+```py
 $ python lenet_mnist.py
 ```
 
 然后，应该从磁盘下载和/或加载 MNIST 数据集，并开始训练:
 
-```
+```py
 [INFO] accessing MNIST...
 [INFO] compiling model...
 [INFO] training network...

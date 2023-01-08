@@ -65,7 +65,7 @@
 
 要列出 Tesseract 中的 14 个 PSM，只需向`tesseract`二进制文件提供`--help-psm`参数:
 
-```
+```py
 $ tesseract --help-psm
 Page segmentation modes:
   0    Orientation and script detection (OSD) only.
@@ -89,7 +89,7 @@ Page segmentation modes:
 
 例如，假设我们有一个名为`input.png`的输入图像，我们想要使用 PSM `7`，它用于 OCR 单行文本。因此，我们对`tesseract`的调用如下所示:
 
-```
+```py
 $ tesseract input.png stdout --psm 7
 ```
 
@@ -105,7 +105,7 @@ $ tesseract input.png stdout --psm 7
 
 说完这些，让我们看看我们的项目目录结构:
 
-```
+```py
 |-- psm-0
 |   |-- han_script.jpg
 |   |-- normal.png
@@ -156,7 +156,7 @@ OSD 最好用一个例子来看。看一下**图 1** ，这里有三个示例图
 
 让我们从将`tesseract`应用到`normal.png`图像开始，该图像显示在**图** 1 中*左上角*处:
 
-```
+```py
 $ tesseract normal.png stdout --psm 0
 Page number: 0
 Orientation in degrees: 0
@@ -170,7 +170,7 @@ Script confidence: 8.10
 
 现在让我们把同样的图像旋转 90 度，如图 1**(*右上*)所示:**
 
-```
+```py
 $ tesseract rotated_90.png stdout --psm 0
 Page number: 0
 Orientation in degrees: 90
@@ -184,7 +184,7 @@ Script confidence: 4.76
 
 最后一个例子，我们现在将把 Tesseract OSD 应用于汉字图像(**图** 1，*底*):
 
-```
+```py
 $ tesseract han_script.jpg stdout --psm 0
 Page number: 0
 Orientation in degrees: 0
@@ -209,7 +209,7 @@ Script confidence: 1.43
 
 然而，如果我们采用图 1 的**中的图像，并使用此模式将它们通过`tesseract`，您可以看到没有 OSD 信息:**
 
-```
+```py
 $ tesseract example.png stdout --psm 1
 Our last argument is how we want to approximate the
 contour. We use cv2.CHAIN_APPROX_SIMPLE to compress
@@ -230,7 +230,7 @@ of resources.
 
 在 Tesseract 中没有实现`--psm 2`模式。您可以通过运行`tesseract --help-psm`命令查看模式二的输出来验证这一点:
 
-```
+```py
 $ tesseract --help-psm
 Page segmentation modes:
 ...
@@ -256,7 +256,7 @@ Page segmentation modes:
 
 以下示例显示了如何获取一段文本，并在两个单独的命令中同时应用 OSD 和 OCR:
 
-```
+```py
 $ tesseract example.png stdout --psm 0
 Page number: 0
 Orientation in degrees: 0
@@ -285,7 +285,7 @@ of resources.
 
 例如，考虑**图** 2，这是杂货店的收据。让我们尝试使用默认(`--psm 3`)模式对该图像进行 OCR:
 
-```
+```py
 $ tesseract receipt.png stdout
 ee
 
@@ -352,7 +352,7 @@ ie
 
 为了解决这个问题，我们可以使用`--psm 4`模式:
 
-```
+```py
 $ tesseract receipt.png stdout --psm 4
 WHOLE
 FOODS.
@@ -397,7 +397,7 @@ wee TAX = 00 BAL 101.33
 
 让我们首先应用默认的`--psm 3`:
 
-```
+```py
 $ tesseract receipt_rotated.png stdout
 WHOLE
 FOODS.
@@ -460,7 +460,7 @@ ie
 
 为了解决这个问题，我们可以使用`--psm 5`:
 
-```
+```py
 $ tesseract receipt_rotated.png stdout --psm 5
 Cea a amD
 
@@ -494,7 +494,7 @@ wee TAX = 00 BAL 101.33
 
 下面显示了在默认`--psm 3`模式下，对夏洛克·福尔摩斯小说(**图** 5)中的单个统一文本块应用宇宙魔方的结果:
 
-```
+```py
 $ tesseract sherlock_holmes.png stdout
 CHAPTER ONE
 
@@ -538,7 +538,7 @@ examination of it.”
 
 通过使用`--psm 6`模式，我们能够更好地对这一大块文本进行 OCR:
 
-```
+```py
 $ tesseract sherlock_holmes.png stdout --psm 6
 CHAPTER ONE
 SS
@@ -582,7 +582,7 @@ examination of it.”
 
 让我们从使用默认的`--psm 3`模式开始:
 
-```
+```py
 $ tesseract license_plate.png stdout
 Estimating resolution as 288
 Empty page!!
@@ -594,7 +594,7 @@ Empty page!!
 
 但是，如果我们使用`--psm 7`并告诉 Tesseract 将输入视为单行统一文本，我们就能够获得正确的结果:
 
-```
+```py
 $ tesseract license_plate.png stdout --psm 7
 MHOZDW8351
 ```
@@ -610,7 +610,7 @@ MHOZDW8351
 
 例如，让我们考虑一下**图 7** ，这是一张店面的照片。我们可以尝试使用默认的`--psm 3`模式对该图像进行 OCR:
 
-```
+```py
 $ tesseract designer.png stdout
 MS atts
 ```
@@ -619,7 +619,7 @@ MS atts
 
 为了解决这个问题，我们可以使用`--psm 8`，告诉 Tesseract 绕过任何页面分割方法，而是将该图像视为一个单词:
 
-```
+```py
 $ tesseract designer.png stdout --psm 8
 Designer
 ```
@@ -647,7 +647,7 @@ Designer
 
 **图 9** 显示了数字`2`的一个例子。让我们试着用默认的`--psm 3`进行 OCR:
 
-```
+```py
 $ tesseract number.png stdout
 Estimating resolution as 1388
 Empty page!!
@@ -659,7 +659,7 @@ Tesseract 试图应用自动页面分割方法，但是由于没有实际的文�
 
 我们可以通过`--psm 10`将输入图像视为单个字符来解决这个问题:
 
-```
+```py
 $ tesseract number.png stdout --psm 10
 2
 ```
@@ -676,7 +676,7 @@ $ tesseract number.png stdout --psm 10
 
 让我们尝试使用默认的`--psm 3`来 OCR 这个主题列表:
 
-```
+```py
 $ tesseract website_menu.png stdout
 How Do | Get Started?
 Deep Learning
@@ -708,7 +708,7 @@ My Books and Courses
 
 为了解决这个问题，我们可以用`--psm 11`将输入图像视为稀疏文本:
 
-```
+```py
 $ tesseract website_menu.png stdout --psm 11
 How Do | Get Started?
 
@@ -764,7 +764,7 @@ My Books and Courses
 
 让我们尝试使用默认的`--psm 3`来 OCR 这个图像:
 
-```
+```py
 $ tesseract the_old_engine.png stdout
 Warning. Invalid resolution 0 dpi. Using 70 instead.
 Estimating resolution as 491
@@ -775,7 +775,7 @@ Tesseract 无法对图像进行 OCR，返回一个空字符串。
 
 现在让我们使用`--psm 13`，绕过所有页面分割算法和镶嵌预处理函数，从而将图像视为一行原始文本:
 
-```
+```py
 $ tesseract the_old_engine.png stdout --psm 13
 Warning. Invalid resolution 0 dpi. Using 70 instead.
 THE OLD ENGINE.

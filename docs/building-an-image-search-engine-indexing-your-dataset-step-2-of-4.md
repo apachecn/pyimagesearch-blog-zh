@@ -64,7 +64,7 @@
 
 例如，让我们看看 Python 中通用图像描述符的框架代码:
 
-```
+```py
 class GenericDescriptor:
 	def __init__(self, paramA, paramB):
 		# store the parameters for use in the 'describe' method

@@ -21,7 +21,7 @@
 
 首先，让我们加载图像并显示在屏幕上:
 
-```
+```py
 # import the necessary packages
 import cv2
 
@@ -48,7 +48,7 @@ cv2.waitKey(0)
 
 仅仅加载和显示图像并不有趣。让我们调整这张图片的大小，让它变得更小。我们可以通过使用图像的`shape`属性来检查图像的尺寸，因为图像毕竟是一个 NumPy 数组:
 
-```
+```py
 # print the dimensions of the image
 print image.shape
 
@@ -60,7 +60,7 @@ print image.shape
 
 因为我们知道我们的图像是 647 像素宽，让我们调整它的大小，使其宽度为 100 像素:
 
-```
+```py
 # we need to keep in mind aspect ratio so the image does
 # not look skewed or distorted -- therefore, we calculate
 # the ratio of the new image to the old image
@@ -87,7 +87,7 @@ cv2.waitKey(0)
 
 调整图像大小并没有那么糟糕。现在，让我们假设我们是侏罗纪公园电影中的霸王龙——让我们把这辆吉普车倒过来:
 
-```
+```py
 # grab the dimensions of the image and calculate the center
 # of the image
 (h, w) = image.shape[:2]
@@ -119,7 +119,7 @@ cv2.waitKey(0)
 
 让我们继续裁剪图像，捕捉格兰特的特写:
 
-```
+```py
 # crop the image using array slices -- it's a NumPy array
 # after all!
 cropped = image[70:170, 440:540]
@@ -138,7 +138,7 @@ cv2.waitKey(0)
 
 作为最后一个例子，让我们将裁剪后的图像保存到磁盘，只保存为 PNG 格式(原始图像是 JPG):
 
-```
+```py
 # write the cropped image to disk in PNG format
 cv2.imwrite("thumbnail.png", cropped)
 

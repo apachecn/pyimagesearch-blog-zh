@@ -30,14 +30,14 @@
 
 由于我们正在使用 [matplotlib](http://matplotlib.org/) ，让我们创建一个名为`plotting`的新虚拟环境:
 
-```
+```py
 $ mkvirtualenv plotting
 
 ```
 
 现在我们在`plotting`环境中，让我们安装`numpy`、`scipy`和`matplotlib`:
 
-```
+```py
 $ pip install numpy
 $ pip install scipy
 $ pip install matplotlib
@@ -46,7 +46,7 @@ $ pip install matplotlib
 
 太棒了——我们所有的 Python 依赖项都已安装。现在，让我们编写几行代码来加载图像，将其转换为灰度图像，计算灰度图像的直方图，最后将其显示在屏幕上。我将把所有这些代码放到一个名为`grayscale_histogram.py`的文件中:
 
-```
+```py
 # import the necessary packages
 from matplotlib import pyplot as plt
 import cv2
@@ -77,7 +77,7 @@ cv2.waitKey(0)
 
 要执行我们的脚本，我们需要做的就是启动 shell 并发出以下命令:
 
-```
+```py
 $ python grayscale_histogram.py
 
 ```
@@ -104,7 +104,7 @@ $ python grayscale_histogram.py
 
 进入 shell 后，我可以使用`matplotlib.get_backend()`访问 matplotlib 后端:
 
-```
+```py
 $ python
 Python 3.4.0 (default, Apr 11 2014, 13:05:11) 
 [GCC 4.8.2] on linux
@@ -119,7 +119,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 幸运的是，我们可以通过使用`apt-get`安装几个库来解决这个问题:
 
-```
+```py
 $ sudo apt-get install tcl-dev tk-dev python-tk python3-tk
 
 ```
@@ -133,7 +133,7 @@ $ sudo apt-get install tcl-dev tk-dev python-tk python3-tk
 
 我可以使用以下命令完成这些步骤:
 
-```
+```py
 $ workon plotting
 $ pip uninstall matplotlib
 $ git clone https://github.com/matplotlib/matplotlib.git
@@ -146,7 +146,7 @@ $ python setup.py install
 
 在通过源代码安装了`matplotlib`之后，让我们再次执行`get_backend()`函数:
 
-```
+```py
 $ python
 Python 3.4.0 (default, Apr 11 2014, 13:05:11) 
 [GCC 4.8.2] on linux
@@ -163,7 +163,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 现在，当我们执行我们的`grayscale_histogram.py`脚本时，就像上面一样:
 
-```
+```py
 $ python grayscale_histogram.py
 
 ```
@@ -186,7 +186,7 @@ Raspbian 操作系统，许多 Raspberry Pi 运行的，是基于 Debian 的，�
 
 精明的 Debian 用户可能想知道为什么我不简单地通过`apt-get`安装`matplotlib`，就像这样:
 
-```
+```py
 $ sudo apt-get install python-matplotlib
 
 ```

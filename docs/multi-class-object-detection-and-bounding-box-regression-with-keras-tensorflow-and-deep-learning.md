@@ -102,7 +102,7 @@
 
 去拿吧。本教程的 ***【下载】*** 部分的 zip 文件。在里面，您将找到数据子集以及我们的项目文件:
 
-```
+```py
 $ tree --dirsfirst --filelimit 20
 .
 ├── dataset
@@ -130,7 +130,7 @@ $ tree --dirsfirst --filelimit 20
 9 directories, 12 files
 ```
 
-```
+```py
 $ head -n 10 face.csv 
 image_0001.jpg,251,15,444,300,face
 image_0002.jpg,106,31,296,310,face
@@ -171,7 +171,7 @@ image_0010.jpg,121,34,314,302,face
 
 打开`pyimagesearch`模块中的`config.py`文件，让我们看看里面有什么:
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -189,7 +189,7 @@ Python 的`os`模块( **Line 2** )允许我们在配置文件中构建动态路�
 
 接下来，我们有四个与输出文件相关联的路径:
 
-```
+```py
 # define the path to the base output directory
 BASE_OUTPUT = "output"
 
@@ -203,7 +203,7 @@ TEST_PATHS = os.path.sep.join([BASE_OUTPUT, "test_paths.txt"])
 
 最后，让我们定义我们的标准深度学习超参数:
 
-```
+```py
 # initialize our initial learning rate, number of epochs to train
 # for, and the batch size
 INIT_LR = 1e-4
@@ -219,7 +219,7 @@ BATCH_SIZE = 32
 
 打开项目目录中的`train.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from tensorflow.keras.applications import VGG16
@@ -244,7 +244,7 @@ import os
 
 既然我们的包、文件和方法已经导入，让我们初始化几个列表:
 
-```
+```py
 # initialize the list of data (images), class labels, target bounding
 # box coordinates, and image paths
 print("[INFO] loading dataset...")
@@ -263,7 +263,7 @@ imagePaths = []
 
 现在我们的列表已经初始化，在接下来的三个代码块中，我们将准备数据并填充这些列表，以便它们可以作为多类边界框回归训练的输入:
 
-```
+```py
 # loop over all CSV files in the annotations directory
 for csvPath in paths.list_files(config.ANNOTS_PATH, validExts=(".csv")):
 	# load the contents of the current CSV annotations file
@@ -277,7 +277,7 @@ for csvPath in paths.list_files(config.ANNOTS_PATH, validExts=(".csv")):
 		(filename, startX, startY, endX, endY, label) = row
 ```
 
-```
+```py
 $ head -n 5 dataset/annotations/*.csv
 ==> dataset/annotations/airplane.csv <==
 image_0001.jpg,49,30,349,137,airplane
@@ -306,7 +306,7 @@ image_0005.jpg,31,19,232,145,motorcycle
 
 接下来让我们使用这些值:
 
-```
+```py
 		# derive the path to the input image, load the image (in
 		# OpenCV format), and grab its dimensions
 		imagePath = os.path.sep.join([config.IMAGES_PATH, label,
@@ -324,7 +324,7 @@ image_0005.jpg,31,19,232,145,motorcycle
 
 最后，让我们加载图像并进行预处理:
 
-```
+```py
 		# load the image and preprocess it
 		image = load_img(imagePath, target_size=(224, 224))
 		image = img_to_array(image)
@@ -339,7 +339,7 @@ image_0005.jpg,31,19,232,145,motorcycle
 
 尽管我们的数据准备循环已经完成，但我们仍有一些预处理任务要处理:
 
-```
+```py
 # convert the data, class labels, bounding boxes, and image paths to
 # NumPy arrays, scaling the input pixel intensities from the range
 # [0, 255] to [0, 1]
@@ -362,7 +362,7 @@ if len(lb.classes_) == 2:
 
 让我们继续划分我们的数据分割:
 
-```
+```py
 # partition the data into training and testing splits using 80% of
 # the data for training and the remaining 20% for testing
 split = train_test_split(data, labels, bboxes, imagePaths,
@@ -392,7 +392,7 @@ f.close()
 
 事不宜迟，让我们准备我们的模型:
 
-```
+```py
 # load the VGG16 network, ensuring the head FC layers are left off
 vgg = VGG16(weights="imagenet", include_top=False,
 	input_tensor=Input(shape=(224, 224, 3)))
@@ -414,7 +414,7 @@ flatten = Flatten()(flatten)
 
 说到构建新的层头，让我们现在就做:
 
-```
+```py
 # construct a fully-connected layer header to output the predicted
 # bounding box coordinates
 bboxHead = Dense(128, activation="relu")(flatten)
@@ -452,7 +452,7 @@ model = Model(
 
 下一步是定义我们的损失并编译模型:
 
-```
+```py
 # define a dictionary to set the loss methods -- categorical
 # cross-entropy for the class label head and mean absolute error
 # for the bounding box head
@@ -481,7 +481,7 @@ print(model.summary())
 
 接下来，我们需要再定义两个字典:
 
-```
+```py
 # construct a dictionary for our target training outputs
 trainTargets = {
 	"class_label": trainLabels,
@@ -498,7 +498,7 @@ testTargets = {
 
 我们现在准备训练我们的多类包围盒回归器:
 
-```
+```py
 # train the network for bounding box regression and class label
 # prediction
 print("[INFO] training model...")
@@ -524,7 +524,7 @@ f.close()
 
 现在让我们构建一个图来可视化我们的总损失、类别标签损失(分类交叉熵)和边界框回归损失(均方误差)。
 
-```
+```py
 # plot the total loss, label loss, and bounding box loss
 lossNames = ["loss", "class_label_loss", "bounding_box_loss"]
 N = np.arange(0, config.NUM_EPOCHS)
@@ -557,7 +557,7 @@ plt.close()
 
 最后一步是规划我们的培训和验证准确性:
 
-```
+```py
 # create a new figure for the accuracies
 plt.style.use("ggplot")
 plt.figure()
@@ -585,7 +585,7 @@ plt.savefig(plotPath)
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python train.py
 [INFO] loading dataset...
 [INFO] saving testing image paths...
@@ -663,7 +663,7 @@ _____________________________________________________
 
 随着我们的数据集加载和模型的构建，让我们训练用于多类对象检测的网络:
 
-```
+```py
 [INFO] training model...
 Epoch 1/20
 51/51 [==============================] - 255s 5s/step - loss: 0.0526 - bounding_box_loss: 0.0078 - class_label_loss: 0.0448 - bounding_box_accuracy: 0.7703 - class_label_accuracy: 0.9070 - val_loss: 0.0016 - val_bounding_box_loss: 0.0014 - val_class_label_loss: 2.4737e-04 - val_bounding_box_accuracy: 0.8793 - val_class_label_accuracy: 1.0000
@@ -698,7 +698,7 @@ Epoch 20/20
 
 培训完成后，您的`output`目录中应该有以下文件:
 
-```
+```py
 $ ls output/
 detector.h5	lb.pickle	plots		test_paths.txt
 ```
@@ -707,7 +707,7 @@ detector.h5	lb.pickle	plots		test_paths.txt
 
 我们的多类对象检测器现在已经被训练并序列化到磁盘，但我们仍然需要一种方法来获取这个模型，并使用它在输入图像上实际做出*预测*——我们的`predict.py`文件会处理这些。
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from tensorflow.keras.preprocessing.image import img_to_array
@@ -724,7 +724,7 @@ import os
 
 现在让我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--input", required=True,
@@ -732,7 +732,7 @@ ap.add_argument("-i", "--input", required=True,
 args = vars(ap.parse_args())
 ```
 
-```
+```py
 # determine the input file type, but assume that we're working with
 # single input image
 filetype = mimetypes.guess_type(args["input"])[0]
@@ -750,14 +750,14 @@ if "text/plain" == filetype:
 
 现在让我们从磁盘加载我们的序列化多类边界框回归器和`LabelBinarizer`:
 
-```
+```py
 # load our object detector and label binarizer from disk
 print("[INFO] loading object detector...")
 model = load_model(config.MODEL_PATH)
 lb = pickle.loads(open(config.LB_PATH, "rb").read())
 ```
 
-```
+```py
 # loop over the images that we'll be testing using our bounding box
 # regression model
 for imagePath in imagePaths:
@@ -793,7 +793,7 @@ for imagePath in imagePaths:
 
 最后一步是将边界框坐标缩放回图像的原始空间尺寸，然后注释我们的输出:
 
-```
+```py
 	# load the input image (in OpenCV format), resize it such that it
 	# fits on our screen, and grab its dimensions
 	image = cv2.imread(imagePath)
@@ -841,7 +841,7 @@ for imagePath in imagePaths:
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python predict.py --input datasimg/face/image_0131.jpg 
 [INFO] loading object detector...
 ```
@@ -850,7 +850,7 @@ $ python predict.py --input datasimg/face/image_0131.jpg
 
 让我们试试另一张图片，这张是*“摩托车”:*
 
-```
+```py
 $ python predict.py --input datasimg/motorcycle/image_0026.jpg 
 [INFO] loading object detector...
 ```
@@ -859,7 +859,7 @@ $ python predict.py --input datasimg/motorcycle/image_0026.jpg
 
 这是最后一个例子，这是一架*“飞机”:*
 
-```
+```py
 $ python predict.py --input datasimg/airplane/image_0002.jpg 
 [INFO] loading object detector...
 ```
@@ -868,7 +868,7 @@ $ python predict.py --input datasimg/airplane/image_0002.jpg
 
 您还可以通过更新`--input`命令行参数来预测`output/test_images.txt`中的测试图像:
 
-```
+```py
 $ python predict.py --input output/test_paths.txt 
 [INFO] loading object detector...
 ```

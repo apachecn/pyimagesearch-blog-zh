@@ -93,7 +93,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -120,7 +120,7 @@ $ pip install opencv-contrib-python
 
 接下来，让我们回顾一下我们的项目目录结构:
 
-```
+```py
 |-- michael_jordan_stats.png
 |-- multi_column_ocr.py
 |-- results.csv
@@ -140,7 +140,7 @@ $ pip install opencv-contrib-python
 
 您可以使用以下命令安装`tabulate`:
 
-```
+```py
 $ workon your_env_name # optional
 $ pip install tabulate
 ```
@@ -153,7 +153,7 @@ $ pip install tabulate
 
 我们现在准备实现多列 OCR！打开项目目录结构中的`multi_column_ocr.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from sklearn.cluster import AgglomerativeClustering
 from pytesseract import Output
@@ -178,7 +178,7 @@ import cv2
 
 让我们继续我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -224,7 +224,7 @@ args = vars(ap.parse_args())
 
 考虑到我们的命令行参数，让我们开始我们的图像处理管道:
 
-```
+```py
 # set a seed for our random number generator
 np.random.seed(42)
 
@@ -239,7 +239,7 @@ gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 我们的下一个代码块检测我们的`image`中的大块文本，采用与我们的教程 [OCR 识别护照](https://pyimagesearch.com/2021/12/01/ocr-passports-with-opencv-and-tesseract/) *:* 相似的过程
 
-```
+```py
 # initialize a rectangular kernel that is ~5x wider than it is tall,
 # then smooth the image using a 3x3 Gaussian blur and then apply a
 # blackhat morphological operator to find dark regions on a light
@@ -280,7 +280,7 @@ cv2.imshow("Thresh", thresh)
 
 我们的下一个代码块处理检测和提取这个表:
 
-```
+```py
 # find contours in the thresholded image and grab the largest one,
 # which we will assume is the stats table
 cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
@@ -308,7 +308,7 @@ cv2.imshow("Table", table)
 
 现在我们有了统计数据`table`，让我们对其进行 OCR:
 
-```
+```py
 # set the PSM mode to detect sparse text, and then localize text in
 # the table
 options = "--psm 6"
@@ -335,7 +335,7 @@ ocrText = []
 
 让我们继续循环我们的每个文本检测:
 
-```
+```py
 # loop over each of the individual text localizations
 for i in range(0, len(results["text"])):
 	# extract the bounding box coordinates of the text region from
@@ -364,7 +364,7 @@ for i in range(0, len(results["text"])):
 
 我们现在可以进入项目的集群阶段:
 
-```
+```py
 # extract all x-coordinates from the text bounding boxes, setting the
 # y-coordinate value to zero
 xCoords = [(c[0], 0) for c in coords]
@@ -398,7 +398,7 @@ sortedClusters = []
 
 现在我们的聚类已经完成，让我们遍历每个独特的聚类:
 
-```
+```py
 # loop over all clusters
 for l in np.unique(clustering.labels_):
 	# extract the indexes for the coordinates belonging to the
@@ -431,7 +431,7 @@ df = pd.DataFrame()
 
 现在让我们循环遍历排序后的集群:
 
-```
+```py
 # loop over the clusters again, this time in sorted order
 for (l, _) in sortedClusters:
 	# extract the indexes for the coordinates belonging to the
@@ -456,7 +456,7 @@ for (l, _) in sortedClusters:
 
 现在，让我们遍历该列中的每一段文本:
 
-```
+```py
 	# loop over the sorted indexes
 	for i in sortedIdxs:
 		# extract the text bounding box coordinates and draw the
@@ -486,7 +486,7 @@ for (l, _) in sortedClusters:
 
 至此，我们的表格 OCR 过程已经完成，我们只需要将表格保存到磁盘:
 
-```
+```py
 # replace NaN values with an empty string and then show a nicely
 # formatted version of our multi-column OCR'd text
 df.fillna("", inplace=True)
@@ -515,7 +515,7 @@ cv2.waitKey(0)
 
 打开终端并执行以下命令:
 
-```
+```py
 $ python multi_column_ocr.py --image michael_jordan_stats.png --output results.csv
 +----+---------+---------+-----+---------+-------+-------+-------+-------+-------+--------+
 |    | Year    | CLUB    |   G |     FG% |   REB |   AST | STL   | BLK   |   PTS |   AVG. |
@@ -555,7 +555,7 @@ $ python multi_column_ocr.py --image michael_jordan_stats.png --output results.c
 
 在我们的 Python 脚本被执行之后，我们有一个输出`results.csv`文件，其中包含我们的表，该表作为 CSV 文件被序列化到磁盘上。我们来看看它的内容:
 
-```
+```py
 $ cat results.csv
 Year,CLUB,G,FG%,REB,AST,STL,BLK,PTS,AVG.
 1984-85,CHICAGO,82,515,534,481,196,69,2313,282
@@ -592,7 +592,7 @@ TOTALS,,427,516,2694,2565,1189,465,14016,328
 
 **罗斯布鲁克，A.** “多栏表格 OCR”， *PyImageSearch* ，2022，【https://pyimg.co/h18s2】T4
 
-```
+```py
 @article{Rosebrock_2022_MCT_OCR,
   author = {Adrian Rosebrock},
   title = {Multi-Column Table {OCR}},

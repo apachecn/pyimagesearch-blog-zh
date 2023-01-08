@@ -71,7 +71,7 @@
 
 让我们检查一下我们的项目布局:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── pyimagesearch
@@ -103,7 +103,7 @@ $ tree --dirsfirst
 
 让我们现在安装软件:
 
-```
+```py
 $ workon <env_name> # replace "<env_name>" with your environment
 $ pip install tensorflow # or tensorflow-gpu
 $ pip install keras
@@ -116,14 +116,14 @@ $ pip install matplotlib
 
 您可以通过以下命令**安装修正 Adam** 的 Keras 实现:
 
-```
+```py
 $ pip install keras-rectified-adam
 
 ```
 
 要验证 Keras + RAdam 包是否已成功安装，请打开 Python shell 并尝试导入`keras_radam`:
 
-```
+```py
 $ python
 >>> import keras_radam
 >>>
@@ -145,7 +145,7 @@ $ python
 
 打开一个新文件，将其命名为`train.py`，并插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -182,7 +182,7 @@ args = vars(ap.parse_args())
 
 从这里开始，让我们继续执行一些初始化:
 
-```
+```py
 # initialize the number of epochs to train for and batch size
 EPOCHS = 75
 BS = 128
@@ -222,7 +222,7 @@ labelNames = ["airplane", "automobile", "bird", "cat", "deer",
 
 现在我们进入本教程的核心部分— **初始化*亚当*或*雷达姆*优化器:**
 
-```
+```py
 # check if we are using Adam
 if args["optimizer"] == "adam":
 	# initialize the Adam optimizer
@@ -244,7 +244,7 @@ else:
 
 优化器准备就绪，现在我们将编译和训练我们的模型:
 
-```
+```py
 # initialize our optimizer and model, then compile it
 model = ResNet.build(32, 32, 3, 10, (9, 9, 9),
 	(64, 64, 128, 256), reg=0.0005)
@@ -267,7 +267,7 @@ H = model.fit_generator(
 
 最后，我们打印分类报告，并绘制训练期内的损失/准确度曲线:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(testX, batch_size=BS)
@@ -300,7 +300,7 @@ plt.savefig(args["plot"])
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python train.py --plot cifar10_adam.png --optimizer adam
 [INFO] loading CIFAR-10 data...
 [INFO] using Adam optimizer
@@ -358,7 +358,7 @@ weighted avg       0.90      0.90      0.90     10000
 
 现在，让我们使用修正的 Adam 优化器在 CIFAR-10 上训练 ResNet:
 
-```
+```py
 $ python train.py --plot cifar10_rectified_adam.png --optimizer radam
 [INFO] loading CIFAR-10 data...
 [INFO] using Rectified Adam optimizer

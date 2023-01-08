@@ -101,7 +101,7 @@
 
 从那里，你应该确保你已经安装了 [scikit-image](http://scikit-image.org/) 。[本页](http://scikit-image.org/docs/stable/install.html)提供了关于安装 scikit-image 的更多信息，但是对于大多数系统，您可以使用`pip`:
 
-```
+```py
 $ pip install --upgrade scikit-image
 
 ```
@@ -110,7 +110,7 @@ $ pip install --upgrade scikit-image
 
 打开一个新文件，将其命名为`seam_carving.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from skimage import transform
 from skimage import filters
@@ -134,7 +134,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们从磁盘加载我们的输入图像，将其转换为灰度，并计算 Sobel 梯度幅度表示(即，我们的*能量图*):
 
-```
+```py
 # load the image and convert it to grayscale
 image = cv2.imread(args["image"])
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -158,7 +158,7 @@ cv2.imshow("Original", image)
 
 为了演示接缝雕刻的实际操作，让我们循环查看一些要移除的接缝:
 
-```
+```py
 # loop over a number of seams to remove
 for numSeams in range(20, 140, 20):
 	# perform seam carving, removing the desired number
@@ -189,7 +189,7 @@ for numSeams in range(20, 140, 20):
 
 从那里，执行以下命令:
 
-```
+```py
 $ python seam_carving.py --image bryce_canyon.jpg
 
 ```
@@ -202,7 +202,7 @@ $ python seam_carving.py --image bryce_canyon.jpg
 
 我们可以通过*移除水平接缝*来降低图像高度:
 
-```
+```py
 $ python seam_carving.py --image bryce_canyon.jpg --direction horizontal
 
 ```

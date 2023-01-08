@@ -40,7 +40,7 @@
 
 首先，打开一个新文件，命名为`detect_bright_spots.py`。从那里，插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils import contours
 from skimage import measure
@@ -63,7 +63,7 @@ args = vars(ap.parse_args())
 
 如果您的系统上还没有安装`imutils`，您可以使用`pip`为您安装:
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -72,7 +72,7 @@ $ pip install --upgrade imutils
 
 要开始检测图像中最亮的区域，我们首先需要从磁盘加载图像，然后将其转换为灰度，并对其进行平滑(即模糊)以减少高频噪声:
 
-```
+```py
 # load the image, convert it to grayscale, and blur it
 image = cv2.imread(args["image"])
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -90,7 +90,7 @@ blurred = cv2.GaussianBlur(gray, (11, 11), 0)
 
 为了显示模糊图像中最亮的区域,我们需要应用阈值处理:
 
-```
+```py
 # threshold the image to reveal light regions in the
 # blurred image
 thresh = cv2.threshold(blurred, 200, 255, cv2.THRESH_BINARY)[1]
@@ -109,7 +109,7 @@ thresh = cv2.threshold(blurred, 200, 255, cv2.THRESH_BINARY)[1]
 
 然而，这个图像中有一点噪声(即小斑点)，所以让我们通过执行一系列腐蚀和膨胀来清理它:
 
-```
+```py
 # perform a series of erosions and dilations to remove
 # any small blobs of noise from the thresholded image
 thresh = cv2.erode(thresh, None, iterations=2)
@@ -127,7 +127,7 @@ thresh = cv2.dilate(thresh, None, iterations=4)
 
 一个很好的方法是执行[连接组件分析](https://en.wikipedia.org/wiki/Connected-component_labeling):
 
-```
+```py
 # perform a connected component analysis on the thresholded
 # image, then initialize a mask to store only the "large"
 # components
@@ -179,7 +179,7 @@ for label in np.unique(labels):
 
 最后一步是在我们的图像上绘制标记的斑点:
 
-```
+```py
 # find the contours in the mask, then sort them from left to
 # right
 cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
@@ -217,7 +217,7 @@ cv2.waitKey(0)
 
 从那里，只需执行以下命令:
 
-```
+```py
 $ python detect_bright_spots.py --image images/lights_01.png
 
 ```
@@ -232,7 +232,7 @@ $ python detect_bright_spots.py --image images/lights_01.png
 
 您可以通过执行以下命令来可视化第二个示例:
 
-```
+```py
 $ python detect_bright_spots.py --image images/lights_02.png
 
 ```

@@ -87,7 +87,7 @@
 
 花点时间找到本教程的 ***【下载】*** 部分，并获取我们今天将在这里使用的代码和示例税表。在里面，您会发现以下内容:
 
-```
+```py
 $ tree --dirsfirst 
 .
 ├── pyimagesearch
@@ -128,7 +128,7 @@ $ tree --dirsfirst
 
 打开`align_images.py`，让我们一起编写脚本:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import imutils
@@ -147,7 +147,7 @@ def align_images(image, template, maxFeatures=500, keepPercent=0.2,
 
 接下来，我们将检测关键点，提取局部二进制特征，并在输入图像和模板之间关联这些特征:
 
-```
+```py
 	# use ORB to detect keypoints and extract (binary) local
 	# invariant features
 	orb = cv2.ORB_create(maxFeatures)
@@ -164,7 +164,7 @@ def align_images(image, template, maxFeatures=500, keepPercent=0.2,
 
 现在我们已经有了关键点`matches`，接下来的步骤包括排序、过滤和显示:
 
-```
+```py
 	# sort the matches by their distance (the smaller the distance,
 	# the "more similar" the features are)
 	matches = sorted(matches, key=lambda x:x.distance)
@@ -184,7 +184,7 @@ def align_images(image, template, maxFeatures=500, keepPercent=0.2,
 
 接下来，在计算我们的单应矩阵之前，我们将执行几个步骤:
 
-```
+```py
 	# allocate memory for the keypoints (x, y)-coordinates from the
 	# top matches -- we'll use these coordinates to compute our
 	# homography matrix
@@ -201,7 +201,7 @@ def align_images(image, template, maxFeatures=500, keepPercent=0.2,
 
 给定我们有组织的关键点匹配对，现在我们准备对齐我们的图像:
 
-```
+```py
 	# compute the homography matrix between the two sets of matched
 	# points
 	(H, mask) = cv2.findHomography(ptsA, ptsB, method=cv2.RANSAC)
@@ -228,7 +228,7 @@ def align_images(image, template, maxFeatures=500, keepPercent=0.2,
 
 打开`align_document.py`，让我们回顾一下，看看我们如何才能做到这一点:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.alignment import align_images
 import numpy as np
@@ -250,7 +250,7 @@ args = vars(ap.parse_args())
 
 我们的下一步是对齐我们的两个输入图像:
 
-```
+```py
 # load the input image and template from disk
 print("[INFO] loading images...")
 image = cv2.imread(args["image"])
@@ -270,7 +270,7 @@ aligned = align_images(image, template, debug=True)
 
 让我们准备好我们的`aligned`图像，用于**堆叠**与其`template`的比较:
 
-```
+```py
 # resize both the aligned and template images so we can easily
 # visualize them on our screen
 aligned = imutils.resize(aligned, width=700)
@@ -282,7 +282,7 @@ template = imutils.resize(template, width=700)
 stacked = np.hstack([aligned, template])
 ```
 
-```
+```py
 # our second image alignment visualization will be *overlaying* the
 # aligned image on the template, that way we can obtain an idea of
 # how good our image alignment is
@@ -308,7 +308,7 @@ cv2.waitKey(0)
 
 使用本教程的 ***“下载”*** 部分下载源代码和示例图像。从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python align_document.py --template form_w4.png --image scans/scan_01.jpg
 [INFO] loading images...
 [INFO] aligning images...
@@ -332,7 +332,7 @@ $ python align_document.py --template form_w4.png --image scans/scan_01.jpg
 
 让我们尝试另一个示例图像:
 
-```
+```py
 $ python align_document.py --template form_w4.png --image scans/scan_02.jpg
 [INFO] loading images...
 [INFO] aligning images...

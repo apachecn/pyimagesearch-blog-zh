@@ -128,7 +128,7 @@ Python 脚本将运行至完成。
 
 你可以从他们的[官方网页](http://www.vision.caltech.edu/Image_Datasets/Caltech101/)下载加州理工学院-101 数据集，或者你可以使用下面的`wget`命令:
 
-```
+```py
 $ wget http://www.vision.caltech.edu/Image_Datasets/Caltech101/101_ObjectCategories.tar.gz
 $ tar xvzf 101_ObjectCategories.tar.gz
 
@@ -138,7 +138,7 @@ $ tar xvzf 101_ObjectCategories.tar.gz
 
 让我们检查一下我们的项目结构:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── pyimagesearch
@@ -164,7 +164,7 @@ $ tree --dirsfirst --filelimit 10
 
 打开目录结构中的`parallel_hashing.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import pickle
@@ -205,7 +205,7 @@ def dhash(image, hashSize=8):
 
 接下来，我们来看看`convert_hash`函数:
 
-```
+```py
 def convert_hash(h):
 	# convert the hash to NumPy's 64-bit float and then back to
 	# Python's built in int
@@ -225,7 +225,7 @@ def convert_hash(h):
 
 现在让我们定义我们的`chunk`生成器:
 
-```
+```py
 def chunk(l, n):
 	# loop over the list in n-sized chunks
 	for i in range(0, len(l), n):
@@ -243,7 +243,7 @@ def chunk(l, n):
 
 我们终于到了多处理实现的**主力——`process_images`函数:**
 
-```
+```py
 def process_images(payload):
 	# display the process ID for debugging and initialize the hashes
 	# dictionary
@@ -299,7 +299,7 @@ def process_images(payload):
 
 让我们看看如何实现 OpenCV 和多重处理脚本。打开`extract.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.parallel_hashing import process_images
 from pyimagesearch.parallel_hashing import chunk
@@ -320,7 +320,7 @@ import os
 
 我们所有的多重处理设置代码必须在主线程中执行:
 
-```
+```py
 # check to see if this is the main thread of execution
 if __name__ == "__main__":
 	# construct the argument parser and parse the arguments
@@ -348,7 +348,7 @@ if __name__ == "__main__":
 
 随着我们的命令行参数被解析并准备就绪，现在我们将(1)确定要启动的并发进程的数量，以及(2)准备我们的映像路径(有点预多处理开销):
 
-```
+```py
 	# determine the number of concurrent processes to launch when
 	# distributing the load across the system, then create the list
 	# of process IDs
@@ -378,7 +378,7 @@ if __name__ == "__main__":
 
 让我们准备好分配给每个进程的`payloads`(我们最后的预多处理开销):
 
-```
+```py
 	# initialize the list of payloads
 	payloads = []
 
@@ -412,7 +412,7 @@ if __name__ == "__main__":
 
 下一个块是我们**在系统总线上分配数据集处理的地方:**
 
-```
+```py
 	# construct and launch the processing pool
 	print("[INFO] launching pool using {} processes...".format(procs))
 	pool = Pool(processes=procs)
@@ -434,7 +434,7 @@ if __name__ == "__main__":
 
 最后一步(后多处理开销)是获取我们的*中间*散列并构建最终的*组合*散列。
 
-```
+```py
 	# initialize our *combined* hashes dictionary (i.e., will combine
 	# the results of each pickled/serialized dictionary into a
 	# *single* dictionary
@@ -480,7 +480,7 @@ if __name__ == "__main__":
 
 首先，让我们测试仅使用单核处理我们的 9，144 张图像数据集**需要多长时间**
 
-```
+```py
 $ time python extract.py --images 101_ObjectCategories --output temp_output \
 	--hashes hashes.pickle --procs 1
 [INFO] grabbing image paths...
@@ -502,7 +502,7 @@ sys		0m1.489s
 
 **现在，让我们尝试使用所有的 *20 个进程*(可以映射到我的处理器的所有 20 个内核):**
 
-```
+```py
 $ time python extract.py --images ~/Desktop/101_ObjectCategories \
 	--output temp_output --hashes hashes.pickle 
 [INFO] grabbing image paths...

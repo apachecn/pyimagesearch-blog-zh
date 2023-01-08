@@ -220,7 +220,7 @@ AI/ML 在石油和天然气行业有着巨大的潜力，如果不考虑它，�
 
 **Mangla，P.** “石油和天然气的计算机视觉和深度学习”， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva 和 R. Raha 编辑。，2022 年，【https://pyimg.co/zfg51 
 
-```
+```py
 @incollection{Mangla_2022_CVDLOG,
   author = {Puneet Mangla},
   title = {Computer Vision and Deep Learning for Oil and Gas},

@@ -226,7 +226,7 @@
 
 **Mangla，P.** “用于运输的计算机视觉和深度学习”， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva 和 R. Raha 编辑。，2022 年，【https://pyimg.co/1u4c9 
 
-```
+```py
 @incollection{Mangla_2022_CVDLT,
   author = {Puneet Mangla},
   title = {Computer Vision and Deep Learning for Transportation},

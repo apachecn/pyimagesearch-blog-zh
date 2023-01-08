@@ -104,7 +104,7 @@
 
 要增加交换空间，打开`/etc/dphys-swapfile`，然后编辑`CONF_SWAPSIZE`变量:
 
-```
+```py
 # set size to absolute value, leaving empty (default) then uses computed value
 #   you most likely don't want this, unless you have a special disk situation
 # CONF_SWAPSIZE=100
@@ -116,7 +116,7 @@ CONF_SWAPSIZE=1024
 
 从那里，重新启动交换服务:
 
-```
+```py
 $ sudo /etc/init.d/dphys-swapfile stop
 $ sudo /etc/init.d/dphys-swapfile start
 
@@ -128,7 +128,7 @@ $ sudo /etc/init.d/dphys-swapfile start
 
 首先，使用 **Python 2.7** 创建一个名为`not_santa`的 Python 虚拟环境(当我们使用 TensorFlow install 命令时，我将解释为什么使用 Python 2.7):
 
-```
+```py
 $ mkvirtualenv not_santa -p python2
 
 ```
@@ -139,7 +139,7 @@ $ mkvirtualenv not_santa -p python2
 
 您还需要确保已经将您的`cv2.so`绑定符号链接到您的`not_santa`虚拟环境中(如果您还没有这样做):
 
-```
+```py
 $ cd ~/.virtualenvs/not_santa/lib/python2.7/site-packages
 $ ln -s /usr/local/lib/python2.7/site-packages/cv2.so cv2.so
 
@@ -153,7 +153,7 @@ $ ln -s /usr/local/lib/python2.7/site-packages/cv2.so cv2.so
 
 要进入环境，只需在 bash 提示符下使用`workon`命令:
 
-```
+```py
 $ workon not_santa
 
 ```
@@ -162,14 +162,14 @@ $ workon not_santa
 
 使用以下命令确保在`not_santa`环境中安装了 NumPy:
 
-```
+```py
 $ pip install numpy
 
 ```
 
 由于我们将访问这个项目的 GPIO 引脚，我们需要安装两个 [RPi。GPIO](https://pypi.python.org/pypi/RPi.GPIO) 和 [gpiozero](https://pypi.python.org/pypi/gpiozero) :
 
-```
+```py
 $ sudo pip install RPi.GPIO gpiozero
 
 ```
@@ -195,7 +195,7 @@ Raspbian Stretch 发行版(在撰写本文时 Raspbian 操作系统的最新版�
 
 让我们使用以下命令安装 TensorFlow for Python 2.7:
 
-```
+```py
 $ wget https://github.com/samjabrahams/tensorflow-on-raspberry-pi/releases/download/v1.1.0/tensorflow-1.1.0-cp27-none-linux_armv7l.whl
 $ pip install tensorflow-1.1.0-cp27-none-linux_armv7l.whl
 
@@ -205,7 +205,7 @@ $ pip install tensorflow-1.1.0-cp27-none-linux_armv7l.whl
 
 一旦 TensorFlow 编译并安装完毕(在我的 Raspberry Pi 上花了大约一个小时)，你就需要安装 HDF5 和 h5py。这些库将允许我们从磁盘加载预先训练好的模型:
 
-```
+```py
 $ sudo apt-get install libhdf5-serial-dev
 $ pip install h5py
 
@@ -215,7 +215,7 @@ $ pip install h5py
 
 最后，让我们安装 Keras 和这个项目所需的其他先决条件:
 
-```
+```py
 $ pip install pillow imutils
 $ pip install scipy --no-cache-dir
 $ pip install keras==2.1.5
@@ -228,7 +228,7 @@ $ pip install keras==2.1.5
 
 为了测试您的配置，打开一个 Python shell(在`not_santa`环境中)并执行以下命令:
 
-```
+```py
 $ workon not_santa
 $ python
 >>> import h5py
@@ -270,7 +270,7 @@ Using TesnsorFlow backend.
 
 首先，打开一个新文件，将其命名为`not_santa_detector.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from keras.preprocessing.image import img_to_array
 from keras.models import load_model
@@ -295,7 +295,7 @@ import os
 
 从那里，我们将定义一个函数来点亮我们的 3D 圣诞树:
 
-```
+```py
 def light_tree(tree, sleep=5):
 	# loop over all LEDs in the tree and randomly blink them with
 	# varying intensities
@@ -328,7 +328,7 @@ def light_tree(tree, sleep=5):
 
 我们的下一个函数处理检测到圣诞老人时播放的音乐:
 
-```
+```py
 def play_christmas_music(p):
 	# construct the command to play the music, then execute the
 	# command
@@ -343,7 +343,7 @@ def play_christmas_music(p):
 
 接下来，让我们对将要使用的配置进行硬编码:
 
-```
+```py
 # define the paths to the Not Santa Keras deep learning model and
 # audio file
 MODEL_PATH = "santa_not_santa.model"
@@ -367,7 +367,7 @@ SANTA = False
 
 接下来，我们将加载预训练的 Keras 模型，并初始化我们的圣诞树:
 
-```
+```py
 # load the model
 print("[INFO] loading model...")
 model = load_model(MODEL_PATH)
@@ -383,7 +383,7 @@ Keras 允许我们将模型保存到磁盘上以备将来使用。[上周](https
 
 现在我们将初始化我们的视频流:
 
-```
+```py
 # initialize the video stream and allow the camera sensor to warm up
 print("[INFO] starting video stream...")
 vs = VideoStream(src=0).start()
@@ -398,7 +398,7 @@ time.sleep(2.0)
 
 我们`sleep`了短暂的 2 秒钟，这样我们的相机可以在我们开始循环画面之前预热一下( **Line 60** ):
 
-```
+```py
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the threaded video stream and resize it
@@ -416,7 +416,7 @@ while True:
 
 从这里开始，我们对图像进行预处理，并通过我们的 Keras +深度学习模型进行预测:
 
-```
+```py
 	# prepare the image to be classified by our deep learning network
 	image = cv2.resize(frame, (28, 28))
 	image = image.astype("float") / 255.0
@@ -439,7 +439,7 @@ while True:
 
 让我们来看看圣诞老人是否在图片中:
 
-```
+```py
 	# check to see if santa was detected using our convolutional
 	# neural network
 	if santa > notSanta:
@@ -457,7 +457,7 @@ while True:
 
 假设足够多的连续“圣诞老人”帧已经过去，我们需要触发圣诞老人警报:
 
-```
+```py
 		# check to see if we should raise the santa alarm
 		if not SANTA and TOTAL_CONSEC >= TOTAL_THRESH:
 			# indicate that santa has been found
@@ -487,7 +487,7 @@ while True:
 
 否则(`SANTA`为`True`或`TOTAL_THRESH`未满足)，我们将`TOTAL_CONSEC`重置为零，将`SANTA`重置为`False`:
 
-```
+```py
 	# otherwise, reset the total number of consecutive frames and the
 	# santa alarm
 	else:
@@ -498,7 +498,7 @@ while True:
 
 最后，我们在屏幕上显示带有生成的文本标签的框架:
 
-```
+```py
 	# build the label and draw it on the frame
 	label = "{}: {:.2f}%".format(label, proba * 100)
 	frame = cv2.putText(frame, label, (10, 25),
@@ -555,7 +555,7 @@ vs.stop()
 
 然后，我使用以下命令启动了 *Not Santa* 深度学习+ Keras 检测器:
 
-```
+```py
 $ python not_santa_detector.py
 
 ```

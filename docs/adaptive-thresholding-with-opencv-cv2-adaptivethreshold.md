@@ -81,7 +81,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -108,7 +108,7 @@ $ pip install opencv-contrib-python
 
 请务必访问本教程的 ***“下载”*** 部分，以检索源代码和示例图像:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── adaptive_thresholding.py
@@ -133,7 +133,7 @@ $ tree . --dirsfirst
 
 打开项目目录中的`adaptive_thresholding.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -151,7 +151,7 @@ args = vars(ap.parse_args())
 
 现在让我们从磁盘加载我们的映像并对其进行预处理:
 
-```
+```py
 # load the image and display it
 image = cv2.imread(args["image"])
 cv2.imshow("Image", image)
@@ -167,7 +167,7 @@ blurred = cv2.GaussianBlur(gray, (7, 7), 0)
 
 现在让我们应用带有硬编码阈值`T=230`的**基本阈值**:
 
-```
+```py
 # apply simple thresholding with a hardcoded threshold value
 (T, threshInv) = cv2.threshold(blurred, 230, 255,
 	cv2.THRESH_BINARY_INV)
@@ -179,7 +179,7 @@ cv2.waitKey(0)
 
 接下来，让我们应用 **Otsu 的阈值方法**，该方法*自动*计算我们的阈值参数`T`的最佳值，假设像素强度的双峰分布:
 
-```
+```py
 # apply Otsu's automatic thresholding
 (T, threshInv) = cv2.threshold(blurred, 0, 255,
 	cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)
@@ -189,7 +189,7 @@ cv2.waitKey(0)
 
 现在，让我们使用平均阈值方法应用**自适应阈值**:
 
-```
+```py
 # instead of manually specifying the threshold value, we can use
 # adaptive thresholding to examine neighborhoods of pixels and
 # adaptively threshold each neighborhood
@@ -223,7 +223,7 @@ cv2.waitKey(0)
 
 现在让我们来看看高斯版本的自适应阈值处理:
 
-```
+```py
 # perform adaptive thresholding again, this time using a Gaussian
 # weighting versus a simple mean to compute our local threshold
 # value
@@ -245,7 +245,7 @@ cv2.waitKey(0)
 
 从那里，您可以执行`adaptive_thresholding.py`脚本:
 
-```
+```py
 $ python adaptive_thresholding.py --image steve_jobs.png
 ```
 

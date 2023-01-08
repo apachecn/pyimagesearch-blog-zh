@@ -139,14 +139,14 @@ may be the standard deviation across the training set (thereby turning the prepr
 
 imutils 软件包可以通过`pip`安装:
 
-```
+```py
 $ pip install imutils
 
 ```
 
 假设您的图像处理环境已经准备就绪，让我们打开一个新文件，将其命名为`blob_from_images.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils import paths
 import numpy as np
@@ -177,7 +177,7 @@ imagePaths = sorted(list(paths.list_images("images/")))
 
 接下来，我们将从磁盘加载图像，并使用`blobFromImage`对它们进行预处理:
 
-```
+```py
 # (1) load the first image from disk, (2) pre-process it by resizing
 # it to 224x224 pixels, and (3) construct a blob that can be passed
 # through the pre-trained network
@@ -198,7 +198,7 @@ print("First Blob: {}".format(blob.shape))
 
 接下来，我们将通过 GoogLeNet 发送`blob`:
 
-```
+```py
 # set the input to the pre-trained deep learning network and obtain
 # the output predicted probabilities for each of the 1,000 ImageNet
 # classes
@@ -231,7 +231,7 @@ cv2.waitKey(0)
 
 这里我们将做(几乎)同样的事情，除了我们将创建并填充一个列表`images`，然后将该列表作为参数传递给`blobFromImages`:
 
-```
+```py
 # initialize the list of images we'll be passing through the network
 images = []
 
@@ -259,7 +259,7 @@ print("Second Blob: {}".format(blob.shape))
 
 接下来，我们将通过 GoogLeNet 传递`blob`,并在每张图片的顶部写入类别标签和预测:
 
-```
+```py
 # set the input to our pre-trained network and obtain the output
 # class label predictions
 net.setInput(blob)
@@ -296,14 +296,14 @@ for (i, p) in enumerate(imagePaths[1:]):
 
 从那里，启动一个终端并运行以下命令:
 
-```
+```py
 $ python blob_from_images.py
 
 ```
 
 第一个终端输出是关于在我们应用`cv2.dnn.blobFromImage`函数的`images`文件夹中找到的第一幅图像:
 
-```
+```py
 First Blob: (1, 3, 224, 224)
 
 ```
@@ -326,7 +326,7 @@ First Blob: (1, 3, 224, 224)
 
 第二个斑点的形状是:
 
-```
+```py
 Second Blob: (4, 3, 224, 224)
 
 ```

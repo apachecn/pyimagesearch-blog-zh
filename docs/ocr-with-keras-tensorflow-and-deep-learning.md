@@ -78,7 +78,7 @@
 
 一旦您从本文的 ***【下载】*** 部分获取文件，您将看到以下目录结构:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── pyimagesearch
@@ -108,13 +108,13 @@ $ tree --dirsfirst --filelimit 10
 *   ``load_az_dataset`` :为 Kaggle A-Z 字母
 *   ``load_mnist_dataset`` :为 MNIST 0-9 位数字
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.datasets import mnist
 import numpy as np
 ```
 
-```
+```py
 def load_az_dataset(datasetPath):
 	# initialize the list of data and labels
 	data = []
@@ -151,7 +151,7 @@ Sachin Patel 的 CSV 文件中的每一行包含 785 列——一列用于类别
 
 为了完成这个函数，我们将把数据和标签转换成 NumPy 数组，并返回图像数据和标签:
 
-```
+```py
 	# convert the data and labels to NumPy arrays
 	data = np.array(data, dtype="float32")
 	labels = np.array(labels, dtype="int")
@@ -160,7 +160,7 @@ Sachin Patel 的 CSV 文件中的每一行包含 785 列——一列用于类别
 	return (data, labels)
 ```
 
-```
+```py
 def load_mnist_dataset():
 	# load the MNIST dataset and stack the training data and testing
 	# data together (we'll create our own training and testing splits
@@ -183,7 +183,7 @@ def load_mnist_dataset():
 
 请记住将您的模型保存到下周，届时我们将实现手写识别的自定义解决方案。
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -217,7 +217,7 @@ import cv2
 
 现在，让我们回顾一下我们的三个[命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-a", "--az", required=True,
@@ -233,7 +233,7 @@ args = vars(ap.parse_args())
 
 现在，我们将为 ResNet 设置训练参数，并使用我们已经讨论过的帮助器函数加载数字和字母数据:
 
-```
+```py
 # initialize the number of epochs to train for, initial learning rate,
 # and batch size
 EPOCHS = 50
@@ -252,7 +252,7 @@ print("[INFO] loading datasets...")
 
 接下来，我们将执行一些步骤来准备我们的数据和标签，以与我们在 Keras 和 TensorFlow 中的 ResNet 深度学习模型兼容:
 
-```
+```py
 # the MNIST dataset occupies the labels 0-9, so let's add 10 to every
 # A-Z label to ensure the A-Z characters are not incorrectly labeled
 # as digits
@@ -285,7 +285,7 @@ data /= 255.0
 
 我们的下一步是为 ResNet 准备标签，对标签进行加权以说明每个类(字符)在数据中出现的次数的偏差，并将数据划分为测试和训练部分:
 
-```
+```py
 # convert the labels from integers to vectors
 le = LabelBinarizer()
 labels = le.fit_transform(labels)
@@ -306,7 +306,7 @@ for i in range(0, len(classTotals)):
 
 ```
 
-```
+```py
 # construct the image generator for data augmentation
 aug = ImageDataGenerator(
 	rotation_range=10,
@@ -318,7 +318,7 @@ aug = ImageDataGenerator(
 	fill_mode="nearest")
 ```
 
-```
+```py
 # initialize and compile our deep neural network
 print("[INFO] compiling model...")
 opt = SGD(lr=INIT_LR, decay=INIT_LR / EPOCHS)
@@ -333,7 +333,7 @@ model.compile(loss="categorical_crossentropy", optimizer=opt,
 
 接下来，我们将训练网络，定义标签名称，并评估网络的性能:
 
-```
+```py
 # train the network
 print("[INFO] training network...")
 H = model.fit(
@@ -361,7 +361,7 @@ print(classification_report(testY.argmax(axis=1),
 
 接下来，我们为每个单独的字符建立标签。**第 111-113 行**将我们所有的数字和字母连接起来，形成一个数组，数组中的每个成员都是一个数字。
 
-```
+```py
 # save the model to disk
 print("[INFO] serializing network...")
 model.save(args["model"], save_format="h5")
@@ -380,7 +380,7 @@ plt.savefig(args["plot"])
 
 ```
 
-```
+```py
 # initialize our list of output test images
 images = []
 
@@ -444,7 +444,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python train_ocr_model.py --az a_z_handwritten_data.csv --model handwriting.model
 [INFO] loading datasets...
 [INFO] compiling model...
@@ -519,7 +519,7 @@ weighted avg       0.96      0.96      0.96     88491
 
 **如你所见，我们的 Keras/TensorFlow OCR 模型表现相当好！**
 
-```
+```py
 $ ls *.model
 handwriting.model
 ```

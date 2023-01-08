@@ -141,7 +141,7 @@ ID My Pill 是一个 iPhone 应用程序和 web API，允许您在智能手机�
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -168,7 +168,7 @@ $ pip install opencv-contrib-python
 
 首先通过访问本教程的 ***【下载】*** 部分来检索源代码和示例图像:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── adrian.png
@@ -211,7 +211,7 @@ RGB 色彩空间通常被视为一个立方体:
 
 打开项目目录结构中的`color_spaces.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -229,7 +229,7 @@ args = vars(ap.parse_args())
 
 现在让我们加载我们的图像:
 
-```
+```py
 # load the original image and show it
 image = cv2.imread(args["image"])
 cv2.imshow("RGB", image)
@@ -275,7 +275,7 @@ cv2.destroyAllWindows()
 
 让我们看一些将图像从 RGB(或者更确切地说，BGR)色彩空间转换到 HSV 的示例代码:
 
-```
+```py
 # convert the image to the HSV color space and show it
 hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 cv2.imshow("HSV", hsv)
@@ -311,7 +311,7 @@ HSV 颜色空间在计算机视觉应用中大量使用——尤其是当我们�
 
 例如，让我们计算红色和绿色之间的欧几里德距离；红色和紫色；以及 RGB 颜色空间中的红色和海军蓝:
 
-```
+```py
 >>> import math
 >>> red_green = math.sqrt(((255 - 0) ** 2) + ((0 - 255) ** 2) + ((0 - 0) ** 2))
 >>> red_purple = math.sqrt(((255 - 128) ** 2) + ((0 - 0) ** 2) + ((0 - 128) ** 2))
@@ -344,7 +344,7 @@ HSV 颜色空间在计算机视觉应用中大量使用——尤其是当我们�
 
 现在，让我们看看如何将我们的图像转换到 L*a*b*色彩空间:
 
-```
+```py
 # convert the image to the L*a*b* color space and show it
 lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
 cv2.imshow("L*a*b*", lab)
@@ -370,7 +370,7 @@ cv2.destroyAllWindows()
 
 图像的灰度表示丢弃了图像的颜色信息，也可以使用`cv2.cvtColor`功能来实现:
 
-```
+```py
 # show the original and grayscale versions of the image
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 cv2.imshow("Original", image)
@@ -408,7 +408,7 @@ cv2.waitKey(0)
 
 然后，您可以使用以下命令执行我们的演示脚本:
 
-```
+```py
 $ python color_spaces.py
 ```
 

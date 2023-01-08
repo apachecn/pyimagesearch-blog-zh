@@ -27,14 +27,14 @@
 
 `Stitcher`类将依赖于 [imutils](https://github.com/jrosebr1/imutils) Python 包，所以如果您的系统上还没有安装它，那么您现在就想安装它:
 
-```
+```py
 $ pip install imutils
 
 ```
 
 让我们开始复习`panorama.py`:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import imutils
@@ -53,7 +53,7 @@ class Stitcher:
 
 接下来，让我们开始研究`stitch`方法:
 
-```
+```py
 	def stitch(self, images, ratio=0.75, reprojThresh=4.0,
 		showMatches=False):
 		# unpack the images, then detect keypoints and extract
@@ -87,7 +87,7 @@ class Stitcher:
 
 否则，我们现在准备应用透视变换:
 
-```
+```py
 		# otherwise, apply a perspective warp to stitch the images
 		# together
 		(matches, H, status) = M
@@ -119,7 +119,7 @@ class Stitcher:
 
 既然已经定义了`stitch`方法，让我们看看它调用的一些助手方法。我们从`detectAndDescribe`开始:
 
-```
+```py
 	def detectAndDescribe(self, image):
 		# convert the image to grayscale
 		gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -163,7 +163,7 @@ class Stitcher:
 
 接下来，让我们看看`matchKeypoints`方法:
 
-```
+```py
 	def matchKeypoints(self, kpsA, kpsB, featuresA, featuresB,
 		ratio, reprojThresh):
 		# compute the raw matches and initialize the list of actual
@@ -193,7 +193,7 @@ class Stitcher:
 
 一旦我们使用劳氏比率测试获得了`matches`，我们就可以计算两组关键点之间的单应性:
 
-```
+```py
 		# computing a homography requires at least 4 matches
 		if len(matches) > 4:
 			# construct the two sets of points
@@ -217,7 +217,7 @@ class Stitcher:
 
 最后，我们的`Stitcher`方法中的最后一个方法`drawMatches`用于可视化两幅图像之间的关键点对应关系:
 
-```
+```py
 	def drawMatches(self, imageA, imageB, kpsA, kpsB, matches, status):
 		# initialize the output visualization image
 		(hA, wA) = imageA.shape[:2]
@@ -245,7 +245,7 @@ class Stitcher:
 
 现在我们已经定义了我们的`Stitcher`类，让我们继续创建`stitch.py`驱动程序脚本:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.panorama import Stitcher
 import argparse
@@ -272,7 +272,7 @@ args = vars(ap.parse_args())
 
 驱动程序脚本的其余部分简单地处理加载我们的图像，调整它们的大小(以便它们适合我们的屏幕)，以及构建我们的全景:
 
-```
+```py
 # load the two images and resize them to have a width of 400 pixels
 # (for faster processing)
 imageA = cv2.imread(args["first"])
@@ -303,7 +303,7 @@ cv2.waitKey(0)
 
 说了这么多，让我们试试我们的 OpenCV 全景缝合器。打开终端，发出以下命令:
 
-```
+```py
 $ python stitch.py --first images/bryce_left_01.png \
 	--second images/bryce_right_01.png
 
@@ -327,7 +327,7 @@ $ python stitch.py --first images/bryce_left_01.png \
 
 让我们试试另一组图像:
 
-```
+```py
 $ python stitch.py --first images/bryce_left_02.png \
 	--second images/bryce_right_02.png
 
@@ -341,7 +341,7 @@ $ python stitch.py --first images/bryce_left_02.png \
 
 现在，让我们继续前往大峡谷:
 
-```
+```py
 $ python stitch.py --first images/grand_canyon_left_01.png \
 	--second images/grand_canyon_right_01.png
 
@@ -355,7 +355,7 @@ $ python stitch.py --first images/grand_canyon_left_01.png \
 
 这是大峡谷的另一个例子:
 
-```
+```py
 $ python stitch.py --first images/grand_canyon_left_02.png \
 	--second images/grand_canyon_right_02.png
 
@@ -369,7 +369,7 @@ $ python stitch.py --first images/grand_canyon_left_02.png \
 
 最后，让我们用一个来自亚利桑那州塞多纳的图像拼接示例来结束这篇博文:
 
-```
+```py
 $ python stitch.py --first images/sedona_left_01.png \
 	--second images/sedona_right_01.png
 

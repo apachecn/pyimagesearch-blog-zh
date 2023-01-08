@@ -38,7 +38,7 @@
 
 评分函数接受我们的数据作为输入，并将数据映射到类标签。例如，给定我们的输入图像集，评分函数获取这些数据点，应用某个函数 *f* (我们的评分函数)，然后返回预测的类别标签，类似于下面的伪代码:
 
-```
+```py
 INPUT_IMAGES => F(INPUT_IMAGES) => OUTPUT_CLASS_LABELS
 ```
 
@@ -99,7 +99,7 @@ INPUT_IMAGES => F(INPUT_IMAGES) => OUTPUT_CLASS_LABELS
 
 要了解我们如何完成这种分类，请打开一个新文件，将其命名为`linear_example.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import cv2
@@ -116,7 +116,7 @@ np.random.seed(1)
 
 接下来，让我们初始化权重矩阵和偏差向量:
 
-```
+```py
 # randomly initialize our weight matrix and bias vector -- in a
 # *real* training and classification task, these parameters would
 # be *learned* by our model, but for the sake of this example,
@@ -133,7 +133,7 @@ b = np.random.randn(3)
 
  *既然我们的权重矩阵和偏差向量已经初始化，让我们从磁盘加载我们的示例图像:
 
-```
+```py
 # load our example image, resize it, and then flatten it into our
 # "feature vector" representation
 orig = cv2.imread("beagle.png")
@@ -144,7 +144,7 @@ image = cv2.resize(orig, (32, 32)).flatten()
 
 下一步是通过应用我们的评分函数来计算输出类标签分数:
 
-```
+```py
 # compute the output scores by taking the dot product between the
 # weight matrix and image pixels, followed by adding in the bias
 scores = W.dot(image) + b
@@ -154,7 +154,7 @@ scores = W.dot(image) + b
 
 最后，我们的最后一个代码块处理将每个类标签的评分函数值写入我们的终端，然后将结果显示在我们的屏幕上:
 
-```
+```py
 # loop over the scores + labels and display them
 for (label, score) in zip(labels, scores):
 	print("[INFO] {}: {:.2f}".format(label, score))
@@ -171,7 +171,7 @@ cv2.waitKey(0)
 
 要执行我们的示例，只需发出以下命令:
 
-```
+```py
 $ python linear_example.py 
 [INFO] dog: 7963.93
 [INFO] cat: -2930.99
@@ -255,7 +255,7 @@ $ python linear_example.py
 
 让我们从计算“狗”类的损失*L[I]开始:*
 
-```
+```py
 >>> max(0, 1.33 - 4.26 + 1) + max(0, -1.01 - 4.26 + 1)
 0
 ```
@@ -264,7 +264,7 @@ $ python linear_example.py
 
 类似地，我们可以计算出*图像#2* 的铰链损耗，其中包含一只猫:
 
-```
+```py
 >>> max(0, 3.76 - (-1.20) + 1) + max(0, -3.81 - (-1.20) + 1)
 5.96
 ```
@@ -273,7 +273,7 @@ $ python linear_example.py
 
 最后，让我们以熊猫为例计算铰链损耗:
 
-```
+```py
 >>> max(0, -2.37 - (-2.27) + 1) + max(0, 1.03 - (-2.27) + 1)
 5.199999999999999
 ```
@@ -282,7 +282,7 @@ $ python linear_example.py
 
 然后，我们可以通过取平均值来获得三个示例的总损失:
 
-```
+```py
 >>> (0.0 + 5.96 + 5.2) / 3.0
 3.72
 ```

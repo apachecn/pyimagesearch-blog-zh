@@ -90,7 +90,7 @@ dlib 库由 [Davis King](https://pyimagesearch.com/2017/03/13/an-interview-with-
 
 如果你没有 GPU，你可以按照本指南使用 pip 通过[安装`dlib`:](https://pyimagesearch.com/2018/01/22/install-dlib-easy-complete-guide/)
 
-```
+```py
 $ workon # optional
 $ pip install dlib
 
@@ -98,7 +98,7 @@ $ pip install dlib
 
 或者您可以从源代码编译:
 
-```
+```py
 $ workon <your env name here> # optional
 $ git clone https://github.com/davisking/dlib.git
 $ cd dlib
@@ -117,7 +117,7 @@ $ python setup.py install --yes USE_AVX_INSTRUCTIONS
 
 为此，我建议从源代码安装`dlib`,因为您将对构建有更多的控制权:
 
-```
+```py
 $ workon <your env name here> # optional
 $ git clone https://github.com/davisking/dlib.git
 $ cd dlib
@@ -134,7 +134,7 @@ $ python setup.py install --yes USE_AVX_INSTRUCTIONS --yes DLIB_USE_CUDA
 
 [人脸识别模块](https://github.com/ageitgey/face_recognition)可通过简单的 pip 命令安装:
 
-```
+```py
 $ workon <your env name here> # optional
 $ pip install face_recognition
 
@@ -144,7 +144,7 @@ $ pip install face_recognition
 
 你还需要我的便利功能包。您可以通过 pip 将它安装在您的 Python 虚拟环境中:
 
-```
+```py
 $ workon <your env name here> # optional
 $ pip install imutils
 
@@ -170,7 +170,7 @@ $ pip install imutils
 
 通过检查`tree`命令的输出可以看到我们的项目结构:
 
-```
+```py
 $ tree --filelimit 10 --dirsfirst
 .
 ├── dataset
@@ -231,7 +231,7 @@ $ tree --filelimit 10 --dirsfirst
 
 为了构建我们的人脸嵌入，打开与这篇博文相关的 ***【下载】***`encode_faces.py`:
 
-```
+```py
 # import the necessary packages
 from imutils import paths
 import face_recognition
@@ -246,7 +246,7 @@ import os
 
 让我们用`argparse`来处理运行时处理的[命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--dataset", required=True,
@@ -269,7 +269,7 @@ args = vars(ap.parse_args())
 
 现在我们已经定义了参数，让我们获取数据集中文件的路径(并执行两次初始化):
 
-```
+```py
 # grab the paths to the input images in our dataset
 print("[INFO] quantifying faces...")
 imagePaths = list(paths.list_images(args["dataset"]))
@@ -286,7 +286,7 @@ knownNames = []
 
 是时候开始循环我们的*侏罗纪公园*角色脸了！
 
-```
+```py
 # loop over the image paths
 for (i, imagePath) in enumerate(imagePaths):
 	# extract the person name from the image path
@@ -311,7 +311,7 @@ OpenCV 在 BGR 订购颜色通道，但是`dlib`实际上需要 RGB。`face_reco
 
 接下来，让我们本地化面部和计算机编码:
 
-```
+```py
 	# detect the (x, y)-coordinates of the bounding boxes
 	# corresponding to each face in the input image
 	boxes = face_recognition.face_locations(rgb,
@@ -350,7 +350,7 @@ OpenCV 在 BGR 订购颜色通道，但是`dlib`实际上需要 RGB。`face_reco
 
 现在让我们来解决这个问题:
 
-```
+```py
 # dump the facial encodings + names to disk
 print("[INFO] serializing encodings...")
 data = {"encodings": knownEncodings, "names": knownNames}
@@ -367,7 +367,7 @@ f.close()
 
 要创建我们的面部嵌入，打开一个终端并执行以下命令:
 
-```
+```py
 $ python encode_faces.py --dataset dataset --encodings encodings.pickle
 [INFO] quantifying faces...
 [INFO] processing image 1/218
@@ -396,7 +396,7 @@ $ ls -lh encodings*
 
 打开`recognize_faces_image.py`并插入以下代码(或者更好的是，从这篇文章底部的**的“下载”部分获取与这篇博客文章相关的文件和图像数据，并跟随其后):**
 
-```
+```py
 # import the necessary packages
 import face_recognition
 import argparse
@@ -431,7 +431,7 @@ args = vars(ap.parse_args())
 
  **从这里，让我们加载预先计算的编码+人脸名称，然后为输入图像构造 128-d 人脸编码:
 
-```
+```py
 # load the known faces and embeddings
 print("[INFO] loading encodings...")
 data = pickle.loads(open(args["encodings"], "rb").read())
@@ -463,7 +463,7 @@ names = []
 
 接下来，让我们循环面部表情`encodings`:
 
-```
+```py
 # loop over the facial embeddings
 for encoding in encodings:
 	# attempt to match each face in the input image to our known
@@ -493,7 +493,7 @@ for encoding in encodings:
 
 给定我们的`matches`列表，我们可以计算每个名字的“投票”数量(与每个名字相关联的`True`值的数量)，合计投票，并选择具有最多相应投票的人的名字:
 
-```
+```py
 	# check to see if we have found a match
 	if True in matches:
 		# find the indexes of all matched faces then initialize a
@@ -520,7 +520,7 @@ for encoding in encodings:
 
 如果`matches` ( **行 45** )中有`True`票，我们需要确定`matches`中这些`True`值所在的*索引*。我们在第 49 行**上做了同样的事情，在那里我们构造了一个简单的`matchedIdxs`列表，对于`example_01.png`可能是这样的:**
 
-```
+```py
 (Pdb) matchedIdxs
 [35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 71, 72, 73, 74, 75]
 
@@ -530,7 +530,7 @@ for encoding in encodings:
 
 从这里开始，让我们遍历`matchedIdxs`并设置与每个名字相关联的值，同时根据需要在`counts`中递增该值。对于伊恩·马尔科姆的高票，T2 字典可能是这样的:
 
-```
+```py
 (Pdb) counts
 {'ian_malcolm': 40}
 
@@ -542,7 +542,7 @@ for encoding in encodings:
 
 主面部编码循环的第二次迭代(因为在我们的示例图像中有两个人脸)为`counts`产生如下结果:
 
-```
+```py
 (Pdb) counts
 {'alan_grant': 5}
 
@@ -556,7 +556,7 @@ for encoding in encodings:
 
 让我们继续，循环每个人的边界框和标签名称，并出于可视化目的将它们绘制在输出图像上:
 
-```
+```py
 # loop over the recognized faces
 for ((top, right, bottom, left), name) in zip(boxes, names):
 	# draw the predicted face name on the image
@@ -589,7 +589,7 @@ cv2.waitKey(0)
 
 要使用 OpenCV 和 Python 识别人脸，请打开您的终端并执行我们的脚本:
 
-```
+```py
 $ python recognize_faces_image.py --encodings encodings.pickle \
 	--image examples/example_01.png
 [INFO] loading encodings...
@@ -599,7 +599,7 @@ $ python recognize_faces_image.py --encodings encodings.pickle \
 
 第二个人脸识别示例如下:
 
-```
+```py
 $ python recognize_faces_image.py --encodings encodings.pickle \
 	--image examples/example_03.png
 [INFO] loading encodings...
@@ -617,7 +617,7 @@ $ python recognize_faces_image.py --encodings encodings.pickle \
 
 一旦你抓取了 ***【下载】*** ，打开`recognize_faces_video.py`并跟随:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 import face_recognition
@@ -650,7 +650,7 @@ args = vars(ap.parse_args())
 
 从那里我们将加载我们的编码并开始我们的`VideoStream`:
 
-```
+```py
 # load the known faces and embeddings
 print("[INFO] loading encodings...")
 data = pickle.loads(open(args["encodings"], "rb").read())
@@ -670,7 +670,7 @@ time.sleep(2.0)
 
 从那里我们将开始一个`while`循环，并开始抓取和处理帧:
 
-```
+```py
 # loop over frames from the video file stream
 while True:
 	# grab the frame from the threaded video stream
@@ -698,7 +698,7 @@ while True:
 
 接下来，让我们循环一下与我们刚刚找到的面部相关联的面部`encodings`:
 
-```
+```py
 	# loop over the facial embeddings
 	for encoding in encodings:
 		# attempt to match each face in the input image to our known
@@ -735,7 +735,7 @@ while True:
 
 在下一个块中，我们循环遍历已识别的人脸，并继续在人脸周围绘制一个框，并在人脸上方显示该人的姓名:
 
-```
+```py
 	# loop over the recognized faces
 	for ((top, right, bottom, left), name) in zip(boxes, names):
 		# rescale the face coordinates
@@ -757,7 +757,7 @@ while True:
 
 可选地，我们将把帧写入磁盘，所以让我们看看 [**如何使用 OpenCV**](https://pyimagesearch.com/2016/02/22/writing-to-video-with-opencv/) 将视频写入磁盘:
 
-```
+```py
 	# if the video writer is None *AND* we are supposed to write
 	# the output video to disk initialize the writer
 	if writer is None and args["output"] is not None:
@@ -782,7 +782,7 @@ while True:
 
 让我们来决定是否应该在屏幕上显示人脸识别视频帧:
 
-```
+```py
 	# check to see if we are supposed to display the output frame to
 	# the screen
 	if args["display"] > 0:
@@ -799,7 +799,7 @@ while True:
 
 最后，让我们履行家务职责:
 
-```
+```py
 # do a bit of cleanup
 cv2.destroyAllWindows()
 vs.stop()
@@ -816,7 +816,7 @@ if writer is not None:
 
 要使用 OpenCV 和 Python 演示**实时人脸识别，打开一个终端并执行以下命令:**
 
-```
+```py
 $ python recognize_faces_video.py --encodings encodings.pickle \
 	--output output/webcam_face_recognition_output.avi --display 1
 [INFO] loading encodings...

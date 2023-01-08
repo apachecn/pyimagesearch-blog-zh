@@ -102,7 +102,7 @@ vector, we can reshape it into a *K×K* bitmap:
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 $ pip install scikit-image
 $ pip install scikit-learn
@@ -141,7 +141,7 @@ $ pip install scikit-learn
 
 取消归档后。zip 您应该有以下结构:
 
-```
+```py
 $ tree --dirsfirst --filelimit 20
 .
 ├── caltech_faces [26 entries exceeds filelimit, not opening dir]
@@ -164,7 +164,7 @@ $ tree --dirsfirst --filelimit 20
 
 `caltech_faces`目录的结构如下:
 
-```
+```py
 $ ls -l caltech_faces/
 abraham
 alberta
@@ -214,7 +214,7 @@ caltech_faces/abraham/image_0041.jpg
 
 也就是说，打开`pyimagesearch`模块内的`faces.py`，让我们看看发生了什么:
 
-```
+```py
 # import the necessary packages
 from imutils import paths
 import numpy as np
@@ -267,7 +267,7 @@ def detect_faces(net, image, minConfidence=0.5):
 
 我们的第二个函数`load_face_dataset`，遍历加州理工学院人脸数据集中的所有图像，并对每张图像应用人脸检测:
 
-```
+```py
 def load_face_dataset(inputPath, net, minConfidence=0.5,
 	minSamples=15):
 	# grab the paths to all images in our input directory, extract
@@ -307,7 +307,7 @@ def load_face_dataset(inputPath, net, minConfidence=0.5,
 
 如果通过了`minSamples`测试，我们将继续执行面部检测:
 
-```
+```py
 		# perform face detection
 		boxes = detect_faces(net, image, minConfidence)
 
@@ -343,7 +343,7 @@ def load_face_dataset(inputPath, net, minConfidence=0.5,
 
 打开项目目录结构中的`eigenfaces.py`文件，让我们开始编码:
 
-```
+```py
 # import the necessary packages
 from sklearn.preprocessing import LabelEncoder
 from sklearn.decomposition import PCA
@@ -371,7 +371,7 @@ import os
 
 我们现在可以转到命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--input", type=str, required=True,
@@ -398,7 +398,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们从磁盘加载我们的人脸检测模型:
 
-```
+```py
 # load our serialized face detector model from disk
 print("[INFO] loading face detector model...")
 prototxtPath = os.path.sep.join([args["face"], "deploy.prototxt"])
@@ -409,7 +409,7 @@ net = cv2.dnn.readNet(prototxtPath, weightsPath)
 
 从那里，让我们加载加州理工学院人脸数据集:
 
-```
+```py
 # load the CALTECH faces dataset
 print("[INFO] loading dataset...")
 (faces, labels) = load_face_dataset(args["input"], net,
@@ -442,7 +442,7 @@ split = train_test_split(faces, pcaFaces, labels, test_size=0.25,
 
 现在让我们在 1D 人脸列表上执行 PCA:
 
-```
+```py
 # compute the PCA (eigenfaces) representation of the data, then
 # project the training data onto the eigenfaces subspace
 print("[INFO] creating eigenfaces...")
@@ -461,7 +461,7 @@ print("[INFO] computing eigenfaces took {:.4f} seconds".format(
 
 现在我们已经执行了 PCA，让我们来看一下主要组件:
 
-```
+```py
 # check to see if the PCA components should be visualized
 if args["visualize"] > 0:
 	# initialize the list of images in the montage
@@ -505,7 +505,7 @@ if args["visualize"] > 0:
 
 考虑到可视化，让我们在特征脸表示上训练我们的 SVM:
 
-```
+```py
 # train a classifier on the eigenfaces representation
 print("[INFO] training classifier...")
 model = SVC(kernel="rbf", C=10.0, gamma=0.001, random_state=42)
@@ -531,7 +531,7 @@ print(classification_report(testY, predictions,
 
 最后一步是对我们的测试数据进行采样，对其进行预测，并将结果分别显示在我们的屏幕上:
 
-```
+```py
 # generate a sample of testing data
 idxs = np.random.choice(range(0, len(testY)), size=10, replace=False)
 
@@ -571,7 +571,7 @@ for i in idxs:
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python eigenfaces.py --input caltech_faces --visualize 1
 [INFO] loading face detector model...
 [INFO] loading dataset...
@@ -612,7 +612,7 @@ weighted avg       0.97      0.97      0.97       100
 
 现在让我们继续在单独的图像中识别面部:
 
-```
+```py
 [INFO] prediction: frank, actual: frank
 [INFO] prediction: abraham, actual: abraham
 [INFO] prediction: julie, actual: julie

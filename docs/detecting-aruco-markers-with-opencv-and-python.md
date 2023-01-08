@@ -38,7 +38,7 @@
 
 我们可以用 3-4 行代码定义一个 ArUco 标记检测程序:
 
-```
+```py
 arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_50)
 arucoParams = cv2.aruco.DetectorParameters_create()
 (corners, ids, rejected) = cv2.aruco.detectMarkers(image, arucoDict,
@@ -51,7 +51,7 @@ arucoParams = cv2.aruco.DetectorParameters_create()
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -80,7 +80,7 @@ $ pip install opencv-contrib-python
 
 从那里，我们可以检查项目目录:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── images
@@ -100,7 +100,7 @@ $ tree . --dirsfirst
 
 打开项目目录中的``detect_aruco_image.py`` 文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 import argparse
 import imutils
@@ -108,7 +108,7 @@ import cv2
 import sys
 ```
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -125,7 +125,7 @@ args = vars(ap.parse_args())
 
 接下来是我们的``ARUCO_DICT`` ，它列举了 OpenCV 支持的每个 ArUco 标签类型:
 
-```
+```py
 # define names of each possible ArUco tag OpenCV supports
 ARUCO_DICT = {
 	"DICT_4X4_50": cv2.aruco.DICT_4X4_50,
@@ -158,7 +158,7 @@ ARUCO_DICT = {
 
 以下 Python shell 块显示了如何执行查找操作的简单示例:
 
-```
+```py
 >>> print(args)
 {'type': 'DICT_5X5_100'}
 >>> arucoType = ARUCO_DICT[args["type"]]
@@ -175,7 +175,7 @@ True
 
 接下来，让我们继续从磁盘加载输入图像:
 
-```
+```py
 # load the input image from disk and resize it
 print("[INFO] loading image...")
 image = cv2.imread(args["image"])
@@ -198,7 +198,7 @@ arucoParams = cv2.aruco.DetectorParameters_create()
 
 ```
 
-```
+```py
 # verify *at least* one ArUco marker was detected
 if len(corners) > 0:
 	# flatten the ArUco IDs list
@@ -218,7 +218,7 @@ if len(corners) > 0:
 		topLeft = (int(topLeft[0]), int(topLeft[1]))
 ```
 
-```
+```py
 		# draw the bounding box of the ArUCo detection
 		cv2.line(image, topLeft, topRight, (0, 255, 0), 2)
 		cv2.line(image, topRight, bottomRight, (0, 255, 0), 2)
@@ -252,7 +252,7 @@ if len(corners) > 0:
 
 从那里，您可以执行以下命令:
 
-```
+```py
 $ python detect_aruco_image.py --image images/example_01.png --type DICT_5X5_100
 [INFO] loading image...
 [INFO] detecting 'DICT_5X5_100' tags...
@@ -269,7 +269,7 @@ $ python detect_aruco_image.py --image images/example_01.png --type DICT_5X5_100
 
 让我们尝试一个不同的图像，这个图像包含 ArUco 标记*而不是我们生成的*:
 
-```
+```py
 $ python detect_aruco_image.py --image images/example_02.png --type DICT_ARUCO_ORIGINAL
 [INFO] loading image...
 [INFO] detecting 'DICT_ARUCO_ORIGINAL' tags...
@@ -301,7 +301,7 @@ $ python detect_aruco_image.py --image images/example_02.png --type DICT_ARUCO_O
 
 打开项目目录结构中的`detect_aruco_video.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 import argparse
@@ -311,7 +311,7 @@ import cv2
 import sys
 ```
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-t", "--type", type=str,
@@ -320,7 +320,7 @@ ap.add_argument("-t", "--type", type=str,
 args = vars(ap.parse_args())
 ```
 
-```
+```py
 # define names of each possible ArUco tag OpenCV supports
 ARUCO_DICT = {
 	"DICT_4X4_50": cv2.aruco.DICT_4X4_50,
@@ -351,7 +351,7 @@ ARUCO_DICT = {
 
 我们现在可以加载我们的 ArUco 字典:
 
-```
+```py
 # verify that the supplied ArUCo tag exists and is supported by
 # OpenCV
 if ARUCO_DICT.get(args["type"], None) is None:
@@ -370,7 +370,7 @@ vs = VideoStream(src=0).start()
 time.sleep(2.0)
 ```
 
-```
+```py
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the threaded video stream and resize it
@@ -383,7 +383,7 @@ while True:
 		arucoDict, parameters=arucoParams)
 ```
 
-```
+```py
 	# verify *at least* one ArUco marker was detected
 	if len(corners) > 0:
 		# flatten the ArUco IDs list
@@ -404,7 +404,7 @@ while True:
 			topLeft = (int(topLeft[0]), int(topLeft[1]))
 ```
 
-```
+```py
 			# draw the bounding box of the ArUCo detection
 			cv2.line(frame, topLeft, topRight, (0, 255, 0), 2)
 			cv2.line(frame, topRight, bottomRight, (0, 255, 0), 2)
@@ -444,7 +444,7 @@ vs.stop()
 
 在那里，打开一个 shell，并执行以下命令:
 
-```
+```py
 $ python detect_aruco_video.py
 ```
 

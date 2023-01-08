@@ -100,7 +100,7 @@ OpenCV 3.3 还支持其他架构，包括 AlexNet、ResNet 和 SqueezeNet——�
 
 首先，打开一个新文件，将其命名为`deep_learning_with_opencv.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -113,7 +113,7 @@ import cv2
 
 然后我们解析命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -139,7 +139,7 @@ args = vars(ap.parse_args())
 
 让我们加载输入图像和类标签:
 
-```
+```py
 # load the input image from disk
 image = cv2.imread(args["image"])
 
@@ -153,7 +153,7 @@ classes = [r[r.find(" ") + 1:].split(",")[0] for r in rows]
 
 让我们仔细看看我们在第 23 行和第 24 行加载的类标签数据:
 
-```
+```py
 n01440764 tench, Tinca tinca
 n01443537 goldfish, Carassius auratus
 n01484850 great white shark, white shark, man-eater, man-eating shark, Carcharodon carcharias
@@ -169,7 +169,7 @@ n01498041 stingray
 
 首先，我们将类标签`rows`从磁盘加载到一个列表中。为此，我们去除了每行开头和结尾的空白，同时使用新行(“`\n`”)作为行分隔符(**第 23 行**)。结果是 id 和标签的列表:
 
-```
+```py
 ['n01440764 tench, Tinca tinca', 'n01443537 goldfish, Carassius auratus',
 'n01484850 great white shark, white shark, man-eater, man-eating shark, Carcharodon carcharias',
 'n01491361 tiger shark, Galeocerdo cuvieri',
@@ -181,7 +181,7 @@ n01498041 stingray
 
 第二，我们使用 list comprehension 从`rows`中提取相关的类标签，方法是查找 ID 后面的空格(’)，然后用逗号(`,`’)分隔类标签。结果只是一个类标签列表:
 
-```
+```py
 ['tench', 'goldfish', 'great white shark', 'tiger shark',
 'hammerhead', 'electric ray', 'stingray', ...]
 
@@ -189,7 +189,7 @@ n01498041 stingray
 
 现在我们已经处理好了标签，让我们深入研究 OpenCV 3.3 的`dnn`模块:
 
-```
+```py
 # our CNN requires fixed spatial dimensions for our input image(s)
 # so we need to ensure it is resized to 224x224 pixels while
 # performing mean subtraction (104, 117, 123) to normalize the input;
@@ -203,7 +203,7 @@ blob = cv2.dnn.blobFromImage(image, 1, (224, 224), (104, 117, 123))
 
 然后，我们从磁盘加载我们的模型:
 
-```
+```py
 # load our serialized model from disk
 print("[INFO] loading model...")
 net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
@@ -218,7 +218,7 @@ net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
 
 现在，让我们以`blob`作为输入，通过网络完成一次正向传递:
 
-```
+```py
 # set the blob as input to the network and perform a forward-pass to
 # obtain our output classification
 net.setInput(blob)
@@ -235,7 +235,7 @@ print("[INFO] classification took {:.5} seconds".format(end - start))
 
 最后，我们来确定输入图像的前五个预测:
 
-```
+```py
 # sort the indexes of the probabilities in descending order (higher
 # probabilitiy first) and grab the top-5 predictions
 idxs = np.argsort(preds[0])[::-1][:5]
@@ -246,7 +246,7 @@ idxs = np.argsort(preds[0])[::-1][:5]
 
 接下来，我们将显示排名前五的类别预测:
 
-```
+```py
 # loop over the top-5 predictions and display them
 for (i, idx) in enumerate(idxs):
 	# draw the top prediction on the input image
@@ -279,7 +279,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python deep_learning_with_opencv.py --image images/jemma.png 
 	--prototxt bvlc_googlenet.prototxt \
 	--model bvlc_googlenet.caffemodel --labels synset_words.txt
@@ -307,7 +307,7 @@ $ python deep_learning_with_opencv.py --image images/jemma.png
 
 让我们使用 OpenCV 和深度学习对另一幅图像进行分类:
 
-```
+```py
 $ python deep_learning_with_opencv.py --image images/traffic_light.png 
 	--prototxt bvlc_googlenet.prototxt \
 	--model bvlc_googlenet.caffemodel --labels synset_words.txt
@@ -329,7 +329,7 @@ OpenCV 和 GoogLeNet 以 100%的把握正确地将这张图片标注为 ***【�
 
 在这个例子中我们有一个 ***【秃鹰】*** :
 
-```
+```py
 $ python deep_learning_with_opencv.py --image images/eagle.png
 	--prototxt bvlc_googlenet.prototxt \
 	--model bvlc_googlenet.caffemodel --labels synset_words.txt
@@ -351,7 +351,7 @@ $ python deep_learning_with_opencv.py --image images/eagle.png
 
 我们最后的例子是一个***【自动售货机】****:*
 
-```
+```py
 $ python deep_learning_with_opencv.py --image images/vending_machine.png
 	--prototxt bvlc_googlenet.prototxt \
 	--model bvlc_googlenet.caffemodel --labels synset_words.txt

@@ -48,7 +48,7 @@
 
 幸运的是，TensorFlow 可以在 pip 上安装:
 
-```
+```py
 $ pip install tensorflow==2.8.0
 $ pip install tensorflow-text==2.8.0
 ```
@@ -80,7 +80,7 @@ $ pip install tensorflow-text==2.8.0
 
 从这里，看一下目录结构:
 
-```
+```py
 $ tree .
 .
 ├── inference.py
@@ -127,21 +127,21 @@ $ tree .
 
 在我们开始实现之前，让我们检查一下项目的配置。为此，我们将转到位于`pyimagesearch`目录中的`config.py`脚本。
 
-```
+```py
 # define the dataset file
 DATA_FNAME = "fra.txt"
 ```
 
 在第 2 行的**上，我们定义了数据集文本文件。在我们的例子中，我们使用下载的`fra.txt`。**
 
-```
+```py
 # define the batch size
 BATCH_SIZE = 512
 ```
 
 在第 5 行的**上，我们定义了数据集的批量大小。**
 
-```
+```py
 # define the vocab size for the source and the target
 # text vectorization layers
 SOURCE_VOCAB_SIZE = 15_000
@@ -150,14 +150,14 @@ TARGET_VOCAB_SIZE = 15_000
 
 在**的第 9 行和第 10 行**，我们定义了源和目标文本处理器的词汇量。这是让我们的文本矢量化层知道应该从所提供的数据集生成的词汇量所必需的。
 
-```
+```py
 # define the maximum positions in the source and target dataset
 MAX_POS_ENCODING = 2048
 ```
 
 在**第 13** 行，我们定义了我们编码的最大长度。
 
-```
+```py
 # define the number of layers for the encoder and the decoder
 ENCODER_NUM_LAYERS = 6
 DECODER_NUM_LAYERS = 6
@@ -165,21 +165,21 @@ DECODER_NUM_LAYERS = 6
 
 在**第 16 行和第 17 行**，我们定义了变压器架构中编码器和解码器的层数。
 
-```
+```py
 # define the dimensions of the model
 D_MODEL = 512
 ```
 
 变压器是一种各向同性的架构。这实质上意味着中间输出的维度在整个模型中不会改变。这需要定义一个静态模型维度。在**第 20 行**，我们定义整个模型的尺寸。
 
-```
+```py
 # define the units of the point wise feed forward network
 DFF = 2048
 ```
 
 我们在**线 23** 上定义了点式前馈网络的中间尺寸。
 
-```
+```py
 # define the number of heads and dropout rate
 NUM_HEADS = 8
 DROP_RATE = 0.1
@@ -187,14 +187,14 @@ DROP_RATE = 0.1
 
 多头关注层中的头数在**行 26** 中定义。辍学率在**第 27 行**指定。
 
-```
+```py
 # define the number of epochs to train the transformer model
 EPOCHS = 25
 ```
 
 我们定义了在第 30 行的**上训练的时期数。**
 
-```
+```py
 # define the output directory
 OUTPUT_DIR = "output"
 ```
@@ -207,7 +207,7 @@ OUTPUT_DIR = "output"
 
 如前所述，我们需要一个包含源语言-目标语言句子对的数据集。为了配置和预处理这样的数据集，我们在`pyimagesearch`目录中准备了`dataset.py`脚本。
 
-```
+```py
 # import the necessary packages
 import random
 
@@ -220,7 +220,7 @@ _AUTO = tf.data.AUTOTUNE
 
 在第 8 行的**上，我们定义了模块级别`tf.data.AUTOTUNE`。**
 
-```
+```py
 def load_data(fname):
     # open the file with utf-8 encoding
     with open(fname, "r", encoding="utf-8") as textFile:
@@ -252,7 +252,7 @@ def load_data(fname):
 
 接下来，在第**行的第 25 行和第 26** 行，我们将源句子和目标句子收集到它们各自的列表中，稍后在第**行的第 29** 行返回。
 
-```
+```py
 def splitting_dataset(source, target):
     # calculate the training and validation size
     trainSize = int(len(source) * 0.8)
@@ -283,7 +283,7 @@ def splitting_dataset(source, target):
 
 使用切片操作，我们将数据集分割成第 38-46 行上的各个分割。我们稍后返回第 49-53 行的**数据集分割。**
 
-```
+```py
 def make_dataset(
     splits, batchSize, sourceTextProcessor, targetTextProcessor, train=False
 ):
@@ -328,7 +328,7 @@ def make_dataset(
 
 在**第 72-82 行**，我们构建数据集。在**第 85 行**，我们返回数据集。
 
-```
+```py
 def tf_lower_and_split_punct(text):
     # split accented characters
     text = tf_text.normalize_utf8(text, "NFKD")
@@ -366,7 +366,7 @@ def tf_lower_and_split_punct(text):
 
 我们在名为`attention.py`的`pyimagesearch`目录下的单个文件中构建这些不同类型的注意力。
 
-```
+```py
 # import the necessary packages
 import tensorflow as tf
 from tensorflow.keras.layers import Add, Layer, LayerNormalization, MultiHeadAttention
@@ -374,7 +374,7 @@ from tensorflow.keras.layers import Add, Layer, LayerNormalization, MultiHeadAtt
 
 在**第 2 行和第 3 行**，我们导入构建注意模块所需的必要包。
 
-```
+```py
 class BaseAttention(Layer):
     """
     The base attention module. All the other attention modules will
@@ -399,7 +399,7 @@ class BaseAttention(Layer):
 
 在第 19-21 行、**、**上，我们初始化了一个`MultiHeadAttention`层、一个`LayerNormalization`层和一个`Add`层。这些是本教程后面指定的任何注意模块的基本层。
 
-```
+```py
 class CrossAttention(BaseAttention):
     def call(self, x, context):
         # apply multihead attention to the query and the context inputs
@@ -433,7 +433,7 @@ class CrossAttention(BaseAttention):
 
 我们在**线 42** 上返回处理后的输出。
 
-```
+```py
 class GlobalSelfAttention(BaseAttention):
     def call(self, x):
         # apply self multihead attention
@@ -457,7 +457,7 @@ class GlobalSelfAttention(BaseAttention):
 
 在**行 55 和 56** 上，我们应用剩余连接和层标准化。处理后的输出在**线 59** 返回。
 
-```
+```py
 class CausalSelfAttention(BaseAttention):
     def call(self, x):
         # apply self multi head attention with causal masking (look-ahead-mask)
@@ -499,7 +499,7 @@ class CausalSelfAttention(BaseAttention):
 
 如前一篇博文所示，为了构建位置编码，我们打开了`pyimagesearch`目录中的`positional_encoding.py`。
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import tensorflow as tf
@@ -508,7 +508,7 @@ from tensorflow.keras.layers import Embedding, Layer
 
 从**第 2-4 行**，我们导入必要的包。
 
-```
+```py
 def positional_encoding(length, depth):
     """
     Function to build the positional encoding as per the
@@ -541,7 +541,7 @@ def positional_encoding(length, depth):
 
 在**第 29 行**上，我们将正弦和余弦输出连接在一起，构建了完整的位置编码；`posEncoding`然后在**线 30** 返回。
 
-```
+```py
 class PositionalEmbedding(Layer):
     def __init__(self, vocabSize, dModel, maximumPositionEncoding, **kwargs):
         """
@@ -598,7 +598,7 @@ Keras 让我们为定制层公开一个`compute_mask`方法。我们在第 56 �
 
 为了构建前馈网络模块，如前一篇博文所示，我们打开了`pyimagesearch`目录中的`feed_forward.py`。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Add, Dense, Dropout, Layer, LayerNormalization
@@ -606,7 +606,7 @@ from tensorflow.keras.layers import Add, Dense, Dropout, Layer, LayerNormalizati
 
 在**行 2 和 3** 上，我们导入必要的包。
 
-```
+```py
 class FeedForward(Layer):
     def __init__(self, dff, dModel, dropoutRate=0.1, **kwargs):
         """
@@ -651,7 +651,7 @@ class FeedForward(Layer):
 
 为了构建学习率调度模块，我们打开了`pyimagesearch`目录中的`rate_schedule.py`文件。
 
-```
+```py
 # import the necessary packages
 import tensorflow as tf
 from tensorflow.keras.optimizers.schedules import LearningRateSchedule
@@ -659,7 +659,7 @@ from tensorflow.keras.optimizers.schedules import LearningRateSchedule
 
 在**第 2 行和第 3 行**，我们导入对费率表重要的必要包。
 
-```
+```py
 class CustomSchedule(LearningRateSchedule):
     def __init__(self, dModel, warmupSteps=4000):
         super().__init__()
@@ -690,7 +690,7 @@ class CustomSchedule(LearningRateSchedule):
 
 我们构建了在`pyimagesearch`目录下的`loss_accuracy.py`中定义指标的模块。
 
-```
+```py
 # import the necessary packages
 import tensorflow as tf
 from tensorflow.keras.losses import SparseCategoricalCrossentropy
@@ -698,7 +698,7 @@ from tensorflow.keras.losses import SparseCategoricalCrossentropy
 
 在**行 2 和 3** 上，我们导入必要的包。
 
-```
+```py
 def masked_loss(label, prediction):
     # mask positions where the label is not equal to 0
     mask = label != 0
@@ -722,7 +722,7 @@ def masked_loss(label, prediction):
 
 然后将原始损耗与布尔掩码相乘，得到第 15 行**和第 16 行**的屏蔽损耗。在**第 19 行**上，我们对屏蔽损失进行平均，并在**第 20 行**上将其返还。
 
-```
+```py
 def masked_accuracy(label, prediction):
     # mask positions where the label is not equal to 0
     mask = label != 0
@@ -766,7 +766,7 @@ def masked_accuracy(label, prediction):
 
 我们在`pyimagesearch`目录中构建编码器模块，并将其命名为`encoder.py`。
 
-```
+```py
 # import the necessary packages
 import tensorflow as tf
 from tensorflow.keras.layers import Dropout, Layer
@@ -778,7 +778,7 @@ from .positional_encoding import PositionalEmbedding
 
 在**第 2 行和第 7 行**，我们导入必要的包。
 
-```
+```py
 class EncoderLayer(Layer):
     def __init__(self, dModel, numHeads, dff, dropOutRate=0.1, **kwargs):
         """
@@ -815,7 +815,7 @@ class EncoderLayer(Layer):
 
 编码器层的输出然后在**线 37** 上返回。
 
-```
+```py
 class Encoder(Layer):
     def __init__(
         self,
@@ -897,7 +897,7 @@ class Encoder(Layer):
 
 我们在`pyimagesearch`内部构建解码器模块，并将其命名为`decoder.py`。
 
-```
+```py
 # import the necessary packages
 import tensorflow as tf
 from tensorflow.keras.layers import Dropout, Layer
@@ -910,7 +910,7 @@ from .positional_encoding import PositionalEmbedding
 
 在第 2-8 行上，我们导入必要的包。
 
-```
+```py
 class DecoderLayer(Layer):
     def __init__(self, dModel, numHeads, dff, dropOutRate=0.1, **kwargs):
         """
@@ -965,7 +965,7 @@ class DecoderLayer(Layer):
 
 注意力分数被缓存在**行 48** 上。之后，我们将前馈网络应用于**线 51** 上的处理输出。定制解码器层的输出然后在**线 52** 上返回。
 
-```
+```py
 class Decoder(Layer):
     def __init__(
         self,
@@ -1048,7 +1048,7 @@ class Decoder(Layer):
 
 我们在`pyimagesearch`目录下的`transformer.py`中构建整个模块。
 
-```
+```py
 # import the necessary packages
 import tensorflow as tf
 from tensorflow.keras import Model
@@ -1061,7 +1061,7 @@ from pyimagesearch.encoder import Encoder
 
 **第 2-8 行**导入必要的包。
 
-```
+```py
 class Transformer(Model):
     def __init__(
         self,
@@ -1153,7 +1153,7 @@ class Transformer(Model):
 
 我们在`pyimagesearch`目录中构建翻译器模块，并将其命名为`translate.py`。
 
-```
+```py
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.layers import StringLookup
@@ -1161,7 +1161,7 @@ from tensorflow.keras.layers import StringLookup
 
 在**行 1-3** 上，我们导入必要的包。
 
-```
+```py
 class Translator(tf.Module):
     def __init__(
         self,
@@ -1196,7 +1196,7 @@ class Translator(tf.Module):
 
 **第 26 行**定义了预应变变压器模型。**第 28 行**定义了翻译句子的最大长度。
 
-```
+```py
     def tokens_to_text(self, resultTokens):
         # decode the token from index to string
         resultTextTokens = self.targetStringFromIndex(resultTokens)
@@ -1217,7 +1217,7 @@ class Translator(tf.Module):
 
 处理后的文本然后在**行 41** 上返回。
 
-```
+```py
     @tf.function(input_signature=[tf.TensorSpec(shape=[], dtype=tf.string)])
     def __call__(self, sentence):
         # the input sentence is a string of source language
@@ -1279,7 +1279,7 @@ class Translator(tf.Module):
 
 我们组装所有部件来训练用于神经机器翻译任务的转换器架构。培训模块内置于`train.py`中。
 
-```
+```py
 # USAGE
 # python train.py
 
@@ -1307,7 +1307,7 @@ from pyimagesearch.transformer import Transformer
 
 在第**行第 5-23** 行，我们定义了导入并为可重复性设置了随机种子。
 
-```
+```py
 # load data from disk
 print(f"[INFO] loading data from {config.DATA_FNAME}...")
 (source, target) = load_data(fname=config.DATA_FNAME)
@@ -1315,7 +1315,7 @@ print(f"[INFO] loading data from {config.DATA_FNAME}...")
 
 **第 26 行和第 27 行**使用`load_data`方法加载数据。
 
-```
+```py
 # split the data into training, validation, and test set
 print("[INFO] splitting the dataset into train, val, and test...")
 (train, val, test) = splitting_dataset(source=source, target=target
@@ -1323,7 +1323,7 @@ print("[INFO] splitting the dataset into train, val, and test...")
 
 一个数据集需要拆分成`train`、`val`和`test`。**第 30 行和第 31 行**正好有助于此。数据集被发送到`splitting_dataset`函数，该函数将其分割成相应的数据片段。
 
-```
+```py
 # create source text processing layer and adapt on the training
 # source sentences
 print("[INFO] adapting the source text processor on the source dataset...")
@@ -1335,7 +1335,7 @@ sourceTextProcessor.adapt(train[0])
 
 **第 35-39 行**创建源文本处理器，一个`TextVectorization`层，并在源训练数据集上修改它。
 
-```
+```py
 # create target text processing layer and adapt on the training
 # target sentences
 print("[INFO] adapting the target text processor on the target dataset...")
@@ -1347,7 +1347,7 @@ targetTextProcessor.adapt(train[1])
 
 **第 43-47 行**创建目标文本处理器，一个`TextVectorization`层，并适应目标训练数据集。
 
-```
+```py
 # build the TensorFlow data datasets of the respective data splits
 print("[INFO] building TensorFlow Data input pipeline...")
 trainDs = make_dataset(
@@ -1375,7 +1375,7 @@ testDs = make_dataset(
 
 **第 50-71 行**使用`make_dataset`函数构建`tf.data.Dataset`管道。
 
-```
+```py
 # build the transformer model
 print("[INFO] building the transformer model...")
 transformerModel = Transformer(
@@ -1393,7 +1393,7 @@ transformerModel = Transformer(
 
 我们在第 74-85 行上构建我们的变压器模型。
 
-```
+```py
 # compile the model
 print("[INFO] compiling the transformer model...")
 learningRate = CustomSchedule(dModel=config.D_MODEL)
@@ -1405,7 +1405,7 @@ transformerModel.compile(
 
 我们用自定义优化器编译模型，在第 88-93 行的上有`CustomSchedule`和`masked_loss`以及`masked_accuracy`函数。
 
-```
+```py
 # fit the model on the training dataset
 transformerModel.fit(
     trainDs,
@@ -1416,7 +1416,7 @@ transformerModel.fit(
 
 使用`trainDs`我们在**行 96-100** 上拟合模型。这里我们使用 Keras 提供的高效优雅的`Model.fit` API。我们还通过向 fit 方法提供`valDs`来验证培训渠道。
 
-```
+```py
 # infer on a sentence
 translator = Translator(
     sourceTextProcessor=sourceTextProcessor,
@@ -1437,7 +1437,7 @@ tf.saved_model.save(
 
 以下是仅 25 个时期的训练脚本的输出。
 
-```
+```py
 $ python train.py
 [INFO] loading data from fra.txt...
 [INFO] splitting the dataset into train, val, and test...
@@ -1466,14 +1466,14 @@ Epoch 25/25
 
 现在是有趣的部分。我们将测试我们的转换器执行机器翻译任务的能力。我们在`inference.py`中构建推理脚本。
 
-```
+```py
 # USAGE
 # python inference.py -s "input sentence"
 ```
 
 我们在第 1 行**和第 2 行**定义推理脚本的用法。
 
-```
+```py
 # import the necessary packages
 import tensorflow_text as tf_text # this is a no op import important for op registry
 import tensorflow as tf
@@ -1482,7 +1482,7 @@ import argparse
 
 我们在第 5-7 行导入必要的包。
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-s", "--sentence", required=True,
@@ -1492,14 +1492,14 @@ args = vars(ap.parse_args())
 
 我们构造参数 parse 并解析第 10-13 行的参数。
 
-```
+```py
 # convert the input english sentence to a constant tensor
 sourceText = tf.constant(args["sentence"])
 ```
 
 **第 16 行**将输入的源句子转换成`tf.Tensor`。这对翻译器来说很重要，因为它接受`tf.Tensor`而不是字符串。
 
-```
+```py
 # load the translator model from disk
 print("[INFO] loading the translator model from disk...")
 translator = tf.saved_model.load("translator")
@@ -1507,7 +1507,7 @@ translator = tf.saved_model.load("translator")
 
 我们现在从磁盘的第 19 行和第 20 行加载保存的翻译模块。
 
-```
+```py
 # perform inference and display the result
 print("[INFO] translating english sentence to french...")
 result = translator(sentence=sourceText)
@@ -1521,7 +1521,7 @@ print("[INFO] french translation: {}".format(translatedText))
 
 以下输出显示了将英语句子翻译成法语的推理。
 
-```
+```py
 $ python inference.py -s "i am hungry, let's get some food"
 
 [INFO] loading the translator model from disk...
@@ -1569,7 +1569,7 @@ Transformer 博客帖子是 PyImageSearch 多个系列的高潮。我们从字�
 
 A. R. Gosthipaty 和 R. Raha。“用 TensorFlow 和 Keras 深入研究变形金刚:第三部分”， *PyImageSearch* ，P. Chugh，S. Huot，K. Kidriavsteva，A. Thanki 编辑。，2022 年，【https://pyimg.co/9nozd 
 
-```
+```py
 @incollection{ARG-RR_2022_DDTFK3,
   author = {Aritra Roy Gosthipaty and Ritwik Raha},
   title = {A Deep Dive into Transformers with {TensorFlow} and {K}eras: Part 3},

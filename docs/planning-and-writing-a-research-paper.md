@@ -219,7 +219,7 @@
 
 **Mangla，P.** “规划和撰写研究论文”， *PyImageSearch* ，P. Chugh，R. Raha，K. Kudriavtseva 和 S. Huot 编辑。，2022 年，【https://pyimg.co/qyafh 
 
-```
+```py
 ***@incollection{Mangla_2022_Planning,
   author = {Puneet Mangla},
   title = {Planning and Writing a Research Paper},

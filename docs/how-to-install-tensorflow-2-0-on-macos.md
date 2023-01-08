@@ -111,7 +111,7 @@ TensorFlow 2.0 中有许多重要的更新，包括急切执行、自动微分�
 
 如果您以前在 Bash 中工作(例如，您升级到了 Catalina)，您可能会在终端中遇到以下消息:
 
-```
+```py
 The default interactive shell is now zsh.
 To update your account to use zsh, please run chsh -s /bin/zsh
 For more details, please visit https://support.apple.com/kb/HT208050.
@@ -120,7 +120,7 @@ For more details, please visit https://support.apple.com/kb/HT208050.
 
 这意味着要切换 shells，您应该在提示符下输入命令:
 
-```
+```py
 $ chsh -s /bin/zsh
 
 ```
@@ -137,7 +137,7 @@ $ chsh -s /bin/zsh
 
 从那里，在终端中接受 Xcode 许可证:
 
-```
+```py
 $ sudo xcodebuild -license
 
 ```
@@ -146,7 +146,7 @@ $ sudo xcodebuild -license
 
 然后安装 Xcode select:
 
-```
+```py
 $ sudo xcode-select --install
 
 ```
@@ -161,14 +161,14 @@ $ sudo xcode-select --install
 
 我们将使用自制软件安装一些依赖项。它没有预装在 macOS 上，所以让我们现在安装它(只有在你还没有自制软件的情况下才这样做):
 
-```
+```py
 $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 ```
 
 从那里，更新家酿:
 
-```
+```py
 $ brew update
 
 ```
@@ -178,7 +178,7 @@ $ brew update
 1.  `~/.zshrc`
 2.  `~/.bash_profile`(猛击)
 
-```
+```py
 $ nano ~/.zshrc # ZSH
 $ nano ~/.bash_profile # Bash
 
@@ -188,7 +188,7 @@ $ nano ~/.bash_profile # Bash
 
 从这里开始，在您的概要文件的末尾插入以下行:
 
-```
+```py
 # Homebrew
 export PATH=/usr/local/bin:$PATH
 
@@ -198,7 +198,7 @@ export PATH=/usr/local/bin:$PATH
 
 现在，开始创建概要文件(即重新加载):
 
-```
+```py
 $ source ~/.zshrc # ZSH
 $ source ~/.bash_profile # Bash
 
@@ -208,14 +208,14 @@ $ source ~/.bash_profile # Bash
 
 我们现在准备好**安装 Python 3:**
 
-```
+```py
 $ brew install python3
 
 ```
 
 让我们检查一下 Python 3 在这一点上是否正确链接:
 
-```
+```py
 $ which python3
 /usr/local/bin/python3
 
@@ -227,7 +227,7 @@ $ which python3
 
 此时，Homebrew 和 Python 已经准备好让我们**安装依赖项:**
 
-```
+```py
 $ brew install cmake pkg-config wget
 $ brew install jpeg libpng libtiff openexr
 $ brew install eigen tbb hdf5
@@ -250,7 +250,7 @@ $ brew install eigen tbb hdf5
 
 让我们下载并安装 pip:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python3 get-pip.py
 
@@ -264,7 +264,7 @@ $ sudo python3 get-pip.py
 
 现在让我们安装我喜欢的虚拟环境工具:
 
-```
+```py
 $ pip3 install virtualenv virtualenvwrapper
 
 ```
@@ -273,7 +273,7 @@ $ pip3 install virtualenv virtualenvwrapper
 
 从这里开始，我们需要更新 bash 概要文件:
 
-```
+```py
 $ nano ~/.zshrc # ZSH
 $ nano ~/.bash_profile # Bash
 
@@ -283,7 +283,7 @@ $ nano ~/.bash_profile # Bash
 
 接下来，在文件底部输入以下几行:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
@@ -299,7 +299,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 不要忘记在您的个人资料中查找变更:
 
-```
+```py
 $ source ~/.zshrc # ZSH
 $ source ~/.bash_profile # Bash
 
@@ -313,7 +313,7 @@ $ source ~/.bash_profile # Bash
 
 现在我们准备创建你的 **Python 3** 深度学习**虚拟**环境命名为`dl4cv`:
 
-```
+```py
 $ mkvirtualenv dl4cv -p python3
 
 ```
@@ -328,7 +328,7 @@ $ mkvirtualenv dl4cv -p python3
 
 张量流的先决条件是数值处理的 NumPy。继续使用 pip 安装 NumPy 和 TensorFlow 2.0:
 
-```
+```py
 $ pip install numpy
 $ pip install tensorflow==2.0.0
 
@@ -346,7 +346,7 @@ $ pip install tensorflow==2.0.0
 
 我们从标准图像处理库开始，包括 OpenCV:
 
-```
+```py
 $ pip install opencv-contrib-python
 $ pip install scikit-image
 $ pip install pillow
@@ -358,7 +358,7 @@ $ pip install imutils
 
 从那里，让我们安装机器学习库和支持库，包括 scikit-learn 和 matplotlib:
 
-```
+```py
 $ pip install scikit-learn
 $ pip install matplotlib
 $ pip install progressbar2
@@ -375,7 +375,7 @@ $ pip install pandas
 
 在您的`dl4cv`环境中启动一个 Python shell(或者您命名的任何 Python 虚拟环境),并确保您可以导入以下包:
 
-```
+```py
 $ workon dl4cv
 $ python
 >>> import tensorflow as tf
@@ -398,7 +398,7 @@ $ python
 
 至此，你的 TensorFlow 2.0 `dl4cv`环境已经整装待发。无论何时你想执行 TensorFlow 2.0 代码(比如来自我的[深度学习书籍](https://pyimagesearch.com/deep-learning-computer-vision-python-book/)，一定要使用`workon`命令进入安装了 TensorFlow 2.0 的 Python 虚拟环境:
 
-```
+```py
 $ workon dl4cv
 
 ```
@@ -407,7 +407,7 @@ $ workon dl4cv
 
 如果您需要回到系统级环境，可以停用当前的虚拟环境:
 
-```
+```py
 $ deactivate
 
 ```
@@ -433,7 +433,7 @@ Keras 已经深深嵌入到 TensorFlow 中，`tf.keras`是 TensorFlow 2.0 中主
 
 现在，您可以在 Python 程序中使用以下语句导入 Keras:
 
-```
+```py
 $ workon dl4cv
 $ python
 >>> import tensorflow.keras

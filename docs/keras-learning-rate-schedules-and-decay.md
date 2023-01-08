@@ -84,7 +84,7 @@
 
 一旦你抓取并提取了 ***【下载】*** ，继续使用`tree`命令检查项目文件夹:
 
-```
+```py
 $ tree
 .
 ├── output
@@ -118,7 +118,7 @@ Keras 库附带了一个基于时间的学习率调度器——它是通过优�
 
 为了发现我们如何利用这种类型的学习率衰减，让我们看一个如何初始化 ResNet 体系结构和 SGD 优化器的示例:
 
-```
+```py
 # initialize our optimizer and model, then compile it
 opt = SGD(lr=1e-2, momentum=0.9, decay=1e-2/epochs)
 model = ResNet.build(32, 32, 3, 10, (9, 9, 9),
@@ -168,7 +168,7 @@ and a decay of ![\frac{0.01}{40}](img/0586d0a710635efd5bdcfc99b6d1dd99.png "\fra
 
 打开目录结构中的`learning_rate_schedulers.py`,插入以下代码:
 
-```
+```py
 # import the necessary packages
 import matplotlib.pyplot as plt
 import numpy as np
@@ -248,7 +248,7 @@ is, the slower the learning rate will decay.
 
 返回到您的`learning_rate_schedulers.py`文件并插入以下代码:
 
-```
+```py
 class StepDecay(LearningRateDecay):
 	def __init__(self, initAlpha=0.01, factor=0.25, dropEvery=10):
 		# store the base initial learning rate, drop factor, and
@@ -287,7 +287,7 @@ class StepDecay(LearningRateDecay):
 
 方便的是，这两种方法都可以在一个类中实现:
 
-```
+```py
 class PolynomialDecay(LearningRateDecay):
 	def __init__(self, maxEpochs=100, initAlpha=0.01, power=1.0):
 		# store the maximum number of epochs, base learning rate,
@@ -322,7 +322,7 @@ class PolynomialDecay(LearningRateDecay):
 
 在编辑器中创建一个名为`train.py` file 的文件，并插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -351,7 +351,7 @@ import argparse
 
 让我们继续，[解析我们的命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-s", "--schedule", type=str, default="",
@@ -375,7 +375,7 @@ args = vars(ap.parse_args())
 
 有了导入和命令行参数，现在是时候**初始化我们的学习速率时间表:**
 
-```
+```py
 # store the number of epochs to train for in a convenience variable,
 # then initialize the list of callbacks and learning rate scheduler
 # to be used
@@ -419,7 +419,7 @@ if schedule is not None:
 
 让我们继续加载我们的数据:
 
-```
+```py
 # load the training and testing data, then scale it into the
 # range [0, 1]
 print("[INFO] loading CIFAR-10 data...")
@@ -446,7 +446,7 @@ labelNames = ["airplane", "automobile", "bird", "cat", "deer",
 
 让我们初始化`decay`参数:
 
-```
+```py
 # initialize the decay for the optimizer
 decay = 0.0
 
@@ -468,7 +468,7 @@ elif schedule is None:
 
 完成所有的初始化后，让我们继续编译并训练我们的`ResNet`模型:
 
-```
+```py
 # initialize our optimizer and model, then compile it
 opt = SGD(lr=1e-1, momentum=0.9, decay=decay)
 model = ResNet.build(32, 32, 3, 10, (9, 9, 9),
@@ -492,7 +492,7 @@ H = model.fit(x=trainX, y=trainY, validation_data=(testX, testY),
 
 最后，让我们评估我们的网络并生成图表:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(x=testX, batch_size=128)
@@ -538,7 +538,7 @@ if schedule is not None:
 
 作为基线，让我们首先在 CIFAR-10 上训练我们的 ResNet 模型，没有学习率衰减或时间表:
 
-```
+```py
 $ python train.py --train-plot output/train_no_schedule.png
 [INFO] loading CIFAR-10 data...
 [INFO] no learning rate schedule being used
@@ -587,7 +587,7 @@ weighted avg       0.85      0.84      0.84     10000
 
 在我们的第二个实验中，我们将使用 Keras 的基于衰减的标准学习速率表:
 
-```
+```py
 $ python train.py --schedule standard --train-plot output/train_standard_schedule.png
 [INFO] loading CIFAR-10 data...
 [INFO] using 'keras standard' learning rate decay...
@@ -634,7 +634,7 @@ weighted avg       0.81      0.82      0.81     10000
 
 让我们继续执行基于步骤的学习率计划，这将使我们的学习率每 15 个时期下降 0.25 倍:
 
-```
+```py
 $ python train.py --schedule step --lr-plot output/lr_step_schedule.png --train-plot output/train_step_schedule.png
 [INFO] using 'step-based' learning rate decay...
 [INFO] loading CIFAR-10 data...
@@ -694,7 +694,7 @@ weighted avg       0.87      0.87      0.87     10000
 
 让我们通过设置`power=1.0`来尝试使用 Keras 的线性学习率计划:
 
-```
+```py
 $ python train.py --schedule linear --lr-plot output/lr_linear_schedule.png --train-plot output/train_linear_schedule.png
 [INFO] using 'linear' learning rate decay...
 [INFO] loading CIFAR-10 data...
@@ -745,7 +745,7 @@ weighted avg       0.87      0.87      0.87     10000
 
 作为最后一个实验，让我们通过设置`power=5`将多项式学习率调度应用于 Keras:
 
-```
+```py
 $ python train.py --schedule poly --lr-plot output/lr_poly_schedule.png --train-plot output/train_poly_schedule.png
 [INFO] using 'polynomial' learning rate decay...
 [INFO] loading CIFAR-10 data...

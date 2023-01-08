@@ -42,7 +42,7 @@
 
 让我们开始写一些代码。打开一个新文件，命名为`detect_barcode.py`，让我们开始编码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -63,7 +63,7 @@ args = vars(ap.parse_args())
 
 现在，是时候进行一些实际的图像处理了:
 
-```
+```py
 # load the image and convert it to grayscale
 image = cv2.imread(args["image"])
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -94,7 +94,7 @@ gradient = cv2.convertScaleAbs(gradient)
 
 **注意我们的梯度操作是如何检测到图像的条形码区域的。**接下来的步骤是滤除图像中的噪声，只关注条形码区域。
 
-```
+```py
 # blur and threshold the image
 blurred = cv2.blur(gradient, (9, 9))
 (_, thresh) = cv2.threshold(blurred, 225, 255, cv2.THRESH_BINARY)
@@ -113,7 +113,7 @@ blurred = cv2.blur(gradient, (9, 9))
 
 然而，正如您在上面的阈值图像中看到的，*条形码的垂直条之间有间隙。*为了填补这些空白，并使我们的算法更容易检测条形码的“斑点”状区域，我们需要执行一些基本的形态学操作:
 
-```
+```py
 # construct a closing kernel and apply it to the thresholded image
 kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (21, 7))
 closed = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
@@ -134,7 +134,7 @@ closed = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
 
 让我们继续尝试移除这些小斑点:
 
-```
+```py
 # perform a series of erosions and dilations
 closed = cv2.erode(closed, None, iterations = 4)
 closed = cv2.dilate(closed, None, iterations = 4)
@@ -153,7 +153,7 @@ closed = cv2.dilate(closed, None, iterations = 4)
 
 最后，让我们找到图像条形码区域的轮廓:
 
-```
+```py
 # find the contours in the thresholded image, then sort the contours
 # by their area, keeping only the largest one
 cnts = cv2.findContours(closed.copy(), cv2.RETR_EXTERNAL,
@@ -194,7 +194,7 @@ cv2.waitKey(0)
 
 获得代码和图像后，打开终端并执行以下命令:
 
-```
+```py
 $ python detect_barcode.py --image images/barcode_02.jpg
 
 ```
@@ -207,7 +207,7 @@ $ python detect_barcode.py --image images/barcode_02.jpg
 
 让我们尝试另一个图像:
 
-```
+```py
 $ python detect_barcode.py --image images/barcode_03.jpg
 
 ```
@@ -220,7 +220,7 @@ $ python detect_barcode.py --image images/barcode_03.jpg
 
 食品已经够多了，那么书上的条形码呢:
 
-```
+```py
 $ python detect_barcode.py --image images/barcode_04.jpg
 
 ```
@@ -233,7 +233,7 @@ $ python detect_barcode.py --image images/barcode_04.jpg
 
 包裹上的追踪代码怎么样？
 
-```
+```py
 $ python detect_barcode.py --image images/barcode_05.jpg
 
 ```
@@ -246,7 +246,7 @@ $ python detect_barcode.py --image images/barcode_05.jpg
 
 最后，让我们再看一张图片，这是我最喜欢的面酱，饶自制的伏特加酱:
 
-```
+```py
 $ python detect_barcode.py --image images/barcode_06.jpg
 
 ```

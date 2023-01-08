@@ -48,7 +48,7 @@
 
 首先，打开一个新文件，将其命名为`read_frames_slow.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils.video import FPS
 import numpy as np
@@ -72,7 +72,7 @@ fps = FPS().start()
 
 如果您还没有安装`imutils`***或*** 如果您使用的是以前的版本，您可以使用以下命令安装/升级`imutils`:
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -83,7 +83,7 @@ $ pip install --upgrade imutils
 
 随着`cv2.VideoCapture`的实例化，我们可以开始从视频文件中读取帧并逐个处理它们:
 
-```
+```py
 # loop over frames from the video file stream
 while True:
 	# grab the frame from the threaded video file stream
@@ -131,7 +131,7 @@ while True:
 
 最后一个代码块处理计算管道的近似 FPS/帧速率吞吐量，释放视频流指针，并关闭任何打开的窗口:
 
-```
+```py
 # stop the timer and display FPS information
 fps.stop()
 print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))

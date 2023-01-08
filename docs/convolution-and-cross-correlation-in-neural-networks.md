@@ -121,7 +121,7 @@ operator) a 3*×*3 region of an image with a 3*×*3 kernel used for blurring:
 
 打开一个新文件，命名为`convolutions.py`，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from skimage.exposure import rescale_intensity
 import numpy as np
@@ -133,7 +133,7 @@ import cv2
 
 接下来，我们可以开始定义这个`convolve`方法:
 
-```
+```py
 def convolve(image, K):
 	# grab the spatial dimensions of the image and kernel
 	(iH, iW) = image.shape[:2]
@@ -162,7 +162,7 @@ def convolve(image, K):
 
 我们现在准备将实际卷积应用于我们的图像:
 
-```
+```py
 	# loop over the input image, "sliding" the kernel across
 	# each (x, y)-coordinate from left-to-right and top-to-bottom
 	for y in np.arange(pad, iH + pad):
@@ -188,7 +188,7 @@ def convolve(image, K):
 
 我们现在可以完成我们的`convolve`方法了:
 
-```
+```py
 	# rescale the output image to be in the range [0, 255]
 	output = rescale_intensity(output, in_range=(0, 255))
 	output = (output * 255).astype("uint8")
@@ -203,7 +203,7 @@ def convolve(image, K):
 
 现在我们已经定义了我们的`convolve`函数，让我们继续脚本的驱动程序部分。本课的这一部分将处理解析命令行参数，定义一系列要应用于图像的内核，然后显示输出结果:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -213,7 +213,7 @@ args = vars(ap.parse_args())
 
 我们的脚本只需要一个命令行参数`--image`，它是输入图像的路径。然后，我们可以定义两个用于模糊和平滑图像的内核:
 
-```
+```py
 # construct average blurring kernels used to smooth an image
 smallBlur = np.ones((7, 7), dtype="float") * (1.0 / (7 * 7))
 largeBlur = np.ones((21, 21), dtype="float") * (1.0 / (21 * 21))
@@ -223,7 +223,7 @@ largeBlur = np.ones((21, 21), dtype="float") * (1.0 / (21 * 21))
 
 然后我们有一个负责锐化图像的内核:
 
-```
+```py
 # construct a sharpening filter
 sharpen = np.array((
 	[0, -1, 0],
@@ -233,7 +233,7 @@ sharpen = np.array((
 
 然后使用拉普拉斯核来检测边缘状区域:
 
-```
+```py
 # construct the Laplacian kernel used to detect edge-like
 # regions of an image
 laplacian = np.array((
@@ -244,7 +244,7 @@ laplacian = np.array((
 
 索贝尔核可用于分别检测沿 *x* 和 *y* 轴的边缘状区域:
 
-```
+```py
 # construct the Sobel x-axis kernel
 sobelX = np.array((
 	[-1, 0, 1],
@@ -260,7 +260,7 @@ sobelY = np.array((
 
 最后，我们定义了浮雕内核:
 
-```
+```py
 # construct an emboss kernel
 emboss = np.array((
 	[-2, -1, 0],
@@ -274,7 +274,7 @@ emboss = np.array((
 
 给定所有这些内核，我们可以将它们集合成一组称为“内核库”的元组:
 
-```
+```py
 # construct the kernel bank, a list of kernels we're going to apply
 # using both our custom 'convolve' function and OpenCV's 'filter2D'
 # function
@@ -290,7 +290,7 @@ kernelBank = (
 
 构建这个内核列表使我们能够循环遍历它们，并以有效的方式可视化它们的输出，如下面的代码块所示:
 
-```
+```py
 # load the input image and convert it to grayscale
 image = cv2.imread(args["image"])
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -323,7 +323,7 @@ for (kernelName, K) in kernelBank:
 
 要运行我们的脚本(并可视化各种卷积运算的输出)，只需发出以下命令:
 
-```
+```py
 $ python convolutions.py --image jemma.png
 ```
 

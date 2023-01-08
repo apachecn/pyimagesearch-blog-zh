@@ -105,13 +105,13 @@ OpenCV 库[维护着一个预先训练好的哈尔级联库](https://github.com/
 
 我们可以使用`cv2.CascadeClassifer`函数从磁盘加载预训练的 Haar 级联:
 
-```
+```py
 detector = cv2.CascadeClassifier(path)
 ```
 
 一旦 Haar 级联加载到内存中，我们可以使用`detectMultiScale`函数对其进行预测:
 
-```
+```py
 results = detector.detectMultiScale(
 		gray, scaleFactor=1.05, minNeighbors=5,
 		minSize=(30, 30), flags=cv2.CASCADE_SCALE_IMAGE)
@@ -127,7 +127,7 @@ results = detector.detectMultiScale(
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -154,7 +154,7 @@ $ pip install opencv-contrib-python
 
 首先访问本教程的 ***“下载”*** 部分，以检索源代码和预训练的 Haar cascades:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── cascades
@@ -180,7 +180,7 @@ $ tree . --dirsfirst
 
 打开项目目录结构中的`opencv_haar_cascades.py`文件，我们就可以开始工作了:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 import argparse
@@ -194,7 +194,7 @@ import os
 
 我们只有一个命令行参数需要解析:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-c", "--cascades", type=str, default="cascades",
@@ -206,7 +206,7 @@ args = vars(ap.parse_args())
 
 我们继续从磁盘加载这些哈尔级联中的每一个:
 
-```
+```py
 # initialize a dictionary that maps the name of the haar cascades to
 # their filenames
 detectorPaths = {
@@ -237,7 +237,7 @@ for (name, path) in detectorPaths.items():
 
 随着我们的三个哈尔级联中的每一个从磁盘加载，我们可以继续访问我们的视频流:
 
-```
+```py
 # initialize the video stream and allow the camera sensor to warm up
 print("[INFO] starting video stream...")
 vs = VideoStream(src=0).start()
@@ -270,7 +270,7 @@ while True:
 
 下一步是循环每个面部位置，应用我们的眼睛和嘴巴哈尔瀑布:
 
-```
+```py
 	# loop over the face bounding boxes
 	for (fX, fY, fW, fH) in faceRects:
 		# extract the face ROI
@@ -295,7 +295,7 @@ while True:
 
 就像我们对所有面部检测进行循环一样，我们需要对眼睛和嘴巴检测进行同样的操作:
 
-```
+```py
 		# loop over the eye bounding boxes
 		for (eX, eY, eW, eH) in eyeRects:
 			# draw the eye bounding box
@@ -323,7 +323,7 @@ while True:
 
 最后，我们可以通过在屏幕上显示我们的输出`frame`来结束:
 
-```
+```py
 	# show the output frame
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
@@ -347,7 +347,7 @@ vs.stop()
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python opencv_haar_cascades.py --cascades cascades
 [INFO] loading haar cascades...
 [INFO] starting video stream...

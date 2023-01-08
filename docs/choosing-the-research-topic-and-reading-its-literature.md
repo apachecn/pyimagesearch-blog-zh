@@ -178,7 +178,7 @@ Keshav (2020) 提出了一种阅读论文的三步法。
 
 **曼格拉，P.** “选择研究课题并阅读其文献”， *PyImageSearch* ，p .丘格，r .拉哈，k .库德里亚夫采娃，s .霍特，2022，【https://pyimg.co/oravw】T4
 
-```
+```py
 @incollection{Mangla_2022_Choosing,
   author = {Puneet Mangla},
   title = {Choosing the Research Topic and Reading Its Literature},

@@ -63,7 +63,7 @@ OpenCV 提供了`[HuMoments](http://docs.opencv.org/modules/imgproc/doc/structur
 
 好了，概述够了。让我们动手写一些代码。
 
-```
+```py
 # import the necessary packages
 import mahotas
 
@@ -98,7 +98,7 @@ class ZernikeMoments:
 
 现在我们已经定义了形状描述符，我们需要将它应用到数据库中的每个口袋妖怪精灵。这是一个相当简单的过程，所以我会让代码做大部分的解释。让我们打开我们最喜欢的编辑器，创建一个名为`index.py`的文件，然后开始工作:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.zernikemoments import ZernikeMoments
 from imutils.paths import list_images
@@ -134,7 +134,7 @@ index = {}
 
 量化我们口袋妖怪精灵的时间到了:
 
-```
+```py
 # loop over the sprite images
 for spritePath in list_images(args["sprites"]):
 	# parse out the pokemon name, then load the image and
@@ -171,7 +171,7 @@ for spritePath in list_images(args["sprites"]):
 
 这个过程给了我们口袋妖怪的面具。现在我们需要面具最外面的轮廓——口袋妖怪的实际轮廓。
 
-```
+```py
 	# initialize the outline image, find the outermost
 	# contours (the outline) of the pokemone, then draw
 	# it
@@ -202,7 +202,7 @@ for spritePath in list_images(args["sprites"]):
 
 计算轮廓的 Zernike 矩实际上很容易:
 
-```
+```py
 	# compute Zernike moments to characterize the shape
 	# of pokemon outline, then update the index
 	moments = desc.describe(outline)
@@ -216,7 +216,7 @@ for spritePath in list_images(args["sprites"]):
 
 让我们来调查一下:
 
-```
+```py
 >>> moments.shape
 (25,)
 
@@ -226,7 +226,7 @@ for spritePath in list_images(args["sprites"]):
 
 我们可以像这样查看 Zernike 矩特征向量的值:
 
-```
+```py
 >>> moments
 [ 0.31830989  0.00137926  0.24653755  0.03015183  0.00321483  0.03953142
   0.10837637  0.00404093  0.09652134  0.005004    0.01573373  0.0197918
@@ -242,7 +242,7 @@ for spritePath in list_images(args["sprites"]):
 
 我们需要做的最后一件事是将我们的索引转储到文件中，以便在执行搜索时使用:
 
-```
+```py
 # write the index to file
 f = open(args["index"], "wb")
 f.write(pickle.dumps(index))
@@ -252,7 +252,7 @@ f.close()
 
 要执行我们的脚本来索引我们所有的口袋妖怪精灵，发出以下命令:
 
-```
+```py
 $ python index.py --sprites sprites --index index.cpickle
 
 ```

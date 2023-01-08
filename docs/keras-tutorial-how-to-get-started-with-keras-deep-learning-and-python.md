@@ -119,7 +119,7 @@ Igor 有一个很好的观点——你遇到的大多数 Keras 教程都会尝�
 
 有许多文件与此项目相关联。从 ***“下载”*** 部分抓取 zip 文件，然后使用`tree`命令在您的终端中显示项目结构(我已经为`tree`提供了两个命令行参数标志，以使输出美观整洁):
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── animals
@@ -194,7 +194,7 @@ $ tree --dirsfirst --filelimit 10
 
 打开`train_simple_nn.py`并插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -230,7 +230,7 @@ import os
 
 让我们用 argparse 解析我们的[命令行参数:](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/)
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -256,7 +256,7 @@ args = vars(ap.parse_args())
 
 有了数据集信息，让我们加载图像和类标签:
 
-```
+```py
 # initialize the data and labels
 print("[INFO] loading images...")
 data = []
@@ -298,7 +298,7 @@ for imagePath in imagePaths:
 
 现在，我们可以一下子将数组操作应用于数据和标签:
 
-```
+```py
 # scale the raw pixel intensities to the range [0, 1]
 data = np.array(data, dtype="float") / 255.0
 labels = np.array(labels)
@@ -317,7 +317,7 @@ labels = np.array(labels)
 
 既然我们已经从磁盘加载了图像数据，接下来我们需要构建我们的训练和测试分割:
 
-```
+```py
 # partition the data into training and testing splits using 75% of
 # the data for training and the remaining 25% for testing
 (trainX, testX, trainY, testY) = train_test_split(data,
@@ -336,7 +336,7 @@ labels = np.array(labels)
 
 为了完成这种编码，我们可以使用 scikit-learn 中的`LabelBinarizer`类:
 
-```
+```py
 # convert the labels from integers to vectors (for 2-class, binary
 # classification you should use Keras' to_categorical function
 # instead as the scikit-learn's LabelBinarizer will not return a
@@ -355,7 +355,7 @@ testY = lb.transform(testY)
 
 这里有一个例子:
 
-```
+```py
 [1, 0, 0] # corresponds to cats
 [0, 1, 0] # corresponds to dogs
 [0, 0, 1] # corresponds to panda
@@ -372,7 +372,7 @@ testY = lb.transform(testY)
 
 下一步是使用 Keras 定义我们的神经网络架构。这里我们将使用一个具有一个输入层、两个隐藏层和一个输出层的网络:
 
-```
+```py
 # define the 3072-1024-512-3 architecture using Keras
 model = Sequential()
 model.add(Dense(1024, input_shape=(3072,), activation="sigmoid"))
@@ -397,7 +397,7 @@ model.add(Dense(len(lb.classes_), activation="softmax"))
 
 一旦我们定义了我们的神经网络架构，下一步就是“编译”它:
 
-```
+```py
 # initialize our initial learning rate and # of epochs to train for
 INIT_LR = 0.01
 EPOCHS = 80
@@ -426,7 +426,7 @@ model.compile(loss="categorical_crossentropy", optimizer=opt,
 
 现在我们的 Keras 模型已经编译好了，我们可以根据我们的训练数据来“拟合”(即训练)它:
 
-```
+```py
 # train the neural network
 H = model.fit(x=trainX, y=trainY, validation_data=(testX, testY),
 	epochs=EPOCHS, batch_size=32)
@@ -447,7 +447,7 @@ H = model.fit(x=trainX, y=trainY, validation_data=(testX, testY),
 
 为了评估我们的 Keras 模型，我们可以结合使用模型的`.predict`方法和来自 scikit-learn 的`classification_report`:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(x=testX, batch_size=32)
@@ -474,7 +474,7 @@ plt.savefig(args["plot"])
 
 运行此脚本时，您会注意到我们的 Keras 神经网络将开始训练，一旦训练完成，我们将在测试集上评估网络:
 
-```
+```py
 $ python train_simple_nn.py --dataset animals --model output/simple_nn.model \
 	--label-bin output/simple_nn_lb.pickle --plot output/simple_nn_plot.png
 Using TensorFlow backend.
@@ -532,7 +532,7 @@ weighted avg       0.60      0.61      0.59       750
 
 最后，我们可以将模型保存到磁盘上，这样我们就可以在以后重用它，而不必重新训练它:
 
-```
+```py
 # save the model and label binarizer to disk
 print("[INFO] serializing network and label binarizer...")
 model.save(args["model"], save_format="h5")
@@ -554,7 +554,7 @@ f.close()
 
 在`predict.py`脚本中，我将向您展示如何操作，因此打开它并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import load_model
 import argparse
@@ -594,7 +594,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们加载图像并根据命令行参数调整其大小:
 
-```
+```py
 # load the input image and resize it to the target spatial dimensions
 image = cv2.imread(args["image"])
 output = image.copy()
@@ -607,7 +607,7 @@ image = image.astype("float") / 255.0
 
 然后我们会`flatten`图片如果需要的话:
 
-```
+```py
 # check to see if we should flatten the image and add a batch
 # dimension
 if args["flatten"] > 0:
@@ -628,7 +628,7 @@ else:
 
 从那里，让我们将模型+标签二进制化器加载到内存中，并进行预测:
 
-```
+```py
 # load the model and label binarizer
 print("[INFO] loading network and label binarizer...")
 model = load_model(args["model"])
@@ -650,7 +650,7 @@ label = lb.classes_[i]
 
 `preds`数组是什么样子的？
 
-```
+```py
 (Pdb) preds
 array([[5.4622066e-01, 4.5377851e-01, 7.7963534e-07]], dtype=float32)
 
@@ -672,7 +672,7 @@ array([[5.4622066e-01, 4.5377851e-01, 7.7963534e-07]], dtype=float32)
 
 现在让我们显示结果:
 
-```
+```py
 # draw the class label + probability on the output image
 text = "{}: {:.2f}%".format(label, preds[0][i] * 100)
 cv2.putText(output, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7,
@@ -694,7 +694,7 @@ cv2.waitKey(0)
 
 一旦您使用本教程的 ***【下载】*** 部分下载了代码，您就可以打开一个终端，尝试在自定义映像上运行我们训练有素的网络:
 
-```
+```py
 $ python predict.py --image images/cat.jpg --model output/simple_nn.model \
 	--label-bin output/simple_nn_lb.pickle --width 32 --height 32 --flatten 1
 Using TensorFlow backend.
@@ -727,7 +727,7 @@ Using TensorFlow backend.
 
 **打开`smallvggnet.py`文件，插入以下代码:**
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import BatchNormalization
@@ -745,7 +745,7 @@ from tensorflow.keras import backend as K
 
 然后我们开始定义我们的`SmallVGGNet`类和`build`方法:
 
-```
+```py
 class SmallVGGNet:
 	@staticmethod
 	def build(width, height, depth, classes):
@@ -775,7 +775,7 @@ class SmallVGGNet:
 
 现在，让我们给网络添加一些层:
 
-```
+```py
 		# CONV => RELU => POOL layer set
 		model.add(Conv2D(32, (3, 3), padding="same",
 			input_shape=inputShape))
@@ -806,7 +806,7 @@ class SmallVGGNet:
 
 继续前进，我们到达下一个`(CONV => RELU) * 2 => POOL`层:
 
-```
+```py
 		# (CONV => RELU) * 2 => POOL layer set
 		model.add(Conv2D(64, (3, 3), padding="same"))
 		model.add(Activation("relu"))
@@ -823,7 +823,7 @@ class SmallVGGNet:
 
 接下来是一个`(CONV => RELU => POOL) * 3`图层组:
 
-```
+```py
 		# (CONV => RELU) * 3 => POOL layer set
 		model.add(Conv2D(128, (3, 3), padding="same"))
 		model.add(Activation("relu"))
@@ -843,7 +843,7 @@ class SmallVGGNet:
 
 最后，我们有一组`FC => RELU`层:
 
-```
+```py
 		# first (and only) set of FC => RELU layers
 		model.add(Flatten())
 		model.add(Dense(512))
@@ -871,7 +871,7 @@ class SmallVGGNet:
 
 打开`train_vgg.py`脚本，让我们开始吧:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -904,7 +904,7 @@ import os
 
 让我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -928,7 +928,7 @@ args = vars(ap.parse_args())
 
 让我们加载并预处理我们的数据:
 
-```
+```py
 # initialize the data and labels
 print("[INFO] loading images...")
 data = []
@@ -978,7 +978,7 @@ labels = np.array(labels)
 
 然后，我们将分割数据，并将标签二进制化:
 
-```
+```py
 # partition the data into training and testing splits using 75% of
 # the data for training and the remaining 25% for testing
 (trainX, testX, trainY, testY) = train_test_split(data,
@@ -1000,7 +1000,7 @@ testY = lb.transform(testY)
 
 现在是数据扩充:
 
-```
+```py
 # construct the image generator for data augmentation
 aug = ImageDataGenerator(rotation_range=30, width_shift_range=0.1,
 	height_shift_range=0.1, shear_range=0.2, zoom_range=0.2,
@@ -1027,7 +1027,7 @@ model = SmallVGGNet.build(width=64, height=64, depth=3,
 
 让我们编译和训练我们的模型:
 
-```
+```py
 # initialize our initial learning rate, # of epochs to train for,
 # and batch size
 INIT_LR = 0.01
@@ -1058,7 +1058,7 @@ H = model.fit(x=aug.flow(trainX, trainY, batch_size=BS),
 
 最后，我们将评估我们的模型，绘制损耗/精度曲线，并保存模型:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(x=testX, batch_size=32)
@@ -1102,7 +1102,7 @@ Matplotlib 用于绘制损耗/精度曲线— **行 108-118** 展示了我的典
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python train_vgg.py --dataset animals --model output/smallvggnet.model \
 	--label-bin output/smallvggnet_lb.pickle \
 	--plot output/smallvggnet_plot.png
@@ -1154,7 +1154,7 @@ GPU 将在几分钟内完成这个过程，因为每个历元只需要 2 秒，�
 
 我们还可以将新培训的 Keras CNN 应用于示例图像:
 
-```
+```py
 $ python predict.py --image images/panda.jpg --model output/smallvggnet.model \
 	--label-bin output/smallvggnet_lb.pickle --width 64 --height 64
 Using TensorFlow backend.
@@ -1170,7 +1170,7 @@ Using TensorFlow backend.
 
 让我们试试可爱的小猎犬:
 
-```
+```py
 $ python predict.py --image images/dog.jpg --model output/smallvggnet.model \
 	--label-bin output/smallvggnet_lb.pickle --width 64 --height 64
 Using TensorFlow backend.

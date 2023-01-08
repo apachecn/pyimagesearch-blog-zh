@@ -122,7 +122,7 @@ XGBoost 代表极端梯度增强，是梯度增强训练的优化解决方案。
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -151,7 +151,7 @@ $ pip install opencv-contrib-python
 
 由于我们与 Kaggle 合作，我们将使用笔记本和 Kaggle 笔记本来编写代码。对于我们今天的数据集，我们直接使用了来自`sklearn.datasets`的`iris`数据集。我们的目标是看看在我们的代码中使用 XGBoost 有多简单。
 
-```
+```py
 # import necessary packages
 import pandas as pd
 import xgboost as xgb
@@ -168,7 +168,7 @@ from sklearn.metrics import mean_squared_error
 
 现在我们将在代码中直接使用 XGBoost。
 
-```
+```py
 # load the iris dataset and create the dataframe
 iris = load_iris()
 X = pd.DataFrame(iris.data, columns=iris.feature_names)
@@ -177,7 +177,7 @@ y = pd.Series(iris.target)
 
 在**第 9 行**，我们使用`load_iris`功能直接加载所需的数据集，并创建了一个由我们的数据组成的数据框架(**第 10 行和第 11 行**)。
 
-```
+```py
 # split the dataset 
 xTrain, xTest, yTrain, yTest = train_test_split(X, y)
 
@@ -197,7 +197,7 @@ xgbModel = xgb.XGBRegressor(
 *   `gamma`:分支机构拆分损失的最小减少额
 *   `max_depth`:一棵树的最大深度
 
-```
+```py
 # fit the training data in the model
 xgbModel.fit(xTrain, yTrain)
 
@@ -207,7 +207,7 @@ impFeat = pd.DataFrame(xgbModel.feature_importances_.reshape(1, -1), columns=iri
 
 在**第 25 行**上，我们将训练中的数据放入我们的回归模型，并让它进行训练。XGBoost 会自动让我们分离出特性的重要性，我们已经在**第 28 行**完成了。
 
-```
+```py
 # get predictions on test data
 yPred = xgbModel.predict(xTest)
 
@@ -233,7 +233,7 @@ msqErr = mean_squared_error(yPred, yTest)
 
 **Martinez，H.** “使用 XGBoost 扩展 Kaggle 竞赛:第 1 部分”， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva，R. Raha 和 A. Thanki 编辑。，2022，[https:](https://pyimg.co/0c9pb)[//pyimg . co/0c9pb](https://pyimg.co/0c9pb)
 
-```
+```py
 @incollection{Martinez_2022_XGBoost1,
   author = {Hector Martinez},
   title = {Scaling {Kaggle} Competitions Using {XGBoost}: Part 1},

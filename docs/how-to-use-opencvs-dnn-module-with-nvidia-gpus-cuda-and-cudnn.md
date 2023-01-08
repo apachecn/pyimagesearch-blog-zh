@@ -60,7 +60,7 @@ PyImageSearch 的读者非常喜欢 OpenCV 的`dnn`模块的便利性和易用�
 
 为 NVIDIA GPU 推断配置 OpenCV 的“dnn”模块的第一步是安装适当的依赖项:
 
-```
+```py
 $ sudo apt-get update
 $ sudo apt-get upgrade
 $ sudo apt-get install build-essential cmake unzip pkg-config
@@ -81,7 +81,7 @@ $ sudo apt-get install python3-dev
 
 这样做的第一步是下载 OpenCV v4.2 的源代码:
 
-```
+```py
 $ cd ~
 $ wget -O opencv.zip https://github.com/opencv/opencv/archive/4.2.0.zip
 $ wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.2.0.zip
@@ -109,7 +109,7 @@ Python 虚拟环境是 Python 开发的最佳实践。它们允许您在隔离�
 
 如果您还没有安装 Python 的包管理器`pip`，您可以使用下面的命令来安装:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python3 get-pip.py
 
@@ -117,7 +117,7 @@ $ sudo python3 get-pip.py
 
 一旦`pip`安装完毕，您就可以同时安装`virtualenv`和`virtualenvwrapper`:
 
-```
+```py
 $ sudo pip install virtualenv virtualenvwrapper
 $ sudo rm -rf ~/get-pip.py ~/.cache/pip
 
@@ -127,14 +127,14 @@ $ sudo rm -rf ~/get-pip.py ~/.cache/pip
 
 我更喜欢使用`nano`文本编辑器，但是你可以使用你最喜欢的编辑器:
 
-```
+```py
 $ nano ~/.bashrc
 
 ```
 
 打开`~/.bashrc`文件后，滚动到文件底部，插入以下内容:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
@@ -146,7 +146,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 然后，您可以在终端会话中重新加载您的`~/.bashrc`文件:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
@@ -155,7 +155,7 @@ $ source ~/.bashrc
 
 最后一步是创建 Python 虚拟环境:
 
-```
+```py
 $ mkvirtualenv opencv_cuda -p python3
 
 ```
@@ -164,14 +164,14 @@ $ mkvirtualenv opencv_cuda -p python3
 
 然后您应该将 NumPy 安装到`opencv_cuda`环境中:
 
-```
+```py
 $ pip install numpy
 
 ```
 
 如果您关闭了您的终端或者停用了您的 Python 虚拟环境，您可以通过`workon`命令再次访问它:
 
-```
+```py
 $ workon opencv_cuda
 
 ```
@@ -190,7 +190,7 @@ $ workon opencv_cuda
 
 **确定你的 NVIDIA GPU 架构版本最简单的方法之一就是简单地使用`nvidia-smi`命令:**
 
-```
+```py
 $ nvidia-smi
 Mon Jan 27 14:11:32 2020
 +-----------------------------------------------------------------------------+
@@ -250,14 +250,14 @@ Mon Jan 27 14:11:32 2020
 
 要配置构建，首先要确保您在使用 NVIDIA GPU 支持编译 OpenCV 的 Python 虚拟环境中:
 
-```
+```py
 $ workon opencv_cuda
 
 ```
 
 接下来，将目录切换到您下载 OpenCV 源代码的位置，然后创建一个`build`目录:
 
-```
+```py
 $ cd ~/opencv
 $ mkdir build
 $ cd build
@@ -266,7 +266,7 @@ $ cd build
 
 然后，您可以运行下面的`cmake`命令，**确保您根据您在上一节中找到的 NVIDIA GPU 架构版本**设置了`CUDA_ARCH_BIN`变量:
 
-```
+```py
 $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 	-D CMAKE_INSTALL_PREFIX=/usr/local \
 	-D INSTALL_PYTHON_EXAMPLES=ON \
@@ -298,7 +298,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 如果您没有正确设置这个值，OpenCV 仍然可以编译，但是当您试图使用`dnn`模块执行推理时，您会收到以下错误消息:
 
-```
+```py
 File "ssd_object_detection.py", line 74, in 
     detections = net.forward()
 cv2.error: OpenCV(4.2.0) /home/a_rosebrock/opencv/modules/dnn/src/cuda/execution.hpp:52: error: (-217:Gpu API call) invalid device function in function 'make_policy'
@@ -309,7 +309,7 @@ cv2.error: OpenCV(4.2.0) /home/a_rosebrock/opencv/modules/dnn/src/cuda/execution
 
 您可以通过查看输出来验证您的`cmake`命令是否正确执行:
 
-```
+```py
 ...
 --   NVIDIA CUDA:                   YES (ver 10.0, CUFFT CUBLAS FAST_MATH)
 --     NVIDIA GPU arch:             70
@@ -324,7 +324,7 @@ cv2.error: OpenCV(4.2.0) /home/a_rosebrock/opencv/modules/dnn/src/cuda/execution
 
 我还喜欢看`OpenCV modules`部分，尤其是`To be built`部分:
 
-```
+```py
 --   OpenCV modules:
 --     To be built:                 aruco bgsegm bioinspired calib3d ccalib core cudaarithm cudabgsegm cudacodec cudafeatures2d cudafilters cudaimgproc cudalegacy cudaobjdetect cudaoptflow cudastereo cudawarping cudev datasets dnn dnn_objdetect dnn_superres dpm face features2d flann fuzzy gapi hdf hfs highgui img_hash imgcodecs imgproc line_descriptor ml objdetect optflow phase_unwrapping photo plot python3 quality reg rgbd saliency shape stereo stitching structured_light superres surface_matching text tracking ts video videoio videostab xfeatures2d ximgproc xobjdetect xphoto
 --     Disabled:                    world
@@ -340,7 +340,7 @@ cv2.error: OpenCV(4.2.0) /home/a_rosebrock/opencv/modules/dnn/src/cuda/execution
 
 您还可以查看`Python 3`部分来验证您的`Interpreter`和`numpy`都指向您的 Python 虚拟环境:
 
-```
+```py
 --   Python 3:
 --     Interpreter:                 /home/a_rosebrock/.virtualenvs/opencv_cuda/bin/python3 (ver 3.5.3)
 --     Libraries:                   /usr/lib/x86_64-linux-gnu/libpython3.5m.so (ver 3.5.3)
@@ -357,7 +357,7 @@ cv2.error: OpenCV(4.2.0) /home/a_rosebrock/opencv/modules/dnn/src/cuda/execution
 
 假设`cmake`没有错误地退出，那么您可以使用以下命令在 NVIDIA GPU 支持下编译 OpenCV:
 
-```
+```py
 $ make -j8
 
 ```
@@ -374,7 +374,7 @@ $ make -j8
 
 您可能会看到以下常见错误:
 
-```
+```py
 $ make
 make: * No targets specified and no makefile found.  Stop.
 
@@ -386,7 +386,7 @@ make: * No targets specified and no makefile found.  Stop.
 
 假设您从**步骤#7** 发出的`make`命令成功完成，您现在可以通过以下方式安装 OpenCV:
 
-```
+```py
 $ sudo make install
 $ sudo ldconfig
 
@@ -402,7 +402,7 @@ $ sudo ldconfig
 
 我可以使用`ls`命令来确认位置:
 
-```
+```py
 $ ls -l /usr/local/lib/python3.5/site-packages/cv2/python-3.5
 total 7168
 -rw-r--r-
@@ -414,7 +414,7 @@ total 7168
 
 现在我知道了 OpenCV 绑定的位置，我需要使用`ln`命令将它们符号链接到我的 Python 虚拟环境中:
 
-```
+```py
 $ cd ~/.virtualenvs/opencv_cuda/lib/python3.5/site-packages/
 $ ln -s /usr/local/lib/python3.5/site-packages/cv2/python-3.5/cv2.cpython-35m-x86_64-linux-gnu.so cv2.so
 
@@ -433,7 +433,7 @@ $ ln -s /usr/local/lib/python3.5/site-packages/cv2/python-3.5/cv2.cpython-35m-x8
 
 让我们从验证我们可以导入`cv2`库开始:
 
-```
+```py
 $ workon opencv_cuda
 $ python
 Python 3.5.3 (default, Sep 27 2018, 17:25:39)
@@ -454,7 +454,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 接下来，让我们验证 OpenCV 的“dnn”模块可以访问我们的 GPU。确保 OpenCV 的“dnn”模块使用 GPU 的关键可以通过在模型加载后和推理执行前立即添加下面两行代码*:*
 
-```
+```py
 net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
 net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 
@@ -466,7 +466,7 @@ net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python ssd_object_detection.py --prototxt MobileNetSSD_deploy.prototxt \
 	--model MobileNetSSD_deploy.caffemodel \
 	--input guitar.mp4 --output output.avi \
@@ -484,7 +484,7 @@ $ python ssd_object_detection.py --prototxt MobileNetSSD_deploy.prototxt \
 
 然后，我可以将我的输出与只使用 CPU(即没有 GPU)的输出进行比较:
 
-```
+```py
 $ python ssd_object_detection.py --prototxt MobileNetSSD_deploy.prototxt \
 	--model MobileNetSSD_deploy.caffemodel --input guitar.mp4 \
 	--output output.avi --display 0
@@ -504,7 +504,7 @@ $ python ssd_object_detection.py --prototxt MobileNetSSD_deploy.prototxt \
 
 如果设置不正确，在运行上一节中的`ssd_object_detection.py`脚本时，您可能会遇到以下错误:
 
-```
+```py
 File "real_time_object_detection.py", line 74, in 
     detections = net.forward()
 cv2.error: OpenCV(4.2.0) /home/a_rosebrock/opencv/modules/dnn/src/cuda/execution.hpp:52: error: (-217:Gpu API call) invalid device function in function 'make_policy'
@@ -517,7 +517,7 @@ cv2.error: OpenCV(4.2.0) /home/a_rosebrock/opencv/modules/dnn/src/cuda/execution
 
 我也建议你*删除*你的`build`目录，在运行`cmake`和`make`之前*重新创建:*
 
-```
+```py
 $ cd ~/opencv
 $ rm -rf build
 $ mkdir build

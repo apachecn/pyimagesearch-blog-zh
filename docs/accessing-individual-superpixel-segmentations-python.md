@@ -47,7 +47,7 @@
 
 打开编辑器，创建一个名为`superpixel_segments.py`的文件，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 from skimage.segmentation import slic
 from skimage.segmentation import mark_boundaries
@@ -72,7 +72,7 @@ args = vars(ap.parse_args())
 
 现在，让我们执行实际的分段:
 
-```
+```py
 # load the image and apply SLIC and extract (approximately)
 # the supplied number of segments
 image = cv2.imread(args["image"])
@@ -101,7 +101,7 @@ plt.show()
 
 如果你知道面具是如何工作的，这其实很简单:
 
-```
+```py
 # loop over the unique segment values
 for (i, segVal) in enumerate(np.unique(segments)):
 	# construct a mask for the segment
@@ -130,7 +130,7 @@ for (i, segVal) in enumerate(np.unique(segments)):
 
 要查看我们的工作结果，请打开一个 shell 并执行以下命令:
 
-```
+```py
 $ python superpixel_segments.py --image nedry.png
 
 ```

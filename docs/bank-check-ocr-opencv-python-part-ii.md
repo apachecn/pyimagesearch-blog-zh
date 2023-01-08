@@ -44,7 +44,7 @@
 
 也就是说，让我们打开一个新文件，将其命名为`bank_check_ocr.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from skimage.segmentation import clear_border
 from imutils import contours
@@ -68,7 +68,7 @@ import cv2
 
 现在我们已经安装了依赖项，让我们*快速回顾一下*上周在本系列第一部分中提到的函数:
 
-```
+```py
 def extract_digits_and_symbols(image, charCnts, minW=5, minH=15):
 	# grab the internal Python iterator for the list of character
 	# contours, then  initialize the character ROI and location
@@ -101,7 +101,7 @@ def extract_digits_and_symbols(image, charCnts, minW=5, minH=15):
 
 在**行** **29** 我们检查轮廓的外接矩形是否至少和一个手指一样宽和一样高。如果是，我们提取并附加`roi` ( **行 31 和 32** )，然后将 ROI 的位置附加到`locs` ( **行 33** )。否则，我们将采取以下措施:
 
-```
+```py
 			# otherwise, we are examining one of the special symbols
 			else:
 				# MICR symbols include three separate parts, so we
@@ -135,7 +135,7 @@ def extract_digits_and_symbols(image, charCnts, minW=5, minH=15):
 
 最后，我们需要捕捉一个`StopIteration`异常来优雅地退出我们的函数:
 
-```
+```py
 		# we have reached the end of the iterator; gracefully break
 		# from the loop
 		except StopIteration:
@@ -154,7 +154,7 @@ def extract_digits_and_symbols(image, charCnts, minW=5, minH=15):
 
 现在是时候接触新材料了。首先，我们将浏览几个代码块，大家应该也有点熟悉:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -169,7 +169,7 @@ args = vars(ap.parse_args())
 
 让我们初始化我们的特殊字符(因为它们在 OpenCV 中不能用 Unicode 表示)并预处理我们的参考图像:
 
-```
+```py
 # initialize the list of reference character names, in the same
 # order as they appear in the reference image where the digits
 # their names and:
@@ -203,7 +203,7 @@ ref = cv2.threshold(ref, 0, 255, cv2.THRESH_BINARY_INV |
 
 现在我们准备在`ref`中查找轮廓并进行分类:
 
-```
+```py
 # find contours in the MICR image (i.e,. the outlines of the
 # characters) and sort them from left to right
 refCnts = cv2.findContours(ref.copy(), cv2.RETR_EXTERNAL,
@@ -219,7 +219,7 @@ refCnts = contours.sort_contours(refCnts, method="left-to-right")[0]
 
 在这一点上，我们有一个有组织的参考轮廓。下一步是提取数字和符号，然后构建字符 ROI 字典:
 
-```
+```py
 # extract the digits and symbols from the list of contours, then
 # initialize a dictionary to map the character name to the ROI
 refROIs = extract_digits_and_symbols(ref, refCnts,
@@ -241,7 +241,7 @@ for (name, roi) in zip(charNames, refROIs):
 
 接下来，我们将实例化一个内核，加载并提取支票图像底部的 20%，其中包含帐号:
 
-```
+```py
 # initialize a rectangular kernel (wider than it is tall) along with
 # an empty list to store the output of the check OCR
 rectKernel = cv2.getStructuringElement(cv2.MORPH_RECT, (17, 7))
@@ -271,7 +271,7 @@ bottom = image[delta:h, 0:w]
 
 接下来，让我们将支票转换为灰度并应用形态学变换:
 
-```
+```py
 # convert the bottom image to grayscale, then apply a blackhat
 # morphological operator to find dark regions against a light
 # background (i.e., the routing and account numbers)
@@ -290,7 +290,7 @@ blackhat = cv2.morphologyEx(gray, cv2.MORPH_BLACKHAT, rectKernel)
 
 现在让我们计算在 *x* 方向上的沙尔梯度:
 
-```
+```py
 # compute the Scharr gradient of the blackhat image, then scale
 # the rest back into the range [0, 255]
 gradX = cv2.Sobel(blackhat, ddepth=cv2.CV_32F, dx=1, dy=0,
@@ -312,7 +312,7 @@ gradX = gradX.astype("uint8")
 
 让我们看看是否可以缩小字符之间的间隙，并将图像二值化:
 
-```
+```py
 # apply a closing operation using the rectangular kernel to help
 # cloes gaps in between rounting and account digits, then apply
 # Otsu's thresholding method to binarize the image
@@ -332,7 +332,7 @@ Figure 7: Thresholding our gradient magnitude representation reveals possible re
 
 在预处理支票图像时，我们的形态学+阈值操作无疑会留下“假阳性”检测区域，我们可以应用一些额外的处理来帮助消除这些操作:
 
-```
+```py
 # remove any pixels that are touching the borders of the image (this
 # simply helps us in the next step when we prune contours)
 thresh = clear_border(thresh)
@@ -347,7 +347,7 @@ thresh = clear_border(thresh)
 
 如上图所示，我们已经清楚地在支票上找到了三组数字。但是，我们实际上是如何从每一个个体群体中提取出 T1 的呢？下面的代码块将向我们展示如何操作:
 
-```
+```py
 # find contours in the thresholded image, then initialize the
 # list of group locations
 groupCnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
@@ -386,7 +386,7 @@ groupLocs = sorted(groupLocs, key=lambda x:x[0])
 
 接下来，让我们循环一遍组位置:
 
-```
+```py
 # loop over the group locations
 for (gX, gY, gW, gH) in groupLocs:
 	# initialize the group output of characters
@@ -426,7 +426,7 @@ for (gX, gY, gW, gH) in groupLocs:
 
 现在，让我们用函数提取数字和符号，然后在`rois`上循环:
 
-```
+```py
 	# find the characters and symbols in the group
 	(rois, locs) = extract_digits_and_symbols(group, charCnts)
 
@@ -468,7 +468,7 @@ for (gX, gY, gW, gH) in groupLocs:
 
 接下来，我们将利用原始的`image`将`groupOutput`结果附加到一个名为`output`的列表中。
 
-```
+```py
 	# draw (padded) bounding box surrounding the group along with
 	# the OCR output of the group
 	cv2.rectangle(image, (gX - 10, gY + delta - 10),
@@ -488,7 +488,7 @@ for (gX, gY, gW, gH) in groupLocs:
 
 我们的最后一步是将 OCR 文本写入我们的终端，并显示最终的输出图像:
 
-```
+```py
 # display the output check OCR information to the screen
 print("Check OCR: {}".format(" ".join(output)))
 cv2.imshow("Check OCR", image)
@@ -506,7 +506,7 @@ cv2.waitKey(0)
 
 从那里，执行以下命令:
 
-```
+```py
 $ python bank_check_ocr.py --image example_check.png \
 	--reference micr_e13b_reference.png
 

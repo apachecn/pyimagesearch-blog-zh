@@ -111,7 +111,7 @@
 
 要访问 Python 虚拟环境，只需通过以下方式激活它:
 
-```
+```py
 $ workon py3cv4
 ```
 
@@ -157,7 +157,7 @@ Raspberry Pi 用户会很高兴地知道，你在抽屉里为启示录(即，深
 
 在里面你会发现一个名为`test_camera_nano.py`的单独的 Python 脚本。现在我们来回顾一下:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 import imutils
@@ -184,7 +184,7 @@ time.sleep(2.0)
 
 现在我们的相机流已经准备好了，我们将循环帧并用 OpenCV 显示它们:
 
-```
+```py
 # loop over frames
 while True:
 	# grab the next frame
@@ -216,13 +216,13 @@ cv2.destroyAllWindows()
 
 然后，激活您的虚拟环境(它是在上预先配置的。img):
 
-```
+```py
 $ workon py3cv4
 ```
 
 从那里，执行脚本:
 
-```
+```py
 $ python test_camera_nano.py
 ```
 

@@ -84,7 +84,7 @@ AND 和 OR 都是线性可分的——我们可以清楚地画出一条线来区
 
 现在我们已经学习了感知器算法，让我们用 Python 实现实际的算法。在您的`pyimagesearch.nn`包中创建一个名为`perceptron.py`的文件——这个文件将存储我们实际的`Perceptron`实现:
 
-```
+```py
 |--- pyimagesearch
 |    |--- __init__.py
 |    |--- nn
@@ -94,7 +94,7 @@ AND 和 OR 都是线性可分的——我们可以清楚地画出一条线来区
 
 创建文件后，打开它，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 
@@ -114,7 +114,7 @@ class Perceptron:
 
 接下来，让我们定义`step`函数:
 
-```
+```py
 	def step(self, x):
 		# apply the step function
 		return 1 if x > 0 else 0
@@ -124,7 +124,7 @@ class Perceptron:
 
 为了实际训练感知器，我们将定义一个名为`fit`的函数。如果你以前有过机器学习、Python 和 scikit-learn 库的经验，那么你会知道将你的训练过程函数命名为`fit`是很常见的，比如*“根据数据拟合模型”*:
 
-```
+```py
 	def fit(self, X, y, epochs=10):
 		# insert a column of 1's as the last entry in the feature
 		# matrix -- this little trick allows us to treat the bias
@@ -140,7 +140,7 @@ class Perceptron:
 
 接下来，让我们回顾一下实际的培训程序:
 
-```
+```py
 		# loop over the desired number of epochs
 		for epoch in np.arange(0, epochs):
 			# loop over each individual data point
@@ -170,7 +170,7 @@ class Perceptron:
 
 我们需要定义的最后一个函数是`predict`，顾名思义，它用于*预测*给定输入数据集的类别标签:
 
-```
+```py
 	def predict(self, X, addBias=True):
 		# ensure our input is a matrix
 		X = np.atleast_2d(X)
@@ -197,7 +197,7 @@ class Perceptron:
 
 首先，让我们创建一个名为`perceptron_or.py`的文件，该文件试图将感知器模型与按位 OR 数据集相匹配:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.nn import Perceptron
 import numpy as np
@@ -218,7 +218,7 @@ p.fit(X, y, epochs=20)
 
 然后，我们可以根据数据评估我们的感知器，以验证它确实学习了 OR 函数:
 
-```
+```py
 # now that our perceptron is trained we can evaluate it
 print("[INFO] testing perceptron...")
 
@@ -237,7 +237,7 @@ for (x, target) in zip(X, y):
 
 要查看我们的感知器算法是否能够学习 OR 函数，只需执行以下命令:
 
-```
+```py
 $ python perceptron_or.py 
 [INFO] training perceptron...
 [INFO] testing perceptron...
@@ -251,7 +251,7 @@ $ python perceptron_or.py
 
 现在，让我们继续讨论 AND 函数——创建一个名为`perceptron_and.py`的新文件，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.nn import Perceptron
 import numpy as np
@@ -281,7 +281,7 @@ for (x, target) in zip(X, y):
 
 执行以下命令，我们可以评估 and 函数上的感知器:
 
-```
+```py
 $ python perceptron_and.py 
 [INFO] training perceptron...
 [INFO] testing perceptron...
@@ -295,7 +295,7 @@ $ python perceptron_and.py
 
 最后，我们来看看`perceptron_xor.py`内部的非线性可分 XOR 函数:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.nn import Perceptron
 import numpy as np
@@ -325,7 +325,7 @@ for (x, target) in zip(X, y):
 
 执行以下命令，我们可以看到感知器*无法*学习这种非线性关系:
 
-```
+```py
 $ python perceptron_xor.py 
 [INFO] training perceptron...
 [INFO] testing perceptron...

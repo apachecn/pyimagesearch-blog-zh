@@ -10,7 +10,7 @@
 
 下面是我加载图像的 Python 脚本，循环遍历网络的每一层，然后将每个输出图像写入文件:
 
-```
+```py
 # import the necessary packages
 from __future__ import print_function
 from batcountry import BatCountry
@@ -77,7 +77,7 @@ bc.cleanup()
 
 然后，我使用以下命令执行 Python 脚本:
 
-```
+```py
 $ python visualize_layers.py \
  	--base-model $CAFFE_ROOT/caffe/models/bvlc_googlenet \
  	--image images/jp.jpg --output output/jp

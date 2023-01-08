@@ -140,7 +140,7 @@
 
 确保您使用了本教程的 ***【下载】*** 部分来下载源代码。从那里，让我们检查项目目录结构:
 
-```
+```py
 $ tree . --dirsfirst
 .
 └── build_siamese_pairs.py
@@ -154,7 +154,7 @@ $ tree . --dirsfirst
 
 打开`build_siamese_pairs.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.datasets import mnist
 from imutils import build_montages
@@ -166,7 +166,7 @@ import cv2
 
 我们将使用 MNIST 数字数据集作为我们的样本数据集(为了方便起见)。也就是说，我们的`make_pairs`函数将与任何图像数据集的*一起工作，只要你提供两个单独的`image`和`labels`数组(你将在下一个代码块中学习如何做)。*
 
-```
+```py
 def make_pairs(images, labels):
 	# initialize two empty lists to hold the (image, image) pairs and
 	# labels to indicate if a pair is positive or negative
@@ -176,7 +176,7 @@ def make_pairs(images, labels):
 
 下一步是计算数据集中唯一类标签的总数:
 
-```
+```py
 	# calculate the total number of classes present in the dataset
 	# and then build a list of indexes for each class label that
 	# provides the indexes for all examples with a given label
@@ -188,7 +188,7 @@ def make_pairs(images, labels):
 
 **第 17 行**然后使用 Python 数组理解为每个类标签构建一个索引列表。为了提高性能，我们在这里使用 Python 列表理解；然而，这段代码可能有点难以理解，所以让我们将它分解为一个专用的`for`循环，以及一些`print`语句:
 
-```
+```py
 >>> for i in range(0, numClasses):
 >>>	idxs = np.where(labels == i)[0]
 >>>	print("{}: {} {}".format(i, len(idxs), idxs))
@@ -209,7 +209,7 @@ def make_pairs(images, labels):
 
 给定我们的`idx`循环列表，让我们现在开始产生我们的积极和消极对:
 
-```
+```py
 	# loop over all images
 	for idxA in range(len(images)):
 		# grab the current image and label belonging to the current
@@ -230,7 +230,7 @@ def make_pairs(images, labels):
 
 接下来，让我们生成我们的**负对:**
 
-```
+```py
 		# grab the indices for each of the class labels *not* equal to
 		# the current label and randomly pick an image corresponding
 		# to a label *not* equal to the current label
@@ -247,7 +247,7 @@ def make_pairs(images, labels):
 
 **第 39 行**抓取`labels` *不*等于当前`label`的所有索引。然后，我们随机选择这些指标中的一个作为我们的负面图像，`negImage` ( **Line 40** )。
 
-```
+```py
 # load MNIST dataset and scale the pixel values to the range of [0, 1]
 print("[INFO] loading MNIST dataset...")
 (trainX, trainY), (testX, testY) = mnist.load_data()
@@ -266,7 +266,7 @@ images = []
 
 然后，我们在**行 55 和 56** 上生成训练和测试对。
 
-```
+```py
 # loop over a sample of our training pairs
 for i in np.random.choice(np.arange(0, len(pairTrain)), size=(49,)):
 	# grab the current image pair and label
@@ -301,7 +301,7 @@ for i in np.random.choice(np.arange(0, len(pairTrain)), size=(49,)):
 
 这里的最后一步是构建我们的蒙太奇并将其显示到我们的屏幕上:
 
-```
+```py
 # construct the montage for the images
 montage = build_montages(images, (96, 51), (7, 7))[0]
 
@@ -320,7 +320,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python build_siamese_pairs.py
 [INFO] loading MNIST dataset...
 [INFO] preparing positive and negative pairs...

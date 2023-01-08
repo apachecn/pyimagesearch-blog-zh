@@ -53,7 +53,7 @@
 
 Redis 非常容易安装。下面是在您的系统上下载、解压缩和安装 Redis 的命令:
 
-```
+```py
 $ wget http://download.redis.io/redis-stable.tar.gz
 $ tar xvzf redis-stable.tar.gz
 $ cd redis-stable
@@ -64,7 +64,7 @@ $ sudo make install
 
 要启动 Redis 服务器，请使用以下命令:
 
-```
+```py
 $ redis-server
 
 ```
@@ -73,7 +73,7 @@ $ redis-server
 
 在另一个终端中，您可以验证 Redis 已经启动并正在运行:
 
-```
+```py
 $ redis-cli ping
 PONG
 
@@ -94,7 +94,7 @@ PONG
 
 您还需要在虚拟环境中安装以下软件包:
 
-```
+```py
 $ workon dl4cv
 $ pip install flask
 $ pip install gevent
@@ -117,7 +117,7 @@ $ pip install redis
 
 让我们打开`run_keras_server.py`并一起走过它:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.applications import ResNet50
 from tensorflow.keras.preprocessing.image import img_to_array
@@ -144,7 +144,7 @@ import io
 
 从这里，让我们初始化将在整个`run_keras_server.py`中使用的常数:
 
-```
+```py
 # initialize constants used to control image spatial dimensions and
 # data type
 IMAGE_WIDTH = 224
@@ -167,7 +167,7 @@ CLIENT_SLEEP = 0.25
 
 让我们启动 Flask 应用程序和 Redis 服务器:
 
-```
+```py
 # initialize our Flask application, Redis server, and Keras model
 app = flask.Flask(__name__)
 db = redis.StrictRedis(host="localhost", port=6379, db=0)
@@ -183,7 +183,7 @@ model = None
 
 接下来，让我们处理图像的序列化:
 
-```
+```py
 def base64_encode_image(a):
 	# base64 encode the input NumPy array
 	return base64.b64encode(a).decode("utf-8")
@@ -215,7 +215,7 @@ Redis 将作为我们在服务器上的临时数据存储。图像将通过各�
 
 让我们预处理我们的图像:
 
-```
+```py
 def prepare_image(image, target):
 	# if the image mode is not RGB, convert it
 	if image.mode != "RGB":
@@ -235,7 +235,7 @@ def prepare_image(image, target):
 
 在这里，我们将定义我们的分类方法:
 
-```
+```py
 def classify_process():
 	# load the pre-trained Keras model (here we are using a model
 	# pre-trained on ImageNet and provided by Keras, but you can
@@ -254,7 +254,7 @@ def classify_process():
 
 加载模型后，该线程将不断轮询新图像，然后对它们进行分类:
 
-```
+```py
 	# continually pool for new images to classify
 	while True:
 		# attempt to grab a batch of images from the database, then
@@ -294,7 +294,7 @@ def classify_process():
 
 让我们完成循环和函数:
 
-```
+```py
 		# check to see if we need to process the batch
 		if len(imageIDs) > 0:
 			# classify the batch
@@ -337,7 +337,7 @@ def classify_process():
 
 接下来让我们处理 REST API 的`/predict`端点:
 
-```
+```py
 @app.route("/predict", methods=["POST"])
 def predict():
 	# initialize the data dictionary that will be returned from the
@@ -380,7 +380,7 @@ def predict():
 
 让我们轮询服务器以返回预测:
 
-```
+```py
 			# keep looping until our model server returns the output
 			# predictions
 			while True:
@@ -428,7 +428,7 @@ def predict():
 
 为了演示我们的 Keras REST API，我们需要一个`__main__`函数来实际启动服务器:
 
-```
+```py
 # if this is the main thread of execution first load the model and
 # then start the server
 if __name__ == "__main__":
@@ -451,14 +451,14 @@ if __name__ == "__main__":
 
 从这里，让我们启动 Redis 服务器(如果它还没有运行的话):
 
-```
+```py
 $ redis-server
 
 ```
 
 然后，在一个单独的终端中，让我们启动 REST API Flask 服务器:
 
-```
+```py
 $ python run_keras_server.py 
 Using TensorFlow backend.
  * Loading Keras model and Flask starting server...please wait until server has fully started
@@ -479,14 +479,14 @@ Using TensorFlow backend.
 
 cURL 工具预装在大多数(基于 Unix 的)操作系统上。我们可以通过使用以下命令在`/predict`端点将图像文件发布到我们的深度学习 REST API:
 
-```
+```py
 $ curl -X POST -F image=@jemma.png 'http://localhost:5000/predict'
 
 ```
 
 您将在终端上收到 JSON 格式的预测:
 
-```
+```py
 {
   "predictions": [
     {
@@ -517,7 +517,7 @@ $ curl -X POST -F image=@jemma.png 'http://localhost:5000/predict'
 
 让我们尝试传递另一个图像，这次是一架航天飞机:
 
-```
+```py
 $ curl -X POST -F image=@space_shuttle.png 'http://localhost:5000/predict'
 {
   "predictions": [
@@ -561,7 +561,7 @@ $ curl -X POST -F image=@space_shuttle.png 'http://localhost:5000/predict'
 
 让我们回顾一下`simple_request.py`:
 
-```
+```py
 # import the necessary packages
 import requests
 
@@ -580,7 +580,7 @@ IMAGE_PATH = "jemma.png"
 
 让我们加载图像并将其发送到服务器:
 
-```
+```py
 # load the input image and construct the payload for the request
 image = open(IMAGE_PATH, "rb").read()
 payload = {"image": image}
@@ -611,7 +611,7 @@ else:
 
 将脚本投入使用很容易。打开一个终端并执行以下命令(当然，前提是我们的 Flask 服务器和 Redis 服务器都在运行)。
 
-```
+```py
 $ python simple_request.py
 1\. beagle: 0.9462
 2\. bluetick: 0.0320
@@ -627,14 +627,14 @@ $ python simple_request.py
 
 对于`space_shuttle.png`，只需修改`IMAGE_PATH`变量:
 
-```
+```py
 IMAGE_PATH = "space_shuttle.png"
 
 ```
 
 从那里，再次运行脚本:
 
-```
+```py
 $ python simple_request.py
 1\. space_shuttle: 0.9918
 2\. missile: 0.0060

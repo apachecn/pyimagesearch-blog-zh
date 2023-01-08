@@ -115,14 +115,14 @@ TensorFlow 2.0 包含一个完整的生态系统，由 TensorFlow Lite(用于移
 
 对于您的大多数项目来说，这很简单，只需将您的`import`行从:
 
-```
+```py
 from keras... import ...
 
 ```
 
 给`import`加上`tensorflow`的前缀:
 
-```
+```py
 from tensorflow.keras... import ...
 
 ```
@@ -173,7 +173,7 @@ TensorFlow v1.10 是 TensorFlow 第一个在`tf.keras`中包含`keras`分支的�
 
 在`tf.keras`中使用 Keras API 的 TensorFlow 1.10+用户将熟悉如何创建一个`Session`来训练他们的模型:
 
-```
+```py
 with tf.Session() as session:
 	session.run(tf.global_variables_initializer())
 	session.run(tf.tables_initializer())
@@ -184,7 +184,7 @@ with tf.Session() as session:
 
 创建`Session`对象并要求提前构建整个模型图有点麻烦，因此 TensorFlow 2.0 引入了[急切执行](https://www.tensorflow.org/guide/eager)的概念，从而将代码简化为:
 
-```
+```py
 model.fit(X_train, y_train, validation_data=(X_valid, y_valid),
 	epochs=10, batch_size=64)
 
@@ -214,7 +214,7 @@ TensorFlow 1.x 的定制实现至少可以说是笨拙的——还有很多需�
 
 为了利用`GradientTape`,我们需要做的就是实现我们的模型架构:
 
-```
+```py
 # Define our model architecture
 model = tf.keras.Sequential([
     tf.keras.layers.Dropout(rate=0.2, input_shape=X.shape[1:]),
@@ -227,7 +227,7 @@ model = tf.keras.Sequential([
 
 定义我们的损失函数和优化器:
 
-```
+```py
 # Define loss and optimizer
 loss_func = tf.keras.losses.BinaryCrossentropy()
 optimizer = tf.keras.optimizers.Adam()
@@ -236,7 +236,7 @@ optimizer = tf.keras.optimizers.Adam()
 
 创建负责执行单个批量更新的函数:
 
-```
+```py
 def train_loop(features, labels):
     # Define the GradientTape context
     with tf.GradientTape() as tape:
@@ -254,7 +254,7 @@ def train_loop(features, labels):
 
 然后训练模型:
 
-```
+```py
 # Train the model
 def train_model():
     start = time.time()
@@ -285,7 +285,7 @@ train_model()
 
 **我将在下周就这三种方法做一个专门的教程，但是现在，**让我们来看看如何使用(1) TensorFlow 2.0，(2) `tf.keras`，和(3)模型子类化特性实现一个基于开创性 LeNet 架构的简单 CNN:
 
-```
+```py
 class LeNet(tf.keras.Model):
     def __init__(self):
         super(LeNet, self).__init__()
@@ -346,7 +346,7 @@ TensorFlow 2.0 和`tf.keras`通过他们的`MirroredStrategy` 提供了更好的
 
 您可以通过首先创建您的`MirroredStrategy`:
 
-```
+```py
 strategy = tf.distribute.MirroredStrategy()
 print ('Number of devices: {}'.format(strategy.num_replicas_in_sync))
 
@@ -354,7 +354,7 @@ print ('Number of devices: {}'.format(strategy.num_replicas_in_sync))
 
 然后您需要声明您的模型架构，并在`strategy`的范围内编译它:
 
-```
+```py
 # Call the distribution scope context manager
 with strategy.scope():
     # Define a model to fit the above data
@@ -374,7 +374,7 @@ with strategy.scope():
 
 在那里，您可以调用`.fit`来训练模型:
 
-```
+```py
 # Train the model
 model.fit(X, y, epochs=5)
 

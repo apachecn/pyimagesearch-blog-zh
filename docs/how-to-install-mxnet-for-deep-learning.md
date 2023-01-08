@@ -43,7 +43,7 @@ GPU 的安装要复杂得多，有可能出错。这些说明已经过测试，�
 
 首先，你要确保你的 Ubuntu 16.04 或 14.04 系统是最新的。您可以执行以下命令从 Ubuntu 存储库中更新软件包:
 
-```
+```py
 $ sudo apt-get update
 $ sudo apt-get upgrade
 
@@ -51,7 +51,7 @@ $ sudo apt-get upgrade
 
 接下来，让我们安装一些开发工具、图像/视频 I/O、GUI 操作和其他包(并非所有这些都是 100%必要的，但如果你在深度学习或机器学习领域工作，你会希望安装它们):
 
-```
+```py
 $ sudo apt-get install build-essential cmake git unzip pkg-config
 $ sudo apt-get install libjpeg-dev libtiff5-dev libjasper-dev libpng12-dev
 $ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
@@ -65,7 +65,7 @@ $ sudo apt-get install python-tk python3-tk python-imaging-tk
 
 第三，让我们安装 Python 头文件:
 
-```
+```py
 $ sudo apt-get install python2.7-dev python3-dev
 
 ```
@@ -84,7 +84,7 @@ $ sudo apt-get install python2.7-dev python3-dev
 
 让我们安装`pip`:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python get-pip.py
 $ sudo python3 get-pip.py
@@ -93,7 +93,7 @@ $ sudo python3 get-pip.py
 
 然后，我们需要 pip-安装我们将使用的两个 Python 虚拟环境库:
 
-```
+```py
 $ sudo pip install virtualenv virtualenvwrapper
 $ sudo rm -rf ~/.cache/pip get-pip.py
 
@@ -101,7 +101,7 @@ $ sudo rm -rf ~/.cache/pip get-pip.py
 
 现在让我们更新我们的`~/.bashrc`文件，在文件的底部包含以下几行:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
@@ -115,7 +115,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 既然`~/.bashrc`已经更改，我们需要重新加载它:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
@@ -126,7 +126,7 @@ $ source ~/.bashrc
 
 出于我的[深度学习书籍](https://pyimagesearch.com/deep-learning-computer-vision-python-book/)的目的，我们使用 Python 3，所以让我们在我们的系统上创建一个名为`dl4cv`的 Python 3 环境。这个环境将容纳深度学习和计算机视觉的相关包，特别是 mxnet。
 
-```
+```py
 $ mkvirtualenv dl4cv -p python3
 
 ```
@@ -139,7 +139,7 @@ $ mkvirtualenv dl4cv -p python3
 
 为此，只需使用`workon`命令:
 
-```
+```py
 $ workon dl4cv
 
 ```
@@ -154,7 +154,7 @@ $ workon dl4cv
 
 要退出您的环境，只需停用它:
 
-```
+```py
 $ deactivate
 
 ```
@@ -169,7 +169,7 @@ $ deactivate
 
 首先，我们将把 NumPy 安装到虚拟环境中:
 
-```
+```py
 $ workon dl4cv
 $ pip install numpy
 
@@ -179,7 +179,7 @@ $ pip install numpy
 
 接下来，让我们将 [opencv](https://github.com/Itseez/opencv) 和 [opencv_contrib](https://github.com/itseez/opencv_contrib) 下载到您的主目录中:
 
-```
+```py
 $ cd ~
 $ wget -O opencv.zip https://github.com/Itseez/opencv/archive/3.3.1.zip
 $ wget -O opencv_contrib.zip https://github.com/Itseez/opencv_contrib/archive/3.3.1.zip
@@ -190,7 +190,7 @@ $ wget -O opencv_contrib.zip https://github.com/Itseez/opencv_contrib/archive/3.
 
 然后，让我们解压缩这两个文件:
 
-```
+```py
 $ unzip opencv.zip
 $ unzip opencv_contrib.zip
 
@@ -200,7 +200,7 @@ $ unzip opencv_contrib.zip
 
 让我们创建一个`build`目录并运行 CMake:
 
-```
+```py
 $ cd ~/opencv-3.3.1/
 $ mkdir build
 $ cd build
@@ -235,7 +235,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 现在我们已经准备好编译 OpenCV 了。假设您的`cmake`命令已正确退出，确保您在`build`目录中并执行以下命令:
 
-```
+```py
 $ make -j4
 
 ```
@@ -244,7 +244,7 @@ $ make -j4
 
 从那里，你需要做的就是安装 OpenCV 3.3，然后如果你愿意的话，释放一些磁盘空间:
 
-```
+```py
 $ sudo make install
 $ sudo ldconfig
 $ cd ~
@@ -257,7 +257,7 @@ $ rm -rf opencv_contrib-3.3.1 opencv_contrib.zip
 
 要将 OpenCV 绑定符号链接到`dl4cv`虚拟环境中，发出以下命令:
 
-```
+```py
 $ cd ~/.virtualenvs/dl4cv/lib/python3.5/site-packages/
 $ ln -s /usr/local/lib/python3.5/site-packages/cv2.cpython-35m-x86_64-linux-gnu.so cv2.so
 $ cd ~
@@ -274,7 +274,7 @@ $ cd ~
 
 现在我们已经安装并链接了 OpenCV 3.3，让我们做一个快速的健全性测试来看看事情是否正常:
 
-```
+```py
 $ workon dl4cv
 $ python
 >>> import cv2
@@ -300,7 +300,7 @@ $ python
 
 让我们克隆 mxnet 存储库和检验分支`0.11.0` —一个与我的书 [*一起使用的分支，用 Python 进行计算机视觉的深度学习*](https://pyimagesearch.com/deep-learning-computer-vision-python-book/) :
 
-```
+```py
 $ cd ~
 $ git clone --recursive https://github.com/apache/incubator-mxnet.git mxnet --branch 0.11.0
 
@@ -308,7 +308,7 @@ $ git clone --recursive https://github.com/apache/incubator-mxnet.git mxnet --br
 
 然后我们可以编译 mxnet:
 
-```
+```py
 $ cd mxnet
 $ make -j4 \
 	USE_OPENCV=1 \
@@ -318,7 +318,7 @@ $ make -j4 \
 
 最后，我们需要将 mxnet 符号链接到我们的 dl4cv 环境:
 
-```
+```py
 $ cd ~/.virtualenvs/dl4cv/lib/python3.5/site-packages/
 $ ln -s ~/mxnet/python/mxnet mxnet
 $ cd ~
@@ -333,7 +333,7 @@ $ cd ~
 
 首先，我们需要准备我们的系统，用 NVIDIA CUDA 驱动程序替换默认驱动程序:
 
-```
+```py
 $ sudo apt-get install linux-image-generic linux-image-extra-virtual
 $ sudo apt-get install linux-source linux-headers-generic
 
@@ -343,14 +343,14 @@ $ sudo apt-get install linux-source linux-headers-generic
 
 首先，通过创建一个新文件来禁用新内核驱动程序:
 
-```
+```py
 $ sudo nano /etc/modprobe.d/blacklist-nouveau.conf
 
 ```
 
 然后将以下几行添加到文件中，然后保存+退出:
 
-```
+```py
 blacklist nouveau
 blacklist lbm-nouveau
 options nouveau modeset=0
@@ -367,7 +367,7 @@ alias lbm-nouveau off
 
 不要忘记我们更新初始 RAM 文件系统并重启机器的关键步骤:
 
-```
+```py
 $ echo options nouveau modeset=0 | sudo tee -a /etc/modprobe.d/nouveau-kms.conf
 $ sudo update-initramfs -u
 $ sudo reboot
@@ -394,7 +394,7 @@ $ sudo reboot
 
 为此，只需右击复制下载链接，并使用`wget`回到您的终端下载文件:
 
-```
+```py
 wget https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_375.26_linux-run
 
 ```
@@ -405,7 +405,7 @@ wget https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8
 
 从这里开始，您需要做的就是解压`-run`文件:
 
-```
+```py
 $ chmod +x cuda_8.0.61_375.26_linux-run
 $ mkdir installers
 $ sudo ./cuda_8.0.61_375.26_linux-run -extract=`pwd`/installers
@@ -416,7 +416,7 @@ $ sudo ./cuda_8.0.61_375.26_linux-run -extract=`pwd`/installers
 
 现在让我们安装 NVIDIA 内核驱动程序:
 
-```
+```py
 $ cd installers
 $ sudo ./NVIDIA-Linux-x86_64-375.26.run
 
@@ -426,14 +426,14 @@ $ sudo ./NVIDIA-Linux-x86_64-375.26.run
 
 然后，我们可以将 NVIDIA 可加载内核模块添加到 Linux 内核中:
 
-```
+```py
 $ modprobe nvidia
 
 ```
 
 最后，安装 CUDA 工具包和示例:
 
-```
+```py
 $ sudo ./cuda-linux64-rel-8.0.61-21551265.run
 $ sudo ./cuda-samples-linux-8.0.61-21551265.run
 
@@ -443,14 +443,14 @@ $ sudo ./cuda-samples-linux-8.0.61-21551265.run
 
 既然已经安装了 NVIDIA CUDA 驱动程序和工具，让我们更新`~/.bashrc`以包含使用 nano 的 CUDA 工具包:
 
-```
+```py
 $ nano ~/.bashrc
 
 ```
 
 将这些行附加到文件的末尾:
 
-```
+```py
 # NVIDIA CUDA Toolkit
 export PATH=/usr/local/cuda-8.0/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64/
@@ -459,7 +459,7 @@ export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64/
 
 接下来，重新加载`~/.bashrc`并通过编译+运行`deviceQuery`示例程序来测试 CUDA 工具包的安装:
 
-```
+```py
 $ source ~/.bashrc
 $ cd /usr/local/cuda-8.0/samples/1_Utilities/deviceQuery
 $ sudo make
@@ -484,7 +484,7 @@ Result = PASS
 
 然而，如果您在一台*远程机器*上(即，SSH'ing 到一台机器上)，您将希望首先将文件下载到您的*本地机器*和*，然后*使用`scp`来传输文件(当然，同时用您适当的值替换`username`和`your_ip_address`):
 
-```
+```py
 $ scp -i EC2KeyPair.pem ~/Downloads/cudnn-8.0-linux-x64-v6.0.tgz \
 	username@your_ip_address:~
 
@@ -492,7 +492,7 @@ $ scp -i EC2KeyPair.pem ~/Downloads/cudnn-8.0-linux-x64-v6.0.tgz \
 
 现在文件已经在你的远程 GPU 机器上了(在我的例子中是 EC2)，解压文件，然后将结果文件分别复制到`lib64`和`include`中，使用`-P`开关保留符号链接:
 
-```
+```py
 $ cd ~
 $ tar -zxf cudnn-8.0-linux-x64-v6.0.tgz
 $ cd cuda
@@ -508,7 +508,7 @@ $ cd ~
 
 让我们用 Python 克隆已经过 [*计算机视觉深度学习测试的 mxnet 库和检出分支`0.11.0`:*](https://pyimagesearch.com/deep-learning-computer-vision-python-book/)
 
-```
+```py
 $ cd ~
 $ git clone --recursive https://github.com/apache/incubator-mxnet.git mxnet --branch 0.11.0
 
@@ -516,7 +516,7 @@ $ git clone --recursive https://github.com/apache/incubator-mxnet.git mxnet --br
 
 然后我们可以编译 mxnet:
 
-```
+```py
 $ cd mxnet
 $ make -j4 \
 	USE_OPENCV=1 \
@@ -529,7 +529,7 @@ $ make -j4 \
 
 最后，我们需要将 mxnet 符号链接到我们的`dl4cv`环境:
 
-```
+```py
 $ cd ~/.virtualenvs/dl4cv/lib/python3.5/site-packages/
 $ ln -s ~/mxnet/python/mxnet mxnet
 $ cd ~
@@ -542,7 +542,7 @@ $ cd ~
 
 最后一步是测试 mxnet 是否已经正确安装:
 
-```
+```py
 $ workon dl4cv
 $ python
 >>> import mxnet

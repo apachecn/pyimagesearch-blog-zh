@@ -43,7 +43,7 @@ Canonical 的员工一直在努力工作。
 
 让我们看看我们的系统上安装了哪个版本:
 
-```
+```py
 $ python3 --version
 Python 3.6.5
 
@@ -51,7 +51,7 @@ Python 3.6.5
 
 现在，让我们启动一个 Python 3 shell 来测试一下:
 
-```
+```py
 $ python3
 >> print("OpenCV + Ubuntu 18.04!")
 OpenCV + Ubuntu 18.04!
@@ -67,7 +67,7 @@ OpenCV + Ubuntu 18.04!
 
 从那里，我们需要用 [apt-get](https://help.ubuntu.com/community/AptGet/Howto) 包管理器刷新/升级预安装的包/库:
 
-```
+```py
 $ sudo apt-get update
 $ sudo apt-get upgrade
 
@@ -75,7 +75,7 @@ $ sudo apt-get upgrade
 
 然后安装开发人员工具:
 
-```
+```py
 $ sudo apt-get install build-essential cmake unzip pkg-config
 
 ```
@@ -84,21 +84,21 @@ $ sudo apt-get install build-essential cmake unzip pkg-config
 
 接下来，我们需要安装一些特定于 OpenCV 的先决条件。OpenCV 是一个图像处理/计算机视觉库，因此它需要能够加载 JPEG、PNG、TIFF 等标准图像文件格式。以下图像 I/O 包将允许 OpenCV 处理图像文件:
 
-```
+```py
 $ sudo apt-get install libjpeg-dev libpng-dev libtiff-dev
 
 ```
 
 现在让我们试着安装`libjasper-dev`:
 
-```
+```py
 $ sudo apt-get install libjasper-dev
 
 ```
 
 **如果您收到关于`libjasper-dev`丢失的错误，请遵循以下说明:**
 
-```
+```py
 sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main"
 sudo apt update
 sudo apt install libjasper1 libjasper-dev
@@ -109,7 +109,7 @@ sudo apt install libjasper1 libjasper-dev
 
 接下来，让我们包括视频 I/O 包，因为我们经常在 PyImageSearch 博客上处理视频。您将需要以下软件包，以便使用您的相机流和处理视频文件:
 
-```
+```py
 $ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
 $ sudo apt-get install libxvidcore-dev libx264-dev
 
@@ -119,21 +119,21 @@ OpenCV 的 highgui 模块依赖 GTK 库进行 gui 操作。highgui 模块将允�
 
 让我们安装 GTK:
 
-```
+```py
 $ sudo apt-get install libgtk-3-dev
 
 ```
 
 我总是推荐以下两个库，它们将优化各种 OpenCV 函数:
 
-```
+```py
 $ sudo apt-get install libatlas-base-dev gfortran
 
 ```
 
 最后，我们的最后一个要求是安装 Python 3 头文件和库:
 
-```
+```py
 $ sudo apt-get install python3.6-dev
 
 ```
@@ -144,7 +144,7 @@ $ sudo apt-get install python3.6-dev
 
 既然我们继续在终端中工作，让我们使用`wget`下载官方 OpenCV 版本:
 
-```
+```py
 $ cd ~
 $ wget -O opencv.zip https://github.com/opencv/opencv/archive/3.4.4.zip
 
@@ -152,7 +152,7 @@ $ wget -O opencv.zip https://github.com/opencv/opencv/archive/3.4.4.zip
 
 接着是`opencv_contrib`模块:
 
-```
+```py
 $ wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/3.4.4.zip
 
 ```
@@ -169,7 +169,7 @@ contrib 模块中包括正在积极开发的模块和/或已申请专利的模�
 
 现在，让我们解压缩归档文件:
 
-```
+```py
 $ unzip opencv.zip
 $ unzip opencv_contrib.zip
 
@@ -181,7 +181,7 @@ $ unzip opencv_contrib.zip
 
 现在，让我们继续重命名目录:
 
-```
+```py
 $ mv opencv-3.4.4 opencv
 $ mv opencv_contrib-3.4.4 opencv_contrib
 
@@ -193,7 +193,7 @@ $ mv opencv_contrib-3.4.4 opencv_contrib
 
 要安装 pip，只需在终端中输入以下内容:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python3 get-pip.py
 
@@ -219,7 +219,7 @@ $ sudo python3 get-pip.py
 
 现在让我们继续安装`virtualenv`和`virtualenvwrapper`:
 
-```
+```py
 $ sudo pip install virtualenv virtualenvwrapper
 $ sudo rm -rf ~/get-pip.py ~/.cache/pip
 
@@ -229,7 +229,7 @@ $ sudo rm -rf ~/get-pip.py ~/.cache/pip
 
 使用终端文本编辑器，如`vi` / `vim`或`nano`，将下列行添加到您的`~/.bashrc`中:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
@@ -239,7 +239,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 或者，您可以通过 bash 命令直接附加这些行:
 
-```
+```py
 $ echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.bashrc
 $ echo "export WORKON_HOME=$HOME/.virtualenvs" >> ~/.bashrc
 $ echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc
@@ -249,7 +249,7 @@ $ echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
 
 接下来，获取`~/.bashrc`文件:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
@@ -258,7 +258,7 @@ $ source ~/.bashrc
 
 好了，虽然这看起来似乎需要做很多工作，但我们现在可以为 OpenCV 创建 Python 3 虚拟环境了:
 
-```
+```py
 $ mkvirtualenv cv -p python3
 
 ```
@@ -267,7 +267,7 @@ $ mkvirtualenv cv -p python3
 
 让我们使用 workon 命令来验证我们是否在 cv 环境中:
 
-```
+```py
 $ workon cv
 
 ```
@@ -282,7 +282,7 @@ $ workon cv
 
 让我们将第一个包安装到环境中:NumPy。NumPy 是使用 Python 和 OpenCV 的必要条件。我们简单地使用 pip(当`cv` Python 虚拟环境处于活动状态时):
 
-```
+```py
 $ pip install numpy
 
 ```
@@ -293,7 +293,7 @@ $ pip install numpy
 
 在我们开始之前，让我们确保我们在 cv 虚拟环境中:
 
-```
+```py
 $ workon cv
 
 ```
@@ -304,7 +304,7 @@ $ workon cv
 
 让我们使用`cmake`来建立我们的 OpenCV 构建:
 
-```
+```py
 $ cd ~/opencv
 $ mkdir build
 $ cd build
@@ -338,7 +338,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 根据处理器/内核的数量，您可以通过改变命令中的标志来减少编译时间。我的计算机有 4 个内核，所以我使用的是`-j4`标志。您可以更新数字或完全关闭标志:
 
-```
+```py
 $ make -j4
 
 ```
@@ -355,7 +355,7 @@ $ make -j4
 
 成功完成 100%的编译后，您现在可以安装 OpenCV:
 
-```
+```py
 $ sudo make install
 $ sudo ldconfig
 
@@ -363,7 +363,7 @@ $ sudo ldconfig
 
 为了验证安装，有时我喜欢在终端中输入以下命令:
 
-```
+```py
 $ pkg-config --modversion opencv
 3.4.4
 
@@ -377,7 +377,7 @@ $ pkg-config --modversion opencv
 
 此时，OpenCV 的 Python 3 绑定应该位于以下文件夹中:
 
-```
+```py
 $ ls /usr/local/python/cv2/python-3.6
 cv2.cpython-36m-x86_64-linux-gnu.so
 
@@ -385,7 +385,7 @@ cv2.cpython-36m-x86_64-linux-gnu.so
 
 让我们简单地将它们重命名为`cv2.so`:
 
-```
+```py
 $ cd /usr/local/python/cv2/python-3.6
 $ sudo mv cv2.cpython-36m-x86_64-linux-gnu.so cv2.so
 
@@ -395,7 +395,7 @@ $ sudo mv cv2.cpython-36m-x86_64-linux-gnu.so cv2.so
 
 我们的最后一个子步骤是将 OpenCV `cv2.so`绑定符号链接到我们的`cv`虚拟环境中:
 
-```
+```py
 $ cd ~/.virtualenvs/cv/lib/python3.6/site-packages/
 $ ln -s /usr/local/python/cv2/python-3.6/cv2.so cv2.so
 
@@ -407,7 +407,7 @@ $ ln -s /usr/local/python/cv2/python-3.6/cv2.so cv2.so
 
 为了验证我们的 OpenCV + Ubuntu 安装是否完成，我喜欢启动 Python，导入 OpenCV，并查询版本(如果您也安装了多个版本的 OpenCV，这对于保持理智很有用):
 
-```
+```py
 $ cd ~
 $ workon cv
 $ python
@@ -431,7 +431,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 或者，此时，您可以安全地删除您的个人文件夹中的 zip 和目录:
 
-```
+```py
 $ cd ~
 $ rm opencv.zip opencv_contrib.zip
 $ rm -rf opencv opencv_contrib
@@ -446,21 +446,21 @@ $ rm -rf opencv opencv_contrib
 
 ***A.*** Python 3 是默认，Ubuntu 18.04 自带。Python 2.7 用户可以在**步骤#1:** 结束时手动安装 Python 2.7
 
-```
+```py
 $ sudo apt-get install python2.7 python2.7-dev
 
 ```
 
 从那里，当您在**步骤#3** 中创建您的虚拟环境时，首先安装 Python 2.7 的 pip:
 
-```
+```py
 $ sudo python2.7 get-pip.py
 
 ```
 
 然后(也是在**步骤#3** 中)当您创建虚拟环境时，只需使用相关的 Python 版本标志:
 
-```
+```py
 $ mkvirtualenv cv -p python2.7
 
 ```

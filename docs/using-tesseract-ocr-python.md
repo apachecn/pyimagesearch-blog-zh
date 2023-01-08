@@ -38,14 +38,14 @@
 
 如果您正在使用一个虚拟环境(我强烈建议您这样做，以便您可以分离不同的项目)，使用`workon`命令，后跟适当的虚拟环境名称。在这种情况下，我们的 virtualenv 被命名为`cv`。
 
-```
+```py
 $ workon cv
 
 ```
 
 接下来让我们安装 [Pillow](https://python-pillow.org/) ，一个对 Python 更友好的 PIL(一个依赖项)端口，后面是`pytesseract`。
 
-```
+```py
 $ pip install pillow
 $ pip install pytesseract
 
@@ -59,7 +59,7 @@ $ pip install pytesseract
 
 让我们首先创建一个名为`ocr.py`的新文件:
 
-```
+```py
 # import the necessary packages
 from PIL import Image
 import pytesseract
@@ -86,7 +86,7 @@ args = vars(ap.parse_args())
 
 接下来，我们将加载图像，将其二进制化，并将其写入磁盘。
 
-```
+```py
 # load the example image and convert it to grayscale
 image = cv2.imread(args["image"])
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -125,7 +125,7 @@ cv2.imwrite(filename, gray)
 
 我们最终可以使用 Tesseract Python“绑定”将 OCR 应用于我们的图像:
 
-```
+```py
 # load the image as a PIL/Pillow image, apply OCR, and then delete
 # the temporary file
 text = pytesseract.image_to_string(Image.open(filename))
@@ -167,7 +167,7 @@ cv2.waitKey(0)
 
 使用宇宙魔方二进制码，[正如我们上周学过的](https://pyimagesearch.com/2017/07/03/installing-tesseract-for-ocr/)，我们可以对原始的、未加工的图像应用 OCR:
 
-```
+```py
 $ tesseract images/example_01.png stdout
 Noisy image
 to test
@@ -179,7 +179,7 @@ Tesseract OCR
 
 现在让我们确认一下我们新制作的脚本`ocr.py`，也可以工作:
 
-```
+```py
 $ python ocr.py --image images/example_01.png
 Noisy image
 to test
@@ -201,7 +201,7 @@ Tesseract OCR
 
 我们可以看到下面的`tesseract`二进制输出:
 
-```
+```py
 $ tesseract images/example_02.png stdout
 Detected 32 diacritics
 " Tesséra‘c't Will
@@ -214,7 +214,7 @@ Backgrounds
 
 然而，通过使用`ocr.py`中的`blur`预处理方法，我们可以获得更好的结果:
 
-```
+```py
 $ python ocr.py --image images/example_02.png --preprocess blur
 Tesseract Will
 Fail With Noisy
@@ -236,7 +236,7 @@ Backgrounds
 
 上图是我的书*【先决条件】**[实用 Python 和 OpenCV](https://pyimagesearch.com/practical-python-opencv/)* 中的截图——我们来看看宇宙魔方二进制是如何处理这张图的:
 
-```
+```py
 $ tesseract images/example_03.png stdout
 PREREQUISITES
 
@@ -256,7 +256,7 @@ documented (a help yuu follaw along.
 
 接着用`ocr.py`测试图像:
 
-```
+```py
 $ python ocr.py --image images/example_03.png
 PREREQUISITES
 
@@ -290,7 +290,7 @@ Python + Tesseract 在这里做了合理的工作，但是我们再一次展示�
 
 确保使用`tesseract -v`命令:检查你机器上安装的宇宙魔方版本
 
-```
+```py
 $ tesseract -v
 tesseract 4.1.1
 ```

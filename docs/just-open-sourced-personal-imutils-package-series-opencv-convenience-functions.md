@@ -22,7 +22,7 @@
 
 要安装`imutils`库，只需发出以下命令:
 
-```
+```py
 $ pip install imutils
 
 ```
@@ -43,7 +43,7 @@ $ pip install imutils
 
 #### 示例:
 
-```
+```py
 # translate the image x=25 pixels to the right and y=75 pixels up
 translated = imutils.translate(workspace, 25, -75)
 
@@ -59,7 +59,7 @@ translated = imutils.translate(workspace, 25, -75)
 
 #### 示例:
 
-```
+```py
 # loop over the angles to rotate the image
 for angle in xrange(0, 360, 90):
 	# rotate the image and display it
@@ -80,7 +80,7 @@ for angle in xrange(0, 360, 90):
 
 #### 示例:
 
-```
+```py
 # loop over varying widths to resize the image to
 for width in (400, 300, 200, 100):
 	# resize the image and display it
@@ -103,7 +103,7 @@ for width in (400, 300, 200, 100):
 
 #### 示例:
 
-```
+```py
 # skeletonize the image
 gray = cv2.cvtColor(logo, cv2.COLOR_BGR2GRAY)
 skeleton = imutils.skeletonize(gray, size=(3, 3))
@@ -121,7 +121,7 @@ cv2.imshow("Skeleton", skeleton)
 
 #### 示例:
 
-```
+```py
 # INCORRECT: show the image without converting color spaces
 plt.figure("Incorrect")
 plt.imshow(cactus)

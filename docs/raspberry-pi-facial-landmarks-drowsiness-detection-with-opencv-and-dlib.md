@@ -4,7 +4,7 @@
 
 今天的博文是期待已久的关于**树莓派上实时睡意检测的教程！**
 
-```
+```py
 $ workon cv
 $ pip install RPi.GPIO
 $ pip install gpiozero
@@ -13,7 +13,7 @@ $ pip install gpiozero
 
 在那里，如果您想检查虚拟环境中的所有组件是否安装正确，您可以直接运行 Python 解释器:
 
-```
+```py
 $ workon cv
 $ python
 >>> import RPi.GPIO
@@ -76,7 +76,7 @@ $ python
 
 在您最喜欢的编辑器或 IDE 中打开一个新文件，并将其命名为`pi_drowsiness_detection.py`。从那里，让我们开始编码:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 from imutils import face_utils
@@ -93,7 +93,7 @@ import cv2
 
 让我们从这里定义一个距离函数:
 
-```
+```py
 def euclidean_dist(ptA, ptB):
 	# compute and return the euclidean distance between the two
 	# points
@@ -105,7 +105,7 @@ def euclidean_dist(ptA, ptB):
 
 现在让我们定义我们的**眼睛纵横比(EAR)函数**，它用于计算垂直眼睛标志之间的距离与水平眼睛标志之间的距离的比率:
 
-```
+```py
 def eye_aspect_ratio(eye):
 	# compute the euclidean distances between the two sets of
 	# vertical eye landmarks (x, y)-coordinates
@@ -128,7 +128,7 @@ def eye_aspect_ratio(eye):
 
 从那里，我们需要解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-c", "--cascade", required=True,
@@ -151,7 +151,7 @@ args = vars(ap.parse_args())
 
 如果设置了`--alarm`标志，我们将设置流量:
 
-```
+```py
 # check to see if we are using GPIO/TrafficHat as an alarm
 if args["alarm"] > 0:
 	from gpiozero import TrafficHat
@@ -164,7 +164,7 @@ if args["alarm"] > 0:
 
 让我们也定义一组重要的配置变量:
 
-```
+```py
 # define two constants, one for the eye aspect ratio to indicate
 # blink and then a second constant for the number of consecutive
 # frames the eye must be below the threshold for to set off the
@@ -185,7 +185,7 @@ ALARM_ON = False
 
 从那里，我们将加载我们的哈尔级联和面部标志预测文件:
 
-```
+```py
 # load OpenCV's Haar cascade for face detection (which is faster than
 # dlib's built-in HOG detector, but less accurate), then create the
 # facial landmark predictor
@@ -201,7 +201,7 @@ predictor = dlib.shape_predictor(args["shape_predictor"])
 
 接下来，我们将初始化每只眼睛的面部标志的索引:
 
-```
+```py
 # grab the indexes of the facial landmarks for the left and
 # right eye, respectively
 (lStart, lEnd) = face_utils.FACIAL_LANDMARKS_IDXS["left_eye"]
@@ -213,7 +213,7 @@ predictor = dlib.shape_predictor(args["shape_predictor"])
 
 我们现在准备开始我们的视频流线程:
 
-```
+```py
 # start the video stream thread
 print("[INFO] starting video stream thread...")
 vs = VideoStream(src=0).start()
@@ -228,7 +228,7 @@ time.sleep(1.0)
 
 从这里开始，让我们循环视频流中的帧:
 
-```
+```py
 # loop over frames from the video stream
 while True:
 	# grab the frame from the threaded video file stream, resize
@@ -251,7 +251,7 @@ while True:
 
 现在让我们循环检查检测结果:
 
-```
+```py
 	# loop over the face detections
 	for (x, y, w, h) in rects:
 		# construct a dlib rectangle object from the Haar cascade
@@ -273,7 +273,7 @@ while True:
 
 给定我们的 NumPy 数组，`shape`，我们可以提取每只眼睛的坐标并计算耳朵:
 
-```
+```py
 		# extract the left and right eye coordinates, then use the
 		# coordinates to compute the eye aspect ratio for both eyes
 		leftEye = shape[lStart:lEnd]
@@ -294,7 +294,7 @@ Soukupová和 ech 建议将两只眼睛的纵横比平均在一起，以获得�
 
 下一个模块严格用于可视化目的:
 
-```
+```py
 		# compute the convex hull for the left and right eye, then
 		# visualize each of the eyes
 		leftEyeHull = cv2.convexHull(leftEye)
@@ -308,7 +308,7 @@ Soukupová和 ech 建议将两只眼睛的纵横比平均在一起，以获得�
 
 从那里，我们将检查我们的眼睛纵横比(`ear`)和帧计数器(`COUNTER`)，以查看眼睛是否闭合，同时发出警报，以在需要时提醒昏昏欲睡的驾驶员:
 
-```
+```py
 		# check to see if the eye aspect ratio is below the blink
 		# threshold, and if so, increment the blink frame counter
 		if ear < EYE_AR_THRESH:
@@ -349,7 +349,7 @@ Soukupová和 ech 建议将两只眼睛的纵横比平均在一起，以获得�
 
 我们差不多完成了——在最后一个代码块中，我们将在`frame`上绘制耳朵，显示`frame`，并做一些清理工作:
 
-```
+```py
 		# draw the computed eye aspect ratio on the frame to help
 		# with debugging and setting the correct eye aspect ratio
 		# thresholds and frame counters
@@ -394,7 +394,7 @@ vs.stop()
 
 要运行该程序，只需执行以下命令:
 
-```
+```py
 $ python pi_detect_drowsiness.py --cascade haarcascade_frontalface_default.xml \
 	--shape-predictor shape_predictor_68_face_landmarks.dat --alarm 1
 

@@ -119,7 +119,7 @@
 
 下载归档文件后，您应该将其解压缩并检查内容:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10 Cyclone_Wildfire_Flood_Earthquake_Database
 Cyclone_Wildfire_Flood_Earthquake_Database
 ├── Cyclone [928 entries]
@@ -138,7 +138,7 @@ Cyclone_Wildfire_Flood_Earthquake_Database
 
 使用`tree`命令，让我们通过本教程的 ***【下载】*** 部分查看今天的项目:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── Cyclone_Wildfire_Flood_Earthquake_Database
@@ -192,7 +192,7 @@ $ tree --dirsfirst --filelimit 10
 
 打开`pyimagesearch`模块中的`config.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -213,7 +213,7 @@ CLASSES = ["Cyclone", "Earthquake", "Flood", "Wildfire"]
 
 让我们定义数据集分割:
 
-```
+```py
 # define the size of the training, validation (which comes from the
 # train split), and testing splits, respectively
 TRAIN_SPLIT = 0.75
@@ -226,7 +226,7 @@ TEST_SPLIT = 0.25
 
 接下来，我们将定义我们的培训参数:
 
-```
+```py
 # define the minimum learning rate, maximum learning rate, batch size,
 # step size, CLR method, and number of epochs
 MIN_LR = 1e-6
@@ -244,7 +244,7 @@ NUM_EPOCHS = 48
 
 在这里，我们将定义输出路径:
 
-```
+```py
 # set the path to the serialized model after training
 MODEL_PATH = os.path.sep.join(["output", "natural_disaster.model"])
 
@@ -274,7 +274,7 @@ CLR_PLOT_PATH = os.path.sep.join(["output", "clr_plot.png"])
 
 继续在您最喜欢的代码编辑器中打开`train.py`,插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -318,7 +318,7 @@ import os
 
 让我们解析命令行参数并获取我们的图像路径:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-f", "--lr-find", type=int, default=0,
@@ -342,7 +342,7 @@ labels = []
 
 现在让我们填充`data`和`labels`列表:
 
-```
+```py
 # loop over the image paths
 for imagePath in imagePaths:
 	# extract the class label
@@ -382,7 +382,7 @@ labels = lb.fit_transform(labels)
 
 从这里开始，我们将对数据进行分区，并设置数据扩充:
 
-```
+```py
 # partition the data into training and testing splits
 (trainX, testX, trainY, testY) = train_test_split(data, labels,
 	test_size=config.TEST_SPLIT, random_state=42)
@@ -409,7 +409,7 @@ aug = ImageDataGenerator(
 
 此时，我们将设置 VGG16 模型以进行[微调](https://pyimagesearch.com/2019/06/03/fine-tuning-with-keras-and-deep-learning/):
 
-```
+```py
 # load the VGG16 network, ensuring the head FC layer sets are left
 # off
 baseModel = VGG16(weights="imagenet", include_top=False,
@@ -451,7 +451,7 @@ model.compile(loss="categorical_crossentropy", optimizer=opt,
 
 第一次运行脚本时，您应该设置`--lr-find`命令行参数，以使用 [Keras 学习率查找器](https://pyimagesearch.com/2019/08/05/keras-learning-rate-finder/)来确定最佳学习率。让我们看看它是如何工作的:
 
-```
+```py
 # check to see if we are attempting to find an optimal learning rate
 # before training for the full number of epochs
 if args["lr_find"] > 0:
@@ -497,7 +497,7 @@ if args["lr_find"] > 0:
 
 在这种情况下，是时候初始化我们的[循环学习率类](https://pyimagesearch.com/2019/07/29/cyclical-learning-rates-with-keras-and-deep-learning/)并开始训练了:
 
-```
+```py
 # otherwise, we have already defined a learning rate space to train
 # over, so compute the step size and initialize the cyclic learning
 # rate method
@@ -526,7 +526,7 @@ H = model.fit_generator(
 
 培训完成后，我们开始评估并保存我们的`model`:
 
-```
+```py
 # evaluate the network and show a classification report
 print("[INFO] evaluating network...")
 predictions = model.predict(testX, batch_size=config.BATCH_SIZE)
@@ -545,7 +545,7 @@ model.save(config.MODEL_PATH)
 
 最后，让我们绘制我们的培训历史和 CLR 历史:
 
-```
+```py
 # construct a plot that plots and saves the training history
 N = np.arange(0, config.NUM_EPOCHS)
 plt.style.use("ggplot")
@@ -588,7 +588,7 @@ plt.savefig(config.CLR_PLOT_PATH)
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python train.py --lr-find 1
 [INFO] loading images...
 [INFO] processing data...
@@ -630,7 +630,7 @@ Epoch 14/20
 
 既然我们已经知道了我们的最佳学习率，让我们回到我们的`config.py`文件并相应地更新它们:
 
-```
+```py
 # define the minimum learning rate, maximum learning rate, batch size,
 # step size, CLR method, and number of epochs
 MIN_LR = 1e-6
@@ -650,7 +650,7 @@ NUM_EPOCHS = 48
 
 执行以下命令，该命令将在整个时期内训练我们的网络:
 
-```
+```py
 $ python train.py
 [INFO] loading images...
 [INFO] processing data...
@@ -719,7 +719,7 @@ weighted avg       0.95      0.95      0.95      1107
 
 为了完成*自然灾害视频分类*让我们来看看`predict.py`:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import load_model
 from pyimagesearch import config
@@ -748,7 +748,7 @@ args = vars(ap.parse_args())
 
 让我们继续加载我们的自然灾害分类模型，并初始化我们的队列+视频流:
 
-```
+```py
 # load the trained model from disk
 print("[INFO] loading model and label binarizer...")
 model = load_model(config.MODEL_PATH)
@@ -767,7 +767,7 @@ writer = None
 
 随着我们的`model`、`Q`和`vs`准备就绪，我们将开始循环播放帧:
 
-```
+```py
 # loop over frames from the video file stream
 while True:
 	# read the next frame from the file
@@ -797,7 +797,7 @@ while True:
 
 现在让我们在框架上做一个自然灾害预测:
 
-```
+```py
 	# make predictions on the frame and then update the predictions
 	# queue
 	preds = model.predict(np.expand_dims(frame, axis=0))[0]
@@ -817,7 +817,7 @@ while True:
 
 **第 64 行和第 65 行**然后提取最高概率类标签，以便我们可以注释我们的帧:
 
-```
+```py
 	# draw the activity on the output frame
 	text = "activity: {}".format(label)
 	cv2.putText(output, text, (35, 50), cv2.FONT_HERSHEY_SIMPLEX,
@@ -867,7 +867,7 @@ vs.release()
 
 下载后，您可以使用以下命令启动`predict.py`脚本:
 
-```
+```py
 $ python predict.py --input videos/terrific_natural_disasters_compilation.mp4 \
 	--output output/natural_disasters_output.avi
 [INFO] processing video...

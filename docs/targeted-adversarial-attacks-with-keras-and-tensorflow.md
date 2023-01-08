@@ -82,7 +82,7 @@
 
 首先使用本教程的 ***【下载】*** 部分下载源代码和示例图像。从那里，检查目录结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── pyimagesearch
@@ -125,7 +125,7 @@ $ tree --dirsfirst
 
 综上所述，首先使用本教程的 ***“下载”*** 部分下载源代码和示例图像。
 
-```
+```py
 $ python predict_normal.py --image pig.jpg
 [INFO] loading image...
 [INFO] loading pre-trained ResNet50 model...
@@ -148,7 +148,7 @@ $ python predict_normal.py --image pig.jpg
 
 打开项目目录结构中的`generate_targeted_adversary.py`文件，并插入以下代码:
 
-```
+```py
 # import necessary packages
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.applications import ResNet50
@@ -161,7 +161,7 @@ import argparse
 import cv2
 ```
 
-```
+```py
 def preprocess_image(image):
 	# swap color channels, resize the input image, and add a batch
 	# dimension
@@ -173,7 +173,7 @@ def preprocess_image(image):
 	return image
 ```
 
-```
+```py
 def clip_eps(tensor, eps):
 	# clip the values of the tensor to a given range and return it
 	return tf.clip_by_value(tensor, clip_value_min=-eps,
@@ -188,7 +188,7 @@ def clip_eps(tensor, eps):
 
 接下来，我们需要定义`generate_targeted_adversaries`函数，这是这个 Python 脚本的主要部分:
 
-```
+```py
 def generate_targeted_adversaries(model, baseImage, delta, classIdx,
 	target, steps=500):
 	# iterate over the number of steps
@@ -206,7 +206,7 @@ def generate_targeted_adversaries(model, baseImage, delta, classIdx,
 
 接下来是应用有针对性的对抗性攻击的梯度下降部分:
 
-```
+```py
 			# run this newly constructed image tensor through our
 			# model and calculate the loss with respect to the
 			# both the *original* class label and the *target*
@@ -239,7 +239,7 @@ def generate_targeted_adversaries(model, baseImage, delta, classIdx,
 
 现在已经定义了所有的函数，我们可以开始解析命令行参数了:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--input", required=True,
@@ -255,7 +255,7 @@ args = vars(ap.parse_args())
 
 让我们继续进行一些初始化:
 
-```
+```py
 EPS = 2 / 255.0
 LR = 5e-3
 
@@ -273,7 +273,7 @@ image = preprocess_image(image)
 
 接下来，我们需要加载 ResNet 模型并初始化我们的损失函数:
 
-```
+```py
 # load the pre-trained ResNet50 model for running inference
 print("[INFO] loading pre-trained ResNet50 model...")
 model = ResNet50(weights="imagenet")
@@ -292,7 +292,7 @@ delta = tf.Variable(tf.zeros_like(baseImage), trainable=True)
 
 构建了所有变量后，我们现在可以应用有针对性的对抗性攻击:
 
-```
+```py
 # generate the perturbation vector to create an adversarial example
 print("[INFO] generating perturbation...")
 deltaUpdated = generate_targeted_adversaries(model, baseImage, delta,
@@ -315,7 +315,7 @@ cv2.imwrite(args["output"], adverImage)
 
 让我们在下面代码块中回答这个问题:
 
-```
+```py
 # run inference with this adversarial example, parse the results,
 # and display the top-1 predicted result
 print("[INFO] running inference on the adversarial example...")
@@ -352,7 +352,7 @@ cv2.waitKey(0)
 
 接下来，打开`imagenet_class_index.json`文件，确定我们想要“欺骗”网络进行预测的 ImageNet 类标签的整数索引——类标签索引文件的前几行如下所示:
 
-```
+```py
 {
   "0": [
     "n01440764",
@@ -377,7 +377,7 @@ cv2.waitKey(0)
 
 在这种情况下，我选择了索引`189`，它对应于一只*“莱克兰梗”*(一种狗):
 
-```
+```py
 ...
 "189": [
     "n02095570",
@@ -388,7 +388,7 @@ cv2.waitKey(0)
 
 从那里，您可以打开一个终端并执行以下命令:
 
-```
+```py
 $ python generate_targeted_adversary.py --input pig.jpg --output adversarial.png --class-idx 341 --target-class-idx 189
 [INFO] loading image...
 [INFO] loading pre-trained ResNet50 model...

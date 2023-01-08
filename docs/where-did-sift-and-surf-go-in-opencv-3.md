@@ -8,7 +8,7 @@
 
 不幸的是，您可能通过打开一个终端、导入 OpenCV，然后尝试实例化您最喜欢的关键点检测器(可能使用如下代码)来学习这一课:
 
-```
+```py
 $ python
 >>> import cv2
 >>> detector = cv2.FeatureDetector_create("SIFT")
@@ -22,7 +22,7 @@ AttributeError: 'module' object has no attribute 'FeatureDetector_create'
 
 我们的`cv2.DescriptorExtractor_create`函数也是如此:
 
-```
+```py
 >>> extractor = cv2.DescriptorExtractor_create("SIFT")
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
@@ -32,7 +32,7 @@ AttributeError: 'module' object has no attribute 'DescriptorExtractor_create'
 
 此外，`cv2.SIFT_create`和`cv2.SURF_create`也将失败:
 
-```
+```py
 >>> cv2.SIFT_create()
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
@@ -76,7 +76,7 @@ SIFT 和 SURF 是 OpenCV 称之为“非自由”模块的算法的例子。这�
 
 为了确认这一点，打开一个 shell，导入 OpenCV，并执行以下命令(当然，假设在当前目录中有一个名为`test_image.jpg`的图像):
 
-```
+```py
 $ python
 >>> import cv2
 >>> image = cv2.imread("test_image.jpg")
@@ -96,7 +96,7 @@ $ python
 
 同样重要的是要注意，通过使用`opencv_contrib`，你将不会干扰 OpenCV 3 中包含的任何其他关键点检测器和局部不变描述符。您仍然可以访问 KAZE、AKAZE、BRISK 等。没有问题:
 
-```
+```py
 >>> kaze = cv2.KAZE_create()
 >>> (kps, descs) = kaze.detectAndCompute(gray, None)
 >>> print("# kps: {}, descriptors: {}".format(len(kps), descs.shape))

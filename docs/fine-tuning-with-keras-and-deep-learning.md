@@ -189,7 +189,7 @@
 
 下载完源代码后，将目录更改为`fine-tuning-keras`:
 
-```
+```py
 $ unzip fine-tuning-keras.zip
 $ cd fine-tuning-keras
 
@@ -203,7 +203,7 @@ $ cd fine-tuning-keras
 
 下载数据集后，可以将其提取到项目目录(`fine-tuning-keras`):
 
-```
+```py
 $ unzip Food-11.zip
 
 ```
@@ -212,7 +212,7 @@ $ unzip Food-11.zip
 
 现在我们已经下载了项目和数据集，接下来导航回项目根目录。让我们从这里开始分析项目结构:
 
-```
+```py
 $ cd ..
 $ tree --dirsfirst --filelimit 10
 .
@@ -270,7 +270,7 @@ $ tree --dirsfirst --filelimit 10
 
 现在让我们填充我们的`config.py`文件——在您最喜欢的代码编辑器中打开它，并插入下面几行:
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -291,7 +291,7 @@ BASE_PATH = "dataset"
 
 在这里，我们将定义我们的`TRAIN`、`TEST`和`VAL`目录的名称:
 
-```
+```py
 # define the names of the training, testing, and validation
 # directories
 TRAIN = "training"
@@ -302,7 +302,7 @@ VAL = "validation"
 
 接着列出了我们的 Food-11 数据集的 11 个`CLASSES`:
 
-```
+```py
 # initialize the list of class label names
 CLASSES = ["Bread", "Dairy product", "Dessert", "Egg", "Fried food",
 	"Meat", "Noodles/Pasta", "Rice", "Seafood", "Soup",
@@ -312,7 +312,7 @@ CLASSES = ["Bread", "Dairy product", "Dessert", "Egg", "Fried food",
 
 最后，我们将指定批量大小和模型+绘图路径:
 
-```
+```py
 # set the batch size when fine-tuning
 BATCH_SIZE = 32
 
@@ -363,7 +363,7 @@ WARMUP_PLOT_PATH = os.path.sep.join(["output", "warmup.png"])
 
 现在让我们回顾一下这个脚本:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from imutils import paths
@@ -412,7 +412,7 @@ for split in (config.TRAIN, config.TEST, config.VAL):
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python build_dataset.py 
 [INFO] processing 'training split'...
 [INFO] processing 'evaluation split'...
@@ -422,7 +422,7 @@ $ python build_dataset.py
 
 如果您研究一下`dataset/`目录，您会看到三个目录，分别对应于我们各自的数据分割:
 
-```
+```py
 $ ls dataset/
 evaluation		training	validation
 
@@ -430,7 +430,7 @@ evaluation		training	validation
 
 在每个数据分割目录中，您还可以找到类别标签子目录:
 
-```
+```py
 $ ls -l dataset/training/
 Bread
 Dairy product
@@ -448,7 +448,7 @@ Vegetable
 
 在每个类别标签子目录中，您会找到与该标签相关的图像:
 
-```
+```py
 $ ls -l dataset/training/Bread/*.jpg | head -n 5
 dataset/training/Bread/0_0.jpg
 dataset/training/Bread/0_1.jpg
@@ -464,7 +464,7 @@ dataset/training/Bread/0_101.jpg
 
 让我们实现`train.py`中的微调脚本:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -499,7 +499,7 @@ import os
 
 包裹唾手可得，我们现在准备继续前进。让我们首先定义一个绘制培训历史的函数:
 
-```
+```py
 def plot_training(H, N, plotPath):
 	# construct a plot that plots and saves the training history
 	plt.style.use("ggplot")
@@ -522,7 +522,7 @@ def plot_training(H, N, plotPath):
 
 让我们确定每个分割中的图像总数:
 
-```
+```py
 # derive the paths to the training, validation, and testing
 # directories
 trainPath = os.path.sep.join([config.BASE_PATH, config.TRAIN])
@@ -543,7 +543,7 @@ totalTest = len(list(paths.list_images(testPath)))
 
 让我们初始化我们的数据扩充对象，并建立我们的平均减法值:
 
-```
+```py
 # initialize the training data augmentation object
 trainAug = ImageDataGenerator(
 	rotation_range=30,
@@ -579,7 +579,7 @@ valAug.mean = mean
 
 我们的数据扩充生成器将直接从各自的目录中生成数据:
 
-```
+```py
 # initialize the training generator
 trainGen = trainAug.flow_from_directory(
 	trainPath,
@@ -615,7 +615,7 @@ testGen = valAug.flow_from_directory(
 
 让我们继续进行**执行网络手术:**
 
-```
+```py
 # load the VGG16 network, ensuring the head FC layer sets are left
 # off
 baseModel = VGG16(weights="imagenet", include_top=False,
@@ -647,7 +647,7 @@ model = Model(inputs=baseModel.input, outputs=headModel)
 
 继续微调，让我们**冻结 VGG16 的所有 CONV 层:**
 
-```
+```py
 # loop over all layers in the base model and freeze them so they will
 # *not* be updated during the first training process
 for layer in baseModel.layers:
@@ -659,7 +659,7 @@ for layer in baseModel.layers:
 
 **鉴于*基地现在被冻结*，我们将继续训练我们的网络*(只有头部权重会被更新):***
 
-```
+```py
 # compile our model (this needs to be done after our setting our
 # layers to being non-trainable
 print("[INFO] compiling model...")
@@ -705,7 +705,7 @@ plot_training(H, 50, config.WARMUP_PLOT_PATH)
 
 现在让我们继续 ***解冻*基础模型图层中的最后一组 CONV 图层:**
 
-```
+```py
 # reset our data generators
 trainGen.reset()
 valGen.reset()
@@ -730,7 +730,7 @@ for layer in baseModel.layers:
 
 继续，让我们**微调*两个*最后一组 CONV 图层*和*我们的一组 FC 图层:**
 
-```
+```py
 # for the changes to the model to take affect we need to recompile
 # the model, this time using SGD with a *very* small learning rate
 print("[INFO] re-compiling model...")
@@ -757,7 +757,7 @@ H = model.fit(
 
 总结一下，让我们再次评估一下网络:
 
-```
+```py
 # reset the testing generator and then use our trained model to
 # make predictions on the data
 print("[INFO] evaluating after fine-tuning network...")
@@ -792,7 +792,7 @@ model.save(config.MODEL_PATH, save_format="h5")
 
 确保您已经使用了本教程的 ***“下载”*** 部分来下载这篇文章的源代码，并从那里执行以下命令:
 
-```
+```py
 $ python train.py
 Using TensorFlow backend.
 Found 9866 images belonging to 11 classes.
@@ -842,7 +842,7 @@ Dairy product       0.75      0.56      0.64       148
 
 接下来，我们看到我们已经解冻了 VGG16 中的最后一块 CONV 层，同时保持其余网络权重冻结:
 
-```
+```py
 <tensorflow.python.keras.engine.input_layer.InputLayer object at 0x7f2baa5f6eb8>: False
 <tensorflow.python.keras.layers.convolutional.Conv2D object at 0x7f2c21583198>: False
 <tensorflow.python.keras.layers.convolutional.Conv2D object at 0x7f2c8075ffd0>: False
@@ -867,7 +867,7 @@ Dairy product       0.75      0.56      0.64       148
 
 一旦我们解冻了最后一个 CONV 块，我们就继续微调:
 
-```
+```py
 [INFO] re-compiling model...
 Epoch 1/20
 308/308 [==============================] - 88s 285ms/step - loss: 0.9120 - accuracy: 0.6978 - val_loss: 0.7333 - val_accuracy: 0.7818
@@ -926,7 +926,7 @@ Dairy product       0.85      0.70      0.77       148
 
 打开`predict.py`并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import load_model
 from pyimagesearch import config
@@ -948,7 +948,7 @@ args = vars(ap.parse_args())
 
 让我们继续从磁盘加载图像并对其进行预处理:
 
-```
+```py
 # load the input image and then clone it so we can draw on it later
 image = cv2.imread(args["image"])
 output = image.copy()
@@ -980,7 +980,7 @@ image -= mean
 
 现在我们的图像已经准备好了，让我们预测它的类标签:
 
-```
+```py
 # load the trained model from disk
 print("[INFO] loading model...")
 model = load_model(config.MODEL_PATH)
@@ -1013,7 +1013,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python predict.py --image dataset/evaluation/Seafood/8_186.jpg
 
 ```
@@ -1026,7 +1026,7 @@ $ python predict.py --image dataset/evaluation/Seafood/8_186.jpg
 
 让我们试试另一个例子:
 
-```
+```py
 $ python predict.py --image dataset/evaluation/Meat/5_293.jpg
 
 ```

@@ -109,7 +109,7 @@ TensorFlow 2.0 具有一系列新功能，包括:
 
 我们将首先打开一个终端并更新我们的系统:
 
-```
+```py
 $ sudo apt-get update
 $ sudo apt-get upgrade
 
@@ -117,7 +117,7 @@ $ sudo apt-get upgrade
 
 从那里我们将安装编译器工具:
 
-```
+```py
 $ sudo apt-get install build-essential cmake unzip pkg-config
 $ sudo apt-get install gcc-6 g++-6
 
@@ -125,21 +125,21 @@ $ sudo apt-get install gcc-6 g++-6
 
 然后我们将安装`screen`，这是一个用于同一个窗口中多个终端的工具——我经常用它进行远程 SSH 连接:
 
-```
+```py
 $ sudo apt-get install screen
 
 ```
 
 从那里我们将安装 X windows 库和 OpenGL 库:
 
-```
+```py
 $ sudo apt-get install libxmu-dev libxi-dev libglu1-mesa libglu1-mesa-dev
 
 ```
 
 以及图像和视频 I/O 库:
 
-```
+```py
 $ sudo apt-get install libjpeg-dev libpng-dev libtiff-dev
 $ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
 $ sudo apt-get install libxvidcore-dev libx264-dev
@@ -148,21 +148,21 @@ $ sudo apt-get install libxvidcore-dev libx264-dev
 
 接下来，我们将安装优化库:
 
-```
+```py
 $ sudo apt-get install libopenblas-dev libatlas-base-dev liblapack-dev gfortran
 
 ```
 
 和用于处理大型数据集的 HDF5:
 
-```
+```py
 $ sudo apt-get install libhdf5-serial-dev
 
 ```
 
 我们还需要我们的 Python 3 开发库，包括 TK 和 GTK GUI 支持:
 
-```
+```py
 $ sudo apt-get install python3-dev python3-tk python-imaging-tk
 $ sudo apt-get install libgtk-3-dev
 
@@ -184,7 +184,7 @@ $ sudo apt-get install libgtk-3-dev
 
 我们需要添加一个 apt-get 存储库，以便我们可以安装 NVIDIA GPU 驱动程序。这可以在您的终端中完成:
 
-```
+```py
 $ sudo add-apt-repository ppa:graphics-drivers/ppa
 $ sudo apt-get update
 
@@ -192,21 +192,21 @@ $ sudo apt-get update
 
 继续安装您的 NVIDIA 显卡驱动程序:
 
-```
+```py
 $ sudo apt-get install nvidia-driver-418
 
 ```
 
 然后发出 reboot 命令，等待系统重新启动:
 
-```
+```py
 $ sudo reboot now
 
 ```
 
 回到终端/SSH 连接后，运行`nvidia-smi`命令查询 GPU 并检查其状态:
 
-```
+```py
 $ nvidia-smi
 Fri Nov 22 03:14:45 2019
 +-----------------------------------------------------------------------------+
@@ -233,7 +233,7 @@ Fri Nov 22 03:14:45 2019
 
 以下命令将从你的终端下载和安装 CUDA 10.0
 
-```
+```py
 $ cd ~
 $ mkdir installers
 $ cd installers/
@@ -248,7 +248,7 @@ $ sudo ./cuda_10.0.130_410.48_linux.run --override
 
 系统将提示您接受最终用户许可协议(EULA)。在此过程中，您可能会遇到以下错误:
 
-```
+```py
 Please make sure that
 PATH includes /usr/local/cuda-10.0/bin
 LD_LIBRARY_PATH includes /usr/local/cuda-10.0/lib64, or, add /usr/local/cuda-10.0/lib64 to /etc/ld.so.conf and run ldconfig as root
@@ -266,14 +266,14 @@ Logfile is /tmp/cuda_install_25774.log
 
 现在让我们使用`nano`更新我们的 bash 配置文件(如果你更习惯使用`vim`或`emacs`，你可以使用它们):
 
-```
+```py
 $ nano ~/.bashrc
 
 ```
 
 在配置文件的底部插入以下几行:
 
-```
+```py
 # NVIDIA CUDA Toolkit
 export PATH=/usr/local/cuda-10.0/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda-10.0/lib64
@@ -288,14 +288,14 @@ export LD_LIBRARY_PATH=/usr/local/cuda-10.0/lib64
 
 然后，获取配置文件:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
 
 在这里，我们将查询 CUDA 以确保它已成功安装:
 
-```
+```py
 $ nvcc -V
 nvcc: NVIDIA (R) Cuda compiler driver
 Copyright (c) 2005-2018 NVIDIA Corporation
@@ -318,7 +318,7 @@ Cuda compilation tools, release 10.0, V10.0.130
 
 然后，您可能需要将其从您的家用机器 SCP(安全复制)到您的远程深度学习箱:
 
-```
+```py
 $ scp ~/Downloads/cudnn-10.0-linux-x64-v7.6.4.24.tgz \
     username@your_ip_address:~/installers
 
@@ -326,7 +326,7 @@ $ scp ~/Downloads/cudnn-10.0-linux-x64-v7.6.4.24.tgz \
 
 回到你的 GPU 开发系统，让我们安装 cuDNN:
 
-```
+```py
 $ cd ~/installers
 $ tar -zxf cudnn-10.0-linux-x64-v7.6.4.38.tgz
 $ cd cuda
@@ -358,7 +358,7 @@ $ cd ~
 
 让我们下载并安装 pip:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python3 get-pip.py
 
@@ -372,7 +372,7 @@ $ sudo python3 get-pip.py
 
 现在让我们安装我喜欢的虚拟环境工具:
 
-```
+```py
 $ pip3 install virtualenv virtualenvwrapper
 
 ```
@@ -381,14 +381,14 @@ $ pip3 install virtualenv virtualenvwrapper
 
 从这里开始，我们需要更新 bash 概要文件以适应`virtualenvwrapper`。用 Nano 或其他文本编辑器打开`~/.bashrc`文件:
 
-```
+```py
 $ nano ~/.bashrc
 
 ```
 
 并在文件末尾插入以下行:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.local/bin/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
@@ -401,7 +401,7 @@ source $HOME/.local/bin/virtualenvwrapper.sh
 
 继续将更改来源/加载到您的个人资料中:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
@@ -410,7 +410,7 @@ $ source ~/.bashrc
 
 现在我们准备创建你的 **Python 3** 深度学习**虚拟**环境命名为`dl4cv`:
 
-```
+```py
 $ mkvirtualenv dl4cv -p python3
 
 ```
@@ -427,14 +427,14 @@ $ mkvirtualenv dl4cv -p python3
 
 确保您仍然在您的`dl4cv`虚拟环境中(通常虚拟环境名称在您的 bash 提示符之前)。如果没有，不用担心。只需使用以下命令激活环境:
 
-```
+```py
 $ workon dl4cv
 
 ```
 
 TensorFlow 2.0 的先决条件是 NumPy 用于数值处理。继续使用 pip 安装 NumPy 和 TensorFlow 2.0:
 
-```
+```py
 $ pip install numpy
 $ pip install tensorflow==2.0.0 # or tensorflow-gpu==2.0.0
 
@@ -458,14 +458,14 @@ $ pip install tensorflow==2.0.0 # or tensorflow-gpu==2.0.0
 
 确保您仍然在您的`dl4cv`虚拟环境中(通常虚拟环境名称在您的 bash 提示符之前)。如果没有，不用担心。只需使用以下命令激活环境:
 
-```
+```py
 $ workon dl4cv
 
 ```
 
 我们首先安装标准图像处理库，包括 OpenCV:
 
-```
+```py
 $ pip install opencv-contrib-python
 $ pip install scikit-image
 $ pip install pillow
@@ -477,7 +477,7 @@ $ pip install imutils
 
 从那里，让我们安装机器学习库和支持库，最著名的两个是 scikit-learn 和 matplotlib:
 
-```
+```py
 $ pip install scikit-learn
 $ pip install matplotlib
 $ pip install progressbar2
@@ -498,7 +498,7 @@ $ pip install pandas
 
 在您的`dl4cv`环境中启动一个 Python shell，并确保您可以导入以下包:
 
-```
+```py
 $ workon dl4cv
 $ python
 >>> import tensorflow as tf
@@ -513,7 +513,7 @@ $ python
 
 如果您的系统配置了 NVIDIA GPU，请务必**检查 TensorFlow 2.0 的安装是否能够利用您的 GPU:**
 
-```
+```py
 $ workon dl4cv
 $ python
 >>> import tensorflow as tf
@@ -528,7 +528,7 @@ True
 
 至此，你的 TensorFlow 2.0 `dl4cv`环境已经整装待发。无论何时你想执行 TensorFlow 2.0 代码(比如来自我的[深度学习书籍](https://pyimagesearch.com/deep-learning-computer-vision-python-book/)，一定要使用`workon`命令:
 
-```
+```py
 $ workon dl4cv
 
 ```
@@ -537,7 +537,7 @@ $ workon dl4cv
 
 如果您需要回到系统级环境，可以停用当前的虚拟环境:
 
-```
+```py
 $ deactivate
 
 ```
@@ -561,7 +561,7 @@ Keras 已经深深嵌入到 TensorFlow 中，`tf.keras`是 TensorFlow 2.0 中主
 
 现在，您可以在 Python 程序中使用以下语句导入 Keras:
 
-```
+```py
 $ workon dl4cv
 $ python
 >>> import tensorflow.keras

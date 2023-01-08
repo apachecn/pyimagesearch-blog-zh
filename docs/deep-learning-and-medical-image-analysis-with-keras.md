@@ -243,7 +243,7 @@
 
 首先，更改目录并解压缩文件:
 
-```
+```py
 $ cd /path/where/you/downloaded/the/files
 $ unzip dl-medical-imaging.zip
 
@@ -251,7 +251,7 @@ $ unzip dl-medical-imaging.zip
 
 然后将目录切换到项目文件夹中，并在其中创建一个`malaria/`目录+ `cd`:
 
-```
+```py
 $ cd dl-medical-imaging
 $ mkdir malaria
 $ cd malaria
@@ -260,7 +260,7 @@ $ cd malaria
 
 接下来，下载数据集(到您当前应该“在”的`dl-medical-imaging/malaria/`目录中):
 
-```
+```py
 $ wget https://ceb.nlm.nih.gov/proj/malaria/cell_images.zip
 $ unzip cell_images.zip
 
@@ -268,7 +268,7 @@ $ unzip cell_images.zip
 
 如果您没有`tree`包，您将需要它:
 
-```
+```py
 $ sudo apt-get install tree # for Ubuntu
 $ brew install tree # for macOS
 
@@ -276,14 +276,14 @@ $ brew install tree # for macOS
 
 现在让我们切换回父目录:
 
-```
+```py
 $ cd ..
 
 ```
 
 最后，现在让我们使用 tree 命令来检查我们的项目结构:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── malaria
@@ -325,7 +325,7 @@ NIH 疟疾数据集位于`malaria/`文件夹中。里面的东西已经被解压
 
 现在让我们回顾一下`config.py`文件:
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -373,7 +373,7 @@ VAL_SPLIT = 0.1
 
 要查看数据分割过程是如何执行的，打开`build_dataset.py`并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from imutils import paths
@@ -395,7 +395,7 @@ random.shuffle(imagePaths)
 
 现在，让我们拆分数据:
 
-```
+```py
 # compute the training and testing split
 i = int(len(imagePaths) * config.TRAIN_SPLIT)
 trainPaths = imagePaths[:i]
@@ -416,7 +416,7 @@ trainPaths = trainPaths[i:]
 
 现在，我们已经将图像路径组织到各自的分割中，让我们定义将要构建的数据集:
 
-```
+```py
 # define the datasets that we'll be building
 datasets = [
 	("training", trainPaths, config.TRAIN_PATH),
@@ -434,7 +434,7 @@ datasets = [
 
 有了这些信息，我们可以开始循环每个`datasets`:
 
-```
+```py
 # loop over the datasets
 for (dType, imagePaths, baseOutput) in datasets:
 	# show which data split we are creating
@@ -483,7 +483,7 @@ for (dType, imagePaths, baseOutput) in datasets:
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python build_dataset.py
 [INFO] building 'training' split
 [INFO] 'creating malaria/training' directory
@@ -506,7 +506,7 @@ $ python build_dataset.py
 
 让我们再看一下我们的项目结构，只是为了好玩:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── malaria
@@ -551,7 +551,7 @@ $ tree --dirsfirst --filelimit 10
 
 打开`train_model.py`脚本并插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -589,7 +589,7 @@ args = vars(ap.parse_args())
 
 现在让我们设置我们的训练参数，并定义我们的学习率衰减函数:
 
-```
+```py
 # define the total number of epochs to train for along with the
 # initial learning rate and batch size
 NUM_EPOCHS = 50
@@ -619,7 +619,7 @@ def poly_decay(epoch):
 
 接下来，我们来看看训练集、验证集和测试集中图像路径的数量:
 
-```
+```py
 # determine the total number of image paths in training, validation,
 # and testing directories
 totalTrain = len(list(paths.list_images(config.TRAIN_PATH)))
@@ -632,7 +632,7 @@ totalTest = len(list(paths.list_images(config.TEST_PATH)))
 
 让我们应用数据扩充(我几乎总是为每个深度学习数据集推荐这个过程):
 
-```
+```py
 # initialize the training training data augmentation object
 trainAug = ImageDataGenerator(
 	rescale=1 / 255.0,
@@ -654,7 +654,7 @@ valAug = ImageDataGenerator(rescale=1 / 255.0)
 
 让我们初始化我们的训练、验证和测试生成器:
 
-```
+```py
 # initialize the training generator
 trainGen = trainAug.flow_from_directory(
 	config.TRAIN_PATH,
@@ -700,7 +700,7 @@ testGen = valAug.flow_from_directory(
 
 让我们初始化`ResNet`并编译模型:
 
-```
+```py
 # initialize our ResNet model and compile it
 model = ResNet.build(64, 64, 3, 2, (3, 4, 6),
 	(64, 128, 256, 512), reg=0.0005)
@@ -727,7 +727,7 @@ model.compile(loss="binary_crossentropy", optimizer=opt,
 
 我们现在准备训练我们的模型:
 
-```
+```py
 # define our set of callbacks and fit the model
 callbacks = [LearningRateScheduler(poly_decay)]
 H = model.fit(
@@ -751,7 +751,7 @@ H = model.fit(
 
 让我们评估一下测试数据集的结果:
 
-```
+```py
 # reset the testing generator and then use our trained model to
 # make predictions on the data
 print("[INFO] evaluating network...")
@@ -777,7 +777,7 @@ print(classification_report(testGen.classes, predIdxs,
 
 最后，我们将绘制我们的训练数据:
 
-```
+```py
 # plot the training loss and accuracy
 N = NUM_EPOCHS
 plt.style.use("ggplot")
@@ -807,7 +807,7 @@ plt.savefig(args["plot"])
 
 在那里，您可以使用以下命令开始训练:
 
-```
+```py
 $ python train_model.py
 Found 19842 images belonging to 2 classes.
 Found 2204 images belonging to 2 classes.

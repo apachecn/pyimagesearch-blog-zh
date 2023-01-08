@@ -22,7 +22,7 @@
 
 要查看`detectMultiScale`函数的参数，只需启动一个 shell，导入 OpenCV，然后使用`help`函数:
 
-```
+```py
 $ python
 >>> import cv2
 >>> help(cv2.HOGDescriptor().detectMultiScale)
@@ -39,7 +39,7 @@ $ python
 
 在我们探索`detectMultiScale`参数之前，让我们首先创建一个简单的 Python 脚本(基于我们上周的[行人检测器)，它将允许我们轻松地进行实验:](https://pyimagesearch.com/2015/11/09/pedestrian-detection-opencv/)
 
-```
+```py
 # import the necessary packages
 from __future__ import print_function
 import argparse
@@ -67,7 +67,7 @@ args = vars(ap.parse_args())
 
 **第 9-20 行**处理解析我们的命令行参数`--image`开关是我们想要检测行人的输入图像的路径。`--win-stride`是滑动窗口在 *x* 和 *y* 方向的步长。`--padding`开关控制在 HOG 特征向量提取和 SVM 分类之前填充 ROI 的像素数量。为了控制图像金字塔的比例(允许我们在多个比例下检测图像中的人)，我们可以使用`--scale`参数。最后，如果我们想要对检测到的边界框应用均值漂移分组，可以指定`--mean-shift`。
 
-```
+```py
 # evaluate the command line arguments (using the eval function like
 # this is not good form, but let's tolerate it for the example)
 winStride = eval(args["win_stride"])
@@ -90,7 +90,7 @@ image = imutils.resize(image, width=min(400, image.shape[1]))
 
 从那里，**第 33 行和第 34 行**加载我们的图像并将其调整到最大宽度为 400 像素——我们的图像越小，处理和检测图像中的人就越快。
 
-```
+```py
 # detect people in the image
 start = datetime.datetime.now()
 (rects, weights) = hog.detectMultiScale(image, winStride=winStride,
@@ -114,7 +114,7 @@ cv2.waitKey(0)
 
 要获得对象检测计时的默认基线，只需执行以下命令:
 
-```
+```py
 $ python detectmultiscale.py --image images/person_010.bmp
 
 ```
@@ -157,7 +157,7 @@ $ python detectmultiscale.py --image images/person_010.bmp
 
 *`winStride`越小，需要评估的窗口就越多(这可能很快变成相当大的计算负担):*
 
-```
+```py
 $ python detectmultiscale.py --image images/person_010.bmp --win-stride="(4, 4)"
 
 ```
@@ -170,7 +170,7 @@ $ python detectmultiscale.py --image images/person_010.bmp --win-stride="(4, 4)"
 
 类似地，*较大的* `winStride`是需要评估的*较少的窗口*(允许我们显著地加速我们的检测器)。然而，如果`winStride`变得太大，那么我们很容易完全错过检测:
 
-```
+```py
 $ python detectmultiscale.py --image images/person_010.bmp --win-stride="(16, 16)"
 
 ```
@@ -203,7 +203,7 @@ $ python detectmultiscale.py --image images/person_010.bmp --win-stride="(16, 16
 
 一个*变小* `scale`将 ***增加*** 图像金字塔中的层数*和* ***增加*** 处理图像所需的时间:
 
-```
+```py
 $ python detectmultiscale.py --image images/person_010.bmp --scale 1.01
 
 ```
@@ -216,7 +216,7 @@ $ python detectmultiscale.py --image images/person_010.bmp --scale 1.01
 
 与此同时，*更大的*比例将 ***减少*** 金字塔中的层数，以及 ***减少*** 检测图像中的物体所需的时间:
 
-```
+```py
 $ python detectmultiscale.py --image images/person_010.bmp --scale 1.5
 
 ```
@@ -229,7 +229,7 @@ $ python detectmultiscale.py --image images/person_010.bmp --scale 1.5
 
 最后，如果你同时减少*`winStride`和`scale`，你将*显著*增加执行物体检测的时间:*
 
-```
+```py
 $ python detectmultiscale.py --image images/person_010.bmp --scale 1.03 \
 	--win-stride="(4, 4)"
 

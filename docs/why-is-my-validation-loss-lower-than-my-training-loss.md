@@ -98,7 +98,7 @@
 
 继续使用本文的 ***【下载】*** 部分下载源代码。从那里，通过`tree`命令检查项目/目录结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── pyimagesearch
@@ -162,7 +162,7 @@ $ tree --dirsfirst
 
 让我们从实施培训脚本开始:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.minivggnet import MiniVGGNet
 from sklearn.metrics import classification_report
@@ -186,7 +186,7 @@ args = vars(ap.parse_args())
 
 然后，我们初始化几个超参数，即我们要训练的时期数、初始学习速率和批量大小:
 
-```
+```py
 # initialize the number of epochs to train for, base learning rate,
 # and batch size
 NUM_EPOCHS = 25
@@ -197,7 +197,7 @@ BS = 32
 
 然后，我们加载并预处理我们的时尚 MNIST 数据:
 
-```
+```py
 # grab the Fashion MNIST dataset (if this is your first time running
 # this the dataset will be automatically downloaded)
 print("[INFO] loading Fashion MNIST...")
@@ -228,7 +228,7 @@ labelNames = ["top", "trouser", "pullover", "dress", "coat",
 
 在这里，我们拥有了根据 MNIST 时装数据编译和训练 MiniVGGNet 模型所需的一切:
 
-```
+```py
 # initialize the optimizer and model
 print("[INFO] compiling model...")
 opt = SGD(lr=INIT_LR, momentum=0.9, decay=INIT_LR / NUM_EPOCHS)
@@ -250,7 +250,7 @@ H = model.fit(trainX, trainY,
 
 在这里，我们将评估我们的`model`并序列化我们的培训历史:
 
-```
+```py
 # make predictions on the test set and show a nicely formatted
 # classification report
 preds = model.predict(testX)
@@ -274,7 +274,7 @@ f.close()
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python fashion_mnist.py --history training.pickle
 [INFO] loading Fashion MNIST...
 [INFO] compiling model...
@@ -325,7 +325,7 @@ weighted avg       0.93      0.93      0.93     10000
 
 检查工作目录的内容，您应该有一个名为`training.pickle`的文件——该文件包含我们的培训历史日志。
 
-```
+```py
 $ ls *.pickle
 training.pickle
 
@@ -339,7 +339,7 @@ training.pickle
 
 打开`plot_shift.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import matplotlib.pyplot as plt
 import numpy as np
@@ -360,7 +360,7 @@ args = vars(ap.parse_args())
 
 让我们继续加载我们的数据并初始化我们的曲线图:
 
-```
+```py
 # load the training history
 H = pickle.loads(open(args["input"], "rb").read())
 
@@ -383,7 +383,7 @@ plt.style.use("ggplot")
 
 让我们生成我们的**顶部图:**
 
-```
+```py
 # plot the *unshifted* training and validation loss
 plt.style.use("ggplot")
 axs[0].plot(epochs, H["loss"], label="train_loss")
@@ -397,7 +397,7 @@ axs[0].legend()
 
 然后画出我们的**底图:**
 
-```
+```py
 # plot the *shifted* training and validation loss
 axs[1].plot(epochs - 0.5, H["loss"], label="train_loss")
 axs[1].plot(epochs, H["val_loss"], label="val_loss")
@@ -418,7 +418,7 @@ plt.show()
 
 打开终端并执行以下命令:
 
-```
+```py
 $ python plot_shift.py --input training.pickle
 
 ```

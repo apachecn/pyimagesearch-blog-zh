@@ -104,7 +104,7 @@ An example of a Pokedex (thank you to [Game Trader USA](https://gametradersusa.c
 
 如果您的系统上尚未安装`requests`，您可以通过以下方式安装:
 
-```
+```py
 $ pip install requests
 
 ```
@@ -113,7 +113,7 @@ $ pip install requests
 
 此外，如果您正在使用 Python 虚拟环境，请确保在安装`requests`之前使用`workon`命令访问环境:
 
-```
+```py
 $ workon your_env_name
 $ pip install requests
 
@@ -125,7 +125,7 @@ $ pip install requests
 
 打开一个新文件，将其命名为`search_bing_api.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from requests import exceptions
 import argparse
@@ -154,7 +154,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们配置一些全局变量:
 
-```
+```py
 # set your Microsoft Cognitive Services API key along with (1) the
 # maximum number of results for a given search and (2) the group size
 # for results (maximum of 50 per request)
@@ -180,7 +180,7 @@ URL = "https://api.cognitive.microsoft.com/bing/v7img/search"
 
 从那里，让我们确保我们准备好处理所有(编辑:*大多数*)可能的异常，这些异常在尝试获取图像时可能会出现，首先列出我们可能会遇到的异常:
 
-```
+```py
 # when attempting to download images from the web both the Python
 # programming language and the requests library have a number of
 # exceptions that can be thrown so let's build a list of them now
@@ -195,7 +195,7 @@ EXCEPTIONS = set([IOError, FileNotFoundError,
 
 从这里，让我们初始化我们的搜索参数并进行搜索:
 
-```
+```py
 # store the search term in a convenience variable then set the
 # headers and search parameters
 term = args["query"]
@@ -229,7 +229,7 @@ total = 0
 
 现在是时候在`GROUP_SIZE`块中循环结果了:
 
-```
+```py
 # loop over the estimated number of results in `GROUP_SIZE` groups
 for offset in range(0, estNumResults, GROUP_SIZE):
 	# update the search parameters using the current offset, then
@@ -251,7 +251,7 @@ for offset in range(0, estNumResults, GROUP_SIZE):
 
 从那里，让我们尝试保存当前批次中的图像:
 
-```
+```py
 	# loop over the results
 	for v in results["value"]:
 		# try to download the image
@@ -291,7 +291,7 @@ for offset in range(0, estNumResults, GROUP_SIZE):
 
 接下来，让我们看看 OpenCV 是否真的可以加载图像，这意味着(1)图像文件下载成功,( 2)图像路径有效:
 
-```
+```py
 		# try to load the image from disk
 		image = cv2.imread(p)
 
@@ -325,14 +325,14 @@ for offset in range(0, estNumResults, GROUP_SIZE):
 
 在我的例子中，我正在创建一个`dataset`目录:
 
-```
+```py
 $ mkdir dataset
 
 ```
 
 所有下载的图像都将存储在`dataset`中。从那里，执行以下命令创建一个子目录，并运行对“charmander”的搜索:
 
-```
+```py
 $ mkdir dataset/charmander
 $ python search_bing_api.py --query "charmander" --output dataset/charmander
 [INFO] searching Bing API for 'charmander'
@@ -358,7 +358,7 @@ $ python search_bing_api.py --query "charmander" --output dataset/charmander
 
 我为[皮卡丘](https://bulbapedia.bulbagarden.net/wiki/Pikachu_(Pok%C3%A9mon))做同样的事情:
 
-```
+```py
 $ mkdir dataset/pikachu
 $ python search_bing_api.py --query "pikachu" --output dataset/pikachu
 [INFO] searching Bing API for 'pikachu'
@@ -374,7 +374,7 @@ $ python search_bing_api.py --query "pikachu" --output dataset/pikachu
 
 连同[杰尼龟](https://bulbapedia.bulbagarden.net/wiki/Squirtle_(Pok%C3%A9mon)):
 
-```
+```py
 $ mkdir dataset/squirtle
 $ python search_bing_api.py --query "squirtle" --output dataset/squirtle
 [INFO] searching Bing API for 'squirtle'
@@ -390,7 +390,7 @@ $ python search_bing_api.py --query "squirtle" --output dataset/squirtle
 
 然后[妙蛙种子](https://bulbapedia.bulbagarden.net/wiki/Bulbasaur_(Pok%C3%A9mon)):
 
-```
+```py
 $ mkdir dataset/bulbasaur
 $ python search_bing_api.py --query "bulbasaur" --output dataset/bulbasaur
 [INFO] searching Bing API for 'bulbasaur'
@@ -408,7 +408,7 @@ $ python search_bing_api.py --query "bulbasaur" --output dataset/bulbasaur
 
 最后是 [Mewtwo](https://bulbapedia.bulbagarden.net/wiki/Mewtwo_(Pok%C3%A9mon)) :
 
-```
+```py
 $ mkdir dataset/mewtwo
 $ python search_bing_api.py --query "mewtwo" --output dataset/mewtwo
 [INFO] searching Bing API for 'mewtwo'
@@ -424,7 +424,7 @@ $ python search_bing_api.py --query "mewtwo" --output dataset/mewtwo
 
 我们可以通过使用一点`find`魔法来计算每次查询下载的图片总数(感谢格伦·杰克曼在 [StackOverflow](https://stackoverflow.com/questions/15216370/how-to-count-number-of-files-in-each-directory) 上的精彩演讲):
 
-```
+```py
 $ find . -type d -print0 | while read -d '' -r dir; do
 > files=("$dir"/*)
 > printf "%5d files in directory %s\n" "${#files[@]}" "$dir"
@@ -461,7 +461,7 @@ $ find . -type d -print0 | while read -d '' -r dir; do
 
 修剪完不相关的图像后，让我们再做一次图像计数:
 
-```
+```py
 $ find . -type d -print0 | while read -d '' -r dir; do
 > files=("$dir"/*);
 > printf "%5d files in directory %s\n" "${#files[@]}" "$dir";

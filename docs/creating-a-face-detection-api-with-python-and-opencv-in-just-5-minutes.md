@@ -39,7 +39,7 @@
 
 第一步是安装并运行我们的开发环境。我们只需要三个必需的包:
 
-```
+```py
 $ pip install numpy django requests
 
 ```
@@ -54,7 +54,7 @@ $ pip install numpy django requests
 
 既然安装了先决条件，让我们设置 Django 项目:
 
-```
+```py
 $ django-admin startproject cv_api
 $ cd cv_api
 
@@ -66,7 +66,7 @@ $ cd cv_api
 
 下面是我们新项目的目录结构:
 
-```
+```py
 |--- cv_api
 |    |--- cv_api
 |        |--- __init__.py
@@ -83,14 +83,14 @@ Django 项目由多个*应用*组成。Django 框架的核心范例之一是，�
 
 记住这一点，让我们创建一个名为`face_detector`的新应用程序，它将包含我们构建人脸检测 API 的代码:
 
-```
+```py
 $ python manage.py startapp face_detector
 
 ```
 
 注意我们现在在`cv_api`目录中有一个`face_detector`目录。同样，Django 已经为我们的`face_detector`应用程序自动生成了一些样板代码和配置，我们可以看到下面的内容:
 
-```
+```py
 |--- cv_api
 |    |--- cv_api
 |        |--- __init__.py
@@ -124,7 +124,7 @@ Django 框架是一种[模型-视图-模板](https://docs.djangoproject.com/en/1
 
 在我们深入代码执行实际的人脸检测之前，我想与您分享我在构建 Python + OpenCV 时的*个人*样板模板。当您构建自己的计算机视觉 API 时，可以使用此代码作为起点。
 
-```
+```py
 # import the necessary packages
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
@@ -217,7 +217,7 @@ def _grab_image(path=None, stream=None, url=None):
 
 既然我们已经检查了 Python + OpenCV web API 的样板代码，让我们把它插入人脸检测器。打开`cv_api/face_detector/views.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
@@ -322,7 +322,7 @@ def _grab_image(path=None, stream=None, url=None):
 
 只需打开`cv_api/cv_api/urls.py`文件，并将其更新为包含一个指向我们的人脸检测视图的 URL 端点:
 
-```
+```py
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
@@ -345,7 +345,7 @@ urlpatterns = patterns('',
 
 只需使用您的终端导航回`cv_api`项目根目录并启动测试服务器:
 
-```
+```py
 $ python manage.py runserver
 
 ```
@@ -370,7 +370,7 @@ $ python manage.py runserver
 
 让我们构造一个命令，通过 cURL 与我们的人脸检测 API 进行交互:
 
-```
+```py
 $ curl -X POST 'http://localhost:8000/face_detection/detect/' -d 'url=https://pyimagesearch.com/wp-content/uploads/2015/05/obama.jpg' ; echo ""
 {"num_faces": 1, "success": true, "faces": [[410, 100, 591, 281]]}
 
@@ -386,7 +386,7 @@ $ curl -X POST 'http://localhost:8000/face_detection/detect/' -d 'url=https://py
 
 同样，我们需要构造 cURL 命令，假设上述文件的名称是`adrian.jpg`:
 
-```
+```py
 $ curl -X POST -F image=@adrian.jpg 'http://localhost:8000/face_detection/detect/' ; echo ""
 {"num_faces": 1, "success": true, "faces": [[180, 114, 222, 156]]}
 
@@ -400,7 +400,7 @@ $ curl -X POST -F image=@adrian.jpg 'http://localhost:8000/face_detection/detect
 
 打开一个新文件，将其命名为`test_api.py`，并包含以下代码:
 
-```
+```py
 # import the necessary packages
 import requests
 import cv2
@@ -449,7 +449,7 @@ cv2.waitKey(0)
 
 要查看我们的脚本运行情况，只需执行以下命令:
 
-```
+```py
 $ python test_api.py
 
 ```
@@ -494,7 +494,7 @@ $ python test_api.py
 
 这是另一个在图像中检测人脸的例子。只是这次我们使用的是实时 API 端点:
 
-```
+```py
 $ curl -X POST 'http://api.pyimagesearch.com/face_detection/detect/' -d 'url=https://pyimagesearch.com/wp-content/uploads/2015/05/obama.jpg' ; echo ""
 {"num_faces": 1, "success": true, "faces": [[410, 100, 591, 281]]}
 

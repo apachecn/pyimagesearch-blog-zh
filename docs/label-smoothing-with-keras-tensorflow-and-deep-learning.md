@@ -97,7 +97,7 @@
 
 一旦您提取了文件，您可以使用如图所示的`tree`命令来查看项目结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── pyimagesearch
@@ -131,7 +131,7 @@ $ tree --dirsfirst
 
 打开项目结构中的`label_smoothing_func.py`文件，插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -155,7 +155,7 @@ import argparse
 
 方法#1 的**核心在于`smooth_labels`函数:**
 
-```
+```py
 def smooth_labels(labels, factor=0.1):
 	# smooth the labels
 	labels *= (1 - factor)
@@ -199,7 +199,7 @@ def smooth_labels(labels, factor=0.1):
 
 让我们继续实施:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-s", "--smoothing", type=float, default=0.1,
@@ -217,7 +217,7 @@ args = vars(ap.parse_args())
 
 让我们准备好超参数和数据:
 
-```
+```py
 # define the total number of epochs to train for, initial learning
 # rate, and batch size
 NUM_EPOCHS = 70
@@ -252,7 +252,7 @@ testX -= mean
 
 让我们**通过方法#1 应用标签平滑:**
 
-```
+```py
 # convert the labels from integers to vectors, converting the data
 # type to floats so we can apply label smoothing
 lb = LabelBinarizer()
@@ -275,7 +275,7 @@ print("[INFO] after smoothing: {}".format(trainY[0]))
 
 在这里，我们将准备数据扩充和我们的学习率调度程序:
 
-```
+```py
 # construct the image generator for data augmentation
 aug = ImageDataGenerator(
 	width_shift_range=0.1,
@@ -315,7 +315,7 @@ H = model.fit_generator(
 
 一旦模型完全训练完毕，我们将继续生成分类报告和训练历史图:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(testX, batch_size=BATCH_SIZE)
@@ -356,7 +356,7 @@ plt.savefig(args["plot"])
 
 打开目录结构中的`label_smoothing_loss.py`文件，我们将开始:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -391,7 +391,7 @@ args = vars(ap.parse_args())
 
 我们的下一个代码块与**方法#1** 几乎相同，除了最后一部分:
 
-```
+```py
 # define the total number of epochs to train for initial learning
 # rate, and batch size
 NUM_EPOCHS = 2
@@ -434,7 +434,7 @@ testY = lb.transform(testY)
 
 让我们实例化我们的数据扩充和学习率调度回调:
 
-```
+```py
 # construct the image generator for data augmentation
 aug = ImageDataGenerator(
 	width_shift_range=0.1,
@@ -451,7 +451,7 @@ callbacks = [LearningRateScheduler(schedule)]
 
 从那里我们将**用标签平滑参数** 初始化我们的损失
 
-```
+```py
 # initialize the optimizer and loss
 print("[INFO] smoothing amount: {}".format(args["smoothing"]))
 opt = SGD(lr=INIT_LR, momentum=0.9)
@@ -471,7 +471,7 @@ model.compile(loss=loss, optimizer=opt, metrics=["accuracy"])
 
 最后，我们将训练我们的模型，评估它，并绘制训练历史:
 
-```
+```py
 # train the network
 print("[INFO] training network...")
 H = model.fit_generator(
@@ -512,7 +512,7 @@ plt.savefig(args["plot"])
 
 从那里，打开一个终端，执行以下命令，使用我们的自定义`smooth_labels`函数应用标签平滑:
 
-```
+```py
 $ python label_smoothing_func.py --smoothing 0.1
 [INFO] loading CIFAR-10 data...
 [INFO] smoothing amount: 0.1
@@ -588,7 +588,7 @@ weighted avg       0.89      0.89      0.89     10000
 
 接下来，让我们在执行标签平滑时使用 Keras/TensorFlow 的`CategoricalCrossentropy`类:
 
-```
+```py
 $ python label_smoothing_loss.py --smoothing 0.1
 [INFO] loading CIFAR-10 data...
 [INFO] smoothing amount: 0.1

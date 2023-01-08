@@ -97,7 +97,7 @@
 
 让我们检查我们的项目文件:
 
-```
+```py
 $ tree
 .
 ├── action_recognition_kinetics.txt
@@ -127,7 +127,7 @@ $ tree
 
 打开项目结构中的`human_activity_reco.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -157,7 +157,7 @@ args = vars(ap.parse_args())
 
 从这里开始，我们将执行初始化:
 
-```
+```py
 # load the contents of the class labels file, then define the sample
 # duration (i.e., # of frames for classification) and sample size
 # (i.e., the spatial dimensions of the frame)
@@ -173,7 +173,7 @@ SAMPLE_SIZE = 112
 
 接下来，我们将加载并初始化我们的人类活动识别模型:
 
-```
+```py
 # load the human activity recognition model
 print("[INFO] loading human activity recognition model...")
 net = cv2.dnn.readNet(args["model"])
@@ -190,7 +190,7 @@ vs = cv2.VideoCapture(args["input"] if args["input"] else 0)
 
 我们现在准备开始循环帧并执行人体活动识别:
 
-```
+```py
 # loop until we explicitly break from it
 while True:
 	# initialize the batch of frames that will be passed through the
@@ -221,7 +221,7 @@ while True:
 
 让我们构建我们的`blob`输入帧，我们将很快通过人类活动识别 CNN:
 
-```
+```py
 	# now that our frames array is filled we can construct our blob
 	blob = cv2.dnn.blobFromImages(frames, 1.0,
 		(SAMPLE_SIZE, SAMPLE_SIZE), (114.7748, 107.7354, 99.4750),
@@ -249,7 +249,7 @@ while True:
 
 此时，我们准备好执行**人类活动识别推理**，然后用预测标签注释帧，并在屏幕上显示预测:
 
-```
+```py
 	# pass the blob through the network to obtain our human activity
 	# recognition predictions
 	net.setInput(blob)
@@ -283,7 +283,7 @@ while True:
 
 在上一节的人类活动识别中，您会注意到下面几行:
 
-```
+```py
 # loop until we explicitly break from it
 while True:
 	# initialize the batch of frames that will be passed through the
@@ -339,7 +339,7 @@ while True:
 
 该脚本与上一个脚本非常相似，但是我在这里包含它是为了让您进行试验:
 
-```
+```py
 # import the necessary packages
 from collections import deque
 import numpy as np
@@ -385,7 +385,7 @@ vs = cv2.VideoCapture(args["input"] if args["input"] else 0)
 
 上面的所有其他行都是一样的，所以现在让我们检查一下我们的帧处理循环:
 
-```
+```py
 # loop over frames from the video stream
 while True:
 	# read a frame from the video stream
@@ -421,7 +421,7 @@ while True:
 
 一旦队列满了，我们将执行滚动的人类活动识别预测:
 
-```
+```py
 	# now that our frames array is filled we can construct our blob
 	blob = cv2.dnn.blobFromImages(frames, 1.0,
 		(SAMPLE_SIZE, SAMPLE_SIZE), (114.7748, 107.7354, 99.4750),
@@ -465,7 +465,7 @@ while True:
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python human_activity_reco_deque.py --model resnet-34_kinetics.onnx \
 	--classes action_recognition_kinetics.txt \
 	--input example_activities.mp4
@@ -478,7 +478,7 @@ $ python human_activity_reco_deque.py --model resnet-34_kinetics.onnx \
 
 如果您运行的是旧版本的 OpenCV，您将收到以下错误:
 
-```
+```py
 net = cv2.dnn.readNet(args["model"])
 cv2.error: OpenCV(4.1.0) /Users/adrian/build/skvark/opencv-python/opencv/modules/dnn/src/onnx/onnx_importer.cpp:245: error: (-215:Assertion failed) attribute_proto.ints_size() == 2 in function 'getLayerParams'
 

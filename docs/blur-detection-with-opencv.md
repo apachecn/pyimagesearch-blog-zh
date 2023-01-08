@@ -38,7 +38,7 @@
 
 方法简单。直白。有合理的推理。而可以在 ***中实现的只有一行代码*** :
 
-```
+```py
 cv2.Laplacian(image, cv2.CV_64F).var()
 
 ```
@@ -69,7 +69,7 @@ cv2.Laplacian(image, cv2.CV_64F).var()
 
 也就是说，打开一个新文件，命名为`detect_blur.py`，让我们开始编码:
 
-```
+```py
 # import the necessary packages
 from imutils import paths
 import argparse
@@ -92,7 +92,7 @@ args = vars(ap.parse_args())
 
 我们从在第 2-4 行导入必要的包开始。如果你的机器上还没有我的 [imutils](https://github.com/jrosebr1/imutils) 包，你会想现在安装它:
 
-```
+```py
 $ pip install imutils
 
 ```
@@ -105,7 +105,7 @@ $ pip install imutils
 
 信不信由你，最难的部分已经完成了！我们只需要写一点代码来从磁盘加载图像，计算拉普拉斯的方差，然后将图像标记为模糊或不模糊:
 
-```
+```py
 # loop over the input images
 for imagePath in paths.list_images(args["images"]):
 	# load the image, convert it to grayscale, and compute the
@@ -139,7 +139,7 @@ for imagePath in paths.list_images(args["images"]):
 
 现在我们已经编写好了`detect_blur.py`脚本，让我们试一试。打开一个 shell 并发出以下命令:
 
-```
+```py
 $ python detect_blur.py --images images
 
 ```

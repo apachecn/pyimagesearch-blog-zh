@@ -46,7 +46,7 @@
 
 对于房价预测，我们可以将分类标签定义为:
 
-```
+```py
 labels = {very cheap, cheap, affordable, expensive, very expensive}
 
 ```
@@ -126,7 +126,7 @@ labels = {very cheap, cheap, affordable, expensive, very expensive}
 
 从那里，解压缩文件并导航到目录:
 
-```
+```py
 $ cd path/to/downloaded/zip
 $ unzip keras-regression.zip
 $ cd keras-regression
@@ -135,7 +135,7 @@ $ cd keras-regression
 
 在那里，您可以使用以下命令下载房价数据集:
 
-```
+```py
 $ git clone https://github.com/emanhamed/Houses-dataset
 
 ```
@@ -146,7 +146,7 @@ $ git clone https://github.com/emanhamed/Houses-dataset
 
 现在您已经有了数据集，接下来使用带有如下所示相同参数的`tree`命令来打印项目的目录+文件列表:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── Houses-dataset
@@ -179,7 +179,7 @@ regression + Keras 脚本包含在`mlp_regression.py`中，我们也将回顾它
 
 打开`datasets.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.preprocessing import MinMaxScaler
@@ -205,7 +205,7 @@ def load_house_attributes(inputPath):
 
 下面您可以看到我们的输入数据示例，包括卧室数量、浴室数量、面积(即平方英尺)、邮政编码、代码，以及我们的模型应训练预测的最终目标价格:
 
-```
+```py
    bedrooms  bathrooms  area  zipcode     price
 0         4        4.0  4053    85255  869500.0
 1         4        3.0  3343    36372  865200.0
@@ -217,7 +217,7 @@ def load_house_attributes(inputPath):
 
 让我们完成剩下的`load_house_attributes`函数:
 
-```
+```py
 	# determine (1) the unique zip codes and (2) the number of data
 	# points with each zip code
 	zipcodes = df["zipcode"].value_counts().keys().tolist()
@@ -247,7 +247,7 @@ def load_house_attributes(inputPath):
 
 现在让我们创建用于预处理数据的`process_house_attributes`函数:
 
-```
+```py
 def process_house_attributes(df, train, test):
 	# initialize the column names of the continuous data
 	continuous = ["bedrooms", "bathrooms", "area"]
@@ -272,7 +272,7 @@ def process_house_attributes(df, train, test):
 
 现在我们需要预处理我们的分类特征，即邮政编码:
 
-```
+```py
 	# one-hot encode the zip code categorical data (by definition of
 	# one-hot encoing, all output features are now in the range [0, 1])
 	zipBinarizer = LabelBinarizer().fit(df["zipcode"])
@@ -303,7 +303,7 @@ def process_house_attributes(df, train, test):
 
 打开`models.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import BatchNormalization
@@ -352,7 +352,7 @@ def create_mlp(dim, regress=False):
 
 打开`mlp_regression.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
@@ -383,7 +383,7 @@ args = vars(ap.parse_args())
 
 让我们加载房屋数据集属性，并构建我们的培训和测试拆分:
 
-```
+```py
 # construct the path to the input .txt file that contains information
 # on each house in the dataset and then load the dataset
 print("[INFO] loading house attributes...")
@@ -403,7 +403,7 @@ print("[INFO] constructing training/testing split...")
 
 让我们来衡量我们的房价数据:
 
-```
+```py
 # find the largest house price in the training set and use it to
 # scale our house prices to the range [0, 1] (this will lead to
 # better training and convergence)
@@ -419,7 +419,7 @@ testY = test["price"] / maxPrice
 
 现在让我们处理房屋属性:
 
-```
+```py
 # process the house attributes data by performing min-max scaling
 # on continuous features, one-hot encoding on categorical features,
 # and then finally concatenating them together
@@ -437,7 +437,7 @@ print("[INFO] processing data...")
 
 现在，让我们根据数据拟合 MLP 模型:
 
-```
+```py
 # create our MLP and then compile the model using mean absolute
 # percentage error as our loss, implying that we seek to minimize
 # the absolute percentage difference between our price *predictions*
@@ -460,7 +460,7 @@ model.fit(x=trainX, y=trainY,
 
 培训完成后，我们可以评估我们的模型并总结我们的结果:
 
-```
+```py
 # make predictions on the testing data
 print("[INFO] predicting house prices...")
 preds = model.predict(testX)
@@ -516,7 +516,7 @@ print("[INFO] mean: {:.2f}%, std: {:.2f}%".format(mean, std))
 
 从那里，打开一个终端并提供以下命令(确保`--dataset` [命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/)指向您下载房价数据集的位置):
 
-```
+```py
 $ python mlp_regression.py --dataset Houses-dataset/Houses\ Dataset/
 [INFO] loading house attributes...
 [INFO] constructing training/testing split...

@@ -22,7 +22,7 @@
 
 也就是说，让我们开始吧。打开一个新文件，命名为`analyze_covers.py`，让我们开始编码:
 
-```
+```py
 # import the necessary packages
 from __future__ import print_function
 import numpy as np
@@ -61,7 +61,7 @@ def filter_by_decade(decade, data):
 
 既然我们的助手函数已经定义好了，让我们继续解析命令行参数并加载我们的`output.json`文件:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-o", "--output", required=True,
@@ -79,7 +79,7 @@ data = json.loads(open("output.json").read())
 
 我们现在准备对*时间*杂志封面数据集进行实际分析:
 
-```
+```py
 # loop over each individual decade Time magazine has been published
 for decade in np.arange(1920, 2020, 10):
 	# initialize the magazine covers list
@@ -126,7 +126,7 @@ for decade in np.arange(1920, 2020, 10):
 
 要运行我们的脚本，只需执行以下命令:
 
-```
+```py
 $ python analyze_covers.py --output visualizations
 
 ```

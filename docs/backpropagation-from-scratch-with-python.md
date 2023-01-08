@@ -97,7 +97,7 @@
 
 让我们继续并开始实现反向传播。打开一个新文件，将其命名为`neuralnetwork.py`，将其存储在`pyimagesearch`的`nn`子模块中(就像我们对`perceptron.py`所做的那样)，然后让我们开始工作:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 
@@ -121,7 +121,7 @@ class NeuralNetwork:
 
 我们的权重列表`W`是空的，所以现在让我们开始初始化它:
 
-```
+```py
 		# start looping from the index of the first layer but
 		# stop before we reach the last two layers
 		for i in np.arange(0, len(layers) - 2):
@@ -140,7 +140,7 @@ class NeuralNetwork:
 
 构造函数的最后一个代码块处理输入连接需要偏置项，但输出不需要的特殊情况:
 
-```
+```py
 		# the last two layers are a special case where the input
 		# connections need a bias term but the output does not
 		w = np.random.randn(layers[-2] + 1, layers[-1])
@@ -151,7 +151,7 @@ class NeuralNetwork:
 
 我们定义的下一个函数是一个名为`__repr__`的 Python“魔法方法”——这个函数对于调试很有用:
 
-```
+```py
 	def __repr__(self):
 		# construct and return a string that represents the network
 		# architecture
@@ -161,7 +161,7 @@ class NeuralNetwork:
 
 在我们的例子中，我们将通过连接每一层中节点数量的整数值来为我们的`NeuralNetwork`对象格式化一个字符串。给定`(2, 2, 1)`的`layers`值，调用该函数的输出将是:
 
-```
+```py
 >>> from pyimagesearch.nn import NeuralNetwork
 >>> nn = NeuralNetwork([2, 2, 1])
 >>> print(nn)
@@ -170,7 +170,7 @@ NeuralNetwork: 2-2-1
 
 接下来，我们可以定义我们的 sigmoid 激活函数:
 
-```
+```py
 	def sigmoid(self, x):
 		# compute and return the sigmoid activation value for a
 		# given input value
@@ -179,7 +179,7 @@ NeuralNetwork: 2-2-1
 
 以及 sigmoid 的*导数*，我们将在向后传递时使用:
 
-```
+```py
   	def sigmoid_deriv(self, x):
 		# compute the derivative of the sigmoid function ASSUMING
 		# that x has already been passed through the 'sigmoid'
@@ -191,7 +191,7 @@ NeuralNetwork: 2-2-1
 
 我们将从 scikit-learn 库获得灵感，并定义一个名为`fit`的函数，它将负责实际训练我们的`NeuralNetwork`:
 
-```
+```py
   	def fit(self, X, y, epochs=1000, displayUpdate=100):
 		# insert a column of 1's as the last entry in the feature
 		# matrix -- this little trick allows us to treat the bias
@@ -218,7 +218,7 @@ NeuralNetwork: 2-2-1
 
 反向传播算法的核心在下面的`fit_partial`方法中:
 
-```
+```py
   	def fit_partial(self, x, y):
 		# construct our list of output activations for each layer
 		# as our data point flows through the network; the first
@@ -236,7 +236,7 @@ NeuralNetwork: 2-2-1
 
 从这里，我们可以开始向前传播阶段:
 
-```
+```py
 		# FEEDFORWARD:
 		# loop over the layers in the network
 		for layer in np.arange(0, len(self.W)):
@@ -261,7 +261,7 @@ NeuralNetwork: 2-2-1
 
 既然向前传球已经完成，我们可以继续进行稍微复杂一点的向后传球:
 
-```
+```py
 		# BACKPROPAGATION
 		# the first phase of backpropagation is to compute the
 		# difference between our *prediction* (the final output
@@ -284,7 +284,7 @@ NeuralNetwork: 2-2-1
 
 给定网络中最后一层的增量，我们现在可以使用`for`循环反向工作:
 
-```
+```py
 		# once you understand the chain rule it becomes super easy
 		# to implement with a 'for' loop -- simply loop over the
 		# layers in reverse order (ignoring the last two since we
@@ -306,7 +306,7 @@ NeuralNetwork: 2-2-1
 
 给定我们的增量列表`D`，我们可以进入权重更新阶段:
 
-```
+```py
   		# since we looped over our layers in reverse order we need to
 		# reverse the deltas
 		D = D[::-1]
@@ -330,7 +330,7 @@ NeuralNetwork: 2-2-1
 
 一旦我们的网络在给定的数据集上得到训练，我们将希望在测试集上进行预测，这可以通过下面的`predict`方法来完成:
 
-```
+```py
   	def predict(self, X, addBias=True):
 		# initialize the output prediction as the input features -- this
 		# value will be (forward) propagated through the network to
@@ -371,7 +371,7 @@ NeuralNetwork: 2-2-1
 
 我们将在`NeuralNetwork`类中定义的最后一个函数将用于计算整个*训练集的损失:*
 
-```
+```py
   	def calculate_loss(self, X, targets):
 		# make predictions for the input data points then compute
 		# the loss
@@ -391,7 +391,7 @@ NeuralNetwork: 2-2-1
 
 继续打开一个新文件，将其命名为`nn_xor.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.nn import NeuralNetwork
 import numpy as np
@@ -405,7 +405,7 @@ y = np.array([[0], [1], [1], [0]])
 
 我们现在可以定义我们的网络架构并对其进行训练:
 
-```
+```py
 # define our 2-2-1 neural network and train it
 nn = NeuralNetwork([2, 2, 1], alpha=0.5)
 nn.fit(X, y, epochs=20000)
@@ -421,7 +421,7 @@ nn.fit(X, y, epochs=20000)
 
 一旦我们的网络被训练，我们将循环我们的 XOR 数据集，允许网络预测每个数据集的输出，并在屏幕上显示预测结果:
 
-```
+```py
 # now that our network is trained, loop over the XOR data points
 for (x, target) in zip(X, y):
 	# make a prediction on the data point and display the result
@@ -436,7 +436,7 @@ for (x, target) in zip(X, y):
 
 要使用 Python 的反向传播来训练我们的神经网络，只需执行以下命令:
 
-```
+```py
 $ python nn_xor.py
 [INFO] epoch=1, loss=0.5092796
 [INFO] epoch=100, loss=0.4923591
@@ -449,7 +449,7 @@ $ python nn_xor.py
 
 平方损失图如下所示(**图 3** )。正如我们所看到的，在整个训练过程中，损耗慢慢减少到接近于零。此外，查看输出的最后四行，我们可以看到我们的预测:
 
-```
+```py
 [INFO] data=[0 0], ground-truth=0, pred=0.0054, step=0
 [INFO] data=[0 1], ground-truth=1, pred=0.9894, step=1
 [INFO] data=[1 0], ground-truth=1, pred=0.9876, step=1
@@ -460,7 +460,7 @@ $ python nn_xor.py
 
 为了证明学习 XOR 函数至少需要一个隐藏层，回到**行 10** ，这里我们定义了*221*架构:
 
-```
+```py
 # define our 2-2-1 neural network and train it
 nn = NeuralNetwork([2, 2, 1], alpha=0.5)
 nn.fit(X, y, epochs=20000)
@@ -468,7 +468,7 @@ nn.fit(X, y, epochs=20000)
 
 并改成 *2-1* 架构:
 
-```
+```py
 # define our 2-1 neural network and train it
 nn = NeuralNetwork([2, 1], alpha=0.5)
 nn.fit(X, y, epochs=20000)
@@ -476,7 +476,7 @@ nn.fit(X, y, epochs=20000)
 
 在此基础上，您可以尝试重新培训您的网络:
 
-```
+```py
 $ python nn_xor.py
 ...
 [INFO] data=[0 0], ground-truth=0, pred=0.5161, step=1
@@ -493,7 +493,7 @@ $ python nn_xor.py
 
 现在，让我们继续在这个 MNIST 子集上训练我们的`NeuralNetwork`实现。打开一个新文件，命名为`nn_mnist.py`，我们开始工作:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.nn import NeuralNetwork
 from sklearn.preprocessing import LabelBinarizer
@@ -506,7 +506,7 @@ from sklearn import datasets
 
 在那里，我们使用 scikit-learn 辅助函数从磁盘加载 MNIST 数据集:
 
-```
+```py
 # load the MNIST dataset and apply min/max scaling to scale the
 # pixel intensity values to the range [0, 1] (each image is
 # represented by an 8 x 8 = 64-dim feature vector)
@@ -522,7 +522,7 @@ print("[INFO] samples: {}, dim: {}".format(data.shape[0],
 
 接下来，让我们构建一个培训和测试分割，使用 75%的数据进行测试，25%的数据进行评估:
 
-```
+```py
 # construct the training and testing splits
 (trainX, testX, trainY, testY) = train_test_split(data,
 	digits.target, test_size=0.25)
@@ -536,7 +536,7 @@ testY = LabelBinarizer().fit_transform(testY)
 
 从那里，我们准备好训练我们的网络:
 
-```
+```py
 # train the network
 print("[INFO] training network...")
 nn = NeuralNetwork([trainX.shape[1], 32, 16, 10])
@@ -548,7 +548,7 @@ nn.fit(trainX, trainY, epochs=1000)
 
 然后我们允许我们的网络训练 1000 个纪元。一旦我们的网络经过训练，我们就可以在测试集上对其进行评估:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = nn.predict(testX)
@@ -562,7 +562,7 @@ print(classification_report(testY.argmax(axis=1), predictions))
 
 要在 MNIST 数据集上训练我们的定制`NeuralNetwork`实现，只需执行以下命令:
 
-```
+```py
 $ python nn_mnist.py
 [INFO] loading MNIST (sample) dataset...
 [INFO] samples: 1797, dim: 64

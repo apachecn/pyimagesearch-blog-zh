@@ -123,7 +123,7 @@ Softmax 分类器是二进制形式的逻辑回归的推广。就像在铰链损
 
 如上所述，打开一个新文件，将其命名为`softmax.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.preprocessing import LabelEncoder
 from sklearn.linear_model import SGDClassifier
@@ -142,21 +142,21 @@ import os
 
 我们将使用 [scikit-learn 库](http://scikit-learn.org/stable/)，因此如果您还没有安装它，请务必现在安装它:
 
-```
+```py
 $ pip install scikit-learn
 
 ```
 
 我们还将使用我的 [imutils 包](https://github.com/jrosebr1/imutils)，这是一系列方便的功能，用于使执行常见的图像处理操作变得更容易。如果您没有安装`imutils`,您也可以安装它:
 
-```
+```py
 $ pip install imutils
 
 ```
 
 接下来，我们定义我们的`extract_color_histogram`函数，该函数用于使用提供的`bins`的数量来量化我们的输入`image`的颜色分布:
 
-```
+```py
 def extract_color_histogram(image, bins=(8, 8, 8)):
 	# extract a 3D color histogram from the HSV color space using
 	# the supplied number of `bins` per channel
@@ -184,7 +184,7 @@ def extract_color_histogram(image, bins=(8, 8, 8)):
 
 让我们解析我们的命令行参数，并从磁盘中获取 25，000 张狗和猫的图像的路径:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -205,7 +205,7 @@ labels = []
 
 一旦我们有了这些图像的路径，我们就可以逐个遍历它们，并提取每幅图像的颜色直方图:
 
-```
+```py
 # loop over the input images
 for (i, imagePath) in enumerate(imagePaths):
 	# load the image and extract the class label (assuming that our
@@ -229,7 +229,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 我们的下一步是构建培训和测试部分。我们将使用 75%的数据来训练我们的分类器，剩余的 25%用于测试和评估模型:
 
-```
+```py
 # encode the labels, converting them from strings to integers
 le = LabelEncoder()
 labels = le.fit_transform(labels)
@@ -259,7 +259,7 @@ print(classification_report(testLabels, predictions,
 
 为了检查一些实际的*概率*，让我们循环几个随机抽样的训练示例，并检查分类器返回的输出概率:
 
-```
+```py
 # to demonstrate that our classifier actually "learned" from
 # our training data, randomly sample a few training images
 idxs = np.random.choice(np.arange(0, len(trainData)), size=(5,))
@@ -293,7 +293,7 @@ for i in idxs:
 
 您可以执行以下命令从我们的数据集中提取特征并训练我们的分类器:
 
-```
+```py
 $ python softmax.py --dataset kaggle_dogs_vs_cats
 
 ```

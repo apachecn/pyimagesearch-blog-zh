@@ -205,7 +205,7 @@ needs to undergo additional tests:
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -232,7 +232,7 @@ $ pip install opencv-contrib-python
 
 请务必访问本教程的 ***“下载”*** 部分，以检索源代码和示例图像:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── images
@@ -253,7 +253,7 @@ $ tree . --dirsfirst
 
 打开项目结构中的`opencv_cann.py`文件，让我们查看代码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -271,7 +271,7 @@ args = vars(ap.parse_args())
 
 现在让我们加载图像并对其进行预处理:
 
-```
+```py
 # load the image, convert it to grayscale, and blur it slightly
 image = cv2.imread(args["image"])
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -290,7 +290,7 @@ cv2.imshow("Blurred", blurred)
 
 我们现在准备执行边缘检测:
 
-```
+```py
 # compute a "wide", "mid-range", and "tight" threshold for the edges
 # using the Canny edge detector
 wide = cv2.Canny(blurred, 10, 200)
@@ -324,7 +324,7 @@ and ![T_\text{upper}](img/0be8acf02181aede3c66b81c389e62fc.png "T_\text{upper}")
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python opencv_canny.py --image images/coins.png
 ```
 
@@ -340,7 +340,7 @@ $ python opencv_canny.py --image images/coins.png
 
 让我们看另一个例子:
 
-```
+```py
 $ python opencv_canny.py --image images/clonazepam_1mg.png
 ```
 

@@ -26,14 +26,14 @@
 
 我们要做的第一件事是设置我们的虚拟环境。打开一个终端，创建你的虚拟环境。对于本例，我们将虚拟环境命名为`pyimagesearch`:
 
-```
+```py
 $ mkvirtualenv pyimagesearch
 
 ```
 
 现在我们的虚拟环境已经设置好了，让我们安装 NumPy、Scipy、matplotlib、scikit-learn 和 scikit-image，它们都是计算机视觉开发中常用的工具:
 
-```
+```py
 $ pip install numpy
 $ pip install scipy
 $ pip install matplotlib
@@ -52,7 +52,7 @@ $ pip install -U scikit-image
 
 现在我们有了 OpenCV 安装的路径，我们可以将它符号链接到我们的虚拟环境中:
 
-```
+```py
 $ cd ~/.virtualenvs/pyimagesearch/lib/python2.7/site-packages/
 $ ln -s /usr/local/lib/python2.7/site-packages/cv.py cv.py
 $ ln -s /usr/local/lib/python2.7/site-packages/cv2.so cv2.so

@@ -199,7 +199,7 @@ AI ≠人类。即使人工智能被训练得像人类一样，但它永远不�
 
 **Mangla，P.** “用于客户服务的计算机视觉和深度学习”， *PyImageSearch* ，P. Chugh，R. Raha，K. Kudriavtseva 和 S. Huot 编辑。，2022 年，【https://pyimg.co/0r254 
 
-```
+```py
 @incollection{Mangla_2022_CustomerService,
   author = {Puneet Mangla},
   title = {Computer Vision and Deep Learning for Customer Service},

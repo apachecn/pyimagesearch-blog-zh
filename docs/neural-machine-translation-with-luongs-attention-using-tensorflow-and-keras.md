@@ -45,7 +45,7 @@
 
 幸运的是，TensorFlow 可以在 pip 上安装:
 
-```
+```py
 $ pip install tensorflow==2.8.0
 $ pip install tensorflow-text==2.8.0
 ```
@@ -77,7 +77,7 @@ $ pip install tensorflow-text==2.8.0
 
 从这里，看一下目录结构:
 
-```
+```py
 ├── download.sh
 ├── inference.py
 ├── output
@@ -168,7 +168,7 @@ Luong 从:
 
 如果您还没有阅读，请务必在继续下一步之前阅读。如果您已经这样做了，让我们打开`pyimagesearch`目录中的`models.py`并浏览它。
 
-```
+```py
 class LuongAttention(Layer):
     def __init__(self, attnUnits, **kwargs):
         super().__init__(**kwargs)
@@ -229,7 +229,7 @@ Bahdanau 和 Luong 的关注既不是最先进的技术，也没有在 NLP 系�
 
 A. R. Gosthipaty 和 R. Raha。“使用 TensorFlow 和 Keras 的 Luong 注意力的神经机器翻译”， *PyImageSearch* ，P. Chugh，S. Huot，K. Kidriavsteva，A. Thanki，eds .，2022 年，【https://pyimg.co/tpf3l 
 
-```
+```py
 @incollection{ARG-RR_2022_Luong,
   author = {Aritra Roy Gosthipaty and Ritwik Raha},
   title = {Neural Machine Translation with {Luong’s} Attention Using {TensorFlow} and {Keras}},

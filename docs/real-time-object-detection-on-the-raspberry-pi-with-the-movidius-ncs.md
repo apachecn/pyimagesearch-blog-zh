@@ -178,7 +178,7 @@ Ramana @ Intel 在论坛上提供了关于如何设置 USB [的“非官方”�
 
 首先，让我们更新我们的系统。打开终端并键入以下内容来更新您的系统:
 
-```
+```py
 $ sudo apt-get update && sudo apt-get upgrade
 
 ```
@@ -225,7 +225,7 @@ $ sudo apt-get update && sudo apt-get upgrade
 
 让我们从终端安装 Git:
 
-```
+```py
 $ sudo apt-get install git
 
 ```
@@ -234,7 +234,7 @@ $ sudo apt-get install git
 
 打开一个终端并跟随:
 
-```
+```py
 $ cd ~
 $ mkdir workspace
 $ cd workspace
@@ -243,7 +243,7 @@ $ cd workspace
 
 现在我们在工作区中，让我们克隆出 **NCSDK** 和 **NC App Zoo** :
 
-```
+```py
 $ git clone https://github.com/movidius/ncsdk.git
 $ git clone https://github.com/movidius/ncappzoo.git
 
@@ -251,7 +251,7 @@ $ git clone https://github.com/movidius/ncappzoo.git
 
 从那里，您应该导航到`ncsdk`目录并安装 SDK:
 
-```
+```py
 $ cd ~/workspace/ncsdk
 $ make install
 
@@ -279,7 +279,7 @@ $ make install
 
 在虚拟机中打开一个终端。您可以运行以下命令来验证操作系统是否知道 USB 设备:
 
-```
+```py
 $ dmesg
 
 ```
@@ -298,7 +298,7 @@ $ dmesg
 
 既然已经安装了 SDK，您可以通过运行预构建的示例来测试安装:
 
-```
+```py
 $ cd ~/workspace/ncsdk
 $ make examples
 
@@ -310,7 +310,7 @@ $ make examples
 
 另一项检查(这与我们上周对 Pi [进行的检查相同)：](https://pyimagesearch.com/2018/02/12/getting-started-with-the-intel-movidius-neural-compute-stick/)
 
-```
+```py
 $ cd ~/workspace/ncsdk/examples/apps
 $ make all
 $ cd hello_ncs_py
@@ -339,7 +339,7 @@ NCS device working.
 
 对于 Caffe，命令行参数采用以下格式(TensorFlow 用户应参考类似的[文档](https://movidius.github.io/ncsdk/tools/compile.html)):
 
-```
+```py
 $ mvNCCompile network.prototxt -w network.caffemodel \
 	-s MaxNumberOfShaves -in InputNodeName -on OutputNodeName \
 	-is InputWidth InputHeight -o OutputGraphFilename
@@ -370,7 +370,7 @@ NCS 的批次大小始终为 1，颜色通道的数量假定为 3。
 
 我已经在 ***【下载】*** 部分提供了川奎 305 的文件。要编译图形，您应该执行以下命令:
 
-```
+```py
 $ mvNCCompile models/MobileNetSSD_deploy.prototxt \
 	-w models/MobileNetSSD_deploy.caffemodel \
 	-s 12 -is 300 300 -o graphs/mobilenetgraph
@@ -395,7 +395,7 @@ mvNCCompile v02.00, Copyright @ Movidius Ltd 2016
 
 下载完文件后，打开`ncs_realtime_objectdetection.py`:
 
-```
+```py
 # import the necessary packages
 from mvnc import mvncapi as mvnc
 from imutils.video import VideoStream
@@ -411,7 +411,7 @@ import cv2
 
 从这里开始，我们将执行初始化:
 
-```
+```py
 # initialize the list of class labels our network was trained to
 # detect, then generate a set of bounding box colors for each class
 CLASSES = ["background", "aeroplane", "bicycle", "bird",
@@ -437,7 +437,7 @@ DISP_MULTIPLIER = DISPLAY_DIMS[0] // PREPROCESS_DIMS[0]
 
 从这里我们将定义一个`preprocess_image`函数:
 
-```
+```py
 def preprocess_image(input_image):
 	# preprocess the image
 	preprocessed = cv2.resize(input_image, PREPROCESS_DIMS)
@@ -458,7 +458,7 @@ def preprocess_image(input_image):
 
 从这里我们将定义一个`predict`函数:
 
-```
+```py
 def predict(image, graph):
 	# preprocess the image
 	image = preprocess_image(image)
@@ -487,7 +487,7 @@ def predict(image, graph):
 
 从这里开始，让我们遍历有效的结果:
 
-```
+```py
 	# loop over results
 	for box_index in range(num_valid_boxes):
 		# calculate the base index into our array so we can extract
@@ -559,7 +559,7 @@ def predict(image, graph):
 
 从那里，让我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-g", "--graph", required=True,
@@ -578,7 +578,7 @@ args = vars(ap.parse_args())
 
 接下来，我们将连接到 NCS 并将图形文件加载到它上面:
 
-```
+```py
 # grab a list of all NCS devices plugged in to USB
 print("[INFO] finding NCS devices...")
 devices = mvnc.EnumerateDevices()
@@ -612,7 +612,7 @@ graph = device.AllocateGraph(graph_in_memory)
 
 让我们开始我们的视频流:
 
-```
+```py
 # open a pointer to the video stream thread and allow the buffer to
 # start to fill, then start the FPS counter
 print("[INFO] starting the video stream and FPS counter...")
@@ -626,7 +626,7 @@ fps = FPS().start()
 
 现在让我们一帧一帧地处理摄像机画面:
 
-```
+```py
 # loop over frames from the video file stream
 while True:
 	try:
@@ -647,7 +647,7 @@ while True:
 
 接下来让我们循环一遍`predictions`:
 
-```
+```py
 		# loop over our predictions
 		for (i, pred) in enumerate(predictions):
 			# extract prediction data for readability
@@ -667,7 +667,7 @@ while True:
 
 如果`confidence`高于阈值，我们将预测打印到终端，并检查我们是否应该在屏幕上显示图像:
 
-```
+```py
 				# check if we should show the prediction data
 				# on the frame
 				if args["display"] > 0:
@@ -699,7 +699,7 @@ while True:
 
 从那里，让我们显示图像并更新我们的 FPS 计数器:
 
-```
+```py
 		# check if we should display the frame on the screen
 		# with prediction data (you can achieve faster FPS if you
 		# do not output to the screen)
@@ -733,7 +733,7 @@ while True:
 
 如果用户碰巧在终端中按下了“ctrl+c ”,或者在读取一个帧时出现了问题，我们就会跳出这个循环。
 
-```
+```py
 # stop the FPS counter timer
 fps.stop()
 
@@ -762,7 +762,7 @@ print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
 
 让我们使用以下命令在 NCS 上运行我们的实时对象检测器:
 
-```
+```py
 $ python ncs_realtime_objectdetection.py --graph graph --display 1
 
 ```

@@ -77,7 +77,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 $ pip install tensorflow
 $ pip install numpy
@@ -112,7 +112,7 @@ $ pip install numpy
 
 从这里，看一下目录结构:
 
-```
+```py
 !tree .
 .
 ├── pyimagesearch
@@ -146,7 +146,7 @@ $ pip install numpy
 
 在`pyimagesearch`目录中，我们有一个名为`config.py`的脚本，它包含了这个项目的配置管道。
 
-```
+```py
 # define the data to be used
 dataDict = {
     "sentence":[
@@ -196,7 +196,7 @@ denseUnits = 50
 
 对于我们今天的项目，我们将自己编写一些预处理包装器。为此，让我们进入`data_processing.py`脚本。
 
-```
+```py
 # import the necessary packages
 import re
 
@@ -234,7 +234,7 @@ def preprocess(sentDf, stopWords, key="sentence"):
 
 我们循环遍历数据帧中所有可用的句子(**第 6-27 行**)，将单词小写，去掉标点符号，并省略停用词。
 
-```
+```py
 def prepare_tokenizer(df, sentKey="sentence", outputKey="sentiment"):
     # counters for tokenizer indices
     wordCounter = 0
@@ -284,7 +284,7 @@ def prepare_tokenizer(df, sentKey="sentence", outputKey="sentiment"):
 
 现在，我们将进入`bow.py`脚本，看看我们计算单词包的自定义函数。
 
-```
+```py
 def calculate_bag_of_words(text, sentence):
     # create a dictionary for frequency check
     freqDict = dict.fromkeys(text, 0)
@@ -308,7 +308,7 @@ def calculate_bag_of_words(text, sentence):
 
 到目前为止，我们已经看到了自己创建所有预处理功能是什么样子。如果你觉得太复杂，我们也将向你展示如何使用 TensorFlow 进行同样的过程。让我们进入`tensorflow_wrapper.py`。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.preprocessing.text import Tokenizer 
 
@@ -348,7 +348,7 @@ def tensorflow_wrap(df):
 
 在第 22-26 行**上，我们创建标签，然后在第 29** 行**上返回编码和标签。**
 
-```
+```py
 #import the necessary packages
 import pyimagesearch.config as config
 from tensorflow.keras.layers import Dense
@@ -384,7 +384,7 @@ def build_shallow_net():
 
 现在是时候结合我们所有的模块，训练单词袋模型方法了。让我们进入`train.py`脚本。
 
-```
+```py
 # USAGE
 # python train.py
 
@@ -419,7 +419,7 @@ for sentence in df["sentence"]:
 
 我们生成一个空列表来存储在**行 21** 出现的单词。循环每个句子，使用位于`bow.py` ( **第 24-28 行**)的`calculate_bag_of_words`函数计算单词的频率。
 
-```
+```py
 # create an empty data frame for the vectors
 finalDf = pd.DataFrame() 
 
@@ -454,7 +454,7 @@ shallowModel.fit(
 
 用于训练的普通模型在**行 46** 上初始化，我们继续在**行 50-55** 上拟合训练数据和标签。因为我们已经将标签列添加到数据帧中，所以我们可以使用`iloc`功能来分离数据和标签(`0:10`用于数据，`10`用于标签)。
 
-```
+```py
 # create dataset using TensorFlow
 trainX, trainY = tensorflow_wrap(df)
 
@@ -479,7 +479,7 @@ tensorflowModel.fit(
 
 需要记住的重要一点是，我们的数据集非常小，结果应该被认为是不确定的。然而，让我们来看看我们的训练精度。
 
-```
+```py
 [INFO] Compiling model...
 Epoch 1/30
 1/1 [==============================] - 0s 495ms/step - loss: 0.7262 - accuracy: 0.5000
@@ -500,7 +500,7 @@ Epoch 30/30
 
 我们的普通模型在`30th`时期达到了`100%`的精度，这是给定数据集的大小所期望的。
 
-```
+```py
 <keras.callbacks.History at 0x7f7bc5b5a110>
 [Info] Compiling Model with Tensorflow wrapped data...
 1/30
@@ -547,7 +547,7 @@ Epoch 30/30
 
 **Chakraborty，D.** “单词袋(BoW)模型介绍”， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva，R. Raha 和 A. Thanki 编辑。，2022 年，【https://pyimg.co/oa2kt 
 
-```
+```py
 @incollection{Chakraborty_2022_BoW,
   author = {Devjyoti Chakraborty},
   title = {Introduction to the Bag-of-Words {(BoW)} Model},

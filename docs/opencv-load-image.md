@@ -30,7 +30,7 @@
 
 所以，让我们直接跳到一些代码中:
 
-```
+```py
 import argparse
 import cv2
 
@@ -67,7 +67,7 @@ cv2.waitKey(0)
 
 我们可以通过发出以下命令来执行我们的脚本:
 
-```
+```py
 $ python load_image.py --image doge.jpg
 
 ```

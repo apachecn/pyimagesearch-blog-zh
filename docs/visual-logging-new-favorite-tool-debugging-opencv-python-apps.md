@@ -29,7 +29,7 @@
 
 在撰写本文时，[视觉记录](https://github.com/dchaplinsky/visual-logging)文档声称这个包是`pip`可安装的:
 
-```
+```py
 $ pip install visual-logging
 
 ```
@@ -38,7 +38,7 @@ $ pip install visual-logging
 
 不管怎样，这没什么大不了的。我们可以简单地从 GitHub repo 克隆并以“老式”的方式安装:
 
-```
+```py
 (cv)annalee:VisualLogging adrianrosebrock$ git clone https://github.com/dchaplinsky/visual-logging.git
 Cloning into 'visual-logging'...
 remote: Counting objects: 137, done.
@@ -53,7 +53,7 @@ Checking connectivity... done.
 
 现在我们已经安装了`visual-logging`，让我们创建一个简单的脚本来演示如何使用`visual-logging`来帮助我们可视化我们的管道:
 
-```
+```py
 # import the necessary packages
 from logging import FileHandler
 from vlogging import VisualRecord
@@ -98,7 +98,7 @@ for s in xrange(3, 11, 2):
 
 说到结果，执行以下命令来生成可视化日志文件:
 
-```
+```py
 $ python visual_logging_example.py
 
 ```

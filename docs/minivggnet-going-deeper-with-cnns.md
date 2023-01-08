@@ -33,7 +33,7 @@ VGGNet 的独特之处在于它在整个架构中使用了 3 个内核*×3 个�
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -68,7 +68,7 @@ $ pip install opencv-contrib-python
 
 根据**表 1** 中对 MiniVGGNet 的描述，我们现在可以使用 Keras 实现网络架构。首先，在`pyimagesearch.nn.conv`子模块中添加一个名为`minivggnet.py`的新文件——这是我们编写 MiniVGGNet 实现的地方:
 
-```
+```py
 --- pyimagesearch
 |    |--- __init__.py
 |    |--- nn
@@ -83,7 +83,7 @@ $ pip install opencv-contrib-python
 
 创建完`minivggnet.py`文件后，在您最喜欢的代码编辑器中打开它，然后我们开始工作:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import BatchNormalization
@@ -100,7 +100,7 @@ from tensorflow.keras import backend as K
 
 就像我们对 ShallowNet 和 LeNet 的实现一样，我们将定义一个`build`方法，可以调用它来使用提供的`width`、`height`、`depth`和数量`classes`来构建架构:
 
-```
+```py
 class MiniVGGNet:
 	@staticmethod
 	def build(width, height, depth, classes):
@@ -123,7 +123,7 @@ class MiniVGGNet:
 
 MiniVGGNet 的第一层块定义如下:
 
-```
+```py
   		# first CONV => RELU => CONV => RELU => POOL layer set
 		model.add(Conv2D(32, (3, 3), padding="same",
 			input_shape=inputShape))
@@ -144,7 +144,7 @@ MiniVGGNet 的第一层块定义如下:
 
 然后，我们将`Dropout`应用于**第 36 行**，概率为 *p* = 0 *。* 25，暗示来自`POOL`层的一个节点在训练时会以 25%的概率随机断开与下一层的连接。我们应用辍学来帮助减少过度拟合的影响。你可以在单独的一课[中读到更多关于辍学的内容。然后，我们将第二层块添加到下面的 MiniVGGNet 中:](https://pyimagesearch.com/2021/05/14/convolutional-neural-networks-cnns-and-layer-types/)
 
-```
+```py
   		# second CONV => RELU => CONV => RELU => POOL layer set
 		model.add(Conv2D(64, (3, 3), padding="same"))
 		model.add(Activation("relu"))
@@ -160,7 +160,7 @@ MiniVGGNet 的第一层块定义如下:
 
 接下来是我们的第一组(也是唯一一组)图层:
 
-```
+```py
   		# first (and only) set of FC => RELU layers
 		model.add(Flatten())
 		model.add(Dense(512))
@@ -173,7 +173,7 @@ MiniVGGNet 的第一层块定义如下:
 
 最后，我们应用 softmax 分类器，并将网络架构返回给调用函数:
 
-```
+```py
   		# softmax classifier
 		model.add(Dense(classes))
 		model.add(Activation("softmax"))
@@ -195,7 +195,7 @@ MiniVGGNet 的第一层块定义如下:
 
 要创建驱动程序脚本来训练 MiniVGGNet，请打开一个新文件，将其命名为`minivggnet_cifar10.py`，并插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -217,7 +217,7 @@ import argparse
 
 接下来，让我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-o", "--output", required=True,
@@ -229,7 +229,7 @@ args = vars(ap.parse_args())
 
 我们现在可以加载 CIFAR-10 数据集(预分割为训练和测试数据)，将像素缩放到范围`[0, 1]`，然后一次性编码标签:
 
-```
+```py
 # load the training and testing data, then scale it into the
 # range [0, 1]
 print("[INFO] loading CIFAR-10 data...")
@@ -249,7 +249,7 @@ labelNames = ["airplane", "automobile", "bird", "cat", "deer",
 
 让我们编译我们的模型并开始训练 MiniVGGNet:
 
-```
+```py
 # initialize the optimizer and model
 print("[INFO] compiling model...")
 opt = SGD(lr=0.01, decay=0.01 / 40, momentum=0.9, nesterov=True)
@@ -269,7 +269,7 @@ H = model.fit(trainX, trainY, validation_data=(testX, testY),
 
 训练完成后，我们可以评估网络并显示一份格式良好的分类报告:
 
-```
+```py
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(testX, batch_size=64)
@@ -279,7 +279,7 @@ print(classification_report(testY.argmax(axis=1),
 
 将我们的损耗和精度图保存到磁盘:
 
-```
+```py
 # plot the training loss and accuracy
 plt.style.use("ggplot")
 plt.figure()
@@ -305,7 +305,7 @@ plt.savefig(args["output"])
 
 要在 CIFAR-10 数据集上训练 MiniVGGNet，只需执行以下命令:
 
-```
+```py
 $ python minivggnet_cifar10.py --output output/cifar10_minivggnet_with_bn.png
 [INFO] loading CIFAR-10 data...
 [INFO] compiling model...
@@ -345,7 +345,7 @@ avg / total       0.83      0.82      0.82     10000
 
 回到`minivggnet.py`实现并注释掉*所有* `BatchNormalization`层，就像这样:
 
-```
+```py
 		# first CONV => RELU => CONV => RELU => POOL layer set
 		model.add(Conv2D(32, (3, 3), padding="same",
 			input_shape=inputShape))
@@ -360,7 +360,7 @@ avg / total       0.83      0.82      0.82     10000
 
 一旦您注释掉了网络中的所有`BatchNormalization`层，请在 CIFAR-10 上重新训练 MiniVGGNet:
 
-```
+```py
 $  python minivggnet_cifar10.py \
 	--output output/cifar10_minivggnet_without_bn.png 
 [INFO] loading CIFAR-10 data...

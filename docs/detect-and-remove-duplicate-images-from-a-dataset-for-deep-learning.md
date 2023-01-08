@@ -113,7 +113,7 @@
 
 一旦您提取了`.zip`，您将看到下面的目录结构:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── dataset [1000 entries]
@@ -131,7 +131,7 @@ $ tree --dirsfirst --filelimit 10
 
 打开项目目录中的`detect_and_remove.py`脚本，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from imutils import paths
 import numpy as np
@@ -147,7 +147,7 @@ import os
 
 本教程的主要组件是`dhash`函数:
 
-```
+```py
 def dhash(image, hashSize=8):
 	# convert the image to grayscale and resize the grayscale image,
 	# adding a single column (width) so we can compute the horizontal
@@ -173,7 +173,7 @@ def dhash(image, hashSize=8):
 
 定义好散列函数后，我们现在准备好[定义和解析命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -190,7 +190,7 @@ args = vars(ap.parse_args())
 
 我们现在准备开始计算哈希值:
 
-```
+```py
 # grab the paths to all images in our input dataset directory and
 # then initialize our hashes dictionary
 print("[INFO] computing image hashes...")
@@ -216,7 +216,7 @@ for imagePath in imagePaths:
 *   将最新的`imagePath`追加到`p` ( **第 45 行**)。此时，`p`代表我们的一组重复图像(即，具有相同散列值的图像)
 *   将所有这些重复项添加到我们的`hashes`字典中(**第 46 行**)
 
-```
+```py
 {
 	...
 	7054210665732718398: ['dataset/00000005.jpg', 'dataset/00000071.jpg', 'dataset/00000869.jpg'],
@@ -231,7 +231,7 @@ for imagePath in imagePaths:
 
 此时，计算完所有的散列后，我们需要循环遍历散列并处理重复项:
 
-```
+```py
 # loop over the image hashes
 for (h, hashedPaths) in hashes.items():
 	# check to see if there is more than one image with the same hash
@@ -271,7 +271,7 @@ for (h, hashedPaths) in hashes.items():
 
 预演意味着我们还没有准备好*删除*副本。相反，我们只是想让*检查*，看看是否存在任何重复项。
 
-```
+```py
 # otherwise, we'll be removing the duplicate images
 		else:
 			# loop over all image paths with the same hash *except*
@@ -296,7 +296,7 @@ for (h, hashedPaths) in hashes.items():
 
 从那里，打开一个终端，执行以下命令来验证在我们的`dataset/`目录中有 1，000 个图像:
 
-```
+```py
 $ ls -l dataset/*.jpg | wc -l
     1000
 
@@ -304,7 +304,7 @@ $ ls -l dataset/*.jpg | wc -l
 
 现在，让我们执行一次预演，这将允许我们可视化数据集中的重复项:
 
-```
+```py
 $ python detect_and_remove.py --dataset dataset
 [INFO] computing image hashes...
 [INFO] hash: 7054210665732718398
@@ -317,7 +317,7 @@ $ python detect_and_remove.py --dataset dataset
 
 为了从我们的系统中真正删除重复项，我们需要再次执行`detect_and_remove.py`，这次提供`--remove 1`命令行参数:
 
-```
+```py
 $ python detect_and_remove.py --dataset dataset --remove 1
 [INFO] computing image hashes...
 
@@ -325,7 +325,7 @@ $ python detect_and_remove.py --dataset dataset --remove 1
 
 我们可以通过计算`dataset`目录中 JPEG 图像的数量来验证重复图像是否已被删除:
 
-```
+```py
 $ ls -l dataset/*.jpg | wc -l
      993
 

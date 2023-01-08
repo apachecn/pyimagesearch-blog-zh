@@ -50,7 +50,7 @@
 
 为了证明这一点，我将把这个等式转换成一个 Python 函数:
 
-```
+```py
 def mse(imageA, imageB):
 	# the 'Mean Squared Error' between the two images is the
 	# sum of the squared difference between the two images;
@@ -97,7 +97,7 @@ SSIM 方法显然比 MSE 方法更复杂，但要点是 SSIM 试图模拟图像�
 
 # 如何:使用 Python 比较两幅图像
 
-```
+```py
 # import the necessary packages
 from skimage.metrics import structural_similarity as ssim
 import matplotlib.pyplot as plt
@@ -108,7 +108,7 @@ import cv2
 
 我们首先导入我们需要的包——`matplotlib`用于绘图，NumPy 用于数值处理，而`cv2`用于 OpenCV 绑定。scikit-image 已经为我们实现了我们的[结构相似性指数](https://scikit-image.org/docs/dev/api/skimage.metrics.html?highlight=ssim#skimage.metrics.structural_similarity)方法，所以我们将只使用他们的实现。
 
-```
+```py
 def mse(imageA, imageB):
 	# the 'Mean Squared Error' between the two images is the
 	# sum of the squared difference between the two images;
@@ -153,7 +153,7 @@ def compare_images(imageA, imageB, title):
 
 第 25-39 行处理一些简单的 matplotlib 绘图。我们只显示与我们正在比较的两幅图像相关的 MSE 和 SSIM。
 
-```
+```py
 # load the images -- the original, the original + contrast,
 # and the original + photoshop
 original = cv2.imread("images/jp_gates_original.png")
@@ -171,7 +171,7 @@ shopped = cv2.cvtColor(shopped, cv2.COLOR_BGR2GRAY)
 
 然后我们在第 48-50 行将我们的图像转换成灰度。
 
-```
+```py
 # initialize the figure
 fig = plt.figure("Images")
 images = ("Original", original), ("Contrast", contrast), ("Photoshopped", shopped)
@@ -200,7 +200,7 @@ compare_images(original, shopped, "Original vs. Photoshopped")
 
 我们可以通过发出以下命令来执行我们的脚本:
 
-```
+```py
 $ python compare.py
 
 ```

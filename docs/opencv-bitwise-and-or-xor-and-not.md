@@ -43,7 +43,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -72,7 +72,7 @@ $ pip install opencv-contrib-python
 
 请务必使用本指南的 ***【下载】*** 部分访问源代码，并从那里查看我们的项目目录结构:
 
-```
+```py
 $ tree . --dirsfirst
 .
 └── opencv_bitwise.py
@@ -92,7 +92,7 @@ $ tree . --dirsfirst
 
 让我们继续，跳到一些代码中:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import cv2
@@ -124,7 +124,7 @@ cv2.imshow("Circle", circle)
 
 在我们演示按位运算时，保持开/关的概念:
 
-```
+```py
 # a bitwise 'AND' is only 'True' when both inputs have a value that
 # is 'ON' -- in this case, the cv2.bitwise_and function examines
 # every pixel in the rectangle and circle; if *BOTH* pixels have a
@@ -153,7 +153,7 @@ cv2.waitKey(0)
 
 现在让我们应用按位“或”运算:
 
-```
+```py
 # a bitwise 'OR' examines every pixel in the two inputs, and if
 # *EITHER* pixel in the rectangle or circle is greater than 0,
 # then the output pixel has a value of 255, otherwise it is 0
@@ -168,7 +168,7 @@ cv2.waitKey(0)
 
 接下来是按位异或:
 
-```
+```py
 # the bitwise 'XOR' is identical to the 'OR' function, with one
 # exception: the rectangle and circle are not allowed to *BOTH*
 # have values greater than 0 (only one can be 0)
@@ -187,7 +187,7 @@ XOR 运算的输出显示在**图 5:**
 
 最后，我们得到了按位 NOT 函数:
 
-```
+```py
 # finally, the bitwise 'NOT' inverts the values of the pixels;
 # pixels with a value of 255 become 0, and pixels with a value of 0
 # become 255
@@ -206,7 +206,7 @@ cv2.waitKey(0)
 
 从那里，打开一个 shell 并执行以下命令:
 
-```
+```py
 $ python opencv_bitwise.py
 ```
 

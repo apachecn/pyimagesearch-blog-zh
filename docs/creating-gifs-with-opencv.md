@@ -73,14 +73,14 @@ Dlib 将用于检测面部标志，使我们能够找到一张脸的两只眼睛
 
 要在 Ubuntu(或 Raspbian)上安装 ImageMagick，只需使用 apt:
 
-```
+```py
 $ sudo apt-get install imagemagick
 
 ```
 
 或者，如果你在 macOS 上，你可以使用自制软件:
 
-```
+```py
 $ brew install imagemagick
 
 ```
@@ -89,7 +89,7 @@ $ brew install imagemagick
 
 我的许多博客文章和书籍/课程内容都利用了我的图像处理便利功能包 [imutils](https://github.com/jrosebr1/imutils) 。您可以使用 pip 在您的系统或虚拟环境中安装 imutils:
 
-```
+```py
 $ pip install imutils
 
 ```
@@ -121,7 +121,7 @@ $ pip install imutils
 
 继续打开一个名为`config.json`的新文件，然后插入以下键/值对:
 
-```
+```py
 {
 	"face_detector_prototxt": "assets/deploy.prototxt",
 	"face_detector_weights": "assets/res10_300x300_ssd_iter_140000.caffemodel",
@@ -135,7 +135,7 @@ $ pip install imutils
 
 现在我们有了一些图像文件路径:
 
-```
+```py
 	"sunglasses": "assets/sunglasses.png",
 	"sunglasses_mask": "assets/sunglasses_mask.png",
 	"deal_with_it": "assets/deal_with_it.png",
@@ -169,7 +169,7 @@ $ pip install imutils
 
 现在让我们为热图生成器设置一些参数:
 
-```
+```py
 	"min_confidence": 0.5,
 	"steps": 20,
 	"delay": 5,
@@ -195,7 +195,7 @@ $ pip install imutils
 
 打开一个新文件，将其命名为`create_gif.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils import face_utils
 from imutils import paths
@@ -215,7 +215,7 @@ import os
 
 现在我们的脚本已经有了我们需要的包，让我们定义`overlay_image`函数:
 
-```
+```py
 def overlay_image(bg, fg, fgMask, coords):
 	# grab the foreground spatial dimensions (width and height),
 	# then unpack the coordinates tuple (i.e., where in the image
@@ -252,7 +252,7 @@ def overlay_image(bg, fg, fgMask, coords):
 
 为了完成叠加过程，我们需要应用阿尔法混合:
 
-```
+```py
 def alpha_blend(fg, bg, alpha):
 	# convert the foreground, background, and alpha layers from
 	# unsigned 8-bit integers to floats, making sure to scale the
@@ -280,7 +280,7 @@ alpha 混合的实现在 LearnOpenCV 博客中也有介绍。
 
 让我们也创建一个助手函数，它将使我们能够使用 ImageMagick 和`convert`命令从一组图像路径生成 GIF:
 
-```
+```py
 def create_gif(inputPath, outputPath, delay, finalDelay, loop):
 	# grab all image paths in the input directory
 	imagePaths = sorted(list(paths.list_images(inputPath)))
@@ -312,7 +312,7 @@ def create_gif(inputPath, outputPath, delay, finalDelay, loop):
 
 让我们构造我们自己的脚本的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-c", "--config", required=True,
@@ -335,7 +335,7 @@ args = vars(ap.parse_args())
 
 让我们加载配置文件以及我们的太阳镜+相关面具:
 
-```
+```py
 # load the JSON configuration file and the "Deal With It" sunglasses
 # and associated mask
 config = json.loads(open(args["config"]).read())
@@ -356,7 +356,7 @@ os.makedirs(config["temp_dir"])
 
 现在让我们将 [OpenCV 的深度学习人脸检测器](https://pyimagesearch.com/2018/02/26/face-detection-with-opencv-and-deep-learning/)加载到内存中:
 
-```
+```py
 # load our OpenCV face detector and dlib facial landmark predictor
 print("[INFO] loading models...")
 detector = cv2.dnn.readNetFromCaffe(config["face_detector_prototxt"],
@@ -381,7 +381,7 @@ predictor = dlib.shape_predictor(config["landmark_predictor"])
 
 继续，让我们来看看这张脸:
 
-```
+```py
 # load the input image and construct an input blob from the image
 image = cv2.imread(args["image"])
 (H, W) = image.shape[:2]
@@ -415,7 +415,7 @@ if confidence < config["min_confidence"]:
 
 让我们提取面部并计算面部标志:
 
-```
+```py
 # compute the (x, y)-coordinates of the bounding box for the face
 box = detections[0, 0, i, 3:7] * np.array([W, H, W, H])
 (startX, startY, endX, endY) = box.astype("int")
@@ -443,7 +443,7 @@ rightEyePts = shape[rStart:rEnd]
 
 给定眼睛的坐标，我们可以计算出需要放置太阳镜的位置*和位置*:**
 
-```
+```py
 # compute the center of mass for each eye
 leftEyeCenter = leftEyePts.mean(axis=0).astype("int")
 rightEyeCenter = rightEyePts.mean(axis=0).astype("int")
@@ -487,7 +487,7 @@ sgMask = imutils.resize(sgMask, width=sgW, inter=cv2.INTER_NEAREST)
 
 剩下的三个代码块将创建我们的 GIF 框架:
 
-```
+```py
 # our sunglasses will drop down from the top of the frame so let's
 # define N equally spaced steps between the top of the frame and the
 # desired end location
@@ -524,7 +524,7 @@ for (i, y) in enumerate(steps):
 
 我们的最终输出帧是一个特例，因为它是*“处理它”*文本，我们将通过另一个遮罩操作在该帧上绘制:
 
-```
+```py
 	# if this is the final step then we need to add the "DEAL WITH
 	# IT" text to the bottom of the frame
 	if i == len(steps) - 1:
@@ -561,7 +561,7 @@ for (i, y) in enumerate(steps):
 
 现在我们只需要将每一帧输出到磁盘，然后创建我们的 GIF:
 
-```
+```py
 	# write the output image to our temporary directory
 	p = os.path.sep.join([config["temp_dir"], "{}.jpg".format(
 		str(i).zfill(8))])
@@ -591,7 +591,7 @@ shutil.rmtree(config["temp_dir"], ignore_errors=True)
 
 确保你使用这篇博客文章的 ***“下载”*** 部分来下载源代码、示例图像和深度学习模型。从那里，打开您的终端并执行以下命令:
 
-```
+```py
 $ python create_gif.py --config config.json --image images/adrian.jpg \
 	--output adrian_out.gif
 [INFO] loading models...
@@ -617,7 +617,7 @@ $ python create_gif.py --config config.json --image images/adrian.jpg \
 
 好吧，这是我的回应:
 
-```
+```py
 $ python create_gif.py --config config.json --image images/adrian_jp.jpg \
 	--output adrian_jp_out.gif
 [INFO] loading models...
@@ -643,7 +643,7 @@ $ python create_gif.py --config config.json --image images/adrian_jp.jpg \
 
 Trisha 在 Epcot 的“加拿大花园”外面给我拍了以下照片——她说我看起来像吸血鬼，皮肤苍白，穿着深色衣服，戴着兜帽，与我身后郁郁葱葱的花园形成鲜明对比:
 
-```
+```py
 $ python create_gif.py --config config.json --image images/vampire.jpg \
 	--output vampire_out.gif
 [INFO] loading models...
@@ -663,7 +663,7 @@ Trisha 决定当晚晚些时候在社交媒体上发布这张照片——我被�
 
 > 问:公鸡为什么要过马路？
 
-```
+```py
 $ python create_gif.py --config config.json --image images/rooster.jpg \
 	--output rooster_out.gif
 [INFO] loading models...
@@ -685,7 +685,7 @@ $ python create_gif.py --config config.json --image images/rooster.jpg \
 
 在这里你可以看到小小的杰玛小狗坐在我的肩膀上:
 
-```
+```py
 $ python create_gif.py --config config.json --image images/pupper.jpg \
 	--output pupper_out.gif
 [INFO] loading models...
@@ -707,7 +707,7 @@ $ python create_gif.py --config config.json --image images/pupper.jpg \
 
 如果您看到以下错误:
 
-```
+```py
 $ python create_gif.py --config config.json --image images/adrian.jpg \
 	--output adrian_out.gif
 ...
@@ -720,7 +720,7 @@ AttributeError: module 'imutils.face_utils' has no attribute 'FACIAL_LANDMARKS_I
 
 然后你只需要升级 imutils 包:
 
-```
+```py
 $ pip install --upgrade imutils
 Collecting imutils
 ...

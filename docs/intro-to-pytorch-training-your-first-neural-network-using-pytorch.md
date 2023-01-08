@@ -51,7 +51,7 @@
 
 幸运的是，PyTorch 和 scikit-learn 都非常容易使用 pip 安装:
 
-```
+```py
 $ pip install torch torchvision
 $ pip install scikit-image
 ```
@@ -79,7 +79,7 @@ $ pip install scikit-image
 
 然后，您将看到下面的目录结构。
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── pyimagesearch
@@ -101,7 +101,7 @@ $ tree . --dirsfirst
 
 要开始构建我们的 PyTorch 神经网络，打开项目目录结构的`pyimagesearch`模块中的`mlp.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from collections import OrderedDict
 import torch.nn as nn
@@ -166,7 +166,7 @@ PyTorch 在这方面*没有*宽容(相对于 Keras/TensorFlow)，所以*在指�
 
 打开`train.py`，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import mlp
 from torch.optim import SGD
@@ -187,7 +187,7 @@ import torch
 
 当训练一个神经网络时，我们通过*批*数据来完成(正如你之前所学的)。下面的函数`next_batch`为我们的训练循环产生这样的批次:
 
-```
+```py
 def next_batch(inputs, targets, batchSize):
 	# loop over the dataset
 	for i in range(0, inputs.shape[0], batchSize):
@@ -205,7 +205,7 @@ def next_batch(inputs, targets, batchSize):
 
 接下来，我们要处理一些重要的初始化:
 
-```
+```py
 # specify our batch size, number of epochs, and learning rate
 BATCH_SIZE = 64
 EPOCHS = 10
@@ -222,7 +222,7 @@ print("[INFO] training using {}...".format(DEVICE))
 
 接下来，我们需要一个示例数据集来训练我们的神经网络。在本系列的下一篇教程中，我们将学习如何从磁盘加载图像并对图像数据训练神经网络，但现在，让我们使用 [scikit-learn 的 make_blobs 函数](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_blobs.html)为我们创建一个合成数据集:
 
-```
+```py
 # generate a 3-class classification problem with 1000 data points,
 # where each data point is a 4D feature vector
 print("[INFO] preparing data...")
@@ -255,7 +255,7 @@ testY = torch.from_numpy(testY).float()
 
 现在让我们实例化我们的 PyTorch 神经网络架构:
 
-```
+```py
 # initialize our model and display its architecture
 mlp = mlp.get_training_model().to(DEVICE)
 print(mlp)
@@ -286,7 +286,7 @@ lossFunc = nn.CrossEntropyLoss()
 
  *让我们回顾一下我们的培训循环:
 
-```
+```py
 # create a template to summarize current training progress
 trainTemplate = "epoch: {} test loss: {:.3f} test accuracy: {:.3f}"
 
@@ -368,7 +368,7 @@ for epoch in range(0, EPOCHS):
 
 **此时，我们已经在一个时期的所有数据点上训练了我们的 PyTorch 模型——现在我们需要在我们的测试集上评估它:**
 
-```
+```py
 	# initialize tracker variables for testing, then set our model to
 	# evaluation mode
 	testLoss = 0
@@ -431,7 +431,7 @@ for epoch in range(0, EPOCHS):
 
 要启动 PyTorch 培训流程，只需执行`train.py`脚本:
 
-```
+```py
 $ python train.py
 [INFO] training on cuda...
 [INFO] preparing data...

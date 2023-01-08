@@ -52,7 +52,7 @@
 
 在我们开始实现我们的关键事件视频编写器之前，让我们看一下项目结构:
 
-```
+```py
 |--- output
 |--- pyimagesearch
 |    |--- __init__.py
@@ -75,7 +75,7 @@
 
 让我们开始复习我们的`KeyClipWriter`课:
 
-```
+```py
 # import the necessary packages
 from collections import deque
 from threading import Thread
@@ -118,7 +118,7 @@ class KeyClipWriter:
 
 接下来，让我们回顾一下`update`方法:
 
-```
+```py
 	def update(self, frame):
 		# update the frames buffer
 		self.frames.appendleft(frame)
@@ -133,7 +133,7 @@ class KeyClipWriter:
 
 为了开始实际的视频剪辑记录，我们需要一个`start`方法:
 
-```
+```py
 	def start(self, outputPath, fourcc, fps):
 		# indicate that we are recording, start the video writer,
 		# and initialize the queue of frames that need to be written
@@ -163,7 +163,7 @@ class KeyClipWriter:
 
 如上所述，`start`方法创建了一个新线程，调用用于将`Q`中的帧写入文件的`write`方法。让我们来定义这个`write`方法:
 
-```
+```py
 	def write(self):
 		# keep looping
 		while True:
@@ -195,7 +195,7 @@ class KeyClipWriter:
 
 我们还将定义一个`flush`方法，该方法简单地获取`Q`中剩余的所有帧，并将它们转储到文件中:
 
-```
+```py
 	def flush(self):
 		# empty the queue by flushing all remaining frames to file
 		while not self.Q.empty():
@@ -208,7 +208,7 @@ class KeyClipWriter:
 
 最后，我们定义下面的`finish`方法:
 
-```
+```py
 	def finish(self):
 		# indicate that we are done recording, join the thread,
 		# flush all remaining frames in the queue to file, and
@@ -238,7 +238,7 @@ class KeyClipWriter:
 
 在您继续本教程的其余部分之前，请确保您的系统上安装了 [imutils](https://github.com/jrosebr1/imutils) 软件包:
 
-```
+```py
 $ pip install imutils
 
 ```
@@ -247,7 +247,7 @@ $ pip install imutils
 
 让我们开始吧。打开`save_key_events.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.keyclipwriter import KeyClipWriter
 from imutils.video import VideoStream
@@ -283,7 +283,7 @@ args = vars(ap.parse_args())
 
 让我们执行一些初始化:
 
-```
+```py
 # initialize the video stream and allow the camera sensor to
 # warmup
 print("[INFO] warming up camera...")
@@ -310,7 +310,7 @@ consecFrames = 0
 
 我们现在准备开始处理视频流中的帧:
 
-```
+```py
 # keep looping
 while True:
 	# grab the current frame, resize it, and initialize a
@@ -350,7 +350,7 @@ while True:
 
 我们现在准备检查并查看是否在我们的图像中找到了绿色球:
 
-```
+```py
 	# only proceed if at least one contour was found
 	if len(cnts) > 0:
 		# find the largest contour in the mask, then use it
@@ -386,7 +386,7 @@ while True:
 
 否则，我们将假设没有关键/有趣的事件发生:
 
-```
+```py
 	# otherwise, no action has taken place in this frame, so
 	# increment the number of consecutive frames that contain
 	# no action
@@ -419,7 +419,7 @@ while True:
 
 我们的最后一个代码块确保视频已经成功关闭，然后执行一点清理:
 
-```
+```py
 # if we are in the middle of recording a clip, wrap it up
 if kcw.recording:
 	kcw.finish()
@@ -434,7 +434,7 @@ vs.stop()
 
 要为关键事件生成视频剪辑(例如，视频流中出现的绿色球)，只需执行以下命令:
 
-```
+```py
 $ python save_key_events.py --output output
 
 ```

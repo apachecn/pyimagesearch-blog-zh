@@ -85,14 +85,14 @@ Flask 是一个流行的用 Python 编程语言编写的微型 web 框架。
 
 如果您需要在机器上安装 Flask，只需以下命令即可:
 
-```
+```py
 $ pip install flask
 
 ```
 
 现在，继续安装 NumPy、OpenCV 和 imutils:
 
-```
+```py
 $ pip install numpy
 $ pip install opencv-contrib-python
 $ pip install imutils
@@ -105,7 +105,7 @@ $ pip install imutils
 
 在我们继续之前，让我们看一下项目的目录结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── pyimagesearch
@@ -153,7 +153,7 @@ $ tree --dirsfirst
 
 打开`singlemotiondetector.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import imutils
@@ -183,7 +183,7 @@ class SingleMotionDetector:
 
 接下来，让我们定义`update`方法，它将接受一个输入帧并计算加权平均值:
 
-```
+```py
 	def update(self, image):
 		# if the background model is None, initialize it
 		if self.bg is None:
@@ -202,7 +202,7 @@ class SingleMotionDetector:
 
 给定我们的背景`bg`，我们现在可以通过`detect`方法应用运动检测:
 
-```
+```py
 	def detect(self, image, tVal=25):
 		# compute the absolute difference between the background model
 		# and the image passed in, then threshold the delta image
@@ -229,7 +229,7 @@ class SingleMotionDetector:
 
 下一步是应用轮廓检测来提取任何运动区域:
 
-```
+```py
 		# find contours in the thresholded image and initialize the
 		# minimum and maximum bounding box regions for motion
 		cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
@@ -246,7 +246,7 @@ class SingleMotionDetector:
 
 最后一步是填充这些变量(当然，前提是帧中存在运动):
 
-```
+```py
 		# if no contours were found, return None
 		if len(cnts) == 0:
 			return None
@@ -285,7 +285,7 @@ class SingleMotionDetector:
 
 打开项目结构中的`webstreaming.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.motion_detection import SingleMotionDetector
 from imutils.video import VideoStream
@@ -310,7 +310,7 @@ import cv2
 
 让我们继续执行一些初始化:
 
-```
+```py
 # initialize the output frame and a lock used to ensure thread-safe
 # exchanges of the output frames (useful when multiple browsers/tabs
 # are viewing the stream)
@@ -339,7 +339,7 @@ time.sleep(2.0)
 
 下一个函数`index`将呈现我们的`index.html`模板，并提供输出视频流:
 
-```
+```py
 @app.route("/")
 def index():
 	# return the rendered template
@@ -361,7 +361,7 @@ def index():
 
 现在让我们来看看这个函数:
 
-```
+```py
 def detect_motion(frameCount):
 	# grab global references to the video stream, output frame, and
 	# lock variables
@@ -393,7 +393,7 @@ def detect_motion(frameCount):
 
 完成这些初始化后，我们现在可以开始循环摄像机中的帧:
 
-```
+```py
 	# loop over frames from the video stream
 	while True:
 		# read the next frame from the video stream, resize it,
@@ -421,7 +421,7 @@ def detect_motion(frameCount):
 
 通过最后一项检查，我们可以执行运动检测:
 
-```
+```py
 		# if the total number of frames has reached a sufficient
 		# number to construct a reasonable background model, then
 		# continue to process the frame
@@ -463,7 +463,7 @@ def detect_motion(frameCount):
 
 我们的下一个函数`generate`，是一个 Python 生成器，用于将我们的`outputFrame`编码为 JPEG 数据——现在让我们来看看:
 
-```
+```py
 def generate():
 	# grab global references to the output frame and lock variables
 	global outputFrame, lock
@@ -506,7 +506,7 @@ def generate():
 
 下一个函数`video_feed`调用我们的`generate`函数:
 
-```
+```py
 @app.route("/video_feed")
 def video_feed():
 	# return the response generated along with the specific media
@@ -524,7 +524,7 @@ def video_feed():
 
 我们的最后一个代码块处理解析命令行参数和启动 Flask 应用程序:
 
-```
+```py
 # check to see if this is the main thread of execution
 if __name__ == '__main__':
 	# construct the argument parser and parse command line arguments
@@ -576,7 +576,7 @@ vs.stop()
 
 让我们检查一下`index.html`文件的内容:
 
-```
+```py
 <html>
   <head>
     <title>Pi Video Surveillance</title>
@@ -601,7 +601,7 @@ vs.stop()
 
 打开终端并执行以下命令:
 
-```
+```py
 $ python webstreaming.py --ip 0.0.0.0 --port 8000
  * Serving Flask app "webstreaming" (lazy loading)
  * Environment: production

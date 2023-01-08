@@ -39,7 +39,7 @@
 
 但是在我们这样做之前，我们需要先安装一些必需的包:
 
-```
+```py
 $ sudo apt-get update
 $ sudo apt-get upgrade
 $ sudo apt-get install build-essential cmake git unzip pkg-config
@@ -55,14 +55,14 @@ $ sudo apt-get install linux-source linux-headers-generic
 
 要禁用新内核驱动程序，首先创建一个新文件:
 
-```
+```py
 $ sudo nano /etc/modprobe.d/blacklist-nouveau.conf
 
 ```
 
 然后将以下几行添加到文件中:
 
-```
+```py
 blacklist nouveau
 blacklist lbm-nouveau
 options nouveau modeset=0
@@ -73,7 +73,7 @@ alias lbm-nouveau off
 
 保存这个文件，退出您的编辑器，然后更新初始 RAM 文件系统，然后重新启动您的机器:
 
-```
+```py
 $ echo options nouveau modeset=0 | sudo tee -a /etc/modprobe.d/nouveau-kms.conf
 $ sudo update-initramfs -u
 $ sudo reboot
@@ -90,7 +90,7 @@ $ sudo reboot
 
 首先，我们先下载适用于 CUDA 7.5 的`.run`文件:
 
-```
+```py
 $ wget http://developer.download.nvidia.com/compute/cuda/7.5/Prod/local_installers/cuda_7.5.18_linux.run
 
 ```
@@ -103,14 +103,14 @@ $ wget http://developer.download.nvidia.com/compute/cuda/7.5/Prod/local_installe
 
 接下来，我们需要使`.run`文件可执行:
 
-```
+```py
 $ chmod +x cuda_7.5.18_linux.run
 
 ```
 
 然后将各个安装脚本提取到`installers`目录中:
 
-```
+```py
 $ mkdir installers
 $ sudo ./cuda_7.5.18_linux.run -extract=`pwd`/installers
 
@@ -130,7 +130,7 @@ $ sudo ./cuda_7.5.18_linux.run -extract=`pwd`/installers
 
 下面一组命令将负责实际安装 CUDA 工具包:
 
-```
+```py
 $ sudo ./NVIDIA-Linux-x86_64-352.39.run
 $ modprobe nvidia
 $ sudo ./cuda-linux64-rel-7.5.18-19867135.run
@@ -148,14 +148,14 @@ $ sudo ./cuda-samples-linux-7.5.18-19867135.run
 
 既然安装了 CUDA 工具包，我们需要更新我们的`~/.bashrc`配置:
 
-```
+```py
 $ nano ~/.bashrc
 
 ```
 
 然后添加下面几行来定义 CUDA 工具包`PATH`变量:
 
-```
+```py
 # CUDA Toolkit
 export CUDA_HOME=/usr/local/cuda-7.5
 export LD_LIBRARY_PATH=${CUDA_HOME}/lib64:$LD_LIBRARY_PATH
@@ -165,7 +165,7 @@ export PATH=${CUDA_HOME}/bin:${PATH}
 
 您的`.bashrc`文件会在您每次登录或打开新终端时自动`source`更新，但由于我们*刚刚*修改了它，我们需要手动`source`它:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
@@ -192,14 +192,14 @@ $ source ~/.bashrc
 
 这是一个 75MB 的小下载，你应该把它保存到你的本地机器*(也就是你用来阅读本教程的笔记本电脑/台式机)，然后*把*上传到你的 EC2 实例。为此，只需使用`scp`，根据需要替换路径和 IP 地址:*
 
-```
+```py
 $ scp -i EC2KeyPair.pem ~/Downloads/cudnn-7.5-linux-x64-v5.0-ga.tgz ubuntu@<ip_address>:~
 
 ```
 
 安装 cuDNN 非常简单——我们所需要做的就是将`lib64`和`include`目录中的文件复制到我们 EC2 机器上相应的位置:
 
-```
+```py
 $ cd ~
 $ tar -zxf cudnn-7.5-linux-x64-v5.0-ga.tgz
 $ cd cuda
@@ -214,7 +214,7 @@ $ sudo cp include/* /usr/local/cuda/include/
 
 现在我们已经(1)安装了 NVIDIA CUDA Toolkit ,( 2)安装了 cuDNN，让我们做一些清理工作来回收磁盘空间:
 
-```
+```py
 $ cd ~
 $ rm -rf cuda installers
 $ rm -f cuda_7.5.18_linux.run cudnn-7.5-linux-x64-v5.0-ga.tgz

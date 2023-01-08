@@ -132,7 +132,7 @@ In this tutorial, you will learn how to automatically detect COVID-19 in a hand-
 
 继续从本教程的 ***“下载”*** 部分获取今天的代码和数据。从那里，提取文件，您将看到以下目录结构:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── dataset
@@ -161,7 +161,7 @@ $ tree --dirsfirst --filelimit 10
 
 打开目录结构中的`train_covid19.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications import VGG16
@@ -193,7 +193,7 @@ import os
 
 导入完成后，接下来我们将解析命令行参数并初始化超参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -221,7 +221,7 @@ BS = 8
 
 我们现在准备加载和预处理 X 射线数据:
 
-```
+```py
 # grab the list of images in our dataset directory, then initialize
 # the list of data (i.e., images) and class images
 print("[INFO] loading images...")
@@ -260,7 +260,7 @@ labels = np.array(labels)
 
 接下来，我们将对`labels`进行一次性编码，并创建我们的培训/测试分割:
 
-```
+```py
 # perform one-hot encoding on the labels
 lb = LabelBinarizer()
 labels = lb.fit_transform(labels)
@@ -279,7 +279,7 @@ trainAug = ImageDataGenerator(
 
 `labels`的一次性编码发生在**的第 67-69 行**，这意味着我们的数据将采用以下格式:
 
-```
+```py
 [[0\. 1.]
  [0\. 1.]
  [0\. 1.]
@@ -299,7 +299,7 @@ trainAug = ImageDataGenerator(
 
 从这里，我们将初始化我们的 VGGNet 模型，并为[微调](https://pyimagesearch.com/2019/06/03/fine-tuning-with-keras-and-deep-learning/)设置它:
 
-```
+```py
 # load the VGG16 network, ensuring the head FC layer sets are left
 # off
 baseModel = VGG16(weights="imagenet", include_top=False,
@@ -332,7 +332,7 @@ for layer in baseModel.layers:
 
 我们现在准备编译和训练我们的新冠肺炎(冠状病毒)深度学习模型:
 
-```
+```py
 # compile our model
 print("[INFO] compiling model...")
 opt = Adam(lr=INIT_LR, decay=INIT_LR / EPOCHS)
@@ -355,7 +355,7 @@ H = model.fit_generator(
 
 接下来，我们将评估我们的模型:
 
-```
+```py
 # make predictions on the testing set
 print("[INFO] evaluating network...")
 predIdxs = model.predict(testX, batch_size=BS)
@@ -375,7 +375,7 @@ print(classification_report(testY.argmax(axis=1), predIdxs,
 
 接下来，我们将为进一步的统计评估计算混淆矩阵:
 
-```
+```py
 # compute the confusion matrix and and use it to derive the raw
 # accuracy, sensitivity, and specificity
 cm = confusion_matrix(testY.argmax(axis=1), predIdxs)
@@ -398,7 +398,7 @@ print("specificity: {:.4f}".format(specificity))
 
 然后，我们绘制我们的训练准确度/损失历史以供检查，将该图输出到图像文件:
 
-```
+```py
 # plot the training loss and accuracy
 N = EPOCHS
 plt.style.use("ggplot")
@@ -416,7 +416,7 @@ plt.savefig(args["plot"])
 
 最后，我们将我们的`tf.keras`新冠肺炎分类器模型序列化到磁盘:
 
-```
+```py
 # serialize the model to disk
 print("[INFO] saving COVID-19 detector model...")
 model.save(args["model"], save_format="h5")
@@ -430,7 +430,7 @@ model.save(args["model"], save_format="h5")
 
 从那里，打开一个终端并执行以下命令来训练新冠肺炎检测器:
 
-```
+```py
 $ python train_covid19.py --dataset dataset
 [INFO] loading images...
 [INFO] compiling model...

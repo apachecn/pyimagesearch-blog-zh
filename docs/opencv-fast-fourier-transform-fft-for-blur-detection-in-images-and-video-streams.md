@@ -75,7 +75,7 @@ FFT 在许多学科中都很有用，包括音乐、数学、科学和工程。�
 
 首先使用本教程的 ***【下载】*** 部分下载源代码和示例图像。提取文件后，您将拥有一个如下组织的目录:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── images
@@ -102,7 +102,7 @@ $ tree --dirsfirst
 
 在我们的目录结构中打开`blur_detector.py`文件，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import matplotlib.pyplot as plt
 import numpy as np
@@ -114,7 +114,7 @@ def detect_blur_fft(image, size=60, thresh=10, vis=False):
 	(cX, cY) = (int(w / 2.0), int(h / 2.0))
 ```
 
-```
+```py
 	# compute the FFT to find the frequency transform, then shift
 	# the zero frequency component (i.e., DC component located at
 	# the top-left corner) to the center where it will be more
@@ -129,7 +129,7 @@ def detect_blur_fft(image, size=60, thresh=10, vis=False):
 
 现在我们已经有了`image`的 FFT，让我们来看看设置了`vis`标志后的结果:
 
-```
+```py
 	# check to see if we are visualizing our output
 	if vis:
 		# compute the magnitude spectrum of the transform
@@ -152,7 +152,7 @@ def detect_blur_fft(image, size=60, thresh=10, vis=False):
 		plt.show()
 ```
 
-```
+```py
 	# zero-out the center of the FFT shift (i.e., remove low
 	# frequencies), apply the inverse shift such that the DC
 	# component once again becomes the top-left, and then apply
@@ -170,7 +170,7 @@ def detect_blur_fft(image, size=60, thresh=10, vis=False):
 
 从这里开始，我们还有三个步骤来确定我们的`image`是否模糊:
 
-```
+```py
 	# compute the magnitude spectrum of the reconstructed image,
 	# then compute the mean of the magnitude values
 	magnitude = 20 * np.log(np.abs(recon))
@@ -185,7 +185,7 @@ def detect_blur_fft(image, size=60, thresh=10, vis=False):
 
 ### 用 FFT 检测图像中的模糊
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.blur_detector import detect_blur_fft
 import numpy as np
@@ -206,7 +206,7 @@ ap.add_argument("-d", "--test", type=int, default=-1,
 args = vars(ap.parse_args())
 ```
 
-```
+```py
 # load the input image from disk, resize it, and convert it to
 # grayscale
 orig = cv2.imread(args["image"])
@@ -218,7 +218,7 @@ gray = cv2.cvtColor(orig, cv2.COLOR_BGR2GRAY)
 	thresh=args["thresh"], vis=args["vis"] > 0)
 ```
 
-```
+```py
 # draw on the image, indicating whether or not it is blurry
 image = np.dstack([gray] * 3)
 color = (0, 0, 255) if blurry else (0, 255, 0)
@@ -233,7 +233,7 @@ cv2.imshow("Output", image)
 cv2.waitKey(0)
 ```
 
-```
+```py
 # check to see if are going to test our FFT blurriness detector using
 # various sizes of a Gaussian kernel
 if args["test"] > 0:
@@ -275,7 +275,7 @@ if args["test"] > 0:
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python blur_detector_image.py --image images/adrian_01.png
 [INFO] Not Blurry (42.4630)
 ```
@@ -284,12 +284,12 @@ $ python blur_detector_image.py --image images/adrian_01.png
 
 让我们尝试另一个图像，这是我家的狗 Jemma:
 
-```
+```py
 $ python blur_detector_image.py --image images/jemma.png
 [INFO] Blurry (12.4738)
 ```
 
-```
+```py
 $ python blur_detector_image.py --image images/adrian_02.png --test 1
 [INFO] Not Blurry (32.0934)
 [INFO] Kernel: 1, Result: Not Blurry (32.0934)
@@ -325,7 +325,7 @@ $ python blur_detector_image.py --image images/adrian_02.png --test 1
 
 因此，我们应该*增加*我们的`--thresh`值(我还将包括`--vis`参数，这样我们可以直观地看到 FFT 幅度值是如何变化的):
 
-```
+```py
 $ python blur_detector_image.py --image images/resume.png --thresh 27 --test 1 --vis 1
 [INFO] Not Blurry (34.6735)
 [INFO] Kernel: 1, Result: Not Blurry (34.6735)
@@ -357,7 +357,7 @@ $ python blur_detector_image.py --image images/resume.png --thresh 27 --test 1 -
 
 让我们找出答案——打开一个新文件，将其命名为`blur_detector_video.py`,并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 from pyimagesearch.blur_detector import detect_blur_fft
@@ -373,7 +373,7 @@ ap.add_argument("-t", "--thresh", type=int, default=10,
 args = vars(ap.parse_args())
 ```
 
-```
+```py
 # initialize the video stream and allow the camera sensor to warm up
 print("[INFO] starting video stream...")
 vs = VideoStream(src=0).start()
@@ -396,7 +396,7 @@ while True:
 
 从那里，我们开始在**线 21** 上的帧处理循环。在里面，我们抓取一帧并将其转换为灰度(**第 24-28 行**)，就像我们的单个图像模糊检测脚本一样。
 
-```
+```py
 	# draw on the frame, indicating whether or not it is blurry
 	color = (0, 0, 255) if blurry else (0, 255, 0)
 	text = "Blurry ({:.4f})" if blurry else "Not Blurry ({:.4f})"
@@ -431,7 +431,7 @@ vs.stop()
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python blur_detector_video.py
 [INFO] starting video stream...
 ```

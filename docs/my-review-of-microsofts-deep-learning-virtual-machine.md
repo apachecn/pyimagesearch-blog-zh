@@ -314,7 +314,7 @@ Floydhub 的定价是 4.20 美元/小时(1x V100)，但他们提供了一些很�
 
 快速解决方法是将下面两行 ***放在笔记本最底部的自己的单元格*** 中:
 
-```
+```py
 %%javascript
 Jupyter.notebook.session.delete();
 

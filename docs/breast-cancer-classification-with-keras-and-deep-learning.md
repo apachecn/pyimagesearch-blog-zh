@@ -87,7 +87,7 @@
 
 从那里，解压缩文件:
 
-```
+```py
 $ cd path/to/downloaded/zip
 $ unzip breast-cancer-classification.zip
 
@@ -97,7 +97,7 @@ $ unzip breast-cancer-classification.zip
 
 继续创建以下目录:
 
-```
+```py
 $ cd breast-cancer-classification
 $ mkdir datasets
 $ mkdir datasets/orig
@@ -114,7 +114,7 @@ $ mkdir datasets/orig
 
 现在回到您的终端，导航到您刚刚创建的目录，并解压缩数据:
 
-```
+```py
 $ cd path/to/breast-cancer-classification/datasets/orig
 $ unzip archive.zip -x "IDC_regular_ps50_idx5/*"
 
@@ -122,7 +122,7 @@ $ unzip archive.zip -x "IDC_regular_ps50_idx5/*"
 
 从那里，让我们回到项目目录，使用`tree`命令检查我们的项目结构:
 
-```
+```py
 $ cd ../..
 $ tree --dirsfirst -L 4
 .
@@ -179,7 +179,7 @@ $ tree --dirsfirst -L 4
 
 让我们来看看`config.py`:
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -234,7 +234,7 @@ VAL_SPLIT = 0.1
 
 打开`build_dataset.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from imutils import paths
@@ -279,7 +279,7 @@ datasets = [
 
 现在让我们开始循环查看`datasets`列表:
 
-```
+```py
 # loop over the datasets
 for (dType, imagePaths, baseOutput) in datasets:
 	# show which data split we are creating
@@ -322,7 +322,7 @@ for (dType, imagePaths, baseOutput) in datasets:
 
 现在我们的脚本已经编写好了，接下来通过执行以下命令来创建培训、测试和验证分割目录结构:
 
-```
+```py
 $ python build_dataset.py
 [INFO] building 'training' split
 [INFO] 'creating datasets/idc/training' directory
@@ -404,7 +404,7 @@ $ tree --dirsfirst --filelimit 10
 
 打开`cancernet.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import BatchNormalization
@@ -452,7 +452,7 @@ class CancerNet:
 
 让我们定义我们的`DEPTHWISE_CONV => RELU => POOL`层:
 
-```
+```py
 		# CONV => RELU => POOL
 		model.add(SeparableConv2D(32, (3, 3), padding="same",
 			input_shape=inputShape))
@@ -490,7 +490,7 @@ class CancerNet:
 
 让我们添加完全连接的头部:
 
-```
+```py
 		# first (and only) set of FC => RELU layers
 		model.add(Flatten())
 		model.add(Dense(256))
@@ -519,7 +519,7 @@ softmax 分类器的输出将是我们的模型将预测的每个类别的预测
 
 创建一个名为`train_model.py`的新文件，打开它，并插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -561,7 +561,7 @@ args = vars(ap.parse_args())
 
 现在，我们已经导入了所需的库，并解析了命令行参数，让我们定义训练参数，包括我们的训练图像路径，并考虑类不平衡:
 
-```
+```py
 # initialize our number of epochs, initial learning rate, and batch
 # size
 NUM_EPOCHS = 40
@@ -596,7 +596,7 @@ for i in range(0, len(classTotals)):
 
 让我们初始化我们的数据扩充对象:
 
-```
+```py
 # initialize the training data augmentation object
 trainAug = ImageDataGenerator(
 	rescale=1 / 255.0,
@@ -620,7 +620,7 @@ valAug = ImageDataGenerator(rescale=1 / 255.0)
 
 现在让我们初始化每个生成器:
 
-```
+```py
 # initialize the training generator
 trainGen = trainAug.flow_from_directory(
 	config.TRAIN_PATH,
@@ -654,7 +654,7 @@ testGen = valAug.flow_from_directory(
 
 让我们继续初始化我们的`model`并开始训练吧！
 
-```
+```py
 # initialize our CancerNet model and compile it
 model = CancerNet.build(width=48, height=48, depth=3,
 	classes=2)
@@ -683,7 +683,7 @@ H = model.fit(
 
 训练完成后，我们将根据测试数据评估模型:
 
-```
+```py
 # reset the testing generator and then use our trained model to
 # make predictions on the data
 print("[INFO] evaluating network...")
@@ -706,7 +706,7 @@ print(classification_report(testGen.classes, predIdxs,
 
 让我们收集其他评估指标:
 
-```
+```py
 # compute the confusion matrix and and use it to derive the raw
 # accuracy, sensitivity, and specificity
 cm = confusion_matrix(testGen.classes, predIdxs)
@@ -727,7 +727,7 @@ print("specificity: {:.4f}".format(specificity))
 
 最后，让我们生成并存储我们的训练图:
 
-```
+```py
 # plot the training loss and accuracy
 N = NUM_EPOCHS
 plt.style.use("ggplot")
@@ -763,7 +763,7 @@ plt.savefig(args["plot"])
 
 在您勾选了以上四项之后，打开一个终端并执行以下命令:
 
-```
+```py
 $ python train_model.py
 Found 199818 images belonging to 2 classes.
 Found 22201 images belonging to 2 classes.

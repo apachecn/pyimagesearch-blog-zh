@@ -51,7 +51,7 @@ MNIST 数据集是计算机视觉和机器学习文献中研究得最多的数�
 
 我们要做的第一件事是创建一个文件`rbm.py`，并开始导入我们需要的包:
 
-```
+```py
 # import the necessary packages
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import classification_report
@@ -86,7 +86,7 @@ import cv2
 
 但是在我们开始之前，我们首先需要设置一些函数来加载和操作我们的 MNIST 数据集:
 
-```
+```py
 def load_digits(datasetPath):
 	# build the dataset and then split it into data
 	# and labels
@@ -111,7 +111,7 @@ def load_digits(datasetPath):
 
 为了将列缩放到范围[0，1]，我们需要做的就是定义一个`scale`函数:
 
-```
+```py
 def scale(X, eps = 0.001):
 	# scale the data points s.t the columns of the feature space
 	# (i.e the predictors) are within the range [0, 1]
@@ -127,7 +127,7 @@ def scale(X, eps = 0.001):
 
 为了处理数据集的这种微调，我们将创建`nudge`函数:
 
-```
+```py
 def nudge(X, y):
 	# initialize the translations to shift the image one pixel
 	# up, down, left, and right, then initialize the new data
@@ -181,7 +181,7 @@ def nudge(X, y):
 
 现在我们终于可以开始把这些碎片拼在一起了:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required = True,
@@ -198,7 +198,7 @@ args = vars(ap.parse_args())
 
 `--search`的值`1`表示应该执行网格搜索；值`0`表示已经进行了网格搜索，并且已经手动设置了`BernoulliRBM`和`LogisticRegression`模型的模型参数。
 
-```
+```py
 # load the digits dataset, convert the data points from integers
 # to floats, and then scale the data s.t. the predictors (columns)
 # are within the range [0, 1] -- this is a requirement of the
@@ -219,7 +219,7 @@ X = scale(X)
 
 为了生成我们的训练和测试分割，我们将调用第 74 行上的`train_test_split`函数。这个函数会自动为我们生成拆分。
 
-```
+```py
 # check to see if a grid search should be done
 if args["search"] == 1:
 	# perform a grid search on the 'C' parameter of Logistic
@@ -252,7 +252,7 @@ if args["search"] == 1:
 
 现在我们可以继续我们的管道:一个`BernoulliRBM`和一个`LogisticRegression`分类器一起使用。
 
-```
+```py
 	# initialize the RBM + Logistic Regression pipeline
 	rbm = BernoulliRBM()
 	logistic = LogisticRegression()
@@ -302,7 +302,7 @@ if args["search"] == 1:
 
 要确定管道的最佳值，请执行以下命令:
 
-```
+```py
 $ python rbm.py --dataset data/digits.csv --test 0.4 --search 1
 
 ```
@@ -311,7 +311,7 @@ $ python rbm.py --dataset data/digits.csv --test 0.4 --search 1
 
 走了很长一段路后，您应该看到已经选择了以下最佳值:
 
-```
+```py
 rbm__learning_rate: 0.01
 rbm__n_iter: 40
 rbm__n_components: 200
@@ -323,7 +323,7 @@ logistic__C: 1.0
 
 让我们设置这些参数并评估我们的分类管道:
 
-```
+```py
 # otherwise, use the manually specified parameters
 else:
 	# evaluate using Logistic Regression and only the raw pixel
@@ -362,7 +362,7 @@ else:
 
 要评估我们的系统，发出以下命令:
 
-```
+```py
 $ python rbm.py --dataset data/digits.csv --test 0.4
 
 ```
@@ -373,7 +373,7 @@ $ python rbm.py --dataset data/digits.csv --test 0.4
 
 第一组结果是我们在原始像素特征向量上严格训练的逻辑回归分类器:
 
-```
+```py
 LOGISTIC REGRESSION ON ORIGINAL DATASET
              precision    recall  f1-score   support
 
@@ -396,7 +396,7 @@ avg / total       0.89      0.89      0.89      2000
 
 但是看看当我们训练我们的受限玻尔兹曼机+逻辑回归流水线时会发生什么:
 
-```
+```py
 RBM + LOGISTIC REGRESSION ON ORIGINAL DATASET
              precision    recall  f1-score   support
 
@@ -427,7 +427,7 @@ avg / total       0.93      0.93      0.93      2000
 
 事实证明，是这样的:
 
-```
+```py
 RBM + LOGISTIC REGRESSION ON NUDGED DATASET
              precision    recall  f1-score   support
 

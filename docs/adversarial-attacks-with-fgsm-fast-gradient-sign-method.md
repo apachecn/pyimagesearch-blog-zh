@@ -100,7 +100,7 @@ FGSM 利用神经网络的梯度来构建对抗图像，类似于我们在[无�
 
 让我们从回顾我们的项目目录结构开始。请务必访问本教程的 ***【下载】*** 部分以检索源代码:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── pyimagesearch
@@ -133,7 +133,7 @@ $ tree . --dirsfirst
 
 但是这一切都是从实现 CNN 架构开始的——打开我们项目目录结构的`pyimagesearch`模块中的`simplecnn.py`,让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import BatchNormalization
@@ -150,7 +150,7 @@ from tensorflow.keras.layers import Dense
 
 考虑到我们的导入，我们可以定义我们的 CNN 架构:
 
-```
+```py
 class SimpleCNN:
 	@staticmethod
 	def build(width, height, depth, classes):
@@ -209,7 +209,7 @@ class SimpleCNN:
 
 让我们现在实现 FGSM。打开项目目录结构中的`fgsm.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.losses import MSE
 import tensorflow as tf
@@ -230,7 +230,7 @@ def generate_image_adversary(model, image, label, eps=2 / 255.0):
 
 让我们现在开始实施 FGSM 攻击:
 
-```
+```py
 	# record our gradients
 	with tf.GradientTape() as tape:
 		# explicitly indicate that our image should be tacked for
@@ -249,7 +249,7 @@ def generate_image_adversary(model, image, label, eps=2 / 255.0):
 
 接下来，让我们实现 FGSM 攻击的“带符号梯度”部分:
 
-```
+```py
 	# calculate the gradients of loss with respect to the image, then
 	# compute the sign of the gradient
 	gradient = tape.gradient(loss, image)
@@ -279,7 +279,7 @@ def generate_image_adversary(model, image, label, eps=2 / 255.0):
 
 在我们的目录结构中打开`fgsm_adversarial.py`脚本，我们可以开始工作了:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.simplecnn import SimpleCNN
 from pyimagesearch.fgsm import generate_image_adversary
@@ -296,7 +296,7 @@ import cv2
 
 导入工作完成后，我们现在可以从磁盘加载 MNIST 数据集了:
 
-```
+```py
 # load MNIST dataset and scale the pixel values to the range [0, 1]
 print("[INFO] loading MNIST dataset...")
 (trainX, trainY), (testX, testY) = mnist.load_data()
@@ -320,7 +320,7 @@ testY = to_categorical(testY, 10)
 
 从那里，我们可以初始化我们的`SimpleCNN`模型:
 
-```
+```py
 # initialize our optimizer and model
 print("[INFO] compiling model...")
 opt = Adam(lr=1e-3)
@@ -350,7 +350,7 @@ print("[INFO] loss: {:.4f}, acc: {:.4f}".format(loss, acc))
 
 说到这里，现在让我们使用 FGSM 生成一些敌对的图像:
 
-```
+```py
 # loop over a sample of our testing images
 for i in np.random.choice(np.arange(0, len(testX)), size=(10,)):
 	# grab the current image and label
@@ -379,7 +379,7 @@ for i in np.random.choice(np.arange(0, len(testX)), size=(10,)):
 
 现在让我们为可视化准备`image`和`adversary`:
 
-```
+```py
 	# scale both the original image and adversary to the range
 	# [0, 255] and convert them to an unsigned 8-bit integers
 	adversary = adversary.reshape((28, 28)) * 255
@@ -407,7 +407,7 @@ MNIST 的图像只有 *28×28* ，很难看清，尤其是在高分辨率的屏�
 
 我们的最后一个代码块完成了可视化过程:
 
-```
+```py
 	# determine the predicted label for both the original image and
 	# adversarial image
 	imagePred = label.argmax()
@@ -446,7 +446,7 @@ MNIST 的图像只有 *28×28* ，很难看清，尤其是在高分辨率的屏�
 
 首先访问本教程的 ***【下载】*** 部分来检索源代码。从那里，打开一个终端并执行`fgsm_adversarial.py`脚本:
 
-```
+```py
 $ python fgsm_adversarial.py
 [INFO] loading MNIST dataset...
 [INFO] compiling model...

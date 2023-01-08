@@ -140,7 +140,7 @@ Goodfellow 等人在其 2014 年的论文 *[中首次引入了生成对抗网络
 
 确保您使用本教程的 ***【下载】*** 部分将源代码下载到我们的 GAN 项目:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── output
@@ -165,7 +165,7 @@ $ tree . --dirsfirst
 
 在我们的项目目录结构中打开`dcgan.py`文件，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import BatchNormalization
@@ -198,7 +198,7 @@ from tensorflow.keras.layers import Reshape
 
 现在让我们开始实现我们的`DCGAN`类:
 
-```
+```py
 class DCGAN:
 	@staticmethod
 	def build_generator(dim, depth, channels=1, inputDim=100,
@@ -214,7 +214,7 @@ class DCGAN:
 
 下面我们可以找到我们的发电机网络的主体:
 
-```
+```py
 		# first set of FC => RELU => BN layers
 		model.add(Dense(input_dim=inputDim, units=outputDim))
 		model.add(Activation("relu"))
@@ -235,7 +235,7 @@ class DCGAN:
 
 实际的整形发生在下一个代码块中:
 
-```
+```py
 		# reshape the output of the previous layer set, upsample +
 		# apply a transposed convolution, RELU, and BN
 		model.add(Reshape(inputShape))
@@ -256,7 +256,7 @@ class DCGAN:
 
 让我们应用另一个转置卷积:
 
-```
+```py
 		# apply another upsample and transposed convolution, but
 		# this time output the TANH activation
 		model.add(Conv2DTranspose(channels, (5, 5), strides=(2, 2),
@@ -275,7 +275,7 @@ class DCGAN:
 
 假设`dim=7`、`depth=64`、`channels=1`、`inputDim=100`和`outputDim=512`(我们将在本教程稍后对我们的 GAN 进行时尚培训时使用)，我已经包括了以下模型摘要:
 
-```
+```py
 Model: "sequential"
 _________________________________________________________________
 Layer (type)                 Output Shape              Param #   
@@ -322,7 +322,7 @@ activation_3 (Activation)    (None, 28, 28, 1)         0
 
 继续我们在`dcgan.py`中对`DCGAN`类的实现，现在让我们看看鉴别器:
 
-```
+```py
 	@staticmethod
 	def build_discriminator(width, height, depth, alpha=0.2):
 		# initialize the model along with the input shape to be
@@ -362,7 +362,7 @@ activation_3 (Activation)    (None, 28, 28, 1)         0
 
 在我们的项目目录结构中打开`dcgan_fashion_mnist.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.dcgan import DCGAN
 from tensorflow.keras.models import Model
@@ -381,7 +381,7 @@ import os
 
 让我们开始解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-o", "--output", required=True,
@@ -399,7 +399,7 @@ args = vars(ap.parse_args())
 
 现在让我们来关注一些重要的初始化:
 
-```
+```py
 # store the epochs and batch size in convenience variables, then
 # initialize our learning rate
 NUM_EPOCHS = args["epochs"]
@@ -413,7 +413,7 @@ INIT_LR = 2e-4
 
 我们现在可以从磁盘加载时尚 MNIST 数据集:
 
-```
+```py
 # load the Fashion MNIST dataset and stack the training and testing
 # data points so we have additional training data
 print("[INFO] loading MNIST dataset...")
@@ -437,7 +437,7 @@ trainImages = (trainImages.astype("float") - 127.5) / 127.5
 
 现在让我们初始化我们的生成器和鉴别器:
 
-```
+```py
 # build the generator
 print("[INFO] building generator...")
 gen = DCGAN.build_generator(7, 64, channels=1)
@@ -459,7 +459,7 @@ Adam 优化器的学习率和 beta 值是通过实验调整的。我发现 Adam 
 
 给定生成器和鉴别器，我们可以构建 GAN:
 
-```
+```py
 # build the adversarial model by first setting the discriminator to
 # *not* be trainable, then combine the generator and discriminator
 # together
@@ -486,7 +486,7 @@ gan.compile(loss="binary_crossentropy", optimizer=discOpt)
 
 在整个训练过程中，我们希望看到我们的 GAN 如何从随机噪声中进化出合成图像。为了完成这项任务，我们需要生成一些基准随机噪声来可视化训练过程:
 
-```
+```py
 # randomly generate some benchmark noise so we can consistently
 # visualize how the generative modeling is learning
 print("[INFO] starting training...")
@@ -517,7 +517,7 @@ for epoch in range(0, NUM_EPOCHS):
 
 然后我们在第 79 行**上循环每一批。**
 
-```
+```py
 		# generate images using the noise + generator model
 		genImages = gen.predict(noise, verbose=0)
 
@@ -549,7 +549,7 @@ for epoch in range(0, NUM_EPOCHS):
 
 我们训练过程的最后一步是训练`gan`本身:
 
-```
+```py
 		# let's now train our generator via the adversarial model by
 		# (1) generating random noise and (2) training the generator
 		# with the discriminator weights frozen
@@ -565,7 +565,7 @@ for epoch in range(0, NUM_EPOCHS):
 
 在训练 GAN 时，不仅看损失值很重要，而且你*也*需要检查你`benchmarkNoise`上`gan`的输出:
 
-```
+```py
 		# check to see if this is the end of an epoch, and if so,
 		# initialize the output path
 		if i == batchesPerEpoch - 1:
@@ -598,7 +598,7 @@ for epoch in range(0, NUM_EPOCHS):
 
 我们的最后一个代码块处理将合成图像可视化写入磁盘:
 
-```
+```py
 		# check to see if we should visualize the output of the
 		# generator model on our benchmark data
 		if p is not None:
@@ -631,7 +631,7 @@ for epoch in range(0, NUM_EPOCHS):
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python dcgan_fashion_mnist.py --output output
 [INFO] loading MNIST dataset...
 [INFO] building generator...

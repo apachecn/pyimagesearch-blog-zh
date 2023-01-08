@@ -109,7 +109,7 @@
 
 一旦您跟上了进度，我们就可以继续审查我们的项目目录结构:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── examples
@@ -145,7 +145,7 @@ $ tree . --dirsfirst
 
 打开项目目录结构中的``config.py`` 文件，让我们看看里面的内容:
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -173,7 +173,7 @@ PLOT_PATH = os.path.sep.join([BASE_OUTPUT,
 
 ### **创建我们的助手实用函数**
 
-```
+```py
 # import the necessary packages
 import tensorflow.keras.backend as K
 import matplotlib.pyplot as plt
@@ -182,7 +182,7 @@ import numpy as np
 
 然后我们有了我们的`make_pairs`函数，我在我的 [*用 Python 为暹罗网络构建图像对*教程](https://pyimagesearch.com/2020/11/23/building-image-pairs-for-siamese-networks-with-python/)中详细讨论了这个函数(确保你在继续之前阅读了该指南):
 
-```
+```py
 def make_pairs(images, labels):
 	# initialize two empty lists to hold the (image, image) pairs and
 	# labels to indicate if a pair is positive or negative
@@ -226,7 +226,7 @@ def make_pairs(images, labels):
 	return (np.array(pairImages), np.array(pairLabels))
 ```
 
-```
+```py
 def euclidean_distance(vectors):
 	# unpack the vectors into separate lists
 	(featsA, featsB) = vectors
@@ -241,7 +241,7 @@ def euclidean_distance(vectors):
 
 最后，我们有一个助手实用程序`plot_training`，它接受一个`plotPath`，绘制我们在训练过程中的训练和验证对比损失，然后将该图保存到磁盘:
 
-```
+```py
 def plot_training(H, plotPath):
 	# construct a plot that plots and saves the training history
 	plt.style.use("ggplot")
@@ -261,7 +261,7 @@ def plot_training(H, plotPath):
 
 我们的连体神经网络架构本质上是一个基本的 CNN:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input
@@ -302,7 +302,7 @@ def build_siamese_model(inputShape, embeddingDim=48):
 
 对比损失的完整实现非常简洁，只有 18 行，包括注释:
 
-```
+```py
 # import the necessary packages
 import tensorflow.keras.backend as K
 import tensorflow as tf
@@ -339,7 +339,7 @@ def contrastive_loss(y, preds, margin=1):
 
 在你的项目目录结构中打开``train_contrastive_siamese_network.py`` 文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.siamese_network import build_siamese_model
 from pyimagesearch import metrics
@@ -353,7 +353,7 @@ from tensorflow.keras.datasets import mnist
 import numpy as np
 ```
 
-```
+```py
 # load MNIST dataset and scale the pixel values to the range of [0, 1]
 print("[INFO] loading MNIST dataset...")
 (trainX, trainY), (testX, testY) = mnist.load_data()
@@ -380,7 +380,7 @@ print("[INFO] preparing positive and negative pairs...")
 
 接下来，我们可以实例化暹罗网络架构:
 
-```
+```py
 # configure the siamese network
 print("[INFO] building siamese network...")
 imgA = Input(shape=config.IMG_SHAPE)
@@ -400,7 +400,7 @@ model = Model(inputs=[imgA, imgB], outputs=distance)
 *   然后，我们构建姐妹网络架构，它充当我们的特征提取器( **Line 32** )。
 *   该对中的每个图像将通过我们的特征提取器，产生一个量化每个图像的向量(**行 33 和 34** )。
 
-```
+```py
 # compile the model
 print("[INFO] compiling model...")
 model.compile(loss=metrics.contrastive_loss, optimizer="adam")
@@ -434,7 +434,7 @@ utils.plot_training(history, config.PLOT_PATH)
 
 从那里，您可以执行以下命令:
 
-```
+```py
 $ python train_contrastive_siamese_network.py
 [INFO] loading MNIST dataset...
 [INFO] preparing positive and negative pairs...
@@ -476,7 +476,7 @@ Epoch 100/100
 
 ### **实施我们的对比损失测试脚本**
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from pyimagesearch import utils
@@ -488,7 +488,7 @@ import argparse
 import cv2
 ```
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--input", required=True,
@@ -496,7 +496,7 @@ ap.add_argument("-i", "--input", required=True,
 args = vars(ap.parse_args())
 ```
 
-```
+```py
 # grab the test dataset image paths and then randomly generate a
 # total of 10 image pairs
 print("[INFO] loading test dataset...")
@@ -509,7 +509,7 @@ print("[INFO] loading siamese model...")
 model = load_model(config.MODEL_PATH, compile=False)
 ```
 
-```
+```py
 # loop over all image pairs
 for (i, (pathA, pathB)) in enumerate(pairs):
 	# load both the images and convert them to grayscale
@@ -550,7 +550,7 @@ for (i, (pathA, pathB)) in enumerate(pairs):
 
 最后一个代码块处理图像对中两个图像的可视化以及它们的计算距离:
 
-```
+```py
 	# initialize the figure
 	fig = plt.figure("Pair #{}".format(i + 1), figsize=(4, 2))
 	plt.suptitle("Distance: {:.2f}".format(proba))
@@ -573,7 +573,7 @@ for (i, (pathA, pathB)) in enumerate(pairs):
 
 ### **使用我们的暹罗网络和对比损耗模型进行预测**
 
-```
+```py
 $ python test_contrastive_siamese_network.py --input examples
 [INFO] loading test dataset...
 [INFO] loading siamese model...

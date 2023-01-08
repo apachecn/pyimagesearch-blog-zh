@@ -41,7 +41,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -70,7 +70,7 @@ $ pip install opencv-contrib-python
 
 从这里，看一下目录结构:
 
-```
+```py
 |-- larry_page.png
 |-- ocr_business_card.py
 |-- tony_stark.png
@@ -84,7 +84,7 @@ $ pip install opencv-contrib-python
 
 我们现在准备实现我们的名片 OCR 脚本！首先，在我们的项目目录结构中打开`ocr_business_card.py`文件，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils.perspective import four_point_transform
 import pytesseract
@@ -102,7 +102,7 @@ import re
 
 导入工作完成后，我们可以转到命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -122,7 +122,7 @@ args = vars(ap.parse_args())
 
 现在让我们从磁盘加载输入图像:
 
-```
+```py
 # load the input image from disk, resize it, and compute the ratio
 # of the *new* width to the *old* width
 orig = cv2.imread(args["image"])
@@ -137,7 +137,7 @@ ratio = orig.shape[1] / float(image.shape[1])
 
 下面我们继续我们的图像处理流程。
 
-```
+```py
 # convert the image to grayscale, blur it, and apply edge detection
 # to reveal the outline of the business card
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -165,7 +165,7 @@ cardCnt = None
 
 现在让我们循环最大的等高线:
 
-```
+```py
 # loop over the contours
 for c in cnts:
 	# approximate the contour
@@ -193,7 +193,7 @@ if cardCnt is None:
 
 我们的下一个代码块处理显示一些调试图像以及获取名片的*自顶向下*视图:
 
-```
+```py
 # check to see if we should draw the contour of the business card
 # on the image and then display it to our screen
 if args["debug"] > 0:
@@ -221,7 +221,7 @@ cv2.waitKey(0)
 
 有了我们获得的名片的*自上而下*视图，我们可以继续进行 OCR:
 
-```
+```py
 # convert the business card from BGR to RGB channel ordering and then
 # OCR it
 rgb = cv2.cvtColor(card, cv2.COLOR_BGR2RGB)
@@ -252,7 +252,7 @@ names = re.findall(nameExp, text)
 
 这里的最后一步是向终端显示我们的输出:
 
-```
+```py
 # show the phone numbers header
 print("PHONE NUMBERS")
 print("=============")
@@ -290,7 +290,7 @@ for name in names:
 
 我们现在准备将 OCR 应用于名片。打开终端并执行以下命令:
 
-```
+```py
 $ python ocr_business_card.py --image tony_stark.png --debug 1
 PHONE NUMBERS
 =============
@@ -322,7 +322,7 @@ Stark Industries
 
 让我们尝试另一个例子图片，这是一个老拉里·佩奇(谷歌的联合创始人)的名片:
 
-```
+```py
 $ python ocr_business_card.py --image larry_page.png --debug 1
 PHONE NUMBERS
 =============

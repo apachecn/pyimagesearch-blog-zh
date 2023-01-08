@@ -73,7 +73,7 @@ DCGAN 发生器和鉴别器中有四个常用的激活函数:**`sigmoid`****`tan
 
 Colab 应该已经预装了本教程所需的所有包。我们将在 TensorFlow 2 / Keras 中编写代码，并使用 matplotlib 进行可视化。我们只需要导入这些库，如下所示:
 
-```
+```py
 import tensorflow as tf
 
 from tensorflow import keras
@@ -96,7 +96,7 @@ from matplotlib import pyplot as plt
 
 对于具有时尚 MNIST 的 DCGAN，仅使用训练数据集进行训练就足够了:
 
-```
+```py
 (train_images, train_labels), (_, _) = tf.keras.datasets.fashion_mnist.load_data()
 ```
 
@@ -106,7 +106,7 @@ from matplotlib import pyplot as plt
 
 我总是喜欢将训练数据可视化，以了解图像是什么样子的。让我们看一个图像，看看时尚 MNIST 灰度图像是什么样子的(见图 5**)。**
 
-```
+```py
 plt.figure()
 plt.imshow(train_images[0], cmap='gray')
 plt.show()
@@ -116,13 +116,13 @@ plt.show()
 
 加载的数据呈`(60000, 28, 28)`形状，因为它是灰度的。所以我们需要为通道添加第四维为 1，并将数据类型(来自 NumPy 数组)转换为 TensorFlow 中训练所需的`float32`。
 
-```
+```py
 train_images = train_images.reshape(train_images.shape[0], 28, 28, 1).astype('float32')
 ```
 
 我们将输入图像归一化到`[-1, 1]`的范围，因为生成器的最终层激活使用了前面提到的`tanh`。
 
-```
+```py
 train_images = (train_images - 127.5) / 127.5
 ```
 
@@ -152,7 +152,7 @@ train_images = (train_images - 127.5) / 127.5
 *   `Con2DTranspose`层的权重初始化
 *   图像的颜色通道。
 
-```
+```py
 # latent dimension of the random noise
 LATENT_DIM = 100
 # weight initializer for G per DCGAN paper
@@ -163,13 +163,13 @@ CHANNELS = 1
 
 使用 Keras `Sequential` API 创建模型，这是创建模型最简单的方法:
 
-```
+```py
    model = Sequential(name='generator')
 ```
 
 然后我们创建一个`Dense`层，为 3D 整形做准备，同时确保在模型架构的第一层定义输入形状。添加`BatchNormalization`和`ReLU`图层:
 
-```
+```py
    model.add(layers.Dense(7 * 7 * 256, input_dim=LATENT_DIM))
    model.add(layers.BatchNormalization())
    model.add(layers.ReLU())
@@ -177,13 +177,13 @@ CHANNELS = 1
 
 现在我们将之前的图层从 1D 重塑为 3D。
 
-```
+```py
    model.add(layers.Reshape((7, 7, 256)))
 ```
 
 用`2`的`stride`对`Conv2DTranspose`进行两次上采样，从`7x7`到`14x14`再到`28x28`。在每个`Conv2DTranspose`层后添加一个`BatchNormalization`层，然后再添加一个`ReLU`层。
 
-```
+```py
    # upsample to 14x14: apply a transposed CONV => BN => RELU
    model.add(layers.Conv2DTranspose(128, (5, 5), strides=(2, 2),padding="same", kernel_initializer=WEIGHT_INIT))
    model.add(layers.BatchNormalization())
@@ -197,7 +197,7 @@ CHANNELS = 1
 
 最后，我们使用激活了`tanh`的`Conv2D`层。注意`CHANNELS`早先被定义为`1`，它将制作一个`28x28x1`的图像，与我们的灰度训练图像相匹配。
 
-```
+```py
 model.add(layers.Conv2D(CHANNELS, (5, 5), padding="same", activation="tanh"))
 ```
 
@@ -216,20 +216,20 @@ model.add(layers.Conv2D(CHANNELS, (5, 5), padding="same", activation="tanh"))
 
 我们将再次创建一个函数来构建鉴别器模型。鉴别器的输入是真实图像(训练数据集)或生成器生成的假图像，因此对于时尚 MNIST，图像大小是`28x28x1`，它作为 argos 传递到函数中作为宽度、高度和深度。alpha 用于`LeakyReLU`定义泄漏的斜率。
 
-```
+```py
 def build_discriminator(width, height, depth, alpha=0.2):
 ```
 
 使用 Keras `Sequential` API 来定义鉴别器架构。
 
-```
+```py
    model = Sequential(name='discriminator')
    input_shape = (height, width, depth)
 ```
 
 我们使用`Conv2D`、`BatchNormalization`和`LeakyReLU`两次进行下采样。
 
-```
+```py
    # first set of CONV => BN => leaky ReLU layers
    model.add(layers.Conv2D(64, (5, 5), strides=(2, 2), padding="same",
        input_shape=input_shape))
@@ -244,14 +244,14 @@ def build_discriminator(width, height, depth, alpha=0.2):
 
 展平并应用 dropout:
 
-```
+```py
    model.add(layers.Flatten())
    model.add(layers.Dropout(0.3))
 ```
 
 然后在最后一层，我们使用 sigmoid 激活函数输出单个值用于二进制分类。
 
-```
+```py
    model.add(layers.Dense(1, activation="sigmoid"))
 ```
 
@@ -285,14 +285,14 @@ DCGAN 类的细节请参考 Colab 笔记本[这里](https://github.com/margaretm
 
 在`train_step()`中，我们首先创建随机噪声，作为发生器的输入:
 
-```
+```py
 batch_size = tf.shape(real_images)[0]
 noise = tf.random.normal(shape=(batch_size, self.latent_dim))
 ```
 
 然后我们用真实图像(标记为 1)和虚假图像(标记为 0)来训练鉴别器。
 
-```
+```py
 with tf.GradientTape() as tape:
     # Compute discriminator loss on real images
     pred_real = self.discriminator(real_images, training=True)
@@ -313,7 +313,7 @@ self.d_optimizer.apply_gradients(zip(grads, self.discriminator.trainable_variabl
 
 我们训练生成器，而不更新鉴别器的权重。
 
-```
+```py
 misleading_labels = tf.ones((batch_size, 1)) 
 
 with tf.GradientTape() as tape:
@@ -345,13 +345,13 @@ self.g_loss_metric.update_state(g_loss)
 
 现在我们终于可以组装 DCGAN 模型了！
 
-```
+```py
 dcgan = DCGAN(discriminator=discriminator, generator=generator, latent_dim=LATENT_DIM)
 ```
 
 正如 DCGAN 论文所建议的，我们对生成器和鉴别器都使用了具有 0.0002 的`learning rate`的`Adam`优化器。如前所述，我们对 D 和 g 都使用二元交叉熵损失函数。
 
-```
+```py
 LR = 0.0002 # learning rate
 
 dcgan.compile(
@@ -363,7 +363,7 @@ dcgan.compile(
 
 我们已经准备好训练 DCGAN 模型了，只需调用`model.fit`！
 
-```
+```py
 NUM_EPOCHS = 50 # number of epochs
 dcgan.fit(train_images, epochs=NUM_EPOCHS, 
 callbacks=[GANMonitor(num_img=16, latent_dim=LATENT_DIM)])
@@ -383,7 +383,7 @@ callbacks=[GANMonitor(num_img=16, latent_dim=LATENT_DIM)])
 
 **梅纳德-里德，M.** 《入门:DCGAN for Fashion-MNIST》， *PyImageSearch* ，2021 年，[https://PyImageSearch . com/2021/11/11/Get-Started-DCGAN-for-Fashion-mnist/](https://pyimagesearch.com/2021/11/11/get-started-dcgan-for-fashion-mnist/)
 
-```
+```py
 @article{Maynard-Reid_2021_DCGAN_MNIST,
   author = {Margaret Maynard-Reid},
   title = {Get Started: {DCGAN} for Fashion-{MNIST}},

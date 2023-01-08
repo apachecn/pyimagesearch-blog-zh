@@ -60,7 +60,7 @@ and ![\beta = \text{scale} \times \sin \theta](img/53db602a35d55981ade5626972836
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -87,7 +87,7 @@ $ pip install opencv-contrib-python
 
 请确保您访问了本教程的 ***“下载”*** 部分，以检索源代码和示例图像，并从那里窥视一下内部:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── opencv_logo.png
@@ -104,7 +104,7 @@ $ tree . --dirsfirst
 
 打开项目目录结构中的`opencv_rotate.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import imutils
@@ -123,7 +123,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们从磁盘加载我们的输入图像，并做一些基本的调整大小:
 
-```
+```py
 # load the image and show it
 image = cv2.imread(args["image"])
 cv2.imshow("Original", image)
@@ -176,7 +176,7 @@ cv2.imshow("Rotated by -90 Degrees", rotated)
 
 让我们来看看这是如何实现的:
 
-```
+```py
 # rotate our image around an arbitrary point rather than the center
 M = cv2.getRotationMatrix2D((10, 10), 45, 1.0)
 rotated = cv2.warpAffine(image, M, (w, h))
@@ -193,7 +193,7 @@ cv2.imshow("Rotated by Arbitrary Point", rotated)
 
 让我们通过调用`imutils.rotate`来减少需要编写的代码量，这是一个方便的函数，它包装了对`cv2.getRotationMatrix2D`和`cv2.warpAffine`的调用:
 
-```
+```py
 # use our imutils function to rotate an image 180 degrees
 rotated = imutils.rotate(image, 180)
 cv2.imshow("Rotated by 180 Degrees", rotated)
@@ -207,7 +207,7 @@ cv2.imshow("Rotated by 180 Degrees", rotated)
 
 解决方法是使用`imutils.rotate_bound`函数:
 
-```
+```py
 # rotate our image by 33 degrees counterclockwise, ensuring the
 # entire rotated image still renders within the viewing area
 rotated = imutils.rotate_bound(image, -33)
@@ -237,7 +237,7 @@ cv2.waitKey(0)
 
 我们已经在上一节中回顾了该脚本的结果，但是当您准备自己运行该脚本时，可以使用以下命令:
 
-```
+```py
 $ python opencv_rotate.py
 ```
 

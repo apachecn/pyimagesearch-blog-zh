@@ -14,7 +14,7 @@
 
 在本例中，我们将在 CIFAR-10 数据集上训练 MiniVGGNet 架构，然后在每次模型性能提高时将我们的网络权重序列化到磁盘。首先，打开一个新文件，将其命名为`cifar10_checkpoint_improvements.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.preprocessing import LabelBinarizer
 from pyimagesearch.nn.conv import MiniVGGNet
@@ -29,7 +29,7 @@ import os
 
 接下来，让我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-w", "--weights", required=True,
@@ -39,7 +39,7 @@ args = vars(ap.parse_args())
 
 我们需要的唯一命令行参数是`--weights`，它是输出目录的路径，该目录将在训练过程中存储我们的序列化模型。然后，我们执行从磁盘加载 CIFAR-10 数据集的标准例程，将像素强度缩放到范围`[0, 1]`，然后对标签进行一次性编码:
 
-```
+```py
 # load the training and testing data, then scale it into the
 # range [0, 1]
 print("[INFO] loading CIFAR-10 data...")
@@ -55,7 +55,7 @@ testY = lb.transform(testY)
 
 给定我们的数据，我们现在准备初始化我们的 SGD 优化器以及 MiniVGGNet 架构:
 
-```
+```py
 # initialize the optimizer and model
 print("[INFO] compiling model...")
 opt = SGD(lr=0.01, decay=0.01 / 40, momentum=0.9, nesterov=True)
@@ -70,7 +70,7 @@ MiniVGGNet 架构被实例化为接受宽度为 32 像素、高度为 32 像素�
 
 对我们的网络进行检查点操作的关键步骤可以在下面的代码块中找到:
 
-```
+```py
 # construct the callback to save only the *best* model to disk
 # based on the validation loss
 fname = os.path.sep.join([args["weights"],
@@ -94,7 +94,7 @@ callbacks = [checkpoint]
 
 最后一步是简单地训练网络，让我们的`checkpoint`去处理剩下的事情:
 
-```
+```py
 # train the network
 print("[INFO] training network...")
 H = model.fit(trainX, trainY, validation_data=(testX, testY),
@@ -103,7 +103,7 @@ H = model.fit(trainX, trainY, validation_data=(testX, testY),
 
 要执行我们的脚本，只需打开一个终端并执行以下命令:
 
-```
+```py
 $ python cifar10_checkpoint_improvements.py --weights weights/improvements
 [INFO] loading CIFAR-10 data...
 [INFO] compiling model...
@@ -124,7 +124,7 @@ Epoch 00039: val_loss did not improve
 
 在培训过程结束时，我们有 18 个单独的文件，每个文件代表一个增量改进:
 
-```
+```py
 $ find ./  -printf "%f\n" | sort
 ./
 weights-000-1.2697.hdf5
@@ -159,7 +159,7 @@ weights-033-0.5546.hdf5
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -188,7 +188,7 @@ $ pip install opencv-contrib-python
 
 首先，我们需要导入所需的 Python 包:
 
-```
+```py
 # import the necessary packages
 from sklearn.preprocessing import LabelBinarizer
 from pyimagesearch.nn.conv import MiniVGGNet
@@ -200,7 +200,7 @@ import argparse
 
 然后解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-w", "--weights", required=True,
@@ -212,7 +212,7 @@ args = vars(ap.parse_args())
 
 从那里，我们可以加载我们的 CIFAR-10 数据集，并为训练做准备:
 
-```
+```py
 # load the training and testing data, then scale it into the
 # range [0, 1]
 print("[INFO] loading CIFAR-10 data...")
@@ -228,7 +228,7 @@ testY = lb.transform(testY)
 
 以及初始化我们的 SGD 优化器和 MiniVGGNet 架构:
 
-```
+```py
 # initialize the optimizer and model
 print("[INFO] compiling model...")
 opt = SGD(lr=0.01, decay=0.01 / 40, momentum=0.9, nesterov=True)
@@ -239,7 +239,7 @@ model.compile(loss="categorical_crossentropy", optimizer=opt,
 
 我们现在准备更新`ModelCheckpoint`代码:
 
-```
+```py
 # construct the callback to save only the *best* model to disk
 # based on the validation loss
 checkpoint = ModelCheckpoint(args["weights"], monitor="val_loss",
@@ -251,7 +251,7 @@ callbacks = [checkpoint]
 
 最后，我们在网络上训练下面的代码块:
 
-```
+```py
 # train the network
 print("[INFO] training network...")
 H = model.fit(trainX, trainY, validation_data=(testX, testY),
@@ -260,7 +260,7 @@ H = model.fit(trainX, trainY, validation_data=(testX, testY),
 
 要执行我们的脚本，发出以下命令:
 
-```
+```py
 $ python cifar10_checkpoint_best.py \
 	--weights weights/best/cifar10_best_weights.hdf5
 [INFO] loading CIFAR-10 data...
@@ -288,7 +288,7 @@ Epoch 00039: val_loss did not improve
 
 为了证实这一点，请看一下我的`weights/best`目录，在那里您可以看到只有一个输出文件:
 
-```
+```py
 $ ls -l weights/best/
 total 17024
 -rw-rw-r-- 1 adrian adrian 17431968 Apr 28 09:47 cifar10_best_weights.hdf5

@@ -46,7 +46,7 @@
 
 **要学习如何用 OpenCV 和 Python 截图，*继续阅读*。**
 
-```
+```py
 $ workon your_virtualenv
 $ pip install pillow imutils
 $ pip install pyobjc-core
@@ -59,7 +59,7 @@ $ pip install pyautogui
 
 要为 Ubuntu(或 Raspbian)安装 PyAutoGUI，您需要同时使用 Aptitude 和 pip。同样，在执行 pip 命令之前，请确保您正在 Python 虚拟环境中工作:
 
-```
+```py
 $ sudo apt-get install scrot
 $ sudo apt-get install python-tk python-dev
 $ sudo apt-get install python3-tk python3-dev
@@ -76,7 +76,7 @@ $ pip install pyautogui
 
 打开一个新文件，将其命名为`take_screenshot.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import pyautogui
@@ -91,7 +91,7 @@ import cv2
 
 在第一种方法中，我们获取屏幕截图并将其存储在内存中以供立即使用:
 
-```
+```py
 # take a screenshot of the screen and store it in memory, then
 # convert the PIL/Pillow image to an OpenCV compatible NumPy array
 # and finally write the image to disk
@@ -117,7 +117,7 @@ PyAutoGUI 实际上将图像存储为 PIL/枕头图像，因此在图像可以�
 
 第二种方法(将屏幕截图写入磁盘)更简单:
 
-```
+```py
 # this time take a screenshot directly to disk
 pyautogui.screenshot("straight_to_disk.png")
 
@@ -127,7 +127,7 @@ pyautogui.screenshot("straight_to_disk.png")
 
 我们可以就此打住，但是为了检查一下，让我们确保 OpenCV 也可以打开并显示截图:
 
-```
+```py
 # we can then load our screenshot from disk in OpenCV format
 image = cv2.imread("straight_to_disk.png")
 cv2.imshow("Screenshot", imutils.resize(image, width=600))
@@ -145,7 +145,7 @@ cv2.waitKey(0)
 
 要测试这个脚本，请打开一个终端并执行以下命令:
 
-```
+```py
 $ python take_screenshot.py
 
 ```
@@ -162,7 +162,7 @@ $ python take_screenshot.py
 
 让我们列出目录的内容:
 
-```
+```py
 $ ls -al
 total 18760
 drwxr-xr-x@ 5 adrian  staff      160 Jan 01 10:04 .

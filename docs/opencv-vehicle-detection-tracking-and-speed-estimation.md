@@ -103,7 +103,7 @@ VASCAR 测量的速度受到人为因素的严重限制。
 
 让我们回顾一下我们的项目结构:
 
-```
+```py
 |-- config
 |   |-- config.json
 |-- pyimagesearch
@@ -152,7 +152,7 @@ VASCAR 测量的速度受到人为因素的严重限制。
 
 让我们回顾一下`config.json`，我们的 JSON 配置设置文件:
 
-```
+```py
 {
     // maximum consecutive frames a given object is allowed to be
     // marked as "disappeared" until we need to deregister the object
@@ -218,7 +218,7 @@ VASCAR 测量的速度受到人为因素的严重限制。
 
 其余的配置设置用于在我们的屏幕上显示帧，将文件上传到云(即 Dropbox)，以及输出文件路径:
 
-```
+```py
     // flag indicating if the frame must be displayed
     "display": true,
 
@@ -304,7 +304,7 @@ PyImageSearch 上的以下资源涵盖了`CentroidTracker`类:
 
 为了实现所有这些目标，我们可以定义一个`TrackableObject`的实例—打开`trackableobject.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 
@@ -343,7 +343,7 @@ class TrackableObject:
 
 **第 18 行和第 19 行**以英里/小时和 KMPH 为单位保存速度。我们需要一个函数来计算速度，所以现在让我们定义这个函数:
 
-```
+```py
     def calculate_speed(self, estimatedSpeeds):
         # calculate the speed in KMPH and MPH
         self.speedKMPH = np.average(estimatedSpeeds)
@@ -382,7 +382,7 @@ class TrackableObject:
 
 打开一个名为`speed_estimation_dl.py`的新文件，插入以下几行:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.centroidtracker import CentroidTracker
 from pyimagesearch.trackableobject import TrackableObject
@@ -407,7 +407,7 @@ import os
 
 现在让我们实现`upload_file`函数:
 
-```
+```py
 def upload_file(tempFile, client, imageID):
     # upload the image to Dropbox and cleanup the tempory image
     print("[INFO] uploading {}...".format(imageID))
@@ -421,7 +421,7 @@ def upload_file(tempFile, client, imageID):
 
 让我们继续加载我们的配置:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-c", "--conf", required=True,
@@ -437,7 +437,7 @@ conf = Conf(args["conf"])
 
 然后，如果需要，我们将初始化预训练的 MobileNet SSD `CLASSES`和 Dropbox `client`:
 
-```
+```py
 # initialize the list of class labels MobileNet SSD was trained to
 # detect
 CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
@@ -455,7 +455,7 @@ if conf["use_dropbox"]:
 
 从那里，我们将加载我们的对象检测器并初始化我们的视频流:
 
-```
+```py
 # load our serialized model from disk
 print("[INFO] loading model...")
 net = cv2.dnn.readNetFromCaffe(conf["prototxt_path"],
@@ -483,7 +483,7 @@ W = None
 
 我们还有一些初始化要处理:
 
-```
+```py
 # instantiate our centroid tracker, then initialize a list to store
 # each of our dlib correlation trackers, followed by a dictionary to
 # map each unique object ID to a TrackableObject
@@ -519,7 +519,7 @@ fps = FPS().start()
 
 完成所有的初始化后，让我们开始在帧上循环:
 
-```
+```py
 # loop over the frames of the stream
 while True:
     # grab the next frame from the stream, store the current
@@ -561,7 +561,7 @@ while True:
 
 让我们预处理我们的`frame`并执行一些初始化:
 
-```
+```py
     # resize the frame
     frame = imutils.resize(frame, width=conf["frame_width"])
     rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -591,7 +591,7 @@ while True:
 
 此时，我们准备执行**对象检测**来更新我们的`trackers`:
 
-```
+```py
     # check to see if we should run a more computationally expensive
     # object detection method to aid our tracker
     if totalFrames % conf["track_object"] == 0:
@@ -616,7 +616,7 @@ while True:
 
 让我们遍历`detections`并更新我们的`trackers`:
 
-```
+```py
         # loop over the detections
         for i in np.arange(0, detections.shape[2]):
             # extract the confidence (i.e., probability) associated
@@ -662,7 +662,7 @@ while True:
 
 现在让我们来处理事件，我们将执行**对象跟踪**而不是对象检测:
 
-```
+```py
     # otherwise, we should utilize our object *trackers* rather than
     # object *detectors* to obtain a higher frame processing
     # throughput
@@ -698,7 +698,7 @@ while True:
 
 现在让我们循环一遍`objects`，并逐步计算速度:
 
-```
+```py
     # loop over the tracked objects
     for (objectID, centroid) in objects.items():
         # check to see if a trackable object exists for the current
@@ -715,7 +715,7 @@ while True:
 
 从这里，我们将检查是否已经估计了这个可跟踪对象的速度:
 
-```
+```py
         # otherwise, if there is a trackable object and its speed has
         # not yet been estimated then estimate it
         elif not to.estimated:
@@ -736,7 +736,7 @@ while True:
 
 有了`direction`,现在让我们收集我们的时间戳:
 
-```
+```py
             # if the direction is positive (indicating the object
             # is moving from left to right)
             if to.direction > 0:
@@ -799,7 +799,7 @@ while True:
 
 现在让我们对**从右到左**行驶的汽车(即`direction < 0`)执行相同的时间戳、位置和最后点更新:
 
-```
+```py
             # if the direction is negative (indicating the object
             # is moving from right to left)
             elif to.direction < 0:
@@ -855,7 +855,7 @@ while True:
 
 现在汽车的`lastPoint`是`True`，我们可以计算速度:
 
-```
+```py
             # check to see if the vehicle is past the last point and
             # the vehicle's speed has not yet been estimated, if yes,
             # then calculate the vehicle speed and log it if it's
@@ -926,7 +926,7 @@ while True:
 
 唷！在这个脚本中，最难的部分不在这里。让我们总结一下，首先在`frame`上标注质心和 id:
 
-```
+```py
         # draw both the ID of the object and the centroid of the
         # object on the output frame
         text = "ID {}".format(objectID)
@@ -941,7 +941,7 @@ while True:
 
 接下来，我们将继续更新日志文件，并将车辆图像存储在 Dropbox 中:
 
-```
+```py
         # check if the object has not been logged
         if not to.logged:
             # check if the object's speed has been estimated and it
@@ -1003,7 +1003,7 @@ while True:
 
 让我们总结一下:
 
-```
+```py
     # if the *display* flag is set, then display the current frame
     # to the screen and record if a user presses a key
     if conf["display"]:
@@ -1061,7 +1061,7 @@ vs.stop()
 
 **[预先配置的 Raspbian。img 用户](https://pyimagesearch.com/2016/11/21/raspbian-opencv-pre-configured-and-pre-installed/) :** 请按如下方式激活您的虚拟环境:
 
-```
+```py
 $ source ~/start_openvino.sh
 
 ```
@@ -1070,7 +1070,7 @@ $ source ~/start_openvino.sh
 
 **如果你[自己安装了 open vino](https://pyimagesearch.com/2019/04/08/openvino-opencv-and-movidius-ncs-on-the-raspberry-pi/)(也就是说，你没有使用我预先配置的 Raspbian。img):** 请如下获取`setupvars.sh`脚本(根据您的脚本所在的位置调整命令):
 
-```
+```py
 $ workon <env_name>
 $ source ~/openvino/inference_engine_vpu_arm/bin/setupvars.sh
 
@@ -1084,7 +1084,7 @@ $ source ~/openvino/inference_engine_vpu_arm/bin/setupvars.sh
 
 输入以下命令启动程序并开始记录速度:
 
-```
+```py
 $ python speed_estimation_dl.py --conf config/config.json
 [INFO] loading model...
 [INFO] warming  up camera...

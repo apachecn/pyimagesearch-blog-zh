@@ -42,7 +42,7 @@
 
 幸运的是，上面提到的所有包都是 pip-installable！
 
-```
+```py
 $ pip install opencv-contrib-python
 $ pip install torch
 $ pip install torchvision
@@ -77,7 +77,7 @@ $ pip install tqdm
 
 从这里，看一下目录结构:
 
-```
+```py
 !tree .
 .
 ├── dataset.zip
@@ -117,7 +117,7 @@ $ pip install tqdm
 
 我们的第一个任务是配置我们将在整个项目中使用的几个超参数。为此，让我们跳到`pyimagesearch`文件夹并打开`config.py`脚本。
 
-```
+```py
 # import the necessary packages
 import torch
 import os
@@ -141,7 +141,7 @@ TEST_PATHS = os.path.sep.join([BASE_OUTPUT, "test_paths.txt"])
 
 我们首先定义几个路径，我们稍后会用到它们。然后在**第 7-12 行**，我们为数据集(图像和注释)和输出定义路径。接下来，我们为我们的检测器和标签编码器创建单独的路径，然后是我们的绘图和测试图像的路径(**第 16-19 行**)。
 
-```
+```py
 # determine the current device and based on that set the pin memory
 # flag
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
@@ -170,7 +170,7 @@ BBOX = 1.0
 
 让我们看看我们的数据目录。
 
-```
+```py
 !tree . 
 .
 ├── dataset
@@ -185,7 +185,7 @@ BBOX = 1.0
 
 因为我们将使用 PyTorch 自己的数据加载器，所以以数据加载器能够接受的方式预处理数据[是很重要的。`custom_tensor_dataset.py`脚本将完全做到这一点。](https://pytorch.org/docs/stable/data.html)
 
-```
+```py
 # import the necessary packages
 from torch.utils.data import Dataset
 
@@ -203,7 +203,7 @@ class CustomTensorDataset(Dataset):
 *   `tensors`:三个张量的元组，即图像、标签和边界框坐标。
 *   `transforms`:将用于处理图像的`torchvision.transforms`实例。
 
-```
+```py
 	def __getitem__(self, index):
 		# grab the image, label, and its bounding box coordinates
 		image = self.tensors[0][index]
@@ -230,7 +230,7 @@ class CustomTensorDataset(Dataset):
 
 我们在第 22 行和第 23 行上为`torchvision.transforms`实例添加了一个检查。如果检查结果为`true`，图像将通过`transform`实例传递。此后，`__getitem__`方法返回图像、标签和边界框。
 
-```
+```py
 	def __len__(self):
 		# return the size of the dataset
 		return self.tensors[0].size(0)
@@ -246,7 +246,7 @@ class CustomTensorDataset(Dataset):
 
 考虑到这一点，让我们进入`bbox_regressor.py`！
 
-```
+```py
 # import the necessary packages
 from torch.nn import Dropout
 from torch.nn import Identity
@@ -267,7 +267,7 @@ class ObjectDetector(Module):
 
 对于定制模型`ObjectDetector`，我们将使用`torch.nn.Module`作为父类(**第 10 行**)。对于构造函数`__init__`，有两个外部参数；基本型号和标签数量(**第 11-16 行**)。
 
-```
+```py
 		# build the regressor head for outputting the bounding box
 		# coordinates
 		self.regressor = Sequential(
@@ -286,7 +286,7 @@ class ObjectDetector(Module):
 
 接下来是几个`Linear`和`ReLU`层(**行 22-27** )，最后以输出 **4 值**的`Linear`层结束，接下来是`Sigmoid`层(**行 28** )。
 
-```
+```py
 		# build the classifier head to predict the class labels
 		self.classifier = Sequential(
 			Linear(baseModel.fc.in_features, 512),
@@ -307,7 +307,7 @@ class ObjectDetector(Module):
 
 初始化的最后一步是将基本模型的全连接层变成一个`Identity`层，这意味着它将镜像其之前的卷积块产生的输出(**第 44 行**)。
 
-```
+```py
  	def forward(self, x):
 		# pass the inputs through the base model and then obtain
 		# predictions from two different branches of the network
@@ -327,7 +327,7 @@ class ObjectDetector(Module):
 
 在我们看到物体探测器工作之前，只剩下最后一步了。因此，让我们跳到`train.py`脚本并训练模型！
 
-```
+```py
 # USAGE
 # python train.py
 
@@ -366,7 +366,7 @@ imagePaths = []
 
 现在是进行一些数据预处理的时候了。
 
-```
+```py
 # loop over all CSV files in the annotations directory
 for csvPath in paths.list_files(config.ANNOTS_PATH, validExts=(".csv")):
 	# load the contents of the current CSV annotations file
@@ -416,7 +416,7 @@ for csvPath in paths.list_files(config.ANNOTS_PATH, validExts=(".csv")):
 
 然后用解包后的值更新空列表，并且随着每次迭代的进行重复该过程(**行 67-70** )。
 
-```
+```py
 # convert the data, class labels, bounding boxes, and image paths to
 # NumPy arrays
 data = np.array(data, dtype="float32")
@@ -431,7 +431,7 @@ labels = le.fit_transform(labels)
 
 为了更快地处理数据，列表被转换成`numpy`数组(**第 74-77 行**)。由于标签是字符串格式，我们使用 [scikit-learn 的`LabelEncoder`](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.LabelEncoder.html) 将它们转换成各自的索引(**第 80 行和第 81 行**)。
 
-```
+```py
 # partition the data into training and testing splits using 80% of
 # the data for training and the remaining 20% for testing
 split = train_test_split(data, labels, bboxes, imagePaths,
@@ -446,7 +446,7 @@ split = train_test_split(data, labels, bboxes, imagePaths,
 
 使用另一个方便的 scikit-learn 工具`train_test_split`，我们将数据分成训练集和测试集，保持一个`80-20`比率(**第 85 行和第 86 行**)。由于拆分将应用于传递给`train_test_split`函数的所有数组，我们可以使用简单的行切片将它们解包为元组(**第 89-92 行**)。
 
-```
+```py
 # convert NumPy arrays to PyTorch tensors
 (trainImages, testImages) = torch.tensor(trainImages),\
 	torch.tensor(testImages)
@@ -465,7 +465,7 @@ transforms = transforms.Compose([
 
 解包的训练和测试数据、标签和边界框然后从 numpy 格式转换成 PyTorch 张量(**第 95-100 行**)。接下来，我们继续创建一个`torchvision.transforms`实例来轻松处理数据集(**第 103-107 行**)。这样，数据集也将使用`config.py`中定义的平均值和标准偏差值进行标准化。
 
-```
+```py
 # convert NumPy arrays to PyTorch datasets
 trainDS = CustomTensorDataset((trainImages, trainLabels, trainBBoxes),
 	transforms=transforms)
@@ -491,7 +491,7 @@ testLoader = DataLoader(testDS, batch_size=config.BATCH_SIZE,
 
 最后，我们通过`DataLoader`传递`CustomTensorDataset`实例，并创建训练和测试数据加载器(**第 122-125 行**)。
 
-```
+```py
 # write the testing image paths to disk so that we can use then
 # when evaluating/testing our object detector
 print("[INFO] saving testing image paths...")
@@ -512,7 +512,7 @@ for param in resnet.parameters():
 
 对于我们架构中的基本模型，我们将使用一个预先训练好的 **resnet50** ( **Line 135** )。然而，如前所述，基本模型的重量将保持不变。因此，我们冻结了权重(**第 139 和 140 行**)。
 
-```
+```py
 # create our custom object detector model and flash it to the current
 # device
 objectDetector = ObjectDetector(resnet, len(le.classes_))
@@ -534,7 +534,7 @@ H = {"total_train_loss": [], "total_val_loss": [], "train_class_acc": [],
 
 模型先决条件完成后，我们创建我们的定制模型实例，并将其加载到当前设备中(**第 144 行和第 145 行**)。对于分类器损失，使用交叉熵损失，而对于箱式回归器，我们坚持均方误差损失(**第 148 和 149 行**)。在**行** **153** ，`Adam`被设置为目标探测器优化器。为了跟踪训练损失和其他度量，字典`H`在**行 157 和 158** 上被初始化。
 
-```
+```py
 # loop over epochs
 print("[INFO] training the network...")
 startTime = time.time()
@@ -554,7 +554,7 @@ for e in tqdm(range(config.NUM_EPOCHS)):
 
 对于训练速度评估，记录开始时间(**行 162** )。循环多个时期，我们首先将对象检测器设置为训练模式(**第 165 行**，并初始化正确预测的损失和数量(**第 168-174 行**)。
 
-```
+```py
 	# loop over the training set
 	for (images, labels, bboxes) in trainLoader:
 		# send the input to the device
@@ -588,7 +588,7 @@ for e in tqdm(range(config.NUM_EPOCHS)):
 
 在第**行第 196-198** 行，我们更新损失值并修正预测。
 
-```
+```py
 	# switch off autograd
 	with torch.no_grad():
 		# set the model in evaluation mode
@@ -617,7 +617,7 @@ for e in tqdm(range(config.NUM_EPOCHS)):
 
 以与训练步骤相同的方式计算组合损失(**行 215 和 216** )。因此，总损失值和正确预测被更新(**第 217-221 行**)。
 
-```
+```py
 	# calculate the average training and validation loss
 	avgTrainLoss = totalTrainLoss / trainSteps
 	avgValLoss = totalValLoss / valSteps
@@ -647,7 +647,7 @@ print("[INFO] total time taken to train the model: {:.2f}s".format(
 
 在计算之后，所有的值都记录在模型历史字典`H` ( **第 232-235 行**)中，同时计算结束时间以查看训练花费了多长时间以及退出循环之后(**第 243 行**)。
 
-```
+```py
 # serialize the model to disk
 print("[INFO] saving object detector model...")
 torch.save(objectDetector, config.MODEL_PATH)
@@ -685,7 +685,7 @@ plt.savefig(plotPath)
 
 由于模型的大部分重量保持不变，训练不会花很长时间。首先，让我们来看看一些训练时期。
 
-```
+```py
 [INFO] training the network...
   0%|          | 0/20 [00:00<?,  
   5%|▌         | 1/20 [00:16<05:08, 16.21s/it][INFO] EPOCH: 1/20
@@ -720,7 +720,7 @@ Val loss: 0.003041, Val accuracy: 1.0000
 
 这个旅程的最后一步是`predict.py`脚本。这里，我们将逐个循环测试图像，并用我们的预测值绘制边界框。
 
-```
+```py
 # USAGE
 # python predict.py --input datasimg/face/image_0131.jpg
 
@@ -743,7 +743,7 @@ args = vars(ap.parse_args())
 
 `argparse`模块用于编写用户友好的命令行界面命令。在**的第 15-18 行**，我们构建了一个参数解析器来帮助用户选择测试图像。
 
-```
+```py
 # determine the input file type, but assume that we're working with
 # single input image
 filetype = mimetypes.guess_type(args["input"])[0]
@@ -758,7 +758,7 @@ if "text/plain" == filetype:
 
 我们按照参数解析的步骤来处理用户给出的任何类型的输入。在**行 22 和 23** 上，`imagePaths`变量被设置为处理单个输入图像，而在**行 27-29** 上，处理多个图像的事件。
 
-```
+```py
 # load our object detector, set it evaluation mode, and label
 # encoder from disk
 print("[INFO] loading object detector...")
@@ -776,7 +776,7 @@ transforms = transforms.Compose([
 
 使用`train.py`脚本训练的模型被调用进行评估(**第 34 和 35 行**)。类似地，使用前述脚本存储的标签编码器被加载(**第 36 行**)。因为我们需要再次处理数据，所以创建了另一个`torchvision.transforms`实例，其参数与训练中使用的参数相同。
 
-```
+```py
 # loop over the images that we'll be testing using our bounding box
 # regression model
 for imagePath in imagePaths:
@@ -799,7 +799,7 @@ for imagePath in imagePaths:
 
 我们继续将图像转换成张量，对其应用`torchvision.transforms`实例，并为其添加批处理维度(**第 58-60 行**)。我们的测试图像现在可以插入到对象检测器中了。
 
-```
+```py
 	# predict the bounding box of the object along with the class
 	# label
 	(boxPreds, labelPreds) = model(image)
@@ -816,7 +816,7 @@ for imagePath in imagePaths:
 
 标签预测上的简单 softmax 函数将为我们提供对应于类的值的更好的图片。为此，我们在**69 线**上使用 PyTorch 自己的`torch.nn.Softmax`。用`argmax`隔离索引，我们将它插入标签编码器`le`，并使用`inverse_transform`(索引到值)来获得标签的名称(**第 69-71 行**)。
 
-```
+```py
 	# resize the original image such that it fits on our screen, and
 	# grab its dimensions
 	orig = imutils.resize(orig, width=600)

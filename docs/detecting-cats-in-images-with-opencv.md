@@ -31,7 +31,7 @@
 
 让我们开始使用 OpenCV 检测图像中的猫。打开一个新文件，将其命名为`cat_detector.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -55,7 +55,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们检测输入图像中的猫:
 
-```
+```py
 # load the input image and convert it to grayscale
 image = cv2.imread(args["image"])
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -83,7 +83,7 @@ rects = detector.detectMultiScale(gray, scaleFactor=1.3,
 
 最后，让我们画一个矩形包围图像中的每只猫的脸:
 
-```
+```py
 # loop over the cat faces and draw a rectangle surrounding each
 for (i, (x, y, w, h)) in enumerate(rects):
 	cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
@@ -114,7 +114,7 @@ cv2.waitKey(0)
 
 从那里，执行以下命令:
 
-```
+```py
 $ python cat_detector.py --image images/cat_01.jpg
 
 ```
@@ -127,7 +127,7 @@ $ python cat_detector.py --image images/cat_01.jpg
 
 让我们尝试另一个图像:
 
-```
+```py
 python cat_detector.py --image images/cat_02.jpg
 
 ```
@@ -140,7 +140,7 @@ python cat_detector.py --image images/cat_02.jpg
 
 这张图片也是如此:
 
-```
+```py
 $ python cat_detector.py --image images/cat_03.jpg
 
 ```
@@ -151,7 +151,7 @@ $ python cat_detector.py --image images/cat_03.jpg
 
 我们的最后一个例子演示了使用 OpenCV 和 Python 在一幅图像中检测多只猫:
 
-```
+```py
 $ python cat_detector.py --image images/cat_04.jpg
 
 ```

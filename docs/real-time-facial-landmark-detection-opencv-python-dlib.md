@@ -26,7 +26,7 @@
 
 打开一个新文件，将其命名为`video_facial_landmarks.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 from imutils import face_utils
@@ -43,7 +43,7 @@ import cv2
 
 我们将使用 [imutils](https://github.com/jrosebr1/imutils) 的`face_utils`子模块，因此如果您还没有安装/升级到最新版本，请花一点时间现在就安装/升级:
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -58,7 +58,7 @@ $ pip install --upgrade imutils
 
 接下来，让我们解析我们的命令行参数:
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--shape-predictor", required=True,
@@ -76,7 +76,7 @@ args = vars(ap.parse_args())
 
 既然已经解析了我们的命令行参数，我们需要初始化 dlib 的 [HOG +基于线性 SVM 的面部检测器](https://pyimagesearch.com/2014/11/10/histogram-oriented-gradients-object-detection/)，然后从磁盘加载面部标志预测器:
 
-```
+```py
 # initialize dlib's face detector (HOG-based) and then create
 # the facial landmark predictor
 print("[INFO] loading facial landmark predictor...")
@@ -87,7 +87,7 @@ predictor = dlib.shape_predictor(args["shape_predictor"])
 
 下一个代码块只是处理初始化我们的`VideoStream`并允许相机传感器预热:
 
-```
+```py
 # initialize the video stream and allow the cammera sensor to warmup
 print("[INFO] camera sensor warming up...")
 vs = VideoStream(usePiCamera=args["picamera"] > 0).start()
@@ -97,7 +97,7 @@ time.sleep(2.0)
 
 我们视频处理管道的核心可以在下面的`while`循环中找到:
 
-```
+```py
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the threaded video stream, resize it to
@@ -122,7 +122,7 @@ while True:
 
 既然我们已经在视频流中检测到了面部，下一步就是将面部标志预测器应用于每个面部 ROI:
 
-```
+```py
 	# loop over the face detections
 	for rect in rects:
 		# determine the facial landmarks for the face region, then
@@ -156,7 +156,7 @@ while True:
 
 最后，**行 64 和 65** 做了一些清理工作:
 
-```
+```py
 # do a bit of cleanup
 cv2.destroyAllWindows()
 vs.stop()
@@ -173,7 +173,7 @@ vs.stop()
 
 如果您使用标准网络摄像头/USB 摄像头，您可以执行以下命令来启动视频面部标志预测器:
 
-```
+```py
 $ python video_facial_landmarks.py \
 	--shape-predictor shape_predictor_68_face_landmarks.dat
 
@@ -181,7 +181,7 @@ $ python video_facial_landmarks.py \
 
 否则，如果您使用的是 Raspberry Pi，请确保将`--picamera 1`开关附加到命令中:
 
-```
+```py
 $ python video_facial_landmarks.py \
 	--shape-predictor shape_predictor_68_face_landmarks.dat \
 	--picamera 1

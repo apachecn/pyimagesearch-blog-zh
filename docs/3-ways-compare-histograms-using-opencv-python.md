@@ -38,7 +38,7 @@
 
 # 使用 OpenCV 和 Python 比较直方图的 3 种方法
 
-```
+```py
 # import the necessary packages
 from scipy.spatial import distance as dist
 import matplotlib.pyplot as plt
@@ -73,7 +73,7 @@ images = {}
 
 现在，在我们开始比较直方图之前，我们首先需要从我们的数据集中*提取*直方图:
 
-```
+```py
 # loop over the image paths
 for imagePath in glob.glob(args["dataset"] + "/*.png"):
 	# extract the image filename (assumed to be unique) and
@@ -116,7 +116,7 @@ for imagePath in glob.glob(args["dataset"] + "/*.png"):
 
 现在是时候应用`cv2.compareHist`函数来比较我们的颜色直方图了:
 
-```
+```py
 # METHOD #1: UTILIZING OPENCV
 # initialize OpenCV methods for histogram comparison
 OPENCV_METHODS = (
@@ -151,7 +151,7 @@ for (methodName, method) in OPENCV_METHODS:
 
 现在，让我们比较一下直方图:
 
-```
+```py
 	# loop over the index
 	for (k, hist) in index.items():
 		# compute the distance between the two histograms
@@ -172,7 +172,7 @@ for (methodName, method) in OPENCV_METHODS:
 
 现在，让我们继续展示我们的结果:
 
-```
+```py
 	# show the query image
 	fig = plt.figure("Query")
 	ax = fig.add_subplot(1, 1, 1)
@@ -230,7 +230,7 @@ plt.show()
 
 让我们来看看代码:
 
-```
+```py
 # METHOD #2: UTILIZING SCIPY
 # initialize the scipy methods to compaute distances
 SCIPY_METHODS = (
@@ -294,7 +294,7 @@ plt.show()
 
 比较直方图的第三种方法是“滚动自己的”相似性度量。我将自己的卡方距离函数定义如下:
 
-```
+```py
 # METHOD #3: ROLL YOUR OWN
 def chi2_distance(histA, histB, eps = 1e-10):
 	# compute the chi-squared distance
@@ -316,7 +316,7 @@ def chi2_distance(histA, histB, eps = 1e-10):
 
 从这里，我们可以将我的自定义卡方函数应用于图像:
 
-```
+```py
 # initialize the results dictionary
 results = {}
 

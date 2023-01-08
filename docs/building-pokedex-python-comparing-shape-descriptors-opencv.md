@@ -54,7 +54,7 @@ Zernike 矩用于表征图像中物体的形状。你可以在这里阅读更多
 
 现在我们有了一个计划，让我们定义一个`Searcher`类，它将用于比较查询图像和我们的 Pokemon 精灵索引:
 
-```
+```py
 # import the necessary packages
 from scipy.spatial import distance as dist
 
@@ -99,7 +99,7 @@ class Searcher:
 
 现在我们已经定义了 Searcher 类，让我们创建`search.py`，它将把所有东西粘在一起:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.searcher import Searcher
 from pyimagesearch.zernikemoments import ZernikeMoments
@@ -131,7 +131,7 @@ index = pickle.loads(index)
 
 现在让我们从磁盘上加载查询图像并对其进行预处理:
 
-```
+```py
 # load the query image, convert it to grayscale, and
 # resize it
 image = cv2.imread(args["query"])
@@ -146,7 +146,7 @@ image = imutils.resize(image, width = 64)
 
 我们现在需要为形状描述符准备查询图像，方法是对其进行阈值处理并找到轮廓:
 
-```
+```py
 # threshold the image
 thresh = cv2.adaptiveThreshold(image, 255, cv2.ADAPTIVE_THRESH_MEAN_C,
 	cv2.THRESH_BINARY_INV, 11, 7)
@@ -189,7 +189,7 @@ cv2.drawContours(outline, [cnts], -1, 255, -1)
 
 我们代码的其余部分非常简单:
 
-```
+```py
 # compute Zernike moments to characterize the shape of
 # pokemon outline
 desc = ZernikeMoments(21)
@@ -219,7 +219,7 @@ cv2.waitKey(0)
 
 要执行我们的脚本，发出以下命令:
 
-```
+```py
 $ python search.py --index index.cpickle --query cropped.png
 
 ```

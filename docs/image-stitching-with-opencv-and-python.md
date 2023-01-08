@@ -57,7 +57,7 @@
 
 让我们看看这个项目是如何用`tree`命令组织的:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── images
@@ -92,7 +92,7 @@ OpenCV 已经通过`cv2.createStitcher` (OpenCV 3.x)和`cv2.Stitcher_create` (Op
 
 假设您已经正确配置并安装了的 [OpenCV，您将能够研究 OpenCV 3.x 的`cv2.createStitcher`的函数签名:](https://pyimagesearch.com/opencv-tutorials-resources-guides/)
 
-```
+```py
 createStitcher(...)
     createStitcher([, try_use_gpu]) -> retval
 
@@ -102,7 +102,7 @@ createStitcher(...)
 
 OpenCV 4 的`cv2.Stitcher_create`函数也有类似的特征:
 
-```
+```py
 Stitcher_create(...)
     Stitcher_create([, mode]) -> retval
     .   @brief Creates a Stitcher configured in one of the stitching
@@ -117,7 +117,7 @@ Stitcher_create(...)
 
 为了执行实际的图像拼接，我们需要调用`.stitch`方法:
 
-```
+```py
 OpenCV 3.x:
 stitch(...) method of cv2.Stitcher instance
     stitch(images[, pano]) -> retval, pano
@@ -152,7 +152,7 @@ stitch(...) method of cv2.Stitcher instance
 
 打开`image_stitching_simple.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils import paths
 import numpy as np
@@ -184,7 +184,7 @@ args = vars(ap.parse_args())
 
 让我们加载输入图像:
 
-```
+```py
 # grab the paths to the input images and initialize our images list
 print("[INFO] loading images...")
 imagePaths = sorted(list(paths.list_images(args["images"])))
@@ -204,7 +204,7 @@ for imagePath in imagePaths:
 
 现在`images`已经在内存中，让我们继续使用 OpenCV 的内置功能将它们拼接成一个全景图:
 
-```
+```py
 # initialize OpenCV's image stitcher object and then perform the image
 # stitching
 print("[INFO] stitching images...")
@@ -219,7 +219,7 @@ stitcher = cv2.createStitcher() if imutils.is_cv3() else cv2.Stitcher_create()
 
 最后，我们将(1)将拼接的图像写入磁盘，并(2)将其显示在屏幕上:
 
-```
+```py
 # if the status is '0', then OpenCV successfully performed image
 # stitching
 if status == 0:
@@ -253,7 +253,7 @@ else:
 
 我们的目标是将这三幅图像拼接成一幅全景图像。要执行拼接，请打开一个终端，导航到下载代码+图像的位置，并执行以下命令:
 
-```
+```py
 $ python image_stitching_simple.py --images images/scottsdale --output output.png
 [INFO] loading images...
 [INFO] stitching images...
@@ -292,7 +292,7 @@ $ python image_stitching_simple.py --images images/scottsdale --output output.pn
 
 让我们开始吧——打开`image_stitching.py`脚本并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils import paths
 import numpy as np
@@ -335,7 +335,7 @@ stitcher = cv2.createStitcher() if imutils.is_cv3() else cv2.Stitcher_create()
 
 下一步是我们开始实施额外的功能:
 
-```
+```py
 # if the status is '0', then OpenCV successfully performed image
 # stitching
 if status == 0:
@@ -371,7 +371,7 @@ if status == 0:
 
 给定阈值图像，我们可以应用轮廓提取，计算最大轮廓的边界框(即全景本身的轮廓)，并绘制边界框:
 
-```
+```py
 		# find all external contours in the threshold image then find
 		# the *largest* contour which will be the contour/outline of
 		# the stitched image
@@ -404,7 +404,7 @@ if status == 0:
 
 现在，这里是我为博客帖子整理的最大的黑客之一:
 
-```
+```py
 		# create two copies of the mask: one to serve as our actual
 		# minimum rectangular region and another to serve as a counter
 		# for how many pixels need to be removed to form the minimum
@@ -446,7 +446,7 @@ if status == 0:
 
 给定最小的内部矩形，我们可以再次找到轮廓并计算边界框，但这次我们将简单地从`stitched`图像中提取 ROI:
 
-```
+```py
 		# find contours in the minimum rectangular mask and then
 		# extract the bounding box (x, y)-coordinates
 		cnts = cv2.findContours(minRect.copy(), cv2.RETR_EXTERNAL,
@@ -471,7 +471,7 @@ if status == 0:
 
 最终的`stitched`图像可以显示在我们的屏幕上，然后保存到磁盘上:
 
-```
+```py
 	# write the output stitched image to disk
 	cv2.imwrite(args["output"], stitched)
 
@@ -498,7 +498,7 @@ else:
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python image_stitching.py --images images/scottsdale --output output.png \
 	--crop 1
 [INFO] loading images...
@@ -533,7 +533,7 @@ $ python image_stitching.py --images images/scottsdale --output output.png \
 
 例如，如果您正在使用 OpenCV 4，但试图调用`cv2.createSticher`，您将会遇到以下错误消息:
 
-```
+```py
 >>> cv2.createStitcher
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
@@ -545,7 +545,7 @@ AttributeError: module 'cv2' has no attribute 'createStitcher'
 
 类似地，如果您使用 OpenCV 3 并试图调用`cv2.Sticher_create`,您将收到以下错误:
 
-```
+```py
 >>> cv2.Stitcher_create
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
@@ -557,7 +557,7 @@ AttributeError: module 'cv2' has no attribute 'Stitcher_create'
 
 如果您不确定您正在使用哪个 OpenCV 版本，您可以使用`cv2.__version__`进行检查:
 
-```
+```py
 >>> cv2.__version__
 '4.0.0'
 

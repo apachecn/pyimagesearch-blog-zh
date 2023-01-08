@@ -56,7 +56,7 @@
 
 当我努力在 OSX 上安装 Tkinter 时，在 Ubuntu/Raspbian 上安装却轻而易举，只需要调用`apt-get`:
 
-```
+```py
 $ sudo apt-get install python-tk python3-tk python-imaging-tk
 
 ```
@@ -65,14 +65,14 @@ $ sudo apt-get install python-tk python3-tk python-imaging-tk
 
 您还应该确保安装了一个简单的基于 Python 的图像库 [Pillow](https://python-pillow.org/) ，因为 Tkinter 将需要它来在我们的 GUI 中显示图像:
 
-```
+```py
 $ pip install Pillow
 
 ```
 
 我通过启动 Python shell 并导入 PIL/Pillow、Tkinter 和我的 OpenCV 绑定来验证我的安装:
 
-```
+```py
 $ python
 >>> import PIL
 >>> import Tkinter
@@ -87,7 +87,7 @@ $ python
 
 我们现在已经准备好编写简单的 GUI 应用程序了。打开一个新文件，将其命名为`tkinter_test.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from Tkinter import *
 from PIL import Image
@@ -115,7 +115,7 @@ def select_image():
 
 选择图像后，我们的程序继续:
 
-```
+```py
 	# ensure a file path was selected
 	if len(path) > 0:
 		# load the image from disk, convert it to grayscale, and detect
@@ -146,7 +146,7 @@ def select_image():
 
 我们现在准备将图像添加到我们的 GUI 中:
 
-```
+```py
 		# if the panels are None, initialize them
 		if panelA is None or panelB is None:
 			# the first panel will store our original image
@@ -181,7 +181,7 @@ def select_image():
 
 最后一步是编写实际初始化、创建和启动 GUI 进程的代码:
 
-```
+```py
 # initialize the window toolkit along with the two image panels
 root = Tk()
 panelA = None
@@ -208,7 +208,7 @@ root.mainloop()
 
 要运行我们的 OpenCV + Tkinter 应用程序，只需执行以下命令:
 
-```
+```py
 $ python tkinter_test.py
 
 ```

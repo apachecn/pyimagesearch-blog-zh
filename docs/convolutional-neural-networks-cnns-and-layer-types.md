@@ -182,7 +182,7 @@
 
 在应用 softmax 分类器之前，通常使用一个或两个`FC`层，如下(简化)架构所示:
 
-```
+```py
 INPUT => CONV => RELU => POOL => CONV => RELU => POOL => FC => FC
 ```
 
@@ -220,7 +220,7 @@ to be our mini-batch of activations, then we can compute the normalized ![\hat{x
 
 使用这种方案，利用批处理规范化的网络体系结构将如下所示:
 
-```
+```py
 INPUT => CONV => BN => RELU ...
 ```
 
@@ -238,7 +238,7 @@ INPUT => CONV => BN => RELU ...
 
 将激活后的`BN`放置在网络架构中，看起来像这样:
 
-```
+```py
 INPUT => CONV => RELU => BN ...
 ```
 
@@ -256,7 +256,7 @@ INPUT => CONV => RELU => BN ...
 
 最常见的是放置 *p* = 0 *的辍学层。* 5 ***在架构的*** `FC`层之间，其中最后的`FC`层被假定为我们的 softmax 分类器:
 
-```
+```py
 ... CONV => RELU => POOL => FC => DO => FC => DO => FC
 ```
 
@@ -272,7 +272,7 @@ INPUT => CONV => RELU => BN ...
 
 到目前为止，CNN 架构最常见的形式是堆叠几个`CONV`和`RELU`层，在它们之后是一个`POOL`操作。我们重复这个顺序，直到体积的宽度和高度变小，此时我们应用一个或多个`FC`层。因此，我们可以使用以下[模式](http://cs231n.github.io/convolutional-networks/)推导出最常见的 CNN 架构:
 
-```
+```py
 INPUT => [[CONV => RELU]*N => POOL?]*M => [FC => RELU]*K => FC
 ```
 
@@ -292,20 +292,20 @@ INPUT => [[CONV => RELU]*N => POOL?]*M => [FC => RELU]*K => FC
 
 下面是一个非常浅的 CNN 的例子，只有一个`CONV`层( *N* = *M* = *K* = 0):
 
-```
+```py
 INPUT => CONV => RELU => FC
 ```
 
 下面是一个类似于 [AlexNet 的](http://papers.nips.cc/paper/4824-imagenet-classification-with-deepconvolutional- neural-networks.pdf) CNN 架构的例子，它有多个`CONV => RELU => POOL`层集，后面是`FC`层:
 
-```
+```py
 INPUT => [CONV => RELU => POOL] * 2 => [CONV => RELU] * 3 => POOL =>
 	[FC => RELU => DO] * 2 => SOFTMAX
 ```
 
 对于更深层次的网络架构，例如 **[VGGNet](http://arxiv.org/ abs/1409.1556)** ，我们将在每个`POOL`层之前堆叠两个(或更多)层:
 
-```
+```py
 INPUT => [CONV => RELU] * 2 => POOL => [CONV => RELU] * 2 => POOL =>
 	[CONV => RELU] * 3 => POOL => [CONV => RELU] * 3 => POOL =>
 	[FC => RELU => DO] * 2 => SOFTMAX

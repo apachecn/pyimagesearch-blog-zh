@@ -54,7 +54,7 @@
 
 让我们着手开始这个项目吧。打开一个新文件，命名为`distance_to_camera.py`，然后我们开始工作:
 
-```
+```py
 # import the necessary packages
 from imutils import paths
 import numpy as np
@@ -110,7 +110,7 @@ def find_marker(image):
 
 让我们快速定义一个函数，使用上面详述的三角形相似性计算到一个对象的距离:
 
-```
+```py
 def distance_to_camera(knownWidth, focalLength, perWidth):
 	# compute and return the distance from the maker to the camera
 	return (knownWidth * focalLength) / perWidth
@@ -121,7 +121,7 @@ def distance_to_camera(knownWidth, focalLength, perWidth):
 
 要了解我们如何利用这些功能，请继续阅读:
 
-```
+```py
 # initialize the known distance from the camera to the object, which
 # in this case is 24 inches
 KNOWN_DISTANCE = 24.0
@@ -158,7 +158,7 @@ focalLength = (marker[1][0] * KNOWN_DISTANCE) / KNOWN_WIDTH
 
 让我们看看这是如何做到的:
 
-```
+```py
 # loop over the images
 for imagePath in sorted(paths.list_images("images")):
 	# load the image, find the marker in the image, then compute the
@@ -189,7 +189,7 @@ for imagePath in sorted(paths.list_images("images")):
 
 要查看我们的脚本，请打开终端，导航到您的代码目录，并执行以下命令:
 
-```
+```py
 $ python distance_to_camera.py
 
 ```

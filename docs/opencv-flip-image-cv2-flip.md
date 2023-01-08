@@ -50,7 +50,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -79,7 +79,7 @@ $ pip install opencv-contrib-python
 
 从那里，看一眼您的项目文件夹:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── opencv_flip.py
@@ -98,7 +98,7 @@ $ tree . --dirsfirst
 
 现在您已经看到了图像翻转的样子，我们可以研究代码了:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -116,7 +116,7 @@ args = vars(ap.parse_args())
 
 现在让我们水平翻转图像:
 
-```
+```py
 # load the original input image and display it to our screen
 image = cv2.imread(args["image"])
 cv2.imshow("Original", image)
@@ -137,7 +137,7 @@ cv2.imshow("Flipped Horizontally", flipped)
 
 指定翻转代码`0`表示我们想要围绕 *x* 轴垂直翻转图像:
 
-```
+```py
 # flip the image vertically
 flipped = cv2.flip(image, 0)
 print("[INFO] flipping image vertically...")
@@ -148,7 +148,7 @@ cv2.imshow("Flipped Vertically", flipped)
 
 最后，使用负翻转代码围绕两个轴翻转图像。
 
-```
+```py
 # flip the image along both axes
 flipped = cv2.flip(image, -1)
 print("[INFO] flipping image horizontally and vertically...")
@@ -166,7 +166,7 @@ cv2.waitKey(0)
 
 从那里，打开一个 shell 并执行以下命令:
 
-```
+```py
 $ python opencv_flip.py 
 [INFO] flipping image horizontally...
 [INFO] flipping image vertically...

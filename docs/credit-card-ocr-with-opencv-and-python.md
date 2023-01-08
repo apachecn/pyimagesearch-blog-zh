@@ -66,7 +66,7 @@ OCR-A 字体是在 20 世纪 60 年代末设计的，以便(1)当时的 OCR 算�
 
 打开一个新文件，命名为`ocr_template_match.py`，然后我们开始工作:
 
-```
+```py
 # import the necessary packages
 from imutils import contours
 import numpy as np
@@ -80,7 +80,7 @@ import cv2
 
 要安装/升级`imutils`，只需使用`pip`:
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -89,7 +89,7 @@ $ pip install --upgrade imutils
 
 现在我们已经安装并导入了包，我们可以解析我们的命令行参数了:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -109,7 +109,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们定义信用卡类型:
 
-```
+```py
 # define a dictionary that maps the first digit of a credit card
 # number to the credit card type
 FIRST_NUMBER = {
@@ -125,7 +125,7 @@ FIRST_NUMBER = {
 
 让我们通过加载参考 OCR-A 图像来开始我们的图像处理管道:
 
-```
+```py
 # load the reference OCR-A image from disk, convert it to grayscale,
 # and threshold it, such that the digits appear as *white* on a
 # *black* background
@@ -146,7 +146,7 @@ ref = cv2.threshold(ref, 10, 255, cv2.THRESH_BINARY_INV)[1]
 
 现在让我们在 OCR 上定位轮廓——字体图像:
 
-```
+```py
 # find contours in the OCR-A image (i.e,. the outlines of the digits)
 # sort them from left to right, and initialize a dictionary to map
 # digit name to the ROI
@@ -164,7 +164,7 @@ digits = {}
 
 此时，我们应遍历轮廓，提取 ROI，并将其与相应的数字相关联:
 
-```
+```py
 # loop over the OCR-A reference contours
 for (i, c) in enumerate(refCnts):
 	# compute the bounding box for the digit, extract it, and resize
@@ -192,7 +192,7 @@ for (i, c) in enumerate(refCnts):
 
 让我们继续初始化几个结构化内核:
 
-```
+```py
 # initialize a rectangular (wider than it is tall) and square
 # structuring kernel
 rectKernel = cv2.getStructuringElement(cv2.MORPH_RECT, (9, 3))
@@ -206,7 +206,7 @@ sqKernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
 
 现在让我们准备要进行 OCR 的图像:
 
-```
+```py
 # load the input image, resize it, and convert it to grayscale
 image = cv2.imread(args["image"])
 image = imutils.resize(image, width=300)
@@ -230,7 +230,7 @@ gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 现在，我们的图像是灰度的，大小是一致的，让我们执行一个形态学操作:
 
-```
+```py
 # apply a tophat (whitehat) morphological operator to find light
 # regions against a dark background (i.e., the credit card numbers)
 tophat = cv2.morphologyEx(gray, cv2.MORPH_TOPHAT, rectKernel)
@@ -247,7 +247,7 @@ tophat = cv2.morphologyEx(gray, cv2.MORPH_TOPHAT, rectKernel)
 
 给定我们的`tophat`图像，让我们计算沿着 *x* 方向的梯度:
 
-```
+```py
 # compute the Scharr gradient of the tophat image, then scale
 # the rest back into the range [0, 255]
 gradX = cv2.Sobel(tophat, ddepth=cv2.CV_32F, dx=1, dy=0,
@@ -271,7 +271,7 @@ gradX = gradX.astype("uint8")
 
 让我们继续改进我们的信用卡数字查找算法:
 
-```
+```py
 # apply a closing operation using the rectangular kernel to help
 # cloes gaps in between credit card number digits, then apply
 # Otsu's thresholding method to binarize the image
@@ -293,7 +293,7 @@ thresh = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, sqKernel)
 
 接下来，让我们找到轮廓并初始化数字分组位置列表。
 
-```
+```py
 # find contours in the thresholded image, then initialize the
 # list of digit locations
 cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
@@ -307,7 +307,7 @@ locs = []
 
 现在让我们循环遍历轮廓，同时根据每个轮廓的纵横比进行过滤，这样我们就可以从信用卡的其他不相关区域中删除数字组位置:
 
-```
+```py
 # loop over the contours
 for (i, c) in enumerate(cnts):
 	# compute the bounding box of the contour, then use the
@@ -342,7 +342,7 @@ for (i, c) in enumerate(cnts):
 
 接下来，我们将从左到右对分组进行排序，并为信用卡数字初始化一个列表:
 
-```
+```py
 # sort the digit locations from left-to-right, then initialize the
 # list of classified digits
 locs = sorted(locs, key=lambda x:x[0])
@@ -358,7 +358,7 @@ output = []
 
 这个循环相当长，分为三个代码块，这是第一个代码块:
 
-```
+```py
 # loop over the 4 groupings of 4 digits
 for (i, (gX, gY, gW, gH)) in enumerate(locs):
 	# initialize the list of group digits
@@ -391,7 +391,7 @@ for (i, (gX, gY, gW, gH)) in enumerate(locs):
 
 让我们用一个嵌套循环继续这个循环，进行模板匹配和相似性得分提取:
 
-```
+```py
 	# loop over the digit contours
 	for c in digitCnts:
 		# compute the bounding box of the individual digit, extract
@@ -435,7 +435,7 @@ OpenCV 有一个方便的函数叫做`cv2.matchTemplate`,在这个函数中你�
 
 最后，让我们在每组周围画一个矩形，并以红色文本查看图像上的信用卡号:
 
-```
+```py
 	# draw the digit classifications around the group
 	cv2.rectangle(image, (gX - 5, gY - 5),
 		(gX + gW + 5, gY + gH + 5), (0, 0, 255), 2)
@@ -453,7 +453,7 @@ OpenCV 有一个方便的函数叫做`cv2.matchTemplate`,在这个函数中你�
 
 为了查看脚本的执行情况，让我们将结果输出到终端，并在屏幕上显示我们的图像。
 
-```
+```py
 # display the output credit card information to the screen
 print("Credit Card Type: {}".format(FIRST_NUMBER[output[0]]))
 print("Credit Card #: {}".format("".join(output)))
@@ -489,7 +489,7 @@ cv2.waitKey(0)
 
 要查看我们的信用卡 OCR 系统的运行情况，请打开一个终端并执行以下命令:
 
-```
+```py
 $ python ocr_template_match.py --reference ocr_a_reference.png \
 	--image images/credit_card_05.png
 Credit Card Type: MasterCard
@@ -507,7 +507,7 @@ Credit Card #: 5476767898765432
 
 让我们尝试第二个图像，这一次是签证:
 
-```
+```py
 $ python ocr_template_match.py --reference ocr_a_reference.png \
 	--image images/credit_card_01.png
 Credit Card Type: Visa
@@ -523,7 +523,7 @@ Credit Card #: 4000123456789010
 
 再来一张图片，这次来自宾夕法尼亚州的一家信用合作社 PSECU:
 
-```
+```py
 $ python ocr_template_match.py --reference ocr_a_reference.png \
 	--image images/credit_card_02.png
 Credit Card Type: Visa
@@ -539,7 +539,7 @@ Credit Card #: 4020340002345678
 
 这是另一张万事达卡的示例图片，这张图片来自《床、浴室和其他》:
 
-```
+```py
 $ python ocr_template_match.py --reference ocr_a_reference.png \
 	--image images/credit_card_03.png
 Credit Card Type: MasterCard
@@ -555,7 +555,7 @@ Credit Card #: 5412751234567890
 
 作为我们的最后一个例子，让我们使用另一种签证:
 
-```
+```py
 $ python ocr_template_match.py --reference ocr_a_reference.png \
 	--image images/credit_card_04.png
 Credit Card Type: Visa

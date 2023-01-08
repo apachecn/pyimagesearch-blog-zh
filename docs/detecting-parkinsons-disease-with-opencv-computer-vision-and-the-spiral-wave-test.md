@@ -113,7 +113,7 @@ Zham 等人在 2017 年进行的一项研究发现，通过让患者画一个*�
 
 下面您可以找到配置开发环境所需的命令。
 
-```
+```py
 $ workon cv # insert your virtual environment name such as `cv`
 $ pip install opencv-contrib-python # see the tutorial linked above
 $ pip install scikit-learn
@@ -128,7 +128,7 @@ $ pip install imutils
 
 您可以在终端中使用`tree`命令来检查文件和文件夹的结构:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── dataset
@@ -172,7 +172,7 @@ $ tree --dirsfirst --filelimit 10
 
 打开一个新文件，将其命名为`detect_parkinsons.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder
@@ -204,7 +204,7 @@ import os
 
 让我们用 HOG 方法定义一个量化波形/螺旋`image`的函数:
 
-```
+```py
 def quantify_image(image):
 	# compute the histogram of oriented gradients feature vector for
 	# the input image
@@ -231,7 +231,7 @@ HOG 的另一个应用是这个 [PyImageSearch Gurus 样本课程](https://gurus
 
 接下来，让我们加载数据并提取特征:
 
-```
+```py
 def load_split(path):
 	# grab the list of images in the input directory, then initialize
 	# the list of data (i.e., images) and class labels
@@ -281,7 +281,7 @@ def load_split(path):
 
 让我们继续[解析我们的命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
@@ -299,7 +299,7 @@ args = vars(ap.parse_args())
 
 为了准备培训，我们将进行初始化:
 
-```
+```py
 # define the path to the training and testing directories
 trainingPath = os.path.sep.join([args["dataset"], "training"])
 testingPath = os.path.sep.join([args["dataset"], "testing"])
@@ -327,7 +327,7 @@ trials = {}
 
 让我们现在开始试验:
 
-```
+```py
 # loop over the number of trials to run
 for i in range(0, args["trials"]):
 	# train the model
@@ -368,7 +368,7 @@ for i in range(0, args["trials"]):
 
 循环查看我们的每个指标，我们将打印统计信息:
 
-```
+```py
 # loop over our metrics
 for metric in ("acc", "sensitivity", "specificity"):
 	# grab the list of values for the current metric, then compute
@@ -395,7 +395,7 @@ for metric in ("acc", "sensitivity", "specificity"):
 
 现在是视觉盛宴——我们将创建一个蒙太奇，以便我们可以直观地分享我们的工作:
 
-```
+```py
 # randomly select a few images and then initialize the output images
 # for the montage
 testingPaths = list(paths.list_images(testingPath))
@@ -428,7 +428,7 @@ for i in idxs:
 
 接下来，我们将使用新的 **HOG +基于随机森林的分类器**自动对图像进行分类，并添加颜色编码注释:
 
-```
+```py
 	# quantify the image and make predictions based on the extracted
 	# features using the last trained Random Forest
 	features = quantify_image(image)
@@ -473,7 +473,7 @@ cv2.waitKey(0)
 
 从那里，导航到您下载的位置。zip 文件，将其解压缩，然后**执行下面的命令来训练我们的“wave”模型:**
 
-```
+```py
 $ python detect_parkinsons.py --dataset dataset/wave
 [INFO] loading data...
 [INFO] training model 1 of 5...
@@ -509,7 +509,7 @@ u=0.7333, o=0.0730
 
 **现在让我们在“螺旋”图上训练我们的模型:**
 
-```
+```py
 $ python detect_parkinsons.py --dataset dataset/spiral
 [INFO] loading data...
 [INFO] training model 1 of 5...

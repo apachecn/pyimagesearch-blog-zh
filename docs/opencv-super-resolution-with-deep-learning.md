@@ -97,7 +97,7 @@
 
 幸运的是，OpenCV 4.3+是 pip 安装的:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -122,7 +122,7 @@ $ pip install opencv-contrib-python
 
 配置好开发环境后，让我们继续检查我们的项目目录结构:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── examples
@@ -163,7 +163,7 @@ $ tree . --dirsfirst
 
 打开项目目录结构中的`super_res_image.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 import argparse
 import time
@@ -186,7 +186,7 @@ args = vars(ap.parse_args())
 
 给定我们的超分辨率模型路径，我们现在需要提取**模型名称**和**模型比例**(即，我们将增加图像分辨率的因子):
 
-```
+```py
 # extract the model name and model scale from the file path
 modelName = args["model"].split(os.path.sep)[-1].split("_")[0].lower()
 modelScale = args["model"].split("_x")[-1]
@@ -197,7 +197,7 @@ modelScale = int(modelScale[:modelScale.find(".")])
 
  **解析完模型名称和比例后，我们现在可以继续加载 OpenCV 超分辨率模型:
 
-```
+```py
 # initialize OpenCV's super resolution DNN object, load the super
 # resolution model from disk, and set the model name and scale
 print("[INFO] loading super resolution model: {}".format(
@@ -219,7 +219,7 @@ sr.setModel(modelName, modelScale)
 
 现在让我们用 OpenCV 执行超分辨率:
 
-```
+```py
 # load the input image from disk and display its spatial dimensions
 image = cv2.imread(args["image"])
 print("[INFO] w: {}, h: {}".format(image.shape[1], image.shape[0]))
@@ -245,7 +245,7 @@ print("[INFO] w: {}, h: {}".format(upscaled.shape[1],
 
 为了比较，让我们应用标准的双三次插值并计算它需要多长时间:
 
-```
+```py
 # resize the image using standard bicubic interpolation
 start = time.time()
 bicubic = cv2.resize(image, (upscaled.shape[1], upscaled.shape[0]),
@@ -259,7 +259,7 @@ print("[INFO] bicubic interpolation took {:.6f} seconds".format(
 
 最后，让我们在屏幕上显示输出结果:
 
-```
+```py
 # show the original input image, bicubic interpolation image, and
 # super resolution deep learning output
 cv2.imshow("Original", image)
@@ -278,7 +278,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python super_res_image.py --model models/EDSR_x4.pb --image examples/adrian.png
 [INFO] loading super resolution model: models/EDSR_x4.pb
 [INFO] model name: edsr
@@ -301,7 +301,7 @@ EDSR 超分辨率模式的缺点是速度有点慢。标准的双三次插值可
 
 让我们试试另一张照片，这张是一只蝴蝶:
 
-```
+```py
 $ python super_res_image.py --model models/ESPCN_x4.pb --image examples/butterfly.png
 [INFO] loading super resolution model: models/ESPCN_x4.pb
 [INFO] model name: espcn
@@ -320,7 +320,7 @@ $ python super_res_image.py --model models/ESPCN_x4.pb --image examples/butterfl
 
 下一个示例应用 FSRCNN 超分辨率模型:
 
-```
+```py
 $ python super_res_image.py --model models/FSRCNN_x3.pb --image examples/jurassic_park.png
 [INFO] loading super resolution model: models/FSRCNN_x3.pb
 [INFO] model name: fsrcnn
@@ -337,7 +337,7 @@ $ python super_res_image.py --model models/FSRCNN_x3.pb --image examples/jurassi
 
 最后，让我们看看 LapSRN 模型，它将输入图像分辨率提高了 8 倍:
 
-```
+```py
 $ python super_res_image.py --model models/LapSRN_x8.pb --image examples/zebra.png
 [INFO] loading super resolution model: models/LapSRN_x8.pb
 [INFO] model name: lapsrn
@@ -364,7 +364,7 @@ $ python super_res_image.py --model models/LapSRN_x8.pb --image examples/zebra.p
 
 让我们开始吧:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 import argparse
@@ -386,7 +386,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们提取模型名称和模型比例，然后从磁盘加载我们的 OpenCV 超分辨率模型:
 
-```
+```py
 # extract the model name and model scale from the file path
 modelName = args["model"].split(os.path.sep)[-1].split("_")[0].lower()
 modelScale = args["model"].split("_x")[-1]
@@ -416,7 +416,7 @@ time.sleep(2.0)
 
 完成初始化后，我们现在可以从`VideoStream`开始循环遍历帧:
 
-```
+```py
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the threaded video stream and resize it
@@ -442,7 +442,7 @@ while True:
 
 我们的最后一个代码块将结果显示在屏幕上:
 
-```
+```py
 # show the original frame, bicubic interpolation frame, and super
 	# resolution frame
 
@@ -474,7 +474,7 @@ vs.stop()
 
 从那里，您可以打开一个终端并执行以下命令:
 
-```
+```py
 $ python super_res_video.py --model models/FSRCNN_x3.pb
 [INFO] loading super resolution model: models/FSRCNN_x3.pb
 [INFO] model name: fsrcnn

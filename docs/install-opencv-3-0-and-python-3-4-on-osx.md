@@ -34,7 +34,7 @@
 
 家酿是 OSX 的软件包管理器，类似于 Ubuntu 的 apt-get。我们将使用 Homebrew 来帮助我们安装和管理 OpenCV 的一些先决条件和依赖项。要安装 Homebrew，只需启动终端，复制并粘贴以下命令:
 
-```
+```py
 $ cd ~
 $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 $ brew update
@@ -45,7 +45,7 @@ $ brew update
 
 OSX 没有附带 Python 3 的副本，所以我们需要通过自制软件安装它:
 
-```
+```py
 $ brew install python3
 $ brew linkapps
 
@@ -53,7 +53,7 @@ $ brew linkapps
 
 我们还需要更新`~/.bash_profile`中的`PATH`(如果文件不存在，创建它)以表明自制软件包应该在任何系统软件包之前使用:
 
-```
+```py
 # Homebrew
 export PATH=/usr/local/bin:$PATH
 
@@ -61,14 +61,14 @@ export PATH=/usr/local/bin:$PATH
 
 让我们重新加载我们的`~/.bash_profile`以确保更改已经生效:
 
-```
+```py
 $ source ~/.bash_profile
 
 ```
 
 最后，让我们确认 Python 3.4 已经安装:
 
-```
+```py
 $ which python3
 /usr/local/bin/python
 $ python3 --version
@@ -84,7 +84,7 @@ Python 3.4.3
 
 无论如何，让我们安装`virtualenv`和`virtualenvwrapper`:
 
-```
+```py
 $ pip3 install virtualenv virtualenvwrapper
 
 ```
@@ -93,7 +93,7 @@ $ pip3 install virtualenv virtualenvwrapper
 
 我们还需要再次更新我们的`~/.bash_profile`文件，在文件底部添加以下几行:
 
-```
+```py
 # Virtualenv/VirtualenvWrapper
 export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
 source /usr/local/bin/virtualenvwrapper.sh
@@ -102,14 +102,14 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 接着是重装我们的`.bash_profile`:
 
-```
+```py
 $ source ~/.bash_profile
 
 ```
 
 现在我们有进展了。让我们创建我们的`cv3`虚拟环境，OpenCV 将使用它来编译我们的 Python 3.4 绑定。这个虚拟环境还将包含我们想要存储的用于计算机视觉和图像处理开发的任何额外的包:
 
-```
+```py
 $ mkvirtualenv cv3 -p python3
 
 ```
@@ -118,7 +118,7 @@ $ mkvirtualenv cv3 -p python3
 
 在执行完`mkvirtualenv`命令后，我们进入了我们的`cv3`虚拟环境。如果你想再次访问这个虚拟环境(正如我将在本文底部演示的)，只需使用`workon`命令:
 
-```
+```py
 $ workon cv3
 
 ```
@@ -127,7 +127,7 @@ $ workon cv3
 
 就 Python 的先决条件而言，我们需要的只是 NumPy:
 
-```
+```py
 $ pip install numpy
 
 ```
@@ -138,21 +138,21 @@ $ pip install numpy
 
 为了从源代码编译 OpenCV，我们需要一些开发工具:
 
-```
+```py
 $ brew install cmake pkg-config
 
 ```
 
 以及一些处理从磁盘读取各种图像格式的包:
 
-```
+```py
 $ brew install jpeg libpng libtiff openexr
 
 ```
 
 和另一对优化 OpenCV 内部各种例程的包:
 
-```
+```py
 $ brew install eigen tbb
 
 ```
@@ -161,7 +161,7 @@ $ brew install eigen tbb
 
 编译 OpenCV 的第一步是从 GitHub 中抓取[源代码，并检查 3.0.0 版本:](https://github.com/Itseez/opencv)
 
-```
+```py
 $ cd ~
 $ git clone https://github.com/Itseez/opencv.git
 $ cd opencv
@@ -173,7 +173,7 @@ $ git checkout 3.0.0
 
 我们还将获取包含 opencv 额外模块的 [opencv_contrib](https://github.com/itseez/opencv_contrib) 包，例如特征检测和局部不变描述符(SIFT、SURF 等)。)、文本检测等等:
 
-```
+```py
 $ cd ~
 $ git clone https://github.com/Itseez/opencv_contrib
 $ cd opencv_contrib
@@ -185,7 +185,7 @@ $ git checkout 3.0.0
 
 既然存储库已经被删除，我们可以创建`build`目录:
 
-```
+```py
 $ cd ~/opencv
 $ mkdir build
 $ cd build
@@ -194,7 +194,7 @@ $ cd build
 
 并使用 CMake 来配置构建本身:
 
-```
+```py
 $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 	-D CMAKE_INSTALL_PREFIX=/usr/local \
 	-D PYTHON3_PACKAGES_PATH=~/.virtualenvs/cv3/lib/python3.4/site-packages \
@@ -231,7 +231,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 假设 CMake 已经返回，没有任何错误，我们现在可以编译 OpenCV:
 
-```
+```py
 $ make -j4
 
 ```
@@ -240,14 +240,14 @@ $ make -j4
 
 编译时间本身不应该超过 5-10 分钟，所以在 OpenCV 安装时喝杯咖啡，当你回来时(当然，假设 OpenCV 编译没有错误)，你可以安装它:
 
-```
+```py
 $ make install
 
 ```
 
 如果出于某种原因，您得到一个与安装 OpenCV 的权限无效相关的错误，只需在命令前面加上`sudo`:
 
-```
+```py
 $ sudo make install
 
 ```
@@ -256,7 +256,7 @@ $ sudo make install
 
 此时，您的系统上应该安装了 OpenCV 3.0 和 Python 3.4+绑定。您可以通过将目录更改为我们的`cv3`虚拟环境所在的位置并检查`cv2.so`文件来验证这一点:
 
-```
+```py
 $ cd ~/.virtualenvs/cv3/lib/python3.4/site-packages/
 $ ls -l cv2.so
 -rwxr-xr-x  1 admin  _developer  2013028 Jun 19 06:11 cv2.so
@@ -269,7 +269,7 @@ $ ls -l cv2.so
 
 最后，让我们打开一个 shell 并导入 OpenCV 来验证我们的安装:
 
-```
+```py
 (cv3)74-80-245-164:~ admin$ python3
 Python 3.4.3 (default, Jun 19 2015, 05:23:16) 
 [GCC 4.2.1 Compatible Apple LLVM 6.1.0 (clang-602.0.53)] on darwin

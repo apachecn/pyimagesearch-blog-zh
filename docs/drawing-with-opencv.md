@@ -54,7 +54,7 @@ OpenCV 有许多绘图函数，您可以使用它们来绘制各种形状，包�
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -83,7 +83,7 @@ $ pip install opencv-contrib-python
 
 让我们从查看 OpenCV 绘图项目的项目目录结构开始:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── adrian.png
@@ -106,7 +106,7 @@ $ tree . --dirsfirst
 
 打开项目目录结构中的`basic_drawing.py`文件，让我们开始工作。
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import cv2
@@ -130,7 +130,7 @@ canvas = np.zeros((300, 300, 3), dtype="uint8")
 
 现在我们已经初始化了画布，我们可以开始绘制了:
 
-```
+```py
 # draw a green line from the top-left corner of our canvas to the
 # bottom-right
 green = (0, 255, 0)
@@ -169,7 +169,7 @@ cv2.waitKey(0)
 
 画一条线很简单。现在我们可以继续画矩形了。查看下面的代码了解更多细节:
 
-```
+```py
 # draw a green 50x50 pixel square, starting at 10x10 and ending at 60x60
 cv2.rectangle(canvas, (10, 10), (60, 60), green)
 cv2.imshow("Canvas", canvas)
@@ -218,7 +218,7 @@ cv2.waitKey(0)
 
 画圆和画矩形一样简单，但函数参数略有不同:
 
-```
+```py
 # re-initialize our canvas as an empty array, then compute the
 # center (x, y)-coordinates of the canvas
 canvas = np.zeros((300, 300, 3), dtype="uint8")
@@ -257,7 +257,7 @@ cv2.waitKey(0)
 
 要亲自演示这一点，请打开 Python shell，并执行以下代码:
 
-```
+```py
 $ python
 >>> list(range(0, 175, 25))
 [0, 25, 50, 75, 100, 125, 150]
@@ -284,7 +284,7 @@ $ python
 
 让我们画一些抽象画:
 
-```
+```py
 # re-initialize our canvas once again
 canvas = np.zeros((300, 300, 3), dtype="uint8")
 
@@ -331,7 +331,7 @@ cv2.waitKey(0)
 
 从那里，您可以执行以下命令:
 
-```
+```py
 $ python basic_drawing.py
 ```
 
@@ -345,7 +345,7 @@ $ python basic_drawing.py
 
 为了演示这一点，让我们看一些代码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -361,7 +361,7 @@ args = vars(ap.parse_args())
 
 我们只需要一个参数`--image`，它是我们在磁盘上的输入图像的路径。默认情况下，我们将`--image`命令行参数设置为指向项目目录结构中的`adrian.png`图像。
 
-```
+```py
 # load the input image from disk
 image = cv2.imread(args["image"])
 
@@ -393,7 +393,7 @@ cv2.waitKey(0)
 
 然后，您可以执行以下命令:
 
-```
+```py
 $ python image_drawing.py
 ```
 

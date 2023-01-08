@@ -78,7 +78,7 @@
 
 幸运的是，这两个都是 pip 可安装的:
 
-```
+```py
 $ pip install opencv-contrib-python
 $ pip install scikit-image
 ```
@@ -106,7 +106,7 @@ $ pip install scikit-image
 
 首先使用本教程的 ***“下载”*** 部分下载源代码、示例图像和示例视频:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── examples
@@ -133,7 +133,7 @@ $ tree . --dirsfirst
 
 打开项目目录结构中的`detect_low_contrast_image.py`文件，并插入以下代码。
 
-```
+```py
 # import the necessary packages
 from skimage.exposure import is_low_contrast
 from imutils.paths import list_images
@@ -144,7 +144,7 @@ import cv2
 
 我们从第 2-6 行的**开始，导入我们需要的 Python 包。**
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--input", required=True,
@@ -165,7 +165,7 @@ args = vars(ap.parse_args())
 
 为了使这成为一个具体的例子，考虑 OpenCV 中的图像由一个无符号的 8 位整数表示，该整数的取值范围为 *[0，255】。*如果像素强度分布占据的*小于*该*【0，255】*范围的 35%，则图像被视为低对比度。
 
-```
+```py
 # grab the paths to the input images
 imagePaths = sorted(list(list_images(args["input"])))
 
@@ -195,7 +195,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 从那里，我们应用模糊(以减少高频噪声)，然后应用 Canny 边缘检测器(**行 30 和 31** )来检测输入图像中的边缘。
 
-```
+```py
 	# check to see if the image is low contrast
 	if is_low_contrast(gray, fraction_threshold=args["thresh"]):
 		# update the text and color
@@ -240,7 +240,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 首先使用本教程的 ***【下载】*** 部分下载源代码和示例图像:
 
-```
+```py
 $ python detect_low_contrast_image.py --input examples
 [INFO] processing image 1/3
 [INFO] processing image 2/3
@@ -263,7 +263,7 @@ $ python detect_low_contrast_image.py --input examples
 
 打开项目目录结构中的`detect_low_contrast_video.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 from skimage.exposure import is_low_contrast
 import numpy as np
@@ -272,7 +272,7 @@ import imutils
 import cv2
 ```
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--input", type=str, default="",
@@ -282,7 +282,7 @@ ap.add_argument("-t", "--thresh", type=float, default=0.35,
 args = vars(ap.parse_args())
 ```
 
-```
+```py
 # grab a pointer to the input video stream
 print("[INFO] accessing video stream...")
 vs = cv2.VideoCapture(args["input"] if args["input"] else 0)
@@ -319,7 +319,7 @@ while True:
 2.  检测我们是否到达了视频流的末尾，如果是，则从循环中`break`
 3.  预处理帧，将其转换为灰度，模糊，并应用 Canny 边缘检测器
 
-```
+```py
 	# check to see if the frame is low contrast, and if so, update
 	# the text and color
 	if is_low_contrast(gray, fraction_threshold=args["thresh"]):
@@ -341,7 +341,7 @@ while True:
 		cv2.drawContours(frame, [c], -1, (0, 255, 0), 2)
 ```
 
-```
+```py
 	# draw the text on the output frame
 	cv2.putText(frame, text, (5, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.8,
 		color, 2)
@@ -367,7 +367,7 @@ while True:
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python detect_low_contrast_video.py --input example_video.mp4
 [INFO] accessing video stream...
 [INFO] no frame read from stream - exiting

@@ -53,7 +53,7 @@
 
 打开您最喜欢的编辑器，创建一个新文件并命名为`rootsift.py`，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import cv2
@@ -106,7 +106,7 @@ class RootSIFT:
 
 要真正看到 RootSIFT 的运行，打开一个新文件，命名为`driver.py`，我们将探索如何从图像中提取 SIFT 和 RootSIFT 描述符:
 
-```
+```py
 # import the necessary packages
 from rootsift import RootSIFT
 import cv2
@@ -142,14 +142,14 @@ print "RootSIFT: kps=%d, descriptors=%s " % (len(kps), descs.shape)
 
 要执行我们的脚本，只需发出以下命令:
 
-```
+```py
 $ python driver.py
 
 ```
 
 您的输出应该如下所示:
 
-```
+```py
 SIFT: kps=1006, descriptors=(1006, 128) 
 RootSIFT: kps=1006, descriptors=(1006, 128)
 

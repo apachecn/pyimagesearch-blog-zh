@@ -121,7 +121,7 @@
 
 一定要抓住。本教程的压缩文件来自 ***【下载】*** 部分。一旦您提取了文件，您可以使用`tree`命令来查看里面的内容:
 
-```
+```py
 $ tree
 .
 ├── dog.jpg
@@ -140,7 +140,7 @@ $ tree
 
 打开一个新文件，将其命名为`selective_search.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import random
@@ -157,7 +157,7 @@ ap.add_argument("-m", "--method", type=str, default="fast",
 args = vars(ap.parse_args())
 ```
 
-```
+```py
 # load the input image
 image = cv2.imread(args["image"])
 
@@ -185,7 +185,7 @@ else:
 
 让我们继续**使用我们的图像执行选择性搜索**:
 
-```
+```py
 # run selective search on the input image
 start = time.time()
 rects = ss.process()
@@ -203,7 +203,7 @@ print("[INFO] {} total region proposals".format(len(rects)))
 
 现在，如果我们不将结果可视化，找到我们的区域提案会有什么乐趣呢？毫无乐趣。最后，让我们在图像上绘制输出:
 
-```
+```py
 # loop over the region proposals in chunks (so we can better
 # visualize them)
 for i in range(0, len(rects), 100):
@@ -233,7 +233,7 @@ for i in range(0, len(rects), 100):
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python selective_search.py --image dog.jpg 
 [INFO] using *fast* selective search
 [INFO] selective search took 1.0828 seconds
@@ -248,7 +248,7 @@ $ python selective_search.py --image dog.jpg
 
 让我们对同一幅图像应用选择性搜索，但这一次，使用`--method quality`模式:
 
-```
+```py
 $ python selective_search.py --image dog.jpg --method quality
 [INFO] using *quality* selective search
 [INFO] selective search took 3.7614 seconds

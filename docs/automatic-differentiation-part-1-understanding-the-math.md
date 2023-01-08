@@ -221,7 +221,7 @@ and a vector ![v](img/5cf5c733f94b1c39da6382d8e46f92a3.png "v"). The Vector-Jaco
 
 A. R. Gosthipaty 和 R. Raha。“自动微分第一部分:理解数学”， *PyImageSearch* ，P. Chugh、S. Huot、K. Kidriavsteva 和 A. Thanki 编辑。，2022 年，【https://pyimg.co/pyxml 
 
-```
+```py
 @incollection{ARG-RR_2022_autodiff1,
   author = {Aritra Roy Gosthipaty and Ritwik Raha},
   title = {Automatic Differentiation Part 1: Understanding the Math},

@@ -51,7 +51,7 @@
 
 现在，让我们计算一些距离:
 
-```
+```py
 >>> from scipy.spatial import distance as dist
 >>> import numpy as np
 >>> np.random.seed(42)
@@ -70,7 +70,7 @@ array([ 0.15601864,  0.15599452,  0.05808361,  0.86617615])
 
 是时候计算一些实际距离了:
 
-```
+```py
 >>> dist.euclidean(x, y)
 1.0977486080871359
 >>> dist.cityblock(x, y)
@@ -88,7 +88,7 @@ array([ 0.15601864,  0.15599452,  0.05808361,  0.86617615])
 
 现在，让我们来看看海明距离:
 
-```
+```py
 >>> x = np.random.random_integers(0, high = 1, size =(4,))
 >>> y = np.random.random_integers(0, high = 1, size =(4,))
 >>> x

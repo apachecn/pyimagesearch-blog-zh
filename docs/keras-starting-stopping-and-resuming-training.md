@@ -173,7 +173,7 @@
 
 让我们回顾一下我们的项目结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── output
@@ -214,7 +214,7 @@ $ tree --dirsfirst
 
 打开一个新文件，将其命名为`train.py`，并插入以下代码:
 
-```
+```py
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -241,7 +241,7 @@ import os
 
 现在让我们继续[解析命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-c", "--checkpoints", required=True,
@@ -262,7 +262,7 @@ args = vars(ap.parse_args())
 
 让我们继续加载我们的数据集:
 
-```
+```py
 # grab the Fashion MNIST dataset (if this is your first time running
 # this the dataset will be automatically downloaded)
 print("[INFO] loading Fashion MNIST...")
@@ -290,7 +290,7 @@ testX = testX.reshape((testX.shape[0], 32, 32, 1))
 
 从这里，我们将(1)二进制化我们的标签，以及(2)初始化我们的[数据扩充](https://pyimagesearch.com/2019/07/08/keras-imagedatagenerator-and-data-augmentation/)对象:
 
-```
+```py
 # convert the labels from integers to vectors
 lb = LabelBinarizer()
 trainY = lb.fit_transform(trainY)
@@ -305,7 +305,7 @@ aug = ImageDataGenerator(width_shift_range=0.1,
 
 现在来看看**加载模型检查点的代码:**
 
-```
+```py
 # if there is no specific model checkpoint supplied, then initialize
 # the network (ResNet-56) and compile the model
 if args["model"] is None:
@@ -337,7 +337,7 @@ else:
 
 接下来，我们将**构造我们的回调:**
 
-```
+```py
 # build the path to the training plot and training history
 plotPath = os.path.sep.join(["output", "resnet_fashion_mnist.png"])
 jsonPath = os.path.sep.join(["output", "resnet_fashion_mnist.json"])
@@ -363,7 +363,7 @@ callbacks = [
 
 最后，我们有了开始、停止和恢复训练所需的一切。这最后一块实际上**开始或恢复训练:**
 
-```
+```py
 # train the network
 print("[INFO] training network...")
 model.fit(
@@ -390,7 +390,7 @@ model.fit(
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python train.py --checkpoints output/checkpoints
 [INFO] loading Fashion MNIST...
 [INFO] compiling model...
@@ -440,7 +440,7 @@ Epoch 40/40
 
 回到`train.py`的**行 64** 我们可以看到我的初始学习率是`1e-1`:
 
-```
+```py
 # if there is no specific model checkpoint supplied, then initialize
 # the network (ResNet-56) and compile the model
 if args["model"] is None:
@@ -455,7 +455,7 @@ if args["model"] is None:
 
 我现在将把我的学习率更新为第 79 行的**上的`1e-2`:**
 
-```
+```py
 # otherwise, we're using a checkpoint model
 else:
 	# load the checkpoint from disk
@@ -479,7 +479,7 @@ else:
 
 其次，我也在**线 101** 更新我的`epochs`。最初，`epochs`值是`80`:
 
-```
+```py
 # train the network
 print("[INFO] training network...")
 model.fit(
@@ -494,7 +494,7 @@ model.fit(
 
 我决定将训练的纪元数量减少到`40`个纪元:
 
-```
+```py
 # train the network
 print("[INFO] training network...")
 model.fit(
@@ -515,7 +515,7 @@ model.fit(
 
 在更新了我的学习速度和训练的次数之后，我执行了下面的命令:
 
-```
+```py
 $ python train.py --checkpoints output/checkpoints \
 	--model output/checkpoints/epoch_40.hdf5 --start-epoch 40
 [INFO] loading Fashion MNIST...
@@ -565,7 +565,7 @@ Epoch 10/10
 
 在更新了我的学习率之后，我执行了以下命令:
 
-```
+```py
 $ python train.py --checkpoints output/checkpoints \
 	--model output/checkpoints/epoch_50.hdf5 --start-epoch 50
 [INFO] loading Fashion MNIST...

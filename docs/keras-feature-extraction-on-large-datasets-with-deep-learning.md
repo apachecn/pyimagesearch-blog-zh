@@ -155,7 +155,7 @@ max-pooling 层的输出具有体积形状 *7 x 7 x 512* ，我们将其展平�
 
 下载完源代码后，将目录更改为`transfer-learning-keras`:
 
-```
+```py
 $ unzip keras-feature-extraction.zip
 $ cd keras-feature-extraction
 
@@ -169,7 +169,7 @@ $ cd keras-feature-extraction
 
 下载完数据集后，将它解压缩到项目文件夹中:
 
-```
+```py
 $ unzip Food-5k.zip
 
 ```
@@ -178,14 +178,14 @@ $ unzip Food-5k.zip
 
 继续并导航回根目录:
 
-```
+```py
 $ cd ..
 
 ```
 
 从那里，我们能够用`tree`命令分析我们的项目结构:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── Food-5K
@@ -222,7 +222,7 @@ $ tree --dirsfirst --filelimit 10
 
 打开`config.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import os
 
@@ -276,7 +276,7 @@ BASE_CSV_PATH = "output"
 
 现在让我们使用`build_dataset.py`文件来构建我们的目录结构:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from imutils import paths
@@ -317,7 +317,7 @@ for split in (config.TRAIN, config.TEST, config.VAL):
 
 您可以使用本教程的 ***“下载”*** 部分下载源代码——从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python build_dataset.py 
 [INFO] processing 'training split'...
 [INFO] processing 'evaluation split'...
@@ -327,7 +327,7 @@ $ python build_dataset.py
 
 这样做之后，您将会看到以下目录结构:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── Food-5K
@@ -374,7 +374,7 @@ $ tree --dirsfirst --filelimit 10
 
 上周的帖子中[详细介绍了这个文件，所以为了完整起见，我们在这里只简要回顾一下这个脚本:](https://pyimagesearch.com/2019/05/20/transfer-learning-with-keras-and-deep-learning/)
 
-```
+```py
 # import the necessary packages
 from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.applications import ResNet50
@@ -427,7 +427,7 @@ for split in (config.TRAIN, config.TEST, config.VAL):
 
 现在我们的初始化都设置好了，我们可以开始批量循环图像:
 
-```
+```py
 	# loop over the images in batches
 	for (b, i) in enumerate(range(0, len(imagePaths), config.BATCH_SIZE)):
 		# extract the batch of images and labels, then initialize the
@@ -461,7 +461,7 @@ for split in (config.TRAIN, config.TEST, config.VAL):
 
 我们现在将通过 ResNet 发送批处理以提取特征:
 
-```
+```py
 		# pass the images through the network and use the outputs as
 		# our actual features, then reshape the features into a
 		# flattened volume
@@ -500,7 +500,7 @@ f.close()
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python extract_features.py
 [INFO] loading network...
 [INFO] processing 'training split'...
@@ -527,7 +527,7 @@ $ python extract_features.py
 
 特征提取完成后，您的输出目录中应该有三个 CSV 文件，分别对应于我们的每个数据分割:
 
-```
+```py
 $ ls -l output/
 total 2655188
 -rw-rw-r-- 1 ubuntu ubuntu  502570423 May 13 17:17 evaluation.csv
@@ -549,7 +549,7 @@ total 2655188
 
 打开`train.py`脚本，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
@@ -573,7 +573,7 @@ import os
 
 现在让我们实现生成器:
 
-```
+```py
 def csv_feature_generator(inputPath, bs, numClasses, mode="train"):
 	# open the input file for reading
 	f = open(inputPath, "r")
@@ -606,7 +606,7 @@ def csv_feature_generator(inputPath, bs, numClasses, mode="train"):
 
 我们从读取 CSV 中的一行开始(**第 25 行**)。一旦我们有了行，我们将继续处理它:
 
-```
+```py
 			# check to see if the row is empty, indicating we have
 			# reached the end of the file
 			if row == "":
@@ -646,7 +646,7 @@ def csv_feature_generator(inputPath, bs, numClasses, mode="train"):
 
 让我们继续—在训练模型之前，我们还有几个步骤:
 
-```
+```py
 # load the label encoder from disk
 le = pickle.loads(open(config.LE_PATH, "rb").read())
 
@@ -676,7 +676,7 @@ totalTest = len(testLabels)
 
 让我们为每个数据分割构建一个生成器:
 
-```
+```py
 # construct the training, validation, and testing generators
 trainGen = csv_feature_generator(trainPath, config.BATCH_SIZE,
 	len(config.CLASSES), mode="train")
@@ -691,7 +691,7 @@ testGen = csv_feature_generator(testPath, config.BATCH_SIZE,
 
 我们现在准备建立一个简单的神经网络:
 
-```
+```py
 # define our simple neural network
 model = Sequential()
 model.add(Dense(256, input_shape=(7 * 7 * 2048,), activation="relu"))
@@ -712,7 +712,7 @@ model.add(Dense(len(config.CLASSES), activation="softmax"))
 
 让我们继续`compile`我们的`model`:
 
-```
+```py
 # compile the model
 opt = SGD(lr=1e-3, momentum=0.9, decay=1e-3 / 25)
 model.compile(loss="binary_crossentropy", optimizer=opt,
@@ -726,7 +726,7 @@ model.compile(loss="binary_crossentropy", optimizer=opt,
 
 随着我们的`model`被编译，现在我们准备好训练和评估:
 
-```
+```py
 # train the network
 print("[INFO] training simple network...")
 H = model.fit(
@@ -766,7 +766,7 @@ print(classification_report(testLabels, predIdxs,
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python train.py
 Using TensorFlow backend.
 [INFO] training simple network...

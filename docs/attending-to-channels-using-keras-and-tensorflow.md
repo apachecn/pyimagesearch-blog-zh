@@ -68,7 +68,7 @@ SE 块的最后一个 sigmoid 层输出一个通道式关系，应用到你的�
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 $ pip install tensorflow
 ```
@@ -102,7 +102,7 @@ $ pip install tensorflow
 
 从这里，看一下目录结构:
 
-```
+```py
 !tree .
 .
 ├── output.txt
@@ -135,7 +135,7 @@ $ pip install tensorflow
 
 首先，我们将回顾位于我们代码的`pyimagesearch`目录中的`config.py`脚本。该脚本包含几个定义的参数和超参数，将在整个项目流程中使用。
 
-```
+```py
 # define the number of convolution layer filters and dense layer units
 CONV_FILTER = 64
 DENSE_UNITS = 4096
@@ -184,7 +184,7 @@ VGG 模型的块超参数在第 9-13 行的**中定义。它采用元组格式�
 
 在将其插入我们的项目之前，我们将执行一些预处理，以使数据更适合于训练。为此，让我们转到`pyimagesearch`目录中的`data.py`脚本。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.datasets import cifar10
 import numpy as np
@@ -214,7 +214,7 @@ def standardization(xTrain, xVal, xTest):
 
 这样做的唯一缺点是，在将推断图像输入到我们的模型之前，我们还必须以这种方式改变它们，否则我们很可能会得到错误的预测。
 
-```
+```py
 def get_cifar10_data():
 	# get the CIFAR-10 data
 	(xTrain, yTrain), (xTest, yTest) = cifar10.load_data()
@@ -242,7 +242,7 @@ def get_cifar10_data():
 
 模型架构受到[惯用程序员模型动物园](https://github.com/GoogleCloudPlatform/keras-idiomatic-programmer)的大量启发。
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.layers import GlobalAveragePooling2D
 from tensorflow.keras.layers import MaxPooling2D
@@ -296,7 +296,7 @@ class VGG:
 *   `loss`:定义用于模型的损耗。
 *   `metrics`:定义模型训练要考虑的指标。
 
-```
+```py
 	def stem(self, inputs):
 		# pass the input through a CONV => ReLU layer block
 		x = Conv2D(filters=self.convFilters, kernel_size=(3, 3),
@@ -320,7 +320,7 @@ class VGG:
 
 我们之前已经将`blocks`定义为包含层和针对层的过滤器的元组的集合。我们迭代那些在**第 48 行**的。在**第 49 行**引用了一个名为`group`的函数，在此之后定义。
 
-```
+```py
 	def group(self, x, numLayers, numFilters):
 		# iterate over the number of layers and build a block with 
 		# convolutional layers
@@ -349,7 +349,7 @@ class VGG:
 
 在**线路 66** 上，我们检查该模型是否为 SE 网络，并相应地在**线路 69** 上添加一个 SE 块。接下来是一个`ReLU`层。
 
-```
+```py
 	def squeeze_excite_block(self, x):
 		# store the input
 		shortcut = x
@@ -391,7 +391,7 @@ for purposes explained in the introduction section by adding a dense layer with 
 
 恢复维度后，sigmoid 函数为我们提供了每个通道的权重。因此，我们需要做的就是将它乘以我们之前存储的输入，现在我们有了加权的通道输出(**第 96 行**)。这也是论文作者所说的规模经营。
 
-```
+```py
 	def classifier(self, x):
 		# flatten the input
 		x = Flatten()(x)
@@ -426,7 +426,7 @@ for purposes explained in the introduction section by adding a dense layer with 
 
 在第 124-126 行上，我们初始化并返回模型。这就完成了我们的模型架构。
 
-```
+```py
 	def train_model(self, model, xTrain, yTrain, xVal, yVal, epochs,
 		batchSize):
 		# compile the model
@@ -472,7 +472,7 @@ for purposes explained in the introduction section by adding a dense layer with 
 
 为此，让我们转到位于我们项目根目录中的`train.py`脚本。
 
-```
+```py
 # USAGE
 # python train.py
 
@@ -518,7 +518,7 @@ vggSEModel = vggSEObject.build_model()
 
 ***注意:*** *所有你看到正在使用的参数都已经在我们的`config.py`脚本中定义好了。*
 
-```
+```py
 # train the vanilla VGG model
 print("[INFO] training the vanilla VGG model...")
 vggModel = vggObject.train_model(model=vggModel, xTrain=xTrain,
@@ -538,7 +538,7 @@ print(f"[INFO] VANILLA VGG TEST Accuracy: {acc:0.4f}")
 
 首先，使用来自`VGG`类模板的`train_model`函数训练普通的 CNN(**第 37-39 行**)。然后，使用测试数据集测试的普通 CNN 的损失和准确性被存储在**行 43 和 44** 上。
 
-```
+```py
 # train the VGG model with the SE layer
 print("[INFO] training the VGG model with SE layer...")
 vggSEModel = vggSEObject.train_model(model=vggSEModel, xTrain=xTrain,
@@ -562,7 +562,7 @@ print(f"[INFO] SE VGG TEST Accuracy: {acc:0.4f}")
 
 让我们来看看这些模特们的表现如何！
 
-```
+```py
 [INFO] building a vanilla VGG model...
 [INFO] training the vanilla VGG model...
 Epoch 1/100
@@ -590,7 +590,7 @@ Epoch 10/100
 
 在评估测试数据集时，精确度达到`74%`。
 
-```
+```py
 [INFO] building VGG model with SE layer...
 [INFO] training the VGG model with SE layer...
 Epoch 1/100
@@ -638,7 +638,7 @@ SE VGG 达到了`99%`的训练精度。验证精度在`81%`达到峰值。概括
 
 **Chakraborty，D.** “使用 Keras 和 TensorFlow 关注频道”， *PyImageSearch* ，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva，R. Raha 和 A. Thanki 编辑。，2022 年，【https://pyimg.co/jq94n 
 
-```
+```py
 @incollection{Chakraborty_2022_Attending_Channels,
   author = {Devjyoti Chakraborty},
   title = {Attending to Channels Using {Keras} and {TensorFlow}},

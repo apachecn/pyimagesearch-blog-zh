@@ -82,7 +82,7 @@ GAN 的工作原理也是如此。“你”是试图生成模拟给定输入数�
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -111,7 +111,7 @@ $ pip install opencv-contrib-python
 
 从这里，看一下目录结构:
 
-```
+```py
 !tree .
 .
 ├── dcgan_mnist.py
@@ -145,7 +145,7 @@ $ pip install opencv-contrib-python
 
 我们的第一个任务是跳转到`pyimagesearch`目录并打开`dcgan.py`脚本。该脚本将包含完整的 DCGAN 架构。
 
-```
+```py
 # import the necessary packages
 from torch.nn import ConvTranspose2d
 from torch.nn import BatchNorm2d
@@ -198,7 +198,7 @@ class Generator(nn.Module):
 
 记住，生成器*将随机噪声建模成图像*。记住这一点，我们的下一个任务是定义生成器的层。我们将使用`CONVT`(转置卷积)、`ReLU`(整流线性单元)、`BN`(批量归一化)(**第 18-34 行**)。最终的转置卷积之后是一个`tanh`激活函数，将我们的输出像素值绑定到`1`到`-1` ( **行 38-41** )。
 
-```
+```py
 	def forward(self, x):
 		# pass the input through our first set of CONVT => RELU => BN
 		# layers
@@ -229,7 +229,7 @@ class Generator(nn.Module):
 
 在生成器的`forward`通道中，我们使用了三次`CONVT` = >、`ReLU` = > `BN`图案，而最后的`CONVT`层之后是`tanh`层(**行 46-65** )。
 
-```
+```py
 class Discriminator(nn.Module):
 	def __init__(self, depth, alpha=0.2):
 		super(Discriminator, self).__init__()
@@ -262,7 +262,7 @@ class Discriminator(nn.Module):
 
 我们初始化一组卷积层、漏 ReLU 层、两个线性层，然后是最终的 sigmoid 层(**行 75-90** )。这篇论文的作者提到，泄漏 ReLU 允许一些低于零的值的特性有助于鉴别器的结果。当然，最后的 sigmoid 层是将奇异输出值映射到 0 或 1。
 
-```
+```py
 	def forward(self, x):
 		# pass the input through first set of CONV => RELU layers
 		x = self.conv1(x)
@@ -296,7 +296,7 @@ class Discriminator(nn.Module):
 
 `dcgan_mnist.py`不仅包含 DCGAN 的训练过程，还将充当我们的推理脚本。
 
-```
+```py
 # USAGE
 # python dcgan_mnist.py --output output
 
@@ -340,7 +340,7 @@ def weights_init(model):
 
 对于卷积层，我们将`0.0`和`0.02`作为该函数中的平均值和标准差。对于批量标准化图层，我们将偏差设置为`0`，并将`1.0`和`0.02`作为平均值和标准偏差值。这是论文作者提出的，并认为最适合理想的训练结果。
 
-```
+```py
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-o", "--output", required=True,
@@ -360,7 +360,7 @@ BATCH_SIZE = args["batch_size"]
 
 我们继续将`epochs`和`batch_size`参数存储在适当命名的变量中(**第 50 行和第 51 行**)。
 
-```
+```py
 # set the device we will be using
 DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -392,7 +392,7 @@ PyTorch 托管了许多流行的数据集供即时使用。它省去了在本地
 
 在连接训练和测试数据集(**第 69 行**)之后，我们创建一个 PyTorch `DataLoader`实例来自动处理输入数据管道(**第 72 行和第 73 行**)。
 
-```
+```py
 # calculate steps per epoch
 stepsPerEpoch = len(dataloader.dataset) // BATCH_SIZE
 
@@ -435,7 +435,7 @@ criterion = BCELoss()
 
 最后，我们损失函数的二元交叉熵损失(**第 99 行**)。
 
-```
+```py
 # randomly generate some benchmark noise so we can consistently
 # visualize how the generative modeling is learning
 print("[INFO] starting training...")
@@ -463,7 +463,7 @@ for epoch in range(NUM_EPOCHS):
 
 随着必需品的离开，我们开始在**行 111** 上的历元上循环，并初始化逐历元发生器和鉴别器损耗(**行 118 和 119** )。
 
-```
+```py
 	for x in dataloader:
 		# zero out the discriminator gradients
 		disc.zero_grad()
@@ -495,7 +495,7 @@ for epoch in range(NUM_EPOCHS):
 
 `backward`函数根据损失计算梯度(**行 141** )。
 
-```
+```py
 		# randomly generate noise for the generator to predict on
 		noise = torch.randn(bs, 100, 1, 1, device=DEVICE)
 
@@ -524,7 +524,7 @@ for epoch in range(NUM_EPOCHS):
 
 假图像产生的误差随后被送入`backward`函数进行梯度计算(**行 156** )。然后根据两组图像产生的总损失更新鉴别器(**第 159 和 160 行**)。
 
-```
+```py
 		# set all generator gradients to zero
 		gen.zero_grad()
 
@@ -556,7 +556,7 @@ for epoch in range(NUM_EPOCHS):
 
 最后，我们更新发生器和鉴别器的总损耗值(**行 181 和 182** )。
 
-```
+```py
 	# display training information to disk
 	print("[INFO] Generator Loss: {:.4f}, Discriminator Loss: {:.4f}".format(
 		epochLossG / stepsPerEpoch, epochLossD / stepsPerEpoch))
@@ -603,7 +603,7 @@ for epoch in range(NUM_EPOCHS):
 
 让我们看看 DCGAN 在损耗方面的划时代表现。
 
-```
+```py
 $ python dcgan_mnist.py --output output
 [INFO] loading MNIST dataset...
 [INFO] building generator...
@@ -647,7 +647,7 @@ GANs 为机器学习打开了一扇全新的大门。我们不断看到 GANs 产
 
 Chakraborty，d .“在 PyTorch 训练一名 DCGAN”， *PyImageSearch* ，2021 年，[https://PyImageSearch . com/2021/10/25/Training-a-DCGAN-in-py torch/](https://pyimagesearch.com/2021/10/25/training-a-dcgan-in-pytorch/)
 
-```
+```py
 @article{Chakraborty_2021_Training_DCGAN,
    author = {Devjyoti Chakraborty},
    title = {Training a {DCGAN} in {PyTorch}},

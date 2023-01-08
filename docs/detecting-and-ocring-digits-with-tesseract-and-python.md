@@ -33,7 +33,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -74,7 +74,7 @@ $ pip install opencv-contrib-python
 
 让我们回顾一下该项目的目录结构:
 
-```
+```py
 |-- apple_support.png
 |-- ocr_digits.py
 ```
@@ -85,7 +85,7 @@ $ pip install opencv-contrib-python
 
 我们现在已经准备好用宇宙魔方来识别数字了。打开一个新文件，将其命名为`ocr_digits.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import pytesseract
 import argparse
@@ -107,7 +107,7 @@ args = vars(ap.parse_args())
 
 让我们继续加载我们的图像并执行 OCR:
 
-```
+```py
 # load the input image, convert it from BGR to RGB channel ordering,
 # and initialize our Tesseract OCR options as an empty string
 image = cv2.imread(args["image"])
@@ -140,7 +140,7 @@ Tesseract 需要 RGB 颜色通道排序来执行 OCR。**第 16 和 17 行**加�
 
 打开终端并执行以下命令:
 
-```
+```py
 $ python ocr_digits.py --image apple_support.png
 1-800-275-2273
 ```
@@ -153,7 +153,7 @@ $ python ocr_digits.py --image apple_support.png
 
 如果您想 OCR *所有字符*(不仅限于数字)，您可以将`--digits`命令行参数设置为任意值 *≤0:*
 
-```
+```py
 $ python ocr_digits.py --image apple_support.png --digits 0
 a
 Apple Support

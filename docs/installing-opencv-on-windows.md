@@ -47,19 +47,19 @@
 
 要检查 pip 版本，打开您的命令提示符并键入:
 
-```
+```py
 $ pip -V
 ```
 
 这将让您知道您正在使用的 pip 版本。要将 pip 升级到最新版本类型:
 
-```
+```py
 $ pip install --upgrade pip
 ```
 
 **第二步(可选):**创建一个虚拟环境，在那里安装 OpenCV。用 Python 创建虚拟环境是一个非常好的实践，我们强烈推荐它。你可以开发多个项目，而不用担心你的库会互相碰撞。这可以通过`virtualenv`和`virtualenvwrapper`以及 Anaconda 来实现。在本教程中，我们将使用`virtualenv`和`virtualenvwrapper`。
 
-```
+```py
 $ pip install virtualenv virtualenvwrapper
 $ pip install virtualenvwrapper-win
 ```
@@ -75,25 +75,25 @@ $ pip install virtualenvwrapper-win
 
 接下来，创建一个名为`cv`(您可以随意命名)的虚拟环境来安装 OpenCV。
 
-```
+```py
 $ mkvirtualenv cv -p python3
 ```
 
 使用以下选项切换到此环境:
 
-```
+```py
 $ workon cv
 ```
 
 第三步:万事俱备，我们终于开始在你的 Windows 系统上安装 OpenCV 了。
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
 要检查 OpenCV 是否安装正确，请打开一个新的命令提示符，并使用以下命令输入 Python shell:
 
-```
+```py
 $ python 
 
 >> import cv2
@@ -147,7 +147,7 @@ $ python
 
 **Raha，R.** “在 Windows 上安装 OpenCV”， *PyImageSearch* ，D. Chakraborty，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva，A. Thanki，2022，[https://pyimg.co/b3q05](https://pyimg.co/b3q05)
 
-```
+```py
 @incollection{Raha_2022_Installing-OpenCV-Windows,
   author = {Ritwik Raha},
   title = {Installing {OpenCV} on {W}indows},

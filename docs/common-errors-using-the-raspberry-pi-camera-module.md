@@ -26,7 +26,7 @@
 
 如果您还没有安装`picamera`，这可以通过使用`pip`来完成:
 
-```
+```py
 $ pip install "picamera[array]"
 
 ```
@@ -35,7 +35,7 @@ $ pip install "picamera[array]"
 
 在`pip`安装完`picamera`后，您可以使用以下命令检查版本号:
 
-```
+```py
 $ pip freeze
 
 ```
@@ -48,7 +48,7 @@ $ pip freeze
 
  *在我们继续之前，花点时间看看您是否正在使用 Python 虚拟环境，方法是使用您的`~/.profile`文件并列出您系统上所有可用的虚拟环境:
 
-```
+```py
 $ source ~/.profile
 $ lsvirtualenv
 
@@ -58,7 +58,7 @@ $ lsvirtualenv
 
 假设您正在使用 Python 虚拟环境，您可以执行`workon`命令来访问您系统上的每个单独的 Python 虚拟环境。在 PyImageSearch 博客上的大多数安装教程中，我们将我们的 Python 虚拟环境命名为`cv`，是“计算机视觉”的缩写:
 
-```
+```py
 $ workon cv
 
 ```
@@ -69,7 +69,7 @@ $ workon cv
 
 打开一个新文件，将其命名为`test_video.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from picamera.array import PiRGBArray
 from picamera import PiCamera
@@ -97,7 +97,7 @@ time.sleep(0.1)
 
 我们的下一个代码块实际处理从我们的 Raspberry Pi 相机传感器捕获帧:
 
-```
+```py
 # capture frames from the camera
 for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
 	# grab the raw NumPy array representing the image - this array
@@ -131,7 +131,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 要执行`test_video.py`脚本，只需打开终端/命令行提示符并执行以下命令:
 
-```
+```py
 $ python test_video.py
 
 ```
@@ -150,7 +150,7 @@ $ python test_video.py
 
 下面的错误信息看起来熟悉吗？
 
-```
+```py
 $ python test_video.py 
 mmal: mmal_vc_component_create: failed to create component 'vc.ril.camera' (1:ENOMEM)
 mmal: mmal_component_create_core: could not create component 'vc.ril.camera' (1)

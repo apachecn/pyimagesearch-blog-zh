@@ -37,7 +37,7 @@
 
 因此，如果你试图在你的 Mac 上使用[我以前的教程](https://pyimagesearch.com/opencv-tutorials-resources-guides/)编译 OpenCV，你的编译可能会失败，你最终会得到一个类似下面的错误信息:
 
-```
+```py
 fatal error: 
       'QTKit/QTKit.h' file not found
 #import <QTKit/QTKit.h>
@@ -92,7 +92,7 @@ Xcode 将开始下载和安装。在我的机器上，下载和安装过程大�
 
 假设这是你第一次安装或使用 Xcode，你需要[接受开发者许可](http://apple.stackexchange.com/questions/175069/how-to-accept-xcode-license)(否则，你可以跳过这一步)。我更喜欢尽可能使用终端。您可以使用以下命令来接受 Apple Developer 许可证:
 
-```
+```py
 $ sudo xcodebuild -license
 
 ```
@@ -103,7 +103,7 @@ $ sudo xcodebuild -license
 
 最后，我们需要安装命令行工具。这些工具包括 make、GCC、clang 等包。**这是*绝对*必需的一步**，所以确保你安装了命令行工具:
 
-```
+```py
 $ sudo xcode-select --install
 
 ```
@@ -122,28 +122,28 @@ $ sudo xcode-select --install
 
 安装家酿很简单。只需将家酿网站*“安装家酿”*部分下的命令复制并粘贴到您的终端中(确保您复制并粘贴了*整个*命令):
 
-```
+```py
 $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 ```
 
 一旦安装了 Homebrew，您应该更新它以确保下载了最新的软件包定义:
 
-```
+```py
 $ brew update
 
 ```
 
 最后一步是更新我们的`~/.bash_profile`文件。该文件可能已经存在于您的系统中，也可能不存在。无论哪种情况，用您最喜欢的文本编辑器打开它(在这种情况下，我将使用`nano`):
 
-```
+```py
 $ nano ~/.bash_profile
 
 ```
 
 并在文件底部插入以下几行(如果`~/.bash_profile`不存在，文件将是空的，因此只需插入以下几行):
 
-```
+```py
 # Homebrew
 export PATH=/usr/local/bin:$PATH
 
@@ -159,7 +159,7 @@ export PATH=/usr/local/bin:$PATH
 
 然后，您应该使用`source`命令来确保对您的`~/.bash_profile`文件的更改被手动重新加载:
 
-```
+```py
 $ source ~/.bash_profile
 
 ```
@@ -172,7 +172,7 @@ $ source ~/.bash_profile
 
 相反，你会希望安装你自己的 Python 版本，该版本独立于系统版本。通过自制软件安装 Python 非常简单:
 
-```
+```py
 $ brew install python
 
 ```
@@ -181,14 +181,14 @@ $ brew install python
 
 安装命令完成后，我们只需运行以下命令来完成 Python 安装:
 
-```
+```py
 $ brew linkapps python
 
 ```
 
 为了确认我们使用的是 Python 的*自制版本，而不是 Python* 的*系统版本，您应该使用`which`命令:*
 
-```
+```py
 $ which python
 /usr/local/bin/python
 
@@ -212,14 +212,14 @@ $ which python
 
 要安装`virtualenv`和`virtualenvwrapper`，只需使用`pip`:
 
-```
+```py
 $ pip install virtualenv virtualenvwrapper
 
 ```
 
 安装完这些包后，我们需要再次更新我们的`~/.bash_profile`文件:
 
-```
+```py
 # Virtualenv/VirtualenvWrapper
 source /usr/local/bin/virtualenvwrapper.sh
 
@@ -233,7 +233,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 保存并退出您的文本编辑器，然后使用`source`命令刷新您的环境:
 
-```
+```py
 $ source ~/.bash_profile
 
 ```
@@ -244,7 +244,7 @@ $ source ~/.bash_profile
 
 假设以上命令没有错误地完成，我们现在可以使用`mkvirtualenv`命令来创建我们的 Python 虚拟环境。我们将这个 Python 虚拟环境命名为`cv`:
 
-```
+```py
 $ mkvirtualenv cv
 
 ```
@@ -253,7 +253,7 @@ $ mkvirtualenv cv
 
  *`mkvirtualenv`命令只需要执行一次。如果您需要再次访问这个虚拟环境，只需使用`workon`命令:
 
-```
+```py
 $ workon cv
 
 ```
@@ -278,7 +278,7 @@ $ workon cv
 
 确保您处于`cv`虚拟环境中(否则 NumPy 将被安装到*系统*版本的 Python 中，而不是`cv`环境中)，然后使用`pip`安装 NumPy:
 
-```
+```py
 $ pip install numpy
 
 ```
@@ -291,7 +291,7 @@ OpenCV 需要一些先决条件，所有这些都可以使用自制软件轻松�
 
 要在 macOS 上安装 OpenCV 所需的先决条件，只需执行以下命令:
 
-```
+```py
 $ brew install cmake pkg-config
 $ brew install jpeg libpng libtiff openexr
 $ brew install eigen tbb
@@ -302,7 +302,7 @@ $ brew install eigen tbb
 
 正如我在本教程开头提到的，我们需要从最近的提交中编译 OpenCV，*而不是*一个带标签的发布。这就需要我们下载 [OpenCV GitHub repo](https://github.com/opencv/opencv) :
 
-```
+```py
 $ cd ~
 $ git clone https://github.com/opencv/opencv
 
@@ -310,7 +310,7 @@ $ git clone https://github.com/opencv/opencv
 
 连同 [opencv_contrib repo](https://github.com/opencv/opencv_contrib) :
 
-```
+```py
 $ git clone https://github.com/opencv/opencv_contrib
 
 ```
@@ -331,7 +331,7 @@ $ git clone https://github.com/opencv/opencv_contrib
 
 为了用 Python 2.7 支持 macOS 编译 OpenCV 3，我们需要首先设置构建。这相当于将目录更改为`opencv`并创建一个`build`目录:
 
-```
+```py
 $ cd ~/opencv
 $ mkdir build
 $ cd build
@@ -342,7 +342,7 @@ $ cd build
 
 为了让编译安装过程更简单，我构造了以下模板 ***OpenCV 3 + Python 2.7 CMake 模板:***
 
-```
+```py
 $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
     -D CMAKE_INSTALL_PREFIX=/usr/local \
     -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules \
@@ -368,7 +368,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 让我们从配置您的`PYTHON2_LIBRARY`值开始。这个开关应该指向我们的`libpython2.7.dylib`文件。你可以在`/usr/local/Cellar/python/`的*多个*嵌套子目录中找到这个文件。要找到`libpython2.7.dylib`文件的准确的*路径，只需使用`ls`命令和通配符星号:*
 
-```
+```py
 $ ls /usr/local/Cellar/python/2.7.*/Frameworks/Python.framework/Versions/2.7/lib/python2.7/config/libpython2.7.dylib
 /usr/local/Cellar/python/2.7.12_2/Frameworks/Python.framework/Versions/2.7/lib/python2.7/config/libpython2.7.dylib
 
@@ -380,7 +380,7 @@ $ ls /usr/local/Cellar/python/2.7.*/Frameworks/Python.framework/Versions/2.7/lib
 
 同样，我们将使用相同的`ls`和通配符技巧来确定正确的路径:
 
-```
+```py
 $ ls -d /usr/local/Cellar/python/2.7.*/Frameworks/Python.framework/Versions/2.7/include/python2.7/
 /usr/local/Cellar/python/2.7.12_2/Frameworks/Python.framework/Versions/2.7/include/python2.7/
 
@@ -394,7 +394,7 @@ $ ls -d /usr/local/Cellar/python/2.7.*/Frameworks/Python.framework/Versions/2.7/
 
 在我的特定机器上， *full* CMake 命令如下所示:
 
-```
+```py
 $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
     -D CMAKE_INSTALL_PREFIX=/usr/local \
     -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules \
@@ -429,7 +429,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 假设您的`cmake`命令正确退出*并且*您的`Python 2`部分正确配置，您现在可以编译 OpenCV:
 
-```
+```py
 $ make -j4
 
 ```
@@ -444,7 +444,7 @@ OpenCV 可能需要一段时间来编译(30-90 分钟),这取决于机器的速�
 
 假设 OpenCV 编译无误，您现在可以在 macOS 系统上安装它了:
 
-```
+```py
 $ sudo make install
 
 ```
@@ -453,7 +453,7 @@ $ sudo make install
 
 运行完`make install`之后，您应该会在`/usr/local/lib/python2.7/site-packages`中看到一个名为`cv2.so`的文件:
 
-```
+```py
 $ cd /usr/local/lib/python2.7/site-packages/
 $ ls -l cv2.so 
 -rwxr-xr-x  1 root  admin  3694564 Nov 15 09:20 cv2.so
@@ -464,7 +464,7 @@ $ ls -l cv2.so
 
 然而，我们需要将这些绑定符号链接到我们的`cv`虚拟环境中。这可以使用以下命令来完成:
 
-```
+```py
 $ cd ~/.virtualenvs/cv/lib/python2.7/site-packages/
 $ ln -s /usr/local/lib/python2.7/site-packages/cv2.so cv2.so
 $ cd ~
@@ -481,7 +481,7 @@ $ cd ~
 
 以下是测试安装过程的具体步骤:
 
-```
+```py
 $ workon cv
 $ python
 Python 2.7.12 (default, Oct 11 2016, 05:20:59) 

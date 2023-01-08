@@ -144,7 +144,7 @@
 
 从那里，安装 Creme:
 
-```
+```py
 $ workon dl4cv
 $ pip install creme
 
@@ -152,7 +152,7 @@ $ pip install creme
 
 让我们通过启动一个 Python 解释器来确保一切都已正确安装:
 
-```
+```py
 $ workon cv
 $ python
 >>> import cv2
@@ -184,7 +184,7 @@ $ python
 
 现在让我们**回顾一下我们的项目结构:**
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── train [25000 entries]
@@ -199,7 +199,7 @@ $ tree --dirsfirst --filelimit 10
 
 您应该会看到一个包含 25，000 个文件的`train/`目录。这是你真正的狗和猫的图像所在的地方。让我们列举几个例子:
 
-```
+```py
 $ ls train | sort -R | head -n 10
 dog.271.jpg
 cat.5399.jpg
@@ -232,7 +232,7 @@ cat.1742.jpg
 
 打开`extract_features.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.applications import ResNet50
@@ -268,7 +268,7 @@ args = vars(ap.parse_args())
 
 让我们继续加载我们的模型:
 
-```
+```py
 # load the ResNet50 network and store the batch size in a convenience
 # variable
 print("[INFO] loading network...")
@@ -288,7 +288,7 @@ bs = args["batch_size"]
 
 从这里，让我们拿起`imagePaths`并提取我们的标签:
 
-```
+```py
 # grab all image paths in the input directory and randomly shuffle
 # the paths
 imagePaths = list(paths.list_images(args["dataset"]))
@@ -313,7 +313,7 @@ labels = le.fit_transform(labels)
 
 在 Python 解释器中，我们可以测试第 38 行的完整性。随着您开发解析+列表理解，您的解释器可能如下所示:
 
-```
+```py
 $ python
 >>> import os
 >>> label = "train/cat.0.jpg".split(os.path.sep)[-1].split(".")[0]
@@ -331,7 +331,7 @@ $ python
 
 让我们定义 CSV 列并将它们写入文件:
 
-```
+```py
 # define our set of columns
 cols = ["feat_{}".format(i) for i in range(0, 7 * 7 * 2048)]
 cols = ["class"] + cols
@@ -354,7 +354,7 @@ Creme 库要求 CSV 文件有一个标题，并包含每个列的名称，即:
 
 因此，我们的 CSV 文件的前*五行*和*十列*将如下所示:
 
-```
+```py
 $ head -n 5 features.csv | cut -d ',' -f 1-10
 class,feat_0,feat_1,feat_2,feat_3,feat_4,feat_5,feat_6,feat_7,feat_8
 1,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
@@ -368,7 +368,7 @@ class,feat_0,feat_1,feat_2,feat_3,feat_4,feat_5,feat_6,feat_7,feat_8
 
 接下来，让我们分批循环查看图像:
 
-```
+```py
 # loop over the images in batches
 for (b, i) in enumerate(range(0, len(imagePaths), bs)):
 	# extract the batch of images and labels, then initialize the
@@ -388,7 +388,7 @@ for (b, i) in enumerate(range(0, len(imagePaths), bs)):
 
 让我们遍历当前批处理:
 
-```
+```py
 	# loop over the images and labels in the current batch
 	for imagePath in batchPaths:
 		# load the input image using the Keras helper utility while
@@ -422,7 +422,7 @@ for (b, i) in enumerate(range(0, len(imagePaths), bs)):
 
 为了**提取特征**，我们现在将通过我们的网络传递这批图像:
 
-```
+```py
 	# pass the images through the network and use the outputs as our
 	# actual features, then reshape the features into a flattened
 	# volume
@@ -465,7 +465,7 @@ csv.close()
 
 打开终端并执行以下命令:
 
-```
+```py
 $ python extract_features.py --dataset train --csv features.csv
 Using TensorFlow backend.
 [INFO] loading network...
@@ -485,7 +485,7 @@ Using TensorFlow backend.
 
 在您的脚本完成运行后，看看`features.csv`的输出大小:
 
-```
+```py
 $ ls -lh features.csv 
 -rw-rw-r-- 1 ubuntu ubuntu 12G Jun  10 11:16 features.csv
 
@@ -507,7 +507,7 @@ $ ls -lh features.csv
 
 打开`train_incremental.py`文件，让我们看看:
 
-```
+```py
 # import the necessary packages
 from creme.linear_model import LogisticRegression
 from creme.multiclass import OneVsRestClassifier
@@ -523,7 +523,7 @@ import argparse
 
 现在让我们使用 [argparse 来解析我们的命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-c", "--csv", required=True,
@@ -541,7 +541,7 @@ args = vars(ap.parse_args())
 
 现在我们已经解析了我们的命令行参数，我们需要指定 CSV 文件的数据类型来正确使用 Creme 的`stream`模块:
 
-```
+```py
 # construct our data dictionary which maps the data types of the
 # columns in the CSV file to built-in data types
 print("[INFO] building column names...")
@@ -556,7 +556,7 @@ types["class"] = int
 
 接下来，让我们初始化数据生成器并构建管道:
 
-```
+```py
 # create a CSV data generator for the extracted Keras features
 dataset = stream.iter_csv(args["csv"], target="class", converters=types)
 
@@ -581,7 +581,7 @@ model = Pipeline([
 
  *让我们使用 Creme 来训练我们的模型:
 
-```
+```py
 # initialize our metric
 print("[INFO] starting training...")
 metric = Accuracy()
@@ -619,7 +619,7 @@ print("[INFO] final - {}".format(metric))
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python train_incremental.py --csv features.csv --cols 100352
 [INFO] building column names...
 [INFO] starting training...

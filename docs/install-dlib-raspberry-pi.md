@@ -68,7 +68,7 @@ Raspberry Pi 3 的内存只有 1GB。这 1GB 的 RAM 负责所有的系统操作
 
 为了更新我们的交换空间的大小，我们需要编辑 dphys-swapfile 配置文件，它位于`/etc/dphys-swapfile`中。您可以使用您喜欢的文本编辑器来编辑配置:
 
-```
+```py
 $ sudo nano /etc/dphys-swapfile
 
 ```
@@ -89,7 +89,7 @@ $ sudo nano /etc/dphys-swapfile
 
 更新完`/etc/dphys-swapfile`文件后，运行以下两个命令来重新启动交换服务:
 
-```
+```py
 $ sudo /etc/init.d/dphys-swapfile stop
 $ sudo /etc/init.d/dphys-swapfile start
 
@@ -99,7 +99,7 @@ $ sudo /etc/init.d/dphys-swapfile start
 
 然后，您可以运行:
 
-```
+```py
 $ free -m
 
 ```
@@ -120,7 +120,7 @@ Figure 3: Running *free -m* confirms that the new swap size of 1024MB is being u
 
 为此，请执行:
 
-```
+```py
 $ sudo raspi-config
 
 ```
@@ -164,7 +164,7 @@ dlib 库需要四个先决条件:
 
 这些都可以通过以下命令安装:
 
-```
+```py
 $ sudo apt-get update
 $ sudo apt-get install build-essential cmake
 $ sudo apt-get install libgtk-3-dev
@@ -174,7 +174,7 @@ $ sudo apt-get install libboost-all-dev
 
 `pip`命令应该*已经*安装在您的 Raspberry Pi 上(您可以通过执行`pip`命令并确保它确实存在来验证这一点)——否则，您可以通过以下方式安装`pip`:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python get-pip.py
 
@@ -192,14 +192,14 @@ $ sudo python get-pip.py
 
 如果您想将 dlib 安装到一个预先存在的 Python 虚拟环境中，请使用`workon`命令:
 
-```
+```py
 $ workon <your virtualenv name>
 
 ```
 
 例如，PyImageSearch 上的大多数教程都创建了一个名为`cv`的虚拟环境。我们可以通过以下方式访问`cv`虚拟环境:
 
-```
+```py
 $ workon cv
 
 ```
@@ -208,14 +208,14 @@ $ workon cv
 
 下面的命令将使用 Python 2.7 解释器创建一个名为`py2_dlib`的 Python 虚拟环境:
 
-```
+```py
 $ mkvirtualenv py2_dlib
 
 ```
 
 虽然这个命令将创建一个名为`py3_dlib`的 Python 3 虚拟环境:
 
-```
+```py
 $ mkvirtualenv py3_dlib -p python3
 
 ```
@@ -228,7 +228,7 @@ $ mkvirtualenv py3_dlib -p python3
 
 我们将从基本的 NumPy + SciPy 栈开始，然后是 [scikit-image](http://scikit-image.org/) ，一个通常与 dlib 一起使用的库:
 
-```
+```py
 $ pip install numpy
 $ pip install scipy
 $ pip install scikit-image
@@ -237,7 +237,7 @@ $ pip install scikit-image
 
 然后我们也可以通过`pip`安装 dlib:
 
-```
+```py
 $ pip install dlib
 
 ```
@@ -252,7 +252,7 @@ $ pip install dlib
 
 为了测试您的 dlib 安装，打开一个 Python shell(如果您使用了 Python 虚拟环境，请确保访问您的 Python 虚拟环境)，然后尝试导入`dlib`:
 
-```
+```py
 $ python
 Python 3.4.2 (default, Oct 19 2014, 13:31:11) 
 [GCC 4.9.1] on linux
@@ -276,7 +276,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 作为在 Raspberry Pi 上使用 dlib 的最后一个例子，这里是我编写的一个简短的例子，我们将在输入图像中检测面部标志:
 
-```
+```py
 # import the necessary packages
 from imutils import face_utils
 import dlib
@@ -323,7 +323,7 @@ cv2.waitKey(0)
 
 从那里，您可以发出以下命令:
 
-```
+```py
 $ python pi_facial_landmarks.py
 
 ```

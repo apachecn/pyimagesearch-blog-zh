@@ -44,7 +44,7 @@ Max RGB 滤镜是一款极其简单直接的图像处理滤镜。算法是这样
 
 现在我们已经很好地掌握了 Max RGB 滤镜算法(以及预期的输出应该是什么样子)，让我们继续用 Python 和 OpenCV 实现它。打开一个新文件，将其命名为`max_filter.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -85,7 +85,7 @@ def max_rgb_filter(image):
 
 既然已经定义了`max_rgb_filter`方法，我们需要做的就是编写一些代码来从磁盘上加载我们的图像，应用最大 RGB 滤镜，并将结果显示到我们的屏幕上:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -127,7 +127,7 @@ cv2.waitKey(0)
 
 要查看我们的脚本，只需打开您的终端并执行以下命令:
 
-```
+```py
 $ python max_filter.py --image images/horseshoe_bend_02.jpg
 
 ```
@@ -140,7 +140,7 @@ $ python max_filter.py --image images/horseshoe_bend_02.jpg
 
 让我们试试另一个图像:
 
-```
+```py
 $ python max_filter.py --image images/max_filter_horseshoe_bend_01.png
 
 ```
@@ -153,7 +153,7 @@ $ python max_filter.py --image images/max_filter_horseshoe_bend_01.png
 
 让我们做最后一个例子:
 
-```
+```py
 $ python max_filter.py --image images/max_filter_antelope_canyon.png
 
 ```

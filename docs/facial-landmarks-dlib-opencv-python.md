@@ -107,7 +107,7 @@ dlib 库中预先训练的面部标志检测器用于估计映射到面部上面
 
 第一个效用函数是`rect_to_bb`，是“矩形到边界框”的简称:
 
-```
+```py
 def rect_to_bb(rect):
 	# take a bounding predicted by dlib and convert it
 	# to the format (x, y, w, h) as we would normally do
@@ -132,7 +132,7 @@ def rect_to_bb(rect):
 
 其次，我们有`shape_to_np`函数:
 
-```
+```py
 def shape_to_np(shape, dtype="int"):
 	# initialize the list of (x, y)-coordinates
 	coords = np.zeros((68, 2), dtype=dtype)
@@ -155,7 +155,7 @@ dlib 面部标志检测器将返回一个包含面部标志区域的 68 个 *(x�
 
 打开一个新文件，将其命名为`facial_landmarks.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils import face_utils
 import numpy as np
@@ -187,7 +187,7 @@ args = vars(ap.parse_args())
 
 既然我们的导入和命令行参数已经处理好了，让我们初始化 dlib 的面部检测器和面部标志预测器:
 
-```
+```py
 # initialize dlib's face detector (HOG-based) and then create
 # the facial landmark predictor
 detector = dlib.get_frontal_face_detector()
@@ -201,7 +201,7 @@ predictor = dlib.shape_predictor(args["shape_predictor"])
 
 但是在我们实际检测面部标志之前，我们首先需要检测输入图像中的面部:
 
-```
+```py
 # load the input image, resize it, and convert it to grayscale
 image = cv2.imread(args["image"])
 image = imutils.resize(image, width=500)
@@ -224,7 +224,7 @@ rects = detector(gray, 1)
 
 给定图像中面部的 *(x，y)*-坐标，我们现在可以将面部标志检测应用于每个面部区域:
 
-```
+```py
 # loop over the face detections
 for (i, rect) in enumerate(rects):
 	# determine the facial landmarks for the face region, then
@@ -269,7 +269,7 @@ cv2.waitKey(0)
 
 在我们测试我们的面部标志检测器之前，请确保您已经升级到包含`face_utils.py`文件的最新版本`imutils`:
 
-```
+```py
 $ pip install --upgrade imutils
 ```
 
@@ -279,7 +279,7 @@ $ pip install --upgrade imutils
 
 一旦你下载了。压缩归档文件，将其解压缩，将目录更改为`facial-landmarks`，并执行以下命令:
 
-```
+```py
 $ python facial_landmarks.py --shape-predictor shape_predictor_68_face_landmarks.dat \
 	--image images/example_01.jpg
 
@@ -293,7 +293,7 @@ $ python facial_landmarks.py --shape-predictor shape_predictor_68_face_landmarks
 
 第二个示例图像也是如此:
 
-```
+```py
 $ python facial_landmarks.py --shape-predictor shape_predictor_68_face_landmarks.dat \
 	--image images/example_02.jpg
 
@@ -307,7 +307,7 @@ $ python facial_landmarks.py --shape-predictor shape_predictor_68_face_landmarks
 
 让我们来看最后一个例子，这次图像中有多个人:
 
-```
+```py
 $ python facial_landmarks.py --shape-predictor shape_predictor_68_face_landmarks.dat \
 	--image images/example_03.jpg
 

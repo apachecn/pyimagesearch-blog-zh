@@ -44,7 +44,7 @@ Python 3 已经成为标准，我强烈推荐你在 OpenCV 4 中安装 Python 3�
 
 从那里，让我们更新我们的系统:
 
-```
+```py
 $ sudo apt-get update
 $ sudo apt-get upgrade
 
@@ -52,14 +52,14 @@ $ sudo apt-get upgrade
 
 然后安装开发人员工具:
 
-```
+```py
 $ sudo apt-get install build-essential cmake unzip pkg-config
 
 ```
 
 接下来，让我们安装一些图像和视频 I/O 库。
 
-```
+```py
 $ sudo apt-get install libjpeg-dev libpng-dev libtiff-dev
 $ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
 $ sudo apt-get install libxvidcore-dev libx264-dev
@@ -70,21 +70,21 @@ $ sudo apt-get install libxvidcore-dev libx264-dev
 
 从那里，让我们为我们的 GUI 后端安装 GTK:
 
-```
+```py
 $ sudo apt-get install libgtk-3-dev
 
 ```
 
 然后安装两个包含 OpenCV 数学优化的包:
 
-```
+```py
 $ sudo apt-get install libatlas-base-dev gfortran
 
 ```
 
 最后，让我们安装 Python 3 开发头:
 
-```
+```py
 $ sudo apt-get install python3-dev
 
 ```
@@ -99,7 +99,7 @@ $ sudo apt-get install python3-dev
 
 当你准备好了，就跟着下载`opencv`和`opencv_contrib`代码:
 
-```
+```py
 $ cd ~
 $ wget -O opencv.zip https://github.com/opencv/opencv/archive/4.0.0.zip
 $ wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.0.0.zip
@@ -110,7 +110,7 @@ $ wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.
 
  **从那里，让我们解压缩档案:
 
-```
+```py
 $ unzip opencv.zip
 $ unzip opencv_contrib.zip
 
@@ -118,7 +118,7 @@ $ unzip opencv_contrib.zip
 
 我也喜欢重命名目录:
 
-```
+```py
 $ mv opencv-4.0.0 opencv
 $ mv opencv_contrib-4.0.0 opencv_contrib
 
@@ -134,7 +134,7 @@ $ mv opencv_contrib-4.0.0 opencv_contrib
 
 要安装 pip，只需在终端中输入以下内容:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python3 get-pip.py
 
@@ -154,7 +154,7 @@ Python 虚拟环境允许您单独处理 Python 项目。它们是 Python 开发
 
 让我们继续安装`virtualenv`和`virtualenvwrapper` —这些包允许我们创建和管理 Python 虚拟环境:
 
-```
+```py
 $ sudo pip install virtualenv virtualenvwrapper
 $ sudo rm -rf ~/get-pip.py ~/.cache/pip
 
@@ -164,7 +164,7 @@ $ sudo rm -rf ~/get-pip.py ~/.cache/pip
 
 使用终端文本编辑器，如`vi` / `vim`或`nano`，将下列行添加到您的`~/.bashrc`中:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
@@ -174,7 +174,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 或者，您可以通过 bash 命令直接附加这些行:
 
-```
+```py
 $ echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.bashrc
 $ echo "export WORKON_HOME=$HOME/.virtualenvs" >> ~/.bashrc
 $ echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc
@@ -184,7 +184,7 @@ $ echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
 
 接下来，获取`~/.bashrc`文件:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
@@ -193,7 +193,7 @@ $ source ~/.bashrc
 
 现在我们可以创建 OpenCV 4 + Python 3 虚拟环境了:
 
-```
+```py
 $ mkvirtualenv cv -p python3
 
 ```
@@ -211,7 +211,7 @@ $ mkvirtualenv cv -p python3
 
 让我们通过使用`workon`命令来验证我们是否处于`cv`环境中:
 
-```
+```py
 $ workon cv
 
 ```
@@ -224,7 +224,7 @@ $ workon cv
 
 我们将安装的第一个包和唯一的 Python 先决条件是 NumPy:
 
-```
+```py
 $ pip install numpy
 
 ```
@@ -237,7 +237,7 @@ $ pip install numpy
 
 导航回 OpenCV repo 并创建+输入一个`build`目录:
 
-```
+```py
 $ cd ~/opencv
 $ mkdir build
 $ cd build
@@ -248,7 +248,7 @@ $ cd build
 
 现在让我们运行 CMake 来配置 OpenCV 4 版本:
 
-```
+```py
 $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 	-D CMAKE_INSTALL_PREFIX=/usr/local \
 	-D INSTALL_PYTHON_EXAMPLES=ON \
@@ -280,7 +280,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 现在我们准备编译 OpenCV 4:
 
-```
+```py
 $ make -j4
 
 ```
@@ -295,7 +295,7 @@ $ make -j4
 
 接下来，让我们用另外两个命令安装 OpenCV 4:
 
-```
+```py
 $ sudo make install
 $ sudo ldconfig
 
@@ -305,7 +305,7 @@ $ sudo ldconfig
 
 在我们创建一个符号链接将 OpenCV 4 链接到我们的 Python 虚拟环境之前，让我们确定一下我们的 Python 版本:
 
-```
+```py
 $ workon cv
 $ python --version
 Python 3.5
@@ -318,7 +318,7 @@ Python 3.5
 
 此时，OpenCV 的 Python 3 绑定应该位于以下文件夹中:
 
-```
+```py
 $ ls /usr/local/python/cv2/python-3.5
 cv2.cpython-35m-x86_64-linux-gnu.so
 
@@ -326,7 +326,7 @@ cv2.cpython-35m-x86_64-linux-gnu.so
 
 让我们简单地将它们重命名为`cv2.so`:
 
-```
+```py
 $ cd /usr/local/python/cv2/python-3.5
 $ sudo mv cv2.cpython-35m-x86_64-linux-gnu.so cv2.so
 
@@ -336,7 +336,7 @@ $ sudo mv cv2.cpython-35m-x86_64-linux-gnu.so cv2.so
 
 我们的最后一个子步骤是将 OpenCV `cv2.so`绑定符号链接到我们的`cv`虚拟环境中:
 
-```
+```py
 $ cd ~/.virtualenvs/cv/lib/python3.5/site-packages/
 $ ln -s /usr/local/python/cv2/python-3.5/cv2.so cv2.so
 
@@ -348,7 +348,7 @@ $ ln -s /usr/local/python/cv2/python-3.5/cv2.so cv2.so
 
 打开终端并执行以下操作:
 
-```
+```py
 $ workon cv
 $ python
 >>> import cv2
@@ -374,7 +374,7 @@ $ python
 
 从那里，在您的新虚拟环境中安装`imutils`库:
 
-```
+```py
 $ workon cv
 $ pip install imutils
 
@@ -382,7 +382,7 @@ $ pip install imutils
 
 然后导航到您存储 zip 文件的位置并将其解压缩。例如，您可以将其保存在`~/Downloads`中，然后执行以下步骤:
 
-```
+```py
 $ cd ~/Downloads
 $ unzip ball-tracking.zip
 $ cd ball-tracking
@@ -393,14 +393,14 @@ $ cd ball-tracking
 
 您可以使用以下命令执行该脚本:
 
-```
+```py
 $ python ball_tracking.py --video ball_tracking_example.mp4
 
 ```
 
 准备好用你自己的球和网络摄像头试试了吗？命令如下:
 
-```
+```py
 $ python ball_tracking.py
 
 ```
@@ -423,21 +423,21 @@ $ python ball_tracking.py
 
 从 Ubuntu 18.04 开始，Python 2.7 甚至不包括在内。如果你使用的是 Ubuntu 18.04(或更高版本)，你仍然可以在第一步的最后手动安装
 
-```
+```py
 $ sudo apt-get install python2.7 python2.7-dev
 
 ```
 
 从那里，当您在**步骤#3** 中创建您的虚拟环境时，首先安装 Python 2.7 的 pip:
 
-```
+```py
 $ sudo python2.7 get-pip.py
 
 ```
 
 然后(也是在**步骤#3** 中)当您创建虚拟环境时，只需使用相关的 Python 版本标志:
 
-```
+```py
 $ mkvirtualenv cv -p python2.7
 
 ```

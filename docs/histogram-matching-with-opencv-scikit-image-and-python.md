@@ -53,7 +53,7 @@
 
 因此，应用直方图匹配就像用 OpenCV 的`cv2.imread`加载两幅图像，然后调用 scikit-image 的`match_histograms`函数一样简单:
 
-```
+```py
 src = cv2.imread(args["source"])
 ref = cv2.imread(args["reference"])
 multi = True if src.shape[-1] > 1 else False
@@ -68,7 +68,7 @@ matched = exposure.match_histograms(src, ref, multichannel=multi)
 
 两者都可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 $ pip install scikit-image==0.18.1
 ```
@@ -98,7 +98,7 @@ $ pip install scikit-image==0.18.1
 
 从那里，看看我们的项目目录结构:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── empire_state_cloudy.png
@@ -122,7 +122,7 @@ $ tree . --dirsfirst
 
 打开`match_histograms.py`并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from skimage import exposure
 import matplotlib.pyplot as plt
@@ -155,7 +155,7 @@ args = vars(ap.parse_args())
 
 现在让我们从磁盘加载源图像和参考图像:
 
-```
+```py
 # load the source and reference images
 print("[INFO] loading source and reference images...")
 src = cv2.imread(args["source"])
@@ -186,7 +186,7 @@ cv2.waitKey(0)
 
 至此，我们在技术上已经完成了，但是为了充分理解直方图匹配的作用，让我们来检查一下`src`、`ref`和`matched`图像的颜色直方图:
 
-```
+```py
 # construct a figure to display the histogram plots for each channel
 # before and after histogram matching was applied
 (fig, axs) =  plt.subplots(nrows=3, ncols=3, figsize=(8, 8))
@@ -227,7 +227,7 @@ for (i, image) in enumerate((src, ref, matched)):
 
 最后一步是显示绘图:
 
-```
+```py
 # set the axes titles
 axs[0, 0].set_title("Source")
 axs[0, 1].set_title("Reference")
@@ -248,7 +248,7 @@ plt.show()
 
 从那里，我们打开一个 shell 并执行以下命令:
 
-```
+```py
 $ python match_histograms.py --source empire_state_cloudy.png \
 	--reference empire_state_sunset.png
 [INFO] loading source and reference images...

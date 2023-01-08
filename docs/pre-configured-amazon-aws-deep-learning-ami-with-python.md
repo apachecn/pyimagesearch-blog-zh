@@ -137,7 +137,7 @@ GPU 实例往往比标准 CPU 实例花费*更多*。然而，他们可以在很
 
 启动一个终端，您就可以将 SSH 引入到您的 AWS 实例中:
 
-```
+```py
 $ ssh -i EC2KeyPair.pem ubuntu@52.88.146.157
 
 ```
@@ -167,7 +167,7 @@ $ ssh -i EC2KeyPair.pem ubuntu@52.88.146.157
 
 首先，通过命令行重新启动实例:
 
-```
+```py
 $ sudo reboot
 
 ```
@@ -178,7 +178,7 @@ $ sudo reboot
 
 如果您列出`installers`目录的内容，您会看到三个文件:
 
-```
+```py
 $ ls -l installers/
 total 1435300
 -rwxr-xr-x 1 root root 1292835953 Sep  6 14:03 cuda-linux64-rel-8.0.61-21551265.run
@@ -189,7 +189,7 @@ total 1435300
 
 将目录更改为`installers`，然后执行以下命令:
 
-```
+```py
 $ cd installers
 $ sudo ./NVIDIA-Linux-x86_64-375.26.run --silent
 
@@ -199,7 +199,7 @@ $ sudo ./NVIDIA-Linux-x86_64-375.26.run --silent
 
 您可以通过运行`nvidia-smi`命令来验证 NVIDIA 驱动程序是否安装成功:
 
-```
+```py
 $ nvidia-smi
 Wed Sep 13 12:51:43 2017       
 +-----------------------------------------------------------------------------+
@@ -243,7 +243,7 @@ Wed Sep 13 12:51:43 2017
 
 如果您在导入 mxnet 时遇到错误，只需重新编译它:
 
-```
+```py
 $ cd ~/mxnet
 $ make -j4 USE_OPENCV=1 USE_BLAS=openblas USE_CUDA=1 \
 	USE_CUDA_PATH=/usr/local/cuda USE_CUDNN=1
@@ -256,7 +256,7 @@ $ make -j4 USE_OPENCV=1 USE_BLAS=openblas USE_CUDA=1 \
 
 要将您本地系统上的书中的代码上传到 AMI，我建议使用`scp`命令:
 
-```
+```py
 $ scp -i EC2KeyPair.pem ~/Desktop/sb_code.zip ubuntu@52.88.146.157:~
 
 ```
@@ -270,7 +270,7 @@ $ scp -i EC2KeyPair.pem ~/Desktop/sb_code.zip ubuntu@52.88.146.157:~
 
 然后，您可以解压缩归档文件并执行代码:
 
-```
+```py
 $ unzip sb_code.zip
 $ cd sb_code/chapter12-first_cnn/
 $ workon dl4cv
@@ -313,7 +313,7 @@ avg / total       0.67      0.67      0.67       750
 
 请参见上面的*“在 AWS 上访问深度学习 Python 虚拟环境”*部分。要点是您将通过`scp`命令上传代码的`.zip`到您的 AMI。下面是一个命令示例:
 
-```
+```py
 $ scp -i EC2KeyPair.pem path/to/code.zip ubuntu@your_aws_ip_address:~
 
 ```
@@ -329,7 +329,7 @@ $ scp -i EC2KeyPair.pem path/to/code.zip ubuntu@your_aws_ip_address:~
 
 AMI 可以使用 X11 转发。当您 SSH 到机器时，只需像这样提供`-X`标志:
 
-```
+```py
 $ ssh -X -i EC2KeyPair.pem ubuntu@52.88.146.157
 
 ```

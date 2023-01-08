@@ -54,7 +54,7 @@ OpenCV 库存在的真正原因是为了促进实时图像处理。该库接受�
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -83,7 +83,7 @@ $ pip install opencv-contrib-python
 
 现在让我们看一下目录内容:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── pyimagesearch
@@ -111,7 +111,7 @@ $ tree . --dirsfirst
 
 打开我们项目目录结构的`pyimagesearch`模块中的``augmented_reality.py`` 文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import cv2
@@ -131,7 +131,7 @@ CACHED_REF_PTS = None
 
 完成了导入和变量初始化之后，让我们继续关注我们的``find_and_warp`` 函数。
 
-```
+```py
 def find_and_warp(frame, source, cornerIDs, arucoDict, arucoParams,
 	useCache=False):
 	# grab a reference to our cached reference points
@@ -143,7 +143,7 @@ def find_and_warp(frame, source, cornerIDs, arucoDict, arucoParams,
 	(srcH, srcW) = source.shape[:2]
 ```
 
-```
+```py
 	# detect AruCo markers in the input frame
 	(corners, ids, rejected) = cv2.aruco.detectMarkers(
 		frame, arucoDict, parameters=arucoParams)
@@ -156,7 +156,7 @@ def find_and_warp(frame, source, cornerIDs, arucoDict, arucoParams,
 	refPts = []
 ```
 
-```
+```py
 	# loop over the IDs of the ArUco markers in top-left, top-right,
 	# bottom-right, and bottom-left order
 	for i in cornerIDs:
@@ -180,7 +180,7 @@ def find_and_warp(frame, source, cornerIDs, arucoDict, arucoParams,
 
 下一个代码块解决了这个问题:
 
-```
+```py
 	# check to see if we failed to find the four ArUco markers
 	if len(refPts) != 4:
 		# if we are allowed to use cached reference points, fall
@@ -199,7 +199,7 @@ def find_and_warp(frame, source, cornerIDs, arucoDict, arucoParams,
 		CACHED_REF_PTS = refPts
 ```
 
-```
+```py
 	# unpack our ArUco reference points and use the reference points
 	# to define the *destination* transform matrix, making sure the
 	# points are specified in top-left, top-right, bottom-right, and
@@ -220,7 +220,7 @@ def find_and_warp(frame, source, cornerIDs, arucoDict, arucoParams,
 
 上面的代码，以及这个函数的其余部分，基本上与上周的[相同，所以我将把这些代码块的详细讨论推迟到前面的指南。](https://pyimagesearch.com/2021/01/04/opencv-augmented-reality-ar/)
 
-```
+```py
 	# construct a mask for the source image now that the perspective
 	# warp has taken place (we'll need this mask to copy the source
 	# image into the destination)
@@ -249,7 +249,7 @@ def find_and_warp(frame, source, cornerIDs, arucoDict, arucoParams,
 
 最后一步是使用`mask`将`warped`图像应用到输入表面:
 
-```
+```py
 	# copy the warped source image into the input image by
 	# (1) multiplying the warped image and masked together,
 	# (2) then multiplying the original input image with the
@@ -273,7 +273,7 @@ def find_and_warp(frame, source, cornerIDs, arucoDict, arucoParams,
 
 ### **创建我们的 OpenCV 视频增强现实驱动脚本**
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.augmented_reality import find_and_warp
 from imutils.video import VideoStream
@@ -284,7 +284,7 @@ import time
 import cv2
 ```
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--input", type=str, required=True,
@@ -294,7 +294,7 @@ ap.add_argument("-c", "--cache", type=int, default=-1,
 args = vars(ap.parse_args())
 ```
 
-```
+```py
 # load the ArUCo dictionary and grab the ArUCo parameters
 print("[INFO] initializing marker detector...")
 arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_ARUCO_ORIGINAL)
@@ -320,7 +320,7 @@ time.sleep(2.0)
 
 ```
 
-```
+```py
 # loop over the frames from the video stream
 while len(Q) > 0:
 	# grab the frame from our video stream and resize it
@@ -338,7 +338,7 @@ while len(Q) > 0:
 		useCache=args["cache"] > 0)
 ```
 
-```
+```py
 	# if the warped frame is not None, then we know (1) we found the
 	# four ArUCo markers and (2) the perspective warp was successfully
 	# applied
@@ -361,7 +361,7 @@ while len(Q) > 0:
 			Q.append(nextFrame)
 ```
 
-```
+```py
 	# show the output frame
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
@@ -383,7 +383,7 @@ vs.stop()
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python opencv_ar_video.py --input videos/jp_trailer_short.mp4
 [INFO] initializing marker detector...
 [INFO] accessing video stream...
@@ -408,7 +408,7 @@ $ python opencv_ar_video.py --input videos/jp_trailer_short.mp4
 
 相反，我们可以依靠参考点缓存:
 
-```
+```py
 $ python opencv_ar_video.py --input videos/jp_trailer_short.mp4 --cache 1
 [INFO] initializing marker detector...
 [INFO] accessing video stream...

@@ -167,7 +167,7 @@
 
 例如，如果您希望使用 Python 3 + OpenCV 4.1.1 环境，只需使用 workon 命令和环境名:
 
-```
+```py
 $ workon py3cv4
 (py3cv4) $
 
@@ -181,7 +181,7 @@ $ workon py3cv4
 
 您也可以对位于您的主目录中的启动脚本使用以下命令:
 
-```
+```py
 $ source ~/start_py3cv4.sh
 Starting Python 3.7 with OpenCV 4.1.1 bindings...
 (py3cv4) $
@@ -190,7 +190,7 @@ Starting Python 3.7 with OpenCV 4.1.1 bindings...
 
 如果您使用 OpenVINO，将通过“开始”脚本自动调用英特尔提供的附加脚本:
 
-```
+```py
 $ source ~/start_openvino.sh
 Starting Python 3.7 with OpenCV-OpenVINO 4.1.1 bindings...
 [setupvars.sh] OpenVINO environment initialized

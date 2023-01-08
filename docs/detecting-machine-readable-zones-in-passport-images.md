@@ -22,7 +22,7 @@
 
 让我们着手开始这个项目吧。打开一个新文件，将其命名为`detect_mrz.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils import paths
 import numpy as np
@@ -43,7 +43,7 @@ sqKernel = cv2.getStructuringElement(cv2.MORPH_RECT, (21, 21))
 
 **2-6 线**进口我们必要的包装。我假设您已经安装了 OpenCV。你还需要 [imutils](https://github.com/jrosebr1/imutils) ，我的便利函数集合，让 OpenCV 的基本图像处理操作更容易。您可以使用`pip`安装`imutils`:
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -54,7 +54,7 @@ $ pip install --upgrade imutils
 
 既然我们的命令行参数已经被解析，我们就可以开始遍历数据集中的每个图像并处理它们了:
 
-```
+```py
 # loop over the input image paths
 for imagePath in paths.list_images(args["images"]):
 	# load the image, resize it, and convert it to grayscale
@@ -85,7 +85,7 @@ blackhat 操作器用于在*浅色背景*(即护照本身的背景)下显示*深
 
 MRZ 检测的下一步是使用 Scharr 算子计算 blackhat 图像的梯度幅度表示:
 
-```
+```py
 	# compute the Scharr gradient of the blackhat image and scale the
 	# result into the range [0, 255]
 	gradX = cv2.Sobel(blackhat, ddepth=cv2.CV_32F, dx=1, dy=0, ksize=-1)
@@ -105,7 +105,7 @@ MRZ 检测的下一步是使用 Scharr 算子计算 blackhat 图像的梯度幅�
 
 下一步是尝试检测 MRZ 的实际*线*:
 
-```
+```py
 	# apply a closing operation using the rectangular kernel to close
 	# gaps in between letters -- then apply Otsu's thresholding method
 	gradX = cv2.morphologyEx(gradX, cv2.MORPH_CLOSE, rectKernel)
@@ -123,7 +123,7 @@ MRZ 检测的下一步是使用 Scharr 算子计算 blackhat 图像的梯度幅�
 
 下一步是闭合实际线条之间的间隙，给我们一个对应于 MRZ 的大矩形区域:
 
-```
+```py
 	# perform another closing operation, this time using the square
 	# kernel to close gaps between lines of the MRZ, then perform a
 	# series of erosions to break apart connected components
@@ -140,7 +140,7 @@ MRZ 检测的下一步是使用 Scharr 算子计算 blackhat 图像的梯度幅�
 
 对于一些护照扫描，护照的边界可能在关闭过程中附着在 MRZ 地区。为了解决这个问题，我们将图像的 5%左右边框设置为零(即黑色):
 
-```
+```py
 	# during thresholding, it's possible that border pixels were
 	# included in the thresholding, so let's set 5% of the left and
 	# right borders to zero
@@ -160,7 +160,7 @@ MRZ 检测的下一步是使用 Scharr 算子计算 blackhat 图像的梯度幅�
 
 最后一步是在我们的阈值图像中找到轮廓，并使用轮廓属性来识别 MRZ:
 
-```
+```py
 	# find contours in the thresholded image and sort them by their
 	# size
 	cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
@@ -214,7 +214,7 @@ MRZ 检测的下一步是使用 Scharr 算子计算 blackhat 图像的梯度幅�
 
 要查看我们的 MRZ 检测器的运行情况，只需执行以下命令:
 
-```
+```py
 $ python detect_mrz.py --images examples
 
 ```

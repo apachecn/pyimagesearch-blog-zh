@@ -210,7 +210,7 @@ function gives us the orientation in radians, which we then convert to degrees b
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -237,7 +237,7 @@ $ pip install opencv-contrib-python
 
 请务必访问本教程的 ***“下载”*** 部分，以检索源代码和示例图像:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── images
@@ -266,7 +266,7 @@ $ tree . --dirsfirst
 
 打开一个新文件，命名为`opencv_sobel_scharr.py`，开始编码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -289,7 +289,7 @@ args = vars(ap.parse_args())
 
 现在让我们加载并处理我们的图像:
 
-```
+```py
 # load the image, convert it to grayscale, and display the original
 # grayscale image
 image = cv2.imread(args["image"])
@@ -299,7 +299,7 @@ cv2.imshow("Gray", gray)
 
 **第 15-17 行**从磁盘加载我们的图像，将其转换为灰度(因为我们在图像的灰度版本上计算渐变表示)，并将其显示在我们的屏幕上。
 
-```
+```py
 # set the kernel size, depending on whether we are using the Sobel
 # operator of the Scharr operator, then compute the gradients along
 # the x and y axis, respectively
@@ -342,7 +342,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端窗口并执行以下命令:
 
-```
+```py
 $ python opencv_sobel_scharr.py --image images/bricks.png
 ```
 
@@ -356,7 +356,7 @@ $ python opencv_sobel_scharr.py --image images/bricks.png
 
 让我们看另一个图像:
 
-```
+```py
 $ python opencv_sobel_scharr.py --image images/coins01.png
 ```
 
@@ -364,7 +364,7 @@ $ python opencv_sobel_scharr.py --image images/coins01.png
 
 现在，让我们计算同一图像的沙尔梯度信息:
 
-```
+```py
 $ python opencv_sobel_scharr.py --image images/coins01.png \
 	--scharr 1
 ```
@@ -373,7 +373,7 @@ $ python opencv_sobel_scharr.py --image images/coins01.png \
 
 让我们看另一个 Sobel 例子:
 
-```
+```py
 $ python opencv_sobel_scharr.py --image images/clonazepam_1mg.png
 ```
 
@@ -381,7 +381,7 @@ $ python opencv_sobel_scharr.py --image images/clonazepam_1mg.png
 
 现在让我们看看沙尔表示法:
 
-```
+```py
 $ python opencv_sobel_scharr.py --image images/clonazepam_1mg.png \
 	--scharr 1
 ```
@@ -398,7 +398,7 @@ $ python opencv_sobel_scharr.py --image images/clonazepam_1mg.png \
 
 如上所述，打开一个新文件，将其命名为`opencv_magnitude_orienation.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import matplotlib.pyplot as plt
 import numpy as np
@@ -418,7 +418,7 @@ args = vars(ap.parse_args())
 
 让我们现在加载我们的图像，并计算梯度大小和方向:
 
-```
+```py
 # load the input image and convert it to grayscale
 image = cv2.imread(args["image"])
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -446,7 +446,7 @@ orientation = np.arctan2(gY, gX) * (180 / np.pi) % 180
 
 现在让我们来看一下梯度幅度和梯度方向:
 
-```
+```py
 # initialize a figure to display the input grayscale image along with
 # the gradient magnitude and orientation representations, respectively
 (fig, axs) = plt.subplots(nrows=1, ncols=3, figsize=(8, 4))
@@ -485,7 +485,7 @@ plt.show()
 
 从那里，执行以下命令:
 
-```
+```py
 $ python opencv_magnitude_orientation.py --image images/coins02.png
 ```
 
@@ -503,7 +503,7 @@ $ python opencv_magnitude_orientation.py --image images/coins02.png
 
 让我们试试另一个例子:
 
-```
+```py
 $ python opencv_magnitude_orientation.py \
 	--image images/clonazepam_1mg.png
 ```

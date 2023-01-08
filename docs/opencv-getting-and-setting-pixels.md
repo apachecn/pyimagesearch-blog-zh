@@ -131,7 +131,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -160,7 +160,7 @@ $ pip install opencv-contrib-python
 
 在我们开始看代码之前，让我们回顾一下我们的项目目录结构:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── adrian.png
@@ -177,7 +177,7 @@ $ tree . --dirsfirst
 
 打开项目目录结构中的`opencv_getting_setting.py`文件，让我们开始工作:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -195,7 +195,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们加载这个图像并开始访问像素值:
 
-```
+```py
 # load the image, grab its spatial dimensions (width and height),
 # and then display the original image to our screen
 image = cv2.imread(args["image"])
@@ -211,7 +211,7 @@ cv2.imshow("Original", image)
 
 OpenCV 中的图像由 NumPy 数组表示。要访问一个特定的图像像素，我们需要做的就是将 *(x，y)* 坐标作为`image[y, x]`:
 
-```
+```py
 # images are simply NumPy arrays -- with the origin (0, 0) located at
 # the top-left of the image
 (b, g, r) = image[0, 0]
@@ -251,7 +251,7 @@ print("Pixel at (50, 20) - Red: {}, Green: {}, Blue: {}".format(r, g, b))
 
 接下来，让我们学习如何使用 NumPy 数组切片从图像中获取感兴趣的大块/区域:
 
-```
+```py
 # compute the center of the image, which is simply the width and height
 # divided by two
 (cX, cY) = (w // 2, h // 2)
@@ -280,7 +280,7 @@ cv2.imshow("Top-Left Corner", tl)
 
 让我们进一步扩展这个例子，这样我们就可以练习使用 NumPy 数组切片从图像中提取区域:
 
-```
+```py
 # in a similar fashion, we can crop the top-right, bottom-right, and
 # bottom-left corners of the image and then display them to our
 # screen
@@ -304,7 +304,7 @@ cv2.imshow("Bottom-Left Corner", bl)
 
 我们要做的最后一项任务是使用数组切片来改变像素区域的颜色:
 
-```
+```py
 # set the top-left corner of the original image to be green
 image[0:cY, 0:cX] = (0, 255, 0)
 
@@ -329,7 +329,7 @@ cv2.waitKey(0)
 
 从那里，您可以执行以下命令:
 
-```
+```py
 $ python opencv_getting_setting.py --image adrian.png 
 Pixel at (0, 0) - Red: 233, Green: 240, Blue: 246 
 Pixel at (50, 20) - Red: 229, Green: 238, Blue: 245 

@@ -102,7 +102,7 @@ sigmoid 激活函数有一个范围为*【0，1】*的输出，这意味着当�
 
 接下来，让我们来看看这个项目:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── examples
@@ -161,7 +161,7 @@ $ tree . --dirsfirst
 
 从那里，打开`test_siamese_network.py`，并跟随:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch import config
 from pyimagesearch import utils
@@ -182,7 +182,7 @@ import cv2
 
 让我们继续解析我们的命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--input", required=True,
@@ -194,7 +194,7 @@ args = vars(ap.parse_args())
 
 解析完命令行参数后，我们现在可以获取`--input`目录中的所有`testImagePaths`:
 
-```
+```py
 # grab the test dataset image paths and then randomly generate a
 # total of 10 image pairs
 print("[INFO] loading test dataset...")
@@ -209,7 +209,7 @@ model = load_model(config.MODEL_PATH)
 
 **第 20 行**获取包含我们想要进行相似性比较的数字的所有示例图像的路径。**第 22 行**从这些`testImagePaths`中随机产生总共 10 对图像。
 
-```
+```py
 # loop over all image pairs
 for (i, (pathA, pathB)) in enumerate(pairs):
 	# load both the images and convert them to grayscale
@@ -249,7 +249,7 @@ for (i, (pathA, pathB)) in enumerate(pairs):
 
 最后一步是在屏幕上显示图像对和相应的相似性得分:
 
-```
+```py
 	# initialize the figure
 	fig = plt.figure("Pair #{}".format(i + 1), figsize=(4, 2))
 	plt.suptitle("Similarity: {:.2f}".format(proba))
@@ -285,7 +285,7 @@ for (i, (pathA, pathB)) in enumerate(pairs):
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python test_siamese_network.py --input examples
 [INFO] loading test dataset...
 [INFO] loading siamese model...

@@ -126,7 +126,7 @@ Grad-CAM 的工作原理是(1)找到网络中的最终卷积层，然后(2)检�
 
 让我们检查一下我们教程的项目结构。但是首先，一定要从这篇博文的 ***【下载】*** 部分获取代码和示例图片。从那里，提取文件，并在您的终端中使用`tree`命令:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── images
@@ -163,7 +163,7 @@ $ tree --dirsfirst
 
 打开项目目录结构中的`gradcam.py`文件，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.models import Model
 import tensorflow as tf
@@ -195,7 +195,7 @@ class GradCAM:
 
 既然我们的构造函数已经定义好了，我们的类属性也已经设置好了，那么让我们定义一个方法来找到我们的目标层:
 
-```
+```py
 	def find_target_layer(self):
 		# attempt to find the final convolutional layer in the network
 		# by looping over the layers of the network in reverse order
@@ -217,7 +217,7 @@ class GradCAM:
 
 在我们的下一个函数中，我们将计算我们的可视化热图，给定一个输入`image`:
 
-```
+```py
 	def compute_heatmap(self, image, eps=1e-8):
 		# construct our gradient model by supplying (1) the inputs
 		# to our pre-trained model, (2) the output of the (presumably)
@@ -240,7 +240,7 @@ class GradCAM:
 
 一旦构建了梯度模型，我们将继续计算梯度:
 
-```
+```py
 		# record operations for automatic differentiation
 		with tf.GradientTape() as tape:
 			# cast the image tensor to a float-32 data type, pass the
@@ -276,7 +276,7 @@ TenorFlow 2.0 通过他们所谓的*渐变带*提供了*自动* *微分*的实�
 
 给定我们的梯度，我们现在将计算*引导梯度*:
 
-```
+```py
 		# compute the guided gradients
 		castConvOutputs = tf.cast(convOutputs > 0, "float32")
 		castGrads = tf.cast(grads > 0, "float32")
@@ -301,7 +301,7 @@ TenorFlow 2.0 通过他们所谓的*渐变带*提供了*自动* *微分*的实�
 
 我们正在接近我们的可视化热图。让我们继续:
 
-```
+```py
 		# compute the average of the gradient values, and using them
 		# as weights, compute the ponderation of the filters with
 		# respect to the weights
@@ -315,7 +315,7 @@ TenorFlow 2.0 通过他们所谓的*渐变带*提供了*自动* *微分*的实�
 
 我们的下一步是生成与我们的图像相关的输出热图:
 
-```
+```py
 		# grab the spatial dimensions of the input image and resize
 		# the output class activation map to match the input image
 		# dimensions
@@ -344,7 +344,7 @@ TenorFlow 2.0 通过他们所谓的*渐变带*提供了*自动* *微分*的实�
 
 让我们继续定义这样一个实用程序:
 
-```
+```py
 	def overlay_heatmap(self, heatmap, image, alpha=0.5,
 		colormap=cv2.COLORMAP_VIRIDIS):
 		# apply the supplied color map to the heatmap and then
@@ -385,7 +385,7 @@ TenorFlow 2.0 通过他们所谓的*渐变带*提供了*自动* *微分*的实�
 
 让我们打开项目结构中的`apply_gradcam.py`,插入以下代码:
 
-```
+```py
 # import the necessary packages
 from pyimagesearch.gradcam import GradCAM
 from tensorflow.keras.applications import ResNet50
@@ -417,7 +417,7 @@ args = vars(ap.parse_args())
 
 给定`--model`参数，让我们加载我们的模型:
 
-```
+```py
 # initialize the model to be VGG16
 Model = VGG16
 
@@ -436,7 +436,7 @@ model = Model(weights="imagenet")
 
 接下来，我们将加载并预处理我们的`--image`:
 
-```
+```py
 # load the original image from disk (in OpenCV format) and then
 # resize the image to its target dimensions
 orig = cv2.imread(args["image"])
@@ -468,7 +468,7 @@ image = imagenet_utils.preprocess_input(image)
 
 出于分类的目的(即，还不是 Grad-CAM)，接下来我们将使用我们的模型对图像进行预测:
 
-```
+```py
 # use the network to make predictions on the input image and find
 # the class label index with the largest corresponding probability
 preds = model.predict(image)
@@ -489,7 +489,7 @@ print("[INFO] {}".format(label))
 
 此时，我们已经准备好**计算 Grad-CAM 热图可视化:**
 
-```
+```py
 # initialize our gradient class activation map and build the heatmap
 cam = GradCAM(model, i)
 heatmap = cam.compute_heatmap(image)
@@ -508,7 +508,7 @@ heatmap = cv2.resize(heatmap, (orig.shape[1], orig.shape[0]))
 
 最后，我们生成一个堆叠的可视化，包括(1)原始图像，(2)热图，以及(3)透明地覆盖在原始图像上的带有预测类标签的热图:
 
-```
+```py
 # draw the predicted label on the output image
 cv2.rectangle(output, (0, 0), (340, 40), (0, 0, 0), -1)
 cv2.putText(output, label, (10, 25), cv2.FONT_HERSHEY_SIMPLEX,
@@ -534,7 +534,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python apply_gradcam.py --image images/space_shuttle.jpg
 [INFO] loading model...
 [INFO] space_shuttle: 100.00%
@@ -548,7 +548,7 @@ $ python apply_gradcam.py --image images/space_shuttle.jpg
 
 让我们尝试另一个图像:
 
-```
+```py
 $ python apply_gradcam.py --image images/beagle.jpg
 [INFO] loading model...
 [INFO] beagle: 73.94%
@@ -564,7 +564,7 @@ $ python apply_gradcam.py --image images/beagle.jpg
 
 让我们检查最后一个图像，这次使用 ResNet 架构:
 
-```
+```py
 $ python apply_gradcam.py --image images/soccer_ball.jpg --model resnet
 [INFO] loading model...
 [INFO] soccer_ball: 99.97%

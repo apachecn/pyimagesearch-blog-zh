@@ -34,14 +34,14 @@
 
 安装 Xcode 后，你需要打开一个终端，确保你已经[接受了开发者许可](http://apple.stackexchange.com/questions/175069/how-to-accept-xcode-license):
 
-```
+```py
 $ sudo xcodebuild -license
 
 ```
 
 我们还需要安装苹果命令行工具。这些工具包括 GCC、make、clang 等程序和库。您可以使用以下命令来安装 Apple 命令行工具:
 
-```
+```py
 $ sudo xcode-select --install
 
 ```
@@ -60,28 +60,28 @@ $ sudo xcode-select --install
 
 安装 Homebrew 本身超级简单，只需复制并粘贴下面的*整个*命令:
 
-```
+```py
 $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 ```
 
 一旦安装了 Homebrew，您应该运行以下命令来确保软件包定义是最新的:
 
-```
+```py
 $ brew update
 
 ```
 
 我们现在需要更新我们的`~/.bash_profile`文件(或者创建它，如果它不存在的话)。使用您最喜欢的文本编辑器打开文件(在本例中我使用的是`nano`):
 
-```
+```py
 $ nano ~/.bash_profile
 
 ```
 
 然后将以下几行添加到文件中:
 
-```
+```py
 # Homebrew
 export PATH=/usr/local/bin:$PATH
 
@@ -97,7 +97,7 @@ export PATH=/usr/local/bin:$PATH
 
 更新`.bash_profile`文件后，保存并退出编辑器，然后使用`source`确保对`.bash_profile`的更改被手动重新加载:
 
-```
+```py
 $ source ~/.bash_profile
 
 ```
@@ -110,7 +110,7 @@ $ source ~/.bash_profile
 
 相反，你应该安装你自己的 Python 版本，该版本独立于系统安装。使用自制软件，我们可以使用以下命令安装 Python 3:
 
-```
+```py
 $ brew install python3
 
 ```
@@ -119,7 +119,7 @@ $ brew install python3
 
 作为健全性检查，重要的是确认你使用的是 Python 3 的*自制版本，而不是 Python 3* 的*系统版本。要做到这一点，只需使用`which`命令:*
 
-```
+```py
 $ which python3
 /usr/local/bin/python3
 
@@ -143,21 +143,21 @@ $ which python3
 
 使用`pip`可以轻松安装`virtualenv`和`virtualenvwrapper`:
 
-```
+```py
 $ pip install virtualenv virtualenvwrapper
 
 ```
 
 安装完这些软件包后，我们需要再次更新我们的`~/.bash_profile`:
 
-```
+```py
 $ nano ~/.bash_profile
 
 ```
 
 打开后，将下列行追加到文件中:
 
-```
+```py
 # Virtualenv/VirtualenvWrapper
 source /usr/local/bin/virtualenvwrapper.sh
 
@@ -171,7 +171,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 更新您的`.bash_profile`后，保存它，退出，然后再次`source`它:
 
-```
+```py
 $ source ~/.bash_profile
 
 ```
@@ -182,7 +182,7 @@ $ source ~/.bash_profile
 
 我们现在可以使用`mkvirtualenv`命令创建一个名为`cv`的 Python 3 虚拟环境:
 
-```
+```py
 $ mkvirtualenv cv -p python3
 
 ```
@@ -193,7 +193,7 @@ $ mkvirtualenv cv -p python3
 
  *`mkvirtualenv`命令只需要执行一次。在创建了之后，要访问`cv` Python 虚拟环境*，只需使用`workon`命令:*
 
-```
+```py
 $ workon cv
 
 ```
@@ -218,7 +218,7 @@ OpenCV 需要的唯一基于 Python 的先决条件是一个科学计算包 [Num
 
 要将 NumPy 安装到我们的`cv`虚拟环境中，请确保您处于`cv`环境中(否则 NumPy 将被安装到*系统的*版本的 Python 中),然后利用`pip`来处理实际安装:
 
-```
+```py
 $ pip install numpy
 
 ```
@@ -229,7 +229,7 @@ OpenCV 要求在我们编译它之前安装一些先决条件。这些软件包�
 
 要在 macOS 上安装 OpenCV 的这些必备组件，请执行以下命令:
 
-```
+```py
 $ brew install cmake pkg-config
 $ brew install jpeg libpng libtiff openexr
 $ brew install eigen tbb
@@ -242,7 +242,7 @@ $ brew install eigen tbb
 
 首先，我们需要下载 [OpenCV GitHub repo](https://github.com/opencv/opencv) :
 
-```
+```py
 $ cd ~
 $ git clone https://github.com/opencv/opencv
 
@@ -250,7 +250,7 @@ $ git clone https://github.com/opencv/opencv
 
 后面是 [opencv_contrib repo](https://github.com/opencv/opencv_contrib) :
 
-```
+```py
 $ git clone https://github.com/opencv/opencv_contrib
 
 ```
@@ -274,7 +274,7 @@ $ git clone https://github.com/opencv/opencv_contrib
 
 为了用 Python 3.5 绑定为 macOS 编译 OpenCV，我们首先需要设置构建。这相当于更改目录并创建一个`build`目录:
 
-```
+```py
 $ cd ~/opencv
 $ mkdir build
 $ cd build
@@ -285,7 +285,7 @@ $ cd build
 
 下一部分，我们配置我们的实际构建，变得有点棘手。为了使这个过程更容易，我构建了下面的 ***OpenCV 3 + Python 3.5 CMake 模板:***
 
-```
+```py
 $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
     -D CMAKE_INSTALL_PREFIX=/usr/local \
     -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules \
@@ -311,7 +311,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 我们将从配置您的`PYTHON3_LIBRARY`值开始。这个开关应该指向您的`libpython3.5.dylib`文件。该文件位于`/usr/local/Cellar/python`的多个嵌套子目录中。要找到`libpython3.5.dylib`文件的*确切路径*，只需使用带有通配符的`ls`命令(自动制表符结束也可以):
 
-```
+```py
 $ ls /usr/local/Cellar/python3/3.*/Frameworks/Python.framework/Versions/3.5/lib/python3.5/config-3.5m/libpython3.5.dylib
 /usr/local/Cellar/python3/3.5.2_3/Frameworks/Python.framework/Versions/3.5/lib/python3.5/config-3.5m/libpython3.5.dylib
 
@@ -323,7 +323,7 @@ $ ls /usr/local/Cellar/python3/3.*/Frameworks/Python.framework/Versions/3.5/lib/
 
 同样，我们将使用相同的`ls`和通配符技巧来确定正确的路径:
 
-```
+```py
 $ ls -d /usr/local/Cellar/python3/3.*/Frameworks/Python.framework/Versions/3.5/include/python3.5m/
 /usr/local/Cellar/python3/3.5.2_3/Frameworks/Python.framework/Versions/3.5/include/python3.5m/
 
@@ -337,7 +337,7 @@ $ ls -d /usr/local/Cellar/python3/3.*/Frameworks/Python.framework/Versions/3.5/i
 
 在我的机器上，配置我的 OpenCV 3 + Python 3.5 版本的 *full* CMake 命令如下所示:
 
-```
+```py
 $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
     -D CMAKE_INSTALL_PREFIX=/usr/local \
     -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules \
@@ -372,7 +372,7 @@ $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 在研究了您的`cmake`命令并确保它没有错误地退出(并且`Python 3`部分被正确配置)之后，您现在可以编译 OpenCV:
 
-```
+```py
 $ make -j4
 
 ```
@@ -389,7 +389,7 @@ OpenCV 可能需要一段时间来编译，大约 30-90 分钟，这取决于您
 
 假设 OpenCV 编译无误，您现在可以在 macOS 系统上安装它了:
 
-```
+```py
 $ sudo make install
 
 ```
@@ -398,7 +398,7 @@ $ sudo make install
 
 运行`sudo make install`之后，您的 OpenCV 3 + Python 3.5 绑定应该位于`/usr/local/lib/python3.5/site-packages`中。您可以使用`ls`命令来验证这一点:
 
-```
+```py
 $ cd /usr/local/lib/python3.5/site-packages/
 $ ls -l *.so
 -rwxr-xr-x  1 root  admin  3694564 Nov 15 11:28 cv2.cpython-35m-darwin.so
@@ -409,7 +409,7 @@ $ ls -l *.so
 
 同样，我不知道为什么会发生这种情况，但这很容易解决。我们需要做的就是将文件重命名为`cv2.so`:
 
-```
+```py
 $ cd /usr/local/lib/python3.5/site-packages/
 $ mv cv2.cpython-35m-darwin.so cv2.so
 $ cd ~
@@ -418,7 +418,7 @@ $ cd ~
 
 将`cv2.cpython-35m-darwin.so`重命名为`cv2.so`后，我们需要将 OpenCV 绑定符号链接到 Python 3.5 的`cv`虚拟环境中:
 
-```
+```py
 $ cd ~/.virtualenvs/cv/lib/python3.5/site-packages/
 $ ln -s /usr/local/lib/python3.5/site-packages/cv2.so cv2.so
 $ cd ~
@@ -435,7 +435,7 @@ $ cd ~
 
 以下是您可以用来测试安装的具体步骤:
 
-```
+```py
 $ workon cv
 $ python
 Python 3.5.2 (default, Oct 11 2016, 04:59:56) 

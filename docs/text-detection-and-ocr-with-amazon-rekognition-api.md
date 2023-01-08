@@ -57,7 +57,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install boto3
 ```
 
@@ -93,7 +93,7 @@ $ pip install boto3
 
 为了与 Amazon Rekognition API 接口，我们需要使用`boto3`包:AWS SDK。幸运的是，`boto3`安装起来非常简单，只需要一个`pip` -install 命令:
 
-```
+```py
 $ pip install boto3
 ```
 
@@ -124,7 +124,7 @@ $ pip install boto3
 
 在使用 Amazon Rekognition API 执行文本检测和 OCR 之前，我们首先需要回顾一下我们的项目目录结构。
 
-```
+```py
 |-- config
 |   |-- __init__.py
 |   |-- aws_config.py
@@ -148,7 +148,7 @@ $ pip install boto3
 
 之后，您可以回到这里，打开`aws_config.py`，并更新代码:
 
-```
+```py
 # define our AWS Access Key, Secret Key, and Region
 ACCESS_KEY = "YOUR_ACCESS_KEY"
 SECRET_KEY = "YOUR_SECRET_KEY"
@@ -172,7 +172,7 @@ REGION = "YOUR_AWS_REGION"
 
 让我们开始实施:
 
-```
+```py
 # import the necessary packages
 from config import aws_config as config
 import argparse
@@ -184,7 +184,7 @@ import cv2
 
 现在让我们定义`draw_ocr_results`，这是一个简单的 Python 实用程序，用于从 Amazon Rekognition API 中提取输出 OCR 结果:
 
-```
+```py
 def draw_ocr_results(image, text, poly, color=(0, 255, 0)):
    # unpack the bounding box, taking care to scale the coordinates
    # relative to the input image size
@@ -214,7 +214,7 @@ def draw_ocr_results(image, text, poly, color=(0, 255, 0)):
 
 从那里，我们现在可以注释`image`:
 
-```
+```py
    # build a list of points and use it to construct each vertex
    # of the bounding box
    pts = ((tlX, tlY), (trX, trY), (brX, brY), (blX, blY))
@@ -243,7 +243,7 @@ def draw_ocr_results(image, text, poly, color=(0, 255, 0)):
 
 定义了 helper 实用程序后，让我们继续讨论命令行参数:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
@@ -260,7 +260,7 @@ args = vars(ap.parse_args())
 
 接下来，让我们连接到亚马逊网络服务:
 
-```
+```py
 # connect to AWS so we can use the Amazon Rekognition OCR API
 client = boto3.client(
    "rekognition",
@@ -293,7 +293,7 @@ final = image.copy()
 
 我们现在可以在 Amazon Rekognition API 的文本检测边界框上循环:
 
-```
+```py
 # loop over the text detection bounding boxes
 for detection in detections:
    # extract the OCR'd text, text type, and bounding box coordinates
@@ -335,7 +335,7 @@ cv2.waitKey(0)
 
 让我们看看实际效果，首先逐行对整个图像进行光学字符识别:
 
-```
+```py
 $ python amazon_ocr.py --image images/aircraft.png
 [INFO] making request to AWS Rekognition API...
 WARNING!
@@ -353,7 +353,7 @@ BLAST CAN CAUSE PHYSICAL INJURY
 
 这就像提供`--type`命令行参数一样简单:
 
-```
+```py
 $ python amazon_ocr.py --image images/aircraft.png --type word
 [INFO] making request to AWS Rekognition API...
 
@@ -396,7 +396,7 @@ Python 脚本很简单，只需要不到 100 行代码就可以实现(包括注�
 
 ****Rosebrock，A.**** “使用亚马逊 Rekognition API 的文本检测和 OCR”， *PyImageSearch* ，D. Chakraborty，P. Chugh，A. R. Gosthipaty，S. Huot，K. Kidriavsteva，R. Raha，A. Thanki 编辑。，2022 年，[https://pyimg.co/po6tf](https://pyimg.co/po6tf)
 
-```
+```py
 @incollection{Rosebrock_2022_OCR_Amazon_Rekognition_API,
   author = {Adrian Rosebrock},
   title = {Text Detection and OCR with Amazon Rekognition API},

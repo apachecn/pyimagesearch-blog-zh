@@ -82,7 +82,7 @@ Tiny-YOLO 是 Redmon 等人在其 2016 年的论文 [*中提出的“你只看�
 
 您将需要一个名为 JSON-Minify 的包来解析我们的 JSON 配置。您可以将其安装到您的虚拟环境中:
 
-```
+```py
 $ pip install json_minify
 
 ```
@@ -95,7 +95,7 @@ $ pip install json_minify
 
 从现在开始，您可以用**一个简单的命令**来*激活您的 OpenVINO* 环境(与上一步中的两个命令相反:
 
-```
+```py
 $ source ~/start_openvino.sh
 Starting Python 3.7 with OpenCV-OpenVINO 4.1.1 bindings...
 
@@ -105,7 +105,7 @@ Starting Python 3.7 with OpenCV-OpenVINO 4.1.1 bindings...
 
 如果您不介意执行两个命令而不是一个，您可以打开一个终端并执行以下操作:
 
-```
+```py
 $ workon openvino
 $ source ~/openvino/bin/setupvars.sh
 
@@ -125,7 +125,7 @@ $ source ~/openvino/bin/setupvars.sh
 
 继续并获取今天的可下载内容。zip 来自今天教程的*“下载”部分。让我们用`tree`命令直接在终端中检查我们的项目结构:*
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── config
@@ -175,7 +175,7 @@ $ tree --dirsfirst
 
 我们的配置变量存放在我们的`config.json`文件中。现在打开它，让我们检查一下里面的东西:
 
-```
+```py
 {
 	// path to YOLO architecture definition XML file
 	"xml_path": "yolo/frozen_darknet_tinyyolov3_model.xml",
@@ -194,7 +194,7 @@ $ tree --dirsfirst
 
 现在让我们看看用于过滤检测的变量:
 
-```
+```py
 	// probability threshold for detections filtering
 	"prob_threshold": 0.2,
 
@@ -213,7 +213,7 @@ $ tree --dirsfirst
 
 打开目录结构中的`detect_realtime_tinyyolo_ncs.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 from openvino.inference_engine import IENetwork
 from openvino.inference_engine import IEPlugin
@@ -241,7 +241,7 @@ import os
 
 导入准备就绪，现在我们将加载配置文件:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-c", "--conf", required=True,
@@ -263,7 +263,7 @@ conf = Conf(args["conf"])
 
 既然我们的配置驻留在内存中，现在我们将继续加载我们的 COCO 类标签:
 
-```
+```py
 # load the COCO class labels our YOLO model was trained on and
 # initialize a list of colors to represent each possible class
 # label
@@ -277,7 +277,7 @@ COLORS = np.random.uniform(0, 255, size=(len(LABELS), 3))
 
 接下来，我们将把 TinyYOLOv3 模型加载到我们的 Movidius NCS 上:
 
-```
+```py
 # initialize the plugin in for specified device
 plugin = IEPlugin(device="MYRIAD")
 
@@ -306,7 +306,7 @@ net.batch_size = 1
 
 让我们继续初始化我们的摄像机或文件视频流:
 
-```
+```py
 # if a video path was not supplied, grab a reference to the webcam
 if args["input"] is None:
 	print("[INFO] starting video stream...")
@@ -337,7 +337,7 @@ fps = FPS().start()
 
 至此，我们完成了设置，现在可以开始处理帧并执行 TinyYOLOv3 检测:
 
-```
+```py
 # loop over the frames from the video stream
 while True:
 	# grab the next frame and handle if we are reading from either
@@ -374,7 +374,7 @@ while True:
 
 **第 91 行**初始化一个`objects`列表，我们接下来将填充它:
 
-```
+```py
 	# loop over the output items
 	for (layerName, outBlob) in output.items():
 		# create a new object which contains the required tinyYOLOv3
@@ -393,7 +393,7 @@ while True:
 
 YOLO 和 TinyYOLO 往往会产生相当多的假阳性。为了解决这个问题，接下来，我们将设计两种弱检测滤波器:
 
-```
+```py
 	# loop over each of the objects
 	for i in range(len(objects)):
 		# check if the confidence of the detected object is zero, if
@@ -431,7 +431,7 @@ YOLO 和 TinyYOLO 往往会产生相当多的假阳性。为了解决这个问�
 
 既然我们的`objects`只包含我们关心的那些，我们将用边界框和类标签来注释我们的输出帧:
 
-```
+```py
 	# store the height and width of the original frame
 	(endY, endX) = orig.shape[:-1]
 
@@ -471,7 +471,7 @@ YOLO 和 TinyYOLO 往往会产生相当多的假阳性。为了解决这个问�
 
 最后，我们将显示我们的框架，计算统计数据，并清理:
 
-```
+```py
 	# display the current frame to the screen and record if a user
 	# presses a key
 	cv2.imshow("TinyYOLOv3", orig)
@@ -510,7 +510,7 @@ cv2.destroyAllWindows()
 
 在对源代码/模型权重进行解归档之后，您可以打开一个终端并执行以下命令:
 
-```
+```py
 $ python detect_realtime_tinyyolo_ncs.py --conf config/config.json \
 	--input videos/test_video.mp4
 [INFO] loading models...
@@ -530,7 +530,7 @@ $ python detect_realtime_tinyyolo_ncs.py --conf config/config.json \
 
 现在让我们尝试使用一个**相机**而不是一个视频文件，简单地通过省略`--input` [命令行参数](https://pyimagesearch.com/2018/03/12/python-argparse-command-line-arguments/):
 
-```
+```py
 $ python detect_realtime_tinyyolo_ncs.py --conf config/config.json
 [INFO] loading models...
 [INFO] preparing inputs...

@@ -102,7 +102,7 @@
 
 下面我为标准的普通梯度下降算法添加了类似 Python 的伪代码([伪代码，灵感来自 cs231n 幻灯片](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture3.pdf)):
 
-```
+```py
 while True:
 	Wgradient = evaluate_gradient(loss, data, W)
 	W += -alpha * Wgradient
@@ -130,7 +130,7 @@ while True:
 
 现在我们知道了梯度下降的基础知识，让我们用 Python 实现它，并用它对一些数据进行分类。打开一个新文件，将其命名为`gradient_descent.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
@@ -158,7 +158,7 @@ def sigmoid_deriv(x):
 
 `predict`函数应用我们的 sigmoid 激活函数，然后根据神经元是否触发(1)来设定阈值(0):
 
-```
+```py
 def predict(X, W):
 	# take the dot product between our features and weight matrix
 	preds = sigmoid_activation(X.dot(W))
@@ -178,7 +178,7 @@ def predict(X, W):
 
 接下来，让我们解析我们的命令行参数:
 
-```
+```py
  # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-e", "--epochs", type=float, default=100,
@@ -195,7 +195,7 @@ args = vars(ap.parse_args())
 
 既然我们的命令行参数已被解析，让我们生成一些数据进行分类:
 
-```
+```py
 # generate a 2-class classification problem with 1,000 data points,
 # where each data point is a 2D feature vector
 (X, y) = make_blobs(n_samples=1000, n_features=2, centers=2,
@@ -221,7 +221,7 @@ X = np.c_[X, np.ones((X.shape[0]))]
 
 我们的下一个代码块使用均匀分布处理随机初始化我们的权重矩阵，使其具有与我们的输入特征相同的维数(包括偏差):
 
-```
+```py
 # initialize our weight matrix and list of losses
 print("[INFO] training...")
 W = np.random.randn(X.shape[1], 1)
@@ -234,7 +234,7 @@ losses = []
 
 我们所有的变量现在都已初始化，所以我们可以继续实际的训练和梯度下降程序:
 
-```
+```py
 # loop over the desired number of epochs
 for epoch in np.arange(0, args["epochs"]):
 	# take the dot product between our features "X" and the weight
@@ -258,7 +258,7 @@ for epoch in np.arange(0, args["epochs"]):
 
 现在我们有了`error`，我们可以计算`gradient`，然后用它来更新我们的权重矩阵`W`:
 
-```
+```py
 	# the gradient descent update is the dot product between our
 	# (1) features and (2) the error of the sigmoid derivative of
 	# our predictions
@@ -283,7 +283,7 @@ for epoch in np.arange(0, args["epochs"]):
 
 我们的分类器现在已经训练好了。下一步是评估:
 
-```
+```py
 # evaluate our model
 print("[INFO] evaluating...")
 preds = predict(testX, W)
@@ -294,7 +294,7 @@ print(classification_report(testY, preds))
 
 我们的最后一个代码块处理(1)绘制*测试数据*以便我们可以可视化我们试图分类的数据集，以及(2)我们随时间的损失:
 
-```
+```py
 # plot the (testing) classification data
 plt.style.use("ggplot")
 plt.figure()
@@ -315,7 +315,7 @@ plt.show()
 
 要执行我们的脚本，只需发出以下命令:
 
-```
+```py
 $ python gradient_descent.py 
 [INFO] training...
 [INFO] epoch=1, loss=194.3629849
@@ -345,7 +345,7 @@ $ python gradient_descent.py
 
 该图验证了我们的权重矩阵正在以允许分类器从训练数据中学习的方式被更新。我们可以在下面看到数据集的分类报告:
 
-```
+```py
 [INFO] evaluating...
              precision    recall  f1-score   support
 

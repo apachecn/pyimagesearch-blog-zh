@@ -116,7 +116,7 @@ FaceNet 深度学习模型计算 128-d 嵌入，量化人脸本身。
 
 从那里，您可以使用`tree`命令在您的终端中打印目录结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── dataset
@@ -172,7 +172,7 @@ $ tree --dirsfirst
 
 打开`extract_embeddings.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils import paths
 import numpy as np
@@ -200,7 +200,7 @@ args = vars(ap.parse_args())
 
 我们在**2-8 号线**导入我们需要的包。你需要安装 OpenCV 和`imutils`。要安装 OpenCV，[只需遵循我的一个指南](https://pyimagesearch.com/opencv-tutorials-resources-guides/)(我推荐 OpenCV 3.4.2，所以在遵循指南的同时一定要下载正确的版本)。我的 [imutils](https://github.com/jrosebr1/imutils) 包可以用 pip 安装:
 
-```
+```py
 $ pip install --upgrade imutils
 
 ```
@@ -215,7 +215,7 @@ $ pip install --upgrade imutils
 
 现在我们已经导入了包并解析了命令行参数，让我们从磁盘加载面部检测器和嵌入器:
 
-```
+```py
 # load our serialized face detector from disk
 print("[INFO] loading face detector...")
 protoPath = os.path.sep.join([args["detector"], "deploy.prototxt"])
@@ -238,7 +238,7 @@ embedder = cv2.dnn.readNetFromTorch(args["embedding_model"])
 
 接下来，让我们获取图像路径并执行初始化:
 
-```
+```py
 # grab the paths to the input images in our dataset
 print("[INFO] quantifying faces...")
 imagePaths = list(paths.list_images(args["dataset"]))
@@ -261,7 +261,7 @@ total = 0
 
 让我们开始在图像路径上循环——这个循环将负责从每个图像中找到的人脸中提取嵌入:
 
-```
+```py
 # loop over the image paths
 for (i, imagePath) in enumerate(imagePaths):
 	# extract the person name from the image path
@@ -282,7 +282,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 首先，我们从路径中提取这个人的`name`(**行 52** )。为了解释这是如何工作的，请考虑我的 Python shell 中的以下示例:
 
-```
+```py
 $ python
 >>> from imutils import paths
 >>> import os
@@ -304,7 +304,7 @@ $ python
 
 让我们检测和定位人脸:
 
-```
+```py
 	# construct a blob from the image
 	imageBlob = cv2.dnn.blobFromImage(
 		cv2.resize(image, (300, 300)), 1.0, (300, 300),
@@ -323,7 +323,7 @@ $ python
 
 让我们来处理一下`detections`:
 
-```
+```py
 	# ensure at least one face was found
 	if len(detections) > 0:
 		# we're making the assumption that each image has only ONE
@@ -360,7 +360,7 @@ $ python
 
 从那里，我们将利用我们的`embedder` CNN 并提取面部嵌入:
 
-```
+```py
 			# construct a blob for the face ROI, then pass the blob
 			# through our face embedding model to obtain the 128-d
 			# quantification of the face
@@ -389,7 +389,7 @@ $ python
 
 当循环结束时，剩下的就是将数据转储到磁盘:
 
-```
+```py
 # dump the facial embeddings + names to disk
 print("[INFO] serializing {} encodings...".format(total))
 data = {"embeddings": knownEmbeddings, "names": knownNames}
@@ -407,7 +407,7 @@ f.close()
 
 从那里，打开一个终端，执行以下命令，用 OpenCV 计算人脸嵌入:
 
-```
+```py
 $ python extract_embeddings.py --dataset dataset \
 	--embeddings output/embeddings.pickle \
 	--detector face_detection_model \
@@ -449,7 +449,7 @@ $ python extract_embeddings.py --dataset dataset \
 
 打开`train_model.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import SVC
@@ -470,7 +470,7 @@ args = vars(ap.parse_args())
 
 在运行这个脚本之前，我们需要在我们的环境中安装一个机器学习库 [scikit-learn](http://scikit-learn.org/stable/) 。您可以通过 pip 安装它:
 
-```
+```py
 $ pip install scikit-learn
 
 ```
@@ -487,7 +487,7 @@ $ pip install scikit-learn
 
 让我们加载我们的面部嵌入和编码我们的标签:
 
-```
+```py
 # load the face embeddings
 print("[INFO] loading face embeddings...")
 data = pickle.loads(open(args["embeddings"], "rb").read())
@@ -505,7 +505,7 @@ labels = le.fit_transform(data["names"])
 
 现在是时候训练我们的 SVM 模型来识别人脸了:
 
-```
+```py
 # train the model used to accept the 128-d embeddings of the face and
 # then produce the actual face recognition
 print("[INFO] training model...")
@@ -520,7 +520,7 @@ recognizer.fit(data["embeddings"], labels)
 
 在训练模型之后，我们将模型和标签编码器作为 pickle 文件输出到磁盘。
 
-```
+```py
 # write the actual face recognition model to disk
 f = open(args["recognizer"], "wb")
 f.write(pickle.dumps(recognizer))
@@ -539,7 +539,7 @@ f.close()
 
 既然我们已经完成了对`train_model.py`的编码，让我们将它应用于我们提取的人脸嵌入:
 
-```
+```py
 $ python train_model.py --embeddings output/embeddings.pickle \
 	--recognizer output/recognizer.pickle \
 	--le output/le.pickle
@@ -561,7 +561,7 @@ embeddings.pickle	le.pickle		recognizer.pickle
 
 打开项目中的`recognize.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -603,7 +603,7 @@ args = vars(ap.parse_args())
 
 现在我们已经处理了导入和命令行参数，让我们将三个模型从磁盘加载到内存中:
 
-```
+```py
 # load our serialized face detector from disk
 print("[INFO] loading face detector...")
 protoPath = os.path.sep.join([args["detector"], "deploy.prototxt"])
@@ -633,7 +633,7 @@ le = pickle.loads(open(args["le"], "rb").read())
 
 现在让我们加载我们的图像并*检测*张脸:
 
-```
+```py
 # load the image, resize it to have a width of 600 pixels (while
 # maintaining the aspect ratio), and then grab the image dimensions
 image = cv2.imread(args["image"])
@@ -659,7 +659,7 @@ detections = detector.forward()
 
 给定我们的新`detections`，让我们在图像中识别人脸。但是首先我们需要过滤弱的`detections`并提取`face` ROI:
 
-```
+```py
 # loop over the detections
 for i in range(0, detections.shape[2]):
 	# extract the confidence (i.e., probability) associated with the
@@ -691,7 +691,7 @@ for i in range(0, detections.shape[2]):
 
 识别`face` ROI 的名称只需要几个步骤:
 
-```
+```py
 		# construct a blob for the face ROI, then pass the blob
 		# through our face embedding model to obtain the 128-d
 		# quantification of the face
@@ -718,7 +718,7 @@ for i in range(0, detections.shape[2]):
 
 现在，让我们显示 OpenCV 人脸识别结果:
 
-```
+```py
 		# draw the bounding box of the face along with the associated
 		# probability
 		text = "{}: {:.2f}%".format(name, proba * 100)
@@ -747,7 +747,7 @@ cv2.waitKey(0)
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python recognize.py --detector face_detection_model \
 	--embedding-model openface_nn4.small2.v1.t7 \
 	--recognizer output/recognizer.pickle \
@@ -766,7 +766,7 @@ $ python recognize.py --detector face_detection_model \
 
 让我们尝试另一个 OpenCV 人脸识别示例:
 
-```
+```py
 $ python recognize.py --detector face_detection_model \
 	--embedding-model openface_nn4.small2.v1.t7 \
 	--recognizer output/recognizer.pickle \
@@ -783,7 +783,7 @@ $ python recognize.py --detector face_detection_model \
 
 在最后一个例子中，让我们看看当我们的模型无法识别实际的人脸时会发生什么:
 
-```
+```py
 $ python recognize.py --detector face_detection_model \
 	--embedding-model openface_nn4.small2.v1.t7 \
 	--recognizer output/recognizer.pickle \
@@ -808,7 +808,7 @@ $ python recognize.py --detector face_detection_model \
 
 打开`recognize_video.py`文件，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 from imutils.video import FPS
@@ -842,7 +842,7 @@ args = vars(ap.parse_args())
 
 我们的三个型号和标签编码器在这里加载:
 
-```
+```py
 # load our serialized face detector from disk
 print("[INFO] loading face detector...")
 protoPath = os.path.sep.join([args["detector"], "deploy.prototxt"])
@@ -866,7 +866,7 @@ le = pickle.loads(open(args["le"], "rb").read())
 
 让我们初始化视频流并开始处理帧:
 
-```
+```py
 # initialize the video stream, then allow the camera sensor to warm up
 print("[INFO] starting video stream...")
 vs = VideoStream(src=0).start()
@@ -906,7 +906,7 @@ while True:
 
 现在我们来处理检测结果:
 
-```
+```py
 	# loop over the detections
 	for i in range(0, detections.shape[2]):
 		# extract the confidence (i.e., probability) associated with
@@ -934,7 +934,7 @@ while True:
 
 现在是时候执行 OpenCV 人脸识别了:
 
-```
+```py
 			# construct a blob for the face ROI, then pass the blob
 			# through our face embedding model to obtain the 128-d
 			# quantification of the face
@@ -973,7 +973,7 @@ while True:
 
 让我们显示结果并清理:
 
-```
+```py
 	# show the output frame
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
@@ -1001,7 +1001,7 @@ vs.stop()
 
 要在视频流上执行我们的 OpenCV 人脸识别管道，打开一个终端并执行以下命令:
 
-```
+```py
 $ python recognize_video.py --detector face_detection_model \
 	--embedding-model openface_nn4.small2.v1.t7 \
 	--recognizer output/recognizer.pickle \
@@ -1127,7 +1127,7 @@ k-NN 模型工作得非常好，但正如我们所知，存在更强大的机器
 > 
 > 我的错误是这样的:
 
-```
+```py
 usage: extract_embeddings.py [-h] -i DATASET -e EMBEDDINGS
     -d DETECTOR -m EMBEDDING_MODEL [-c CONFIDENCE]
 extract_embeddings.py: error: the following arguments are required:

@@ -57,7 +57,7 @@
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -90,7 +90,7 @@ $ pip install opencv-contrib-python
 
 ### **项目结构**
 
-```
+```py
 |-- pyimagesearch_address.png
 |-- steve_jobs.png
 |-- whole_foods.png
@@ -105,7 +105,7 @@ $ pip install opencv-contrib-python
 
 让我们从你的第一个宇宙魔方 OCR 项目开始吧！打开一个新文件，将其命名为`first_ocr.py`，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import pytesseract
 import argparse
@@ -124,7 +124,7 @@ args = vars(ap.parse_args())
 
 既然我们已经处理了导入和单独的命令行参数，让我们进入有趣的部分——用 Python 进行 OCR:
 
-```
+```py
 # load the input image and convert it from BGR to RGB channel
 # ordering}
 image = cv2.imread(args["image"])
@@ -153,7 +153,7 @@ print(text)
 
 让我们测试一下新实现的 Tesseract OCR 脚本。打开您的终端，并执行以下命令:
 
-```
+```py
 $ python first_ocr.py --image pyimagesearch_address.png
 PyImageSearch
 PO Box 17598 #17900
@@ -164,7 +164,7 @@ Baltimore, MD 21297
 
 让我们试试另一张图片，这是史蒂夫·乔布斯的旧名片:
 
-```
+```py
 $ python first_ocr.py --image steve_jobs.png
 Steven P. Jobs
 Chairman of the Board
@@ -184,7 +184,7 @@ Cupertino, California 95014
 
 尽管有这些挑战，宇宙魔方仍然能够正确地识别名片。但这回避了一个问题——**OCR*这么简单吗？*** 我们是不是只要打开一个 Python shell，导入`pytesseract`包，然后在一个输入图片上调用`image_to_string`？不幸的是，OCR 并没有那么简单(如果是的话，本教程就没有必要了)。作为一个例子，让我们将同样的`first_ocr.py`脚本应用于一张更具挑战性的全食收据照片:
 
-```
+```py
 $ python first_ocr.py --image whole_foods.png
 aie WESTPORT CT 06880
 

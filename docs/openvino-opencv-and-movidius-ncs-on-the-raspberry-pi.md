@@ -129,7 +129,7 @@ OpenVINO 支持英特尔 CPU、GPU、FPGAs 和 vpu。
 
 要检查您的磁盘空间使用情况，请在您的终端中执行`df -h`命令并检查输出:
 
-```
+```py
 $ df -h
 Filesystem      Size  Used Avail Use% Mounted on
 /dev/root        30G  4.2G   24G  15% /
@@ -149,7 +149,7 @@ tmpfs            88M     0   88M   0% /run/user/1000
 
 在您的终端中打开 Raspberry Pi 配置:
 
-```
+```py
 $ sudo raspi-config
 
 ```
@@ -168,7 +168,7 @@ $ sudo raspi-config
 
 一旦出现提示，你应该选择第一个选项，***“A1。展开文件系统"*** ， ***点击键盘上的回车键*** ，向下箭头到***<【完成】>***按钮，然后重启你的 Pi——会提示你重启。或者，您可以从终端重新启动:
 
-```
+```py
 $ sudo reboot
 
 ```
@@ -179,7 +179,7 @@ $ sudo reboot
 
 在 Raspberry Pi 上获得更多空间的一个简单方法是删除 LibreOffice 和 Wolfram engine 来释放一些空间:
 
-```
+```py
 $ sudo apt-get purge wolfram-engine
 $ sudo apt-get purge libreoffice*
 $ sudo apt-get clean
@@ -195,21 +195,21 @@ $ sudo apt-get autoremove
 
 让我们更新我们的系统:
 
-```
+```py
 $ sudo apt-get update && sudo apt-get upgrade
 
 ```
 
 然后安装开发者工具包括 [CMake](https://cmake.org/) :
 
-```
+```py
 $ sudo apt-get install build-essential cmake unzip pkg-config
 
 ```
 
 接下来，是时候安装一系列图像和视频库了——这些是能够处理图像和视频文件的*关键*:
 
-```
+```py
 $ sudo apt-get install libjpeg-dev libpng-dev libtiff-dev
 $ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
 $ sudo apt-get install libxvidcore-dev libx264-dev
@@ -218,14 +218,14 @@ $ sudo apt-get install libxvidcore-dev libx264-dev
 
 从那里，让我们安装 GTK，我们的 GUI 后端:
 
-```
+```py
 $ sudo apt-get install libgtk-3-dev
 
 ```
 
 现在让我们安装一个软件包，它可能有助于减少 GTK 警告:
 
-```
+```py
 $ sudo apt-get install libcanberra-gtk*
 
 ```
@@ -234,14 +234,14 @@ $ sudo apt-get install libcanberra-gtk*
 
 现在我们需要两个包含 OpenCV 数值优化的包:
 
-```
+```py
 $ sudo apt-get install libatlas-base-dev gfortran
 
 ```
 
 最后，让我们安装 Python 3 开发头:
 
-```
+```py
 $ sudo apt-get install python3-dev
 
 ```
@@ -260,14 +260,14 @@ $ sudo apt-get install python3-dev
 
 让我们导航到我们的主文件夹并创建一个新目录
 
-```
+```py
 $ cd ~
 
 ```
 
 从那里开始，通过`wget`获取 OpenVINO 工具包:
 
-```
+```py
 $ wget https://download.01.org/opencv/2020/openvinotoolkit/2020.1/l_openvino_toolkit_runtime_raspbian_p_2020.1.023.tgz
 
 ```
@@ -276,7 +276,7 @@ $ wget https://download.01.org/opencv/2020/openvinotoolkit/2020.1/l_openvino_too
 
 一旦您成功下载了 OpenVINO toolkit，您可以使用以下命令对其进行解归档:
 
-```
+```py
 $ tar -xf l_openvino_toolkit_runtime_raspbian_p_2020.1.023.tgz
 ...
 $ mv l_openvino_toolkit_runtime_raspbian_p_2020.1.023 openvino
@@ -287,14 +287,14 @@ $ mv l_openvino_toolkit_runtime_raspbian_p_2020.1.023 openvino
 
 让我们用`nano`来编辑我们的`~/.bashrc`。我们将添加一行代码，在您每次调用 Pi 终端时加载 OpenVINO 的`setupvars.sh`。继续打开文件:
 
-```
+```py
 $ nano ~/.bashrc
 
 ```
 
 滚动到底部，添加以下几行:
 
-```
+```py
 # OpenVINO
 source ~/openvino/bin/setupvars.sh
 
@@ -304,7 +304,7 @@ source ~/openvino/bin/setupvars.sh
 
 然后，继续`source`您的`~/.bashrc`文件:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
@@ -315,7 +315,7 @@ OpenVINO 要求我们设置自定义 USB 规则。这很简单，让我们开始
 
 首先，输入以下命令将当前用户添加到 Raspbian“users”组:
 
-```
+```py
 $ sudo usermod -a -G users "$(whoami)"
 
 ```
@@ -324,7 +324,7 @@ $ sudo usermod -a -G users "$(whoami)"
 
 回到终端后，运行以下脚本来设置 USB 规则:
 
-```
+```py
 $ cd ~
 $ sh openvino/install_dependencies/install_NCS_udev_rules.sh
 
@@ -336,7 +336,7 @@ $ sh openvino/install_dependencies/install_NCS_udev_rules.sh
 
 要安装 pip，只需在终端中输入以下内容:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python3 get-pip.py
 
@@ -350,7 +350,7 @@ $ sudo python3 get-pip.py
 
 现在让我们继续安装`virtualenv`和`virtualenvwrapper`——它们支持 Python 虚拟环境:
 
-```
+```py
 $ sudo pip install virtualenv virtualenvwrapper
 $ sudo rm -rf ~/get-pip.py ~/.cache/pip
 
@@ -358,14 +358,14 @@ $ sudo rm -rf ~/get-pip.py ~/.cache/pip
 
 为了完成这些工具的安装，我们需要再次更新我们的`~/.bashrc`:
 
-```
+```py
 $ nano ~/.bashrc
 
 ```
 
 然后添加以下几行:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
@@ -380,7 +380,7 @@ VIRTUALENVWRAPPER_ENV_BIN_DIR=bin
 
 或者，您可以通过 bash 命令直接附加这些行:
 
-```
+```py
 $ echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.bashrc
 $ echo "export WORKON_HOME=$HOME/.virtualenvs" >> ~/.bashrc
 $ echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc
@@ -391,14 +391,14 @@ $ echo "VIRTUALENVWRAPPER_ENV_BIN_DIR=bin" >> ~/.bashrc
 
 接下来，获取`~/.bashrc`概要文件:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
 
 **现在让我们创建一个虚拟环境来存放 OpenVINO、OpenCV 和相关的包:**
 
-```
+```py
 $ mkvirtualenv openvino -p python3
 
 ```
@@ -411,7 +411,7 @@ $ mkvirtualenv openvino -p python3
 
 让我们安装一些今天演示脚本所需的包
 
-```
+```py
 $ workon openvino
 $ pip install numpy
 $ pip install "picamera[array]"
@@ -429,7 +429,7 @@ Caffe、TensorFlow 和 mxnet 的附加软件包可以使用 pip 通过 requireme
 
 打开终端并执行以下操作:
 
-```
+```py
 $ workon openvino
 $ source ~/openvino/bin/setupvars.sh
 $ python
@@ -450,7 +450,7 @@ $ python
 
 打开一个名为`start_openvino.sh`的新文件，并将它放在您的`~/`目录中。插入以下几行:
 
-```
+```py
 #!/bin/bash
 echo "Starting Python 3.7 with OpenCV-OpenVINO 4.2.0 bindings..."
 source ~/openvino/bin/setupvars.sh
@@ -462,7 +462,7 @@ workon openvino
 
 从现在开始，您可以用**一个简单的命令**来*激活您的 OpenVINO* 环境(与上一步中的两个命令相反:
 
-```
+```py
 $ source ~/start_openvino.sh
 Starting Python 3.7 with OpenCV-OpenVINO 4.2.0 bindings...
 
@@ -484,7 +484,7 @@ Starting Python 3.7 with OpenCV-OpenVINO 4.2.0 bindings...
 
 一旦解压了 zip 文件，就可以使用`tree`命令来检查项目目录:
 
-```
+```py
 $ tree
 .
 ├── MobileNetSSD_deploy.caffemodel
@@ -530,7 +530,7 @@ Movidius/Myriad 协处理器将执行实际的深度学习推理，减少 Pi 的
 
 继续打开一个名为`openvino_real_time_object_detection.py`的文件，插入以下几行，密切注意**的第 33-35 行**(用黄色突出显示):
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 from imutils.video import FPS
@@ -663,7 +663,7 @@ Myriad 处理器内置于 Movidius 神经计算棒中。如果你在一个嵌入
 
 使用上面推荐的方法激活您的虚拟环境:
 
-```
+```py
 $ source ~/start_openvino.sh
 Starting Python 3.7 with OpenCV-OpenVINO 4.2.0 bindings...
 
@@ -671,7 +671,7 @@ Starting Python 3.7 with OpenCV-OpenVINO 4.2.0 bindings...
 
 要使用 OpenVINO 执行对象检测，只需执行以下命令:
 
-```
+```py
 $ python openvino_real_time_object_detection.py
 	--prototxt MobileNetSSD_deploy.prototxt \
 	--model MobileNetSSD_deploy.caffemodel

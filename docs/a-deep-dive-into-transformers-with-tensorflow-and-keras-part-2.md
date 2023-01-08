@@ -187,7 +187,7 @@ with ![n](img/f4495f912b12e5a248ce066ec8a2b2f6.png "n")rows where ![n](img/f4495
 
 A. R. Gosthipaty 和 R. Raha。“用 TensorFlow 和 Keras 深入研究变形金刚:第二部分”， *PyImageSearch* ，P. Chugh，S. Huot，K. Kidriavsteva，A. Thanki 编辑。，2022 年，【https://pyimg.co/pzu1j 
 
-```
+```py
 @incollection{ARG-RR_2022_DDTFK2,
   author = {Aritra Roy Gosthipaty and Ritwik Raha},
   title = {A Deep Dive into Transformers with {TensorFlow} and {K}eras: Part 2},

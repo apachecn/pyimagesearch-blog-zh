@@ -67,7 +67,7 @@
 
 要下载房价数据集，你可以克隆 Ahmed 和 Moustafa 的 GitHub 库:
 
-```
+```py
 $ cd ~
 $ git clone https://github.com/emanhamed/Houses-dataset
 
@@ -83,7 +83,7 @@ $ git clone https://github.com/emanhamed/Houses-dataset
 
 让我们看看今天项目的结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── pyimagesearch
@@ -144,7 +144,7 @@ $ tree --dirsfirst
 
 为了了解如何为每栋房子平铺图像，让我们来看看`datasets.py`文件中的`load_house_images`函数:
 
-```
+```py
 def load_house_images(df, inputPath):
 	# initialize our images array (i.e., the house images themselves)
 	images = []
@@ -174,7 +174,7 @@ def load_house_images(df, inputPath):
 
 在下一个代码块中，我们将填充一个包含四幅图像的列表:
 
-```
+```py
 		# initialize our list of input images along with the output image
 		# after *combining* the four input images
 		inputImages = []
@@ -197,7 +197,7 @@ def load_house_images(df, inputPath):
 
 从那里，我们将把四个图像拼接成一个蒙太奇，最终返回所有的蒙太奇:
 
-```
+```py
 		# tile the four input images in the output image such the first
 		# image goes in the top-right corner, the second image in the
 		# top-left corner, the third image in the bottom-right corner,
@@ -233,7 +233,7 @@ def load_house_images(df, inputPath):
 
 打开`models.py`文件并插入以下代码:
 
-```
+```py
 def create_cnn(width, height, depth, filters=(16, 32, 64), regress=False):
 	# initialize the input shape and channel dimension, assuming
 	# TensorFlow/channels-last ordering
@@ -256,7 +256,7 @@ def create_cnn(width, height, depth, filters=(16, 32, 64), regress=False):
 
 让我们继续定义模型的输入，并开始创建我们的`CONV => RELU > BN => POOL`层集:
 
-```
+```py
 	# define the model input
 	inputs = Input(shape=inputShape)
 
@@ -281,7 +281,7 @@ def create_cnn(width, height, depth, filters=(16, 32, 64), regress=False):
 
 让我们完成 CNN 的建设:
 
-```
+```py
 	# flatten the volume, then FC => RELU => BN => DROPOUT
 	x = Flatten()(x)
 	x = Dense(16)(x)
@@ -322,7 +322,7 @@ def create_cnn(width, height, depth, filters=(16, 32, 64), regress=False):
 
 打开`cnn_regression.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from tensorflow.keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
@@ -347,7 +347,7 @@ args = vars(ap.parse_args())
 
 现在让我们加载、预处理和分割我们的数据:
 
-```
+```py
 # construct the path to the input .txt file that contains information
 # on each house in the dataset and then load the dataset
 print("[INFO] loading house attributes...")
@@ -381,7 +381,7 @@ split = train_test_split(df, images, test_size=0.25, random_state=42)
 
 现在，让我们调整定价数据并训练我们的模型:
 
-```
+```py
 # find the largest house price in the training set and use it to
 # scale our house prices to the range [0, 1] (will lead to better
 # training and convergence)
@@ -413,7 +413,7 @@ model.fit(x=trainImagesX, y=trainY,
 
 现在让我们来评估结果！
 
-```
+```py
 # make predictions on the testing data
 print("[INFO] predicting house prices...")
 preds = model.predict(testImagesX)
@@ -462,7 +462,7 @@ print("[INFO] mean: {:.2f}%, std: {:.2f}%".format(mean, std))
 
 从那里，打开一个终端并执行以下命令:
 
-```
+```py
 $ python cnn_regression.py --dataset ~/Houses-dataset/Houses\ Dataset/
 [INFO] loading house attributes...
 [INFO] loading house images...

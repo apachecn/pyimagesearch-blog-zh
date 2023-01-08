@@ -384,7 +384,7 @@ BoF 和激活功能对 CSPResNeXt-50 分级机的影响如**表 3** 所示。从
 
 **步骤#1:** 我们将在本实验中使用 GPU，因此请确保使用以下命令启动并运行 GPU:
 
-```
+```py
 # Sanity check for GPU as runtime
 $ nvidia-smi
 ```
@@ -393,14 +393,14 @@ $ nvidia-smi
 
 第二步:我们将安装一些库，比如 OpenCV，FFmpeg 等等。，这在编译和安装 darknet 之前是必需的。
 
-```
+```py
 # Install OpenCV, ffmpeg modules
 $ apt install libopencv-dev python-opencv ffmpeg
 ```
 
 **步骤#3:** 接下来，我们从 AlexyAB 存储库中克隆 darknet 框架的修改版本。如前所述，Darknet 是由 Joseph Redmon 编写的开源神经网络。用 C 和 CUDA 编写，同时支持 CPU 和 GPU 计算。然而，与之前的 YOLO 版本不同，这一次，YOLOv4 的创造者是 [AlexyAB](https://github.com/AlexeyAB) 本身。
 
-```
+```py
 # Clone AlexeyAB darknet repository
 $ git clone https://github.com/AlexeyAB/darknet/
 $ cd darknet/
@@ -419,7 +419,7 @@ $ cd darknet/
 
 现在，让我们编辑`Makefile`并编译它。
 
-```
+```py
 # Enable the OpenCV, CUDA, CUDNN, CUDNN_HALF & LIBSO Flags and Compile Darknet
 $ sed -i 's/OPENCV=0/OPENCV=1/g' Makefile
 $ sed -i 's/GPU=0/GPU=1/g' Makefile
@@ -435,7 +435,7 @@ make 命令将需要大约 90 秒来完成执行。既然编译已经完成，�
 
 .
 
-```
+```py
 # Download YOLOv4 Weights
 $ wget https://github.com/AlexeyAB/darknet/releases/download/
 darknet_yolo_v3_optimal/yolov4.weights
@@ -443,7 +443,7 @@ darknet_yolo_v3_optimal/yolov4.weights
 
 **步骤#5:** 现在，我们将运行`darknet_images.py`脚本来推断图像。
 
-```
+```py
 # Run the darknet image inference script
 $ python3 darknet_images.py --input data --weights \ 
 yolov4.weights --config_file cfg/yolov4.cfg \
@@ -471,13 +471,13 @@ yolov4.weights --config_file cfg/yolov4.cfg \
 
 在运行`darknet_video.py`演示脚本之前，我们将首先使用`pytube`库从 YouTube 下载视频，并使用`moviepy`库裁剪视频。所以让我们快速安装这些模块并下载视频。
 
-```
+```py
 # Install pytube and moviepy for downloading and cropping the video
 $ pip install git+https://github.com/rishabh3354/pytube@master
 $ pip install moviepy
 ```
 
-```
+```py
 # Import the necessary packages
 $ from pytube import YouTube
 $ from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
@@ -492,14 +492,14 @@ $ ffmpeg_extract_subclip("/content/darknet/Skyfall.mp4", \
 
 如果使用 mp4 视频文件，请务必在 darknet_video.py 的**第 57 行**将`set_saved_video`功能中的视频编解码器从`MJPG`更改为`mp4v`；否则，播放推理视频时会出现解码错误。
 
-```
+```py
 # Change the VideoWriter Codec
 fourcc = cv2.VideoWriter_fourcc(*"mp4v")
 ```
 
 既然所有必要的安装和修改都已完成，我们将运行`darknet_video.py`脚本:
 
-```
+```py
 # Run the darknet video inference script
 $ python darknet_video.py --input \ 
 /content/darknet/Skyfall-Sample.mp4 \ 

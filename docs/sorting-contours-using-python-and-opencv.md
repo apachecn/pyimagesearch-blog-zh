@@ -35,7 +35,7 @@
 
 所以让我们开始吧。打开您最喜欢的代码编辑器，将其命名为`sorting_contours.py` ，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import argparse
@@ -89,7 +89,7 @@ def sort_contours(cnts, method="left-to-right"):
 
 现在，让我们继续定义另一个助手函数，`draw_contour`:
 
-```
+```py
 def draw_contour(image, c, i):
 	# compute the center of the contour area and draw a circle
 	# representing the center
@@ -114,7 +114,7 @@ def draw_contour(image, c, i):
 
 现在，助手函数已经完成，让我们把驱动程序代码放在适当的位置，以获取我们的实际图像，检测轮廓，并对它们进行排序:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True, help="Path to the input image")
@@ -154,7 +154,7 @@ cv2.imshow("Edge Map", accumEdged)
 
 现在，让我们看看能否(1)找到这些乐高积木的轮廓，然后(2)对它们进行分类:
 
-```
+```py
 # find contours in the accumulated image, keeping only the largest
 # ones
 cnts = cv2.findContours(accumEdged.copy(), cv2.RETR_EXTERNAL,
@@ -203,7 +203,7 @@ cv2.waitKey(0)
 
 打开一个终端，导航到您的源代码并执行以下命令:
 
-```
+```py
 $ python sorting_contours.py --image images/image_01.png --method "top-to-bottom"
 
 ```
@@ -220,7 +220,7 @@ $ python sorting_contours.py --image images/image_01.png --method "top-to-bottom
 
 让我们看另一个例子。
 
-```
+```py
 $ python sorting_contours.py --image images/image_01.png --method "bottom-to-top"
 
 ```
@@ -233,7 +233,7 @@ $ python sorting_contours.py --image images/image_01.png --method "bottom-to-top
 
 当然，我们也可以对轮廓进行水平排序:
 
-```
+```py
 $ python sorting_contours.py --image images/image_02.png --method "left-to-right"
 
 ```
@@ -246,7 +246,7 @@ $ python sorting_contours.py --image images/image_02.png --method "left-to-right
 
 最后一个例子:
 
-```
+```py
 $ python sorting_contours.py --image images/image_02.png --method "right-to-left"
 
 ```

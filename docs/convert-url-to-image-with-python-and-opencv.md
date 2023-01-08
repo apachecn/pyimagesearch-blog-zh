@@ -19,7 +19,7 @@
 
 我们将探索的第一种方法是使用 OpenCV、NumPy 和 urllib 库将 URL 转换成图像。打开一个新文件，命名为`url_to_image.py`，让我们开始吧:
 
-```
+```py
 # import the necessary packages
 import numpy as np
 import urllib
@@ -48,7 +48,7 @@ def url_to_image(url):
 
 好了，是时候让这个函数发挥作用了:
 
-```
+```py
 # initialize the list of image URLs to download
 urls = [
 	"https://pyimagesearch.com/wp-content/uploads/2015/01/opencv_logo.png",
@@ -72,7 +72,7 @@ for url in urls:
 
 要查看我们的工作，打开一个终端并执行以下命令:
 
-```
+```py
 $ python url_to_image.py
 
 ```
@@ -101,7 +101,7 @@ $ python url_to_image.py
 
 第二种方法假设您的系统上安装了 [scikit-image](http://scikit-image.org/) 库。让我们看看如何利用 scikit-image 从 URL 下载图像并将其转换为 OpenCV 格式:
 
-```
+```py
 # METHOD #2: scikit-image
 from skimage import io
 

@@ -45,7 +45,7 @@
 
 首先，让我们添加包存储库:
 
-```
+```py
 $ echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | sudo tee /etc/apt/sources.list.d/coral-edgetpu.list
 $ curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 $ sudo apt-get update
@@ -56,14 +56,14 @@ $ sudo apt-get update
 
 现在我们准备好**安装 EdgeTPU 运行时库:**
 
-```
+```py
 $ sudo apt-get install libedgetpu1-std
 
 ```
 
 接着是**安装 EdgeTPU Python API:**
 
-```
+```py
 $ sudo apt-get install python3-edgetpu
 
 ```
@@ -72,7 +72,7 @@ $ sudo apt-get install python3-edgetpu
 
 重新启动您的 Raspberry Pi 或计算机是安装完成的关键。您可以使用以下命令:
 
-```
+```py
 $ sudo reboot now
 
 ```
@@ -87,7 +87,7 @@ Python 虚拟环境是您系统上的一个*隔离的*开发/测试/生产环境
 
 您可以使用以下命令安装 pip:
 
-```
+```py
 $ wget https://bootstrap.pypa.io/get-pip.py
 $ sudo python get-pip.py
 $ sudo python3 get-pip.py
@@ -97,21 +97,21 @@ $ sudo rm -rf ~/.cache/pip
 
 现在让我们安装`virtualenv`和`virtualenvwrapper`:
 
-```
+```py
 $ sudo pip install virtualenv virtualenvwrapper
 
 ```
 
 一旦`virtualenv`和`virtualenvwrapper`都安装好了，打开你的`~/.bashrc`文件:
 
-```
+```py
 $ nano ~/.bashrc
 
 ```
 
 …并将以下几行附加到文件的底部:
 
-```
+```py
 # virtualenv and virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
@@ -123,14 +123,14 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 从那里，重新加载您的`~/.bashrc`文件，将更改应用到您当前的 bash 会话:
 
-```
+```py
 $ source ~/.bashrc
 
 ```
 
 接下来，创建您的 **Python 3 虚拟环境:**
 
-```
+```py
 $ mkvirtualenv coral -p python3
 
 ```
@@ -147,7 +147,7 @@ $ mkvirtualenv coral -p python3
 
 首先，让我们找到 Python EdgeTPU 包的安装路径:
 
-```
+```py
 $ dpkg -L python3-edgetpu
 /.
 /usr
@@ -204,7 +204,7 @@ $ dpkg -L python3-edgetpu
 
 现在让我们创建我们的符号链接:
 
-```
+```py
 $ cd ~/.virtualenvs/coral/lib/python3.7/site-packages
 $ ln -s /usr/lib/python3/dist-packages/edgetpu/ edgetpu
 $ cd ~
@@ -215,7 +215,7 @@ $ cd ~
 
 让我们启动 Python shell 来测试我们的 Google Coral 安装:
 
-```
+```py
 $ workon coral
 $ python
 >>> import edgetpu
@@ -230,7 +230,7 @@ $ python
 
 让我们安装用于 PiCamera(仅限 Raspberry Pi)和图像处理的软件包:
 
-```
+```py
 $ workon coral
 $ pip install "picamera[array]" # Raspberry Pi only
 $ pip install numpy
@@ -247,14 +247,14 @@ $ pip install pillow
 
 首先让我们**安装 EdgeTPU 示例包:**
 
-```
+```py
 $ sudo apt-get install edgetpu-examples
 
 ```
 
 从那里，我们需要添加**写权限到示例目录:**
 
-```
+```py
 $ sudo chmod a+w /usr/share/edgetpu/examples
 
 ```
@@ -265,7 +265,7 @@ $ sudo chmod a+w /usr/share/edgetpu/examples
 
 继续激活您的环境，并切换到示例目录:
 
-```
+```py
 $ workon coral
 $ cd /usr/share/edgetpu/examples
 
@@ -273,7 +273,7 @@ $ cd /usr/share/edgetpu/examples
 
 examples 目录包含图像和模型的目录，以及一些 Python 脚本。让我们用`tree`命令检查我们的项目结构:
 
-```
+```py
 $ tree --dirsfirst
 .
 ├── images
@@ -319,7 +319,7 @@ $ tree --dirsfirst
 
 让我们首先执行一个简单的**图像分类**示例:
 
-```
+```py
 $ python classify_image.py \
 	--mode models/mobilenet_v2_1.0_224_inat_bird_quant_edgetpu.tflite \
 	--label models/inat_bird_labels.txt \
@@ -341,7 +341,7 @@ Score :  0.15234375
 
 让我们尝试第二个分类示例:
 
-```
+```py
 $ python classify_image.py \
 	--mode models/mobilenet_v2_1.0_224_inat_bird_quant_edgetpu.tflite \
 	--label models/inat_bird_labels.txt \
@@ -363,7 +363,7 @@ Score :  0.29296875
 
 现在让我们尝试使用 Google Coral USB 加速器执行**面部检测**:
 
-```
+```py
 $ python object_detection.py \
 	--mode models/mobilenet_ssd_v2_face_quant_postprocess_edgetpu.tflite \
 	--input images/grace_hopper.bmp 
@@ -382,7 +382,7 @@ Please check  object_detection_result.jpg
 
 下一个示例显示了如何使用在 COCO 数据集上训练的 MobileNet + SSD 来执行**对象检测**:
 
-```
+```py
 $ python object_detection.py \
 	--mode models/mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite \
 	--input images/cat.bmp 
@@ -432,7 +432,7 @@ Please check  object_detection_result.jpg
 
 下面是一个将人脸检测器应用于自定图像的示例:
 
-```
+```py
 $ python object_detection.py \
     --mode models/mobilenet_ssd_v2_face_quant_postprocess_edgetpu.tflite \
     --input ~/IMG_7687.jpg
@@ -450,7 +450,7 @@ box =  [190.66683948040009, 0.0, 307.4474334716797, 125.00646710395813]
 
 最后，这里有一个在同一映像上运行 MobileNet + SSD 的示例:
 
-```
+```py
 $ python object_detection.py \
     --mode models/mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite \
     --label models/coco_labels.txt \

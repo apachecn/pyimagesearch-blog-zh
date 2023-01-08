@@ -182,7 +182,7 @@
 
 **Mangla，P.** “当事情不顺利时规划下一步”， *PyImageSearch* ，P. Chugh，R. Raha，K. Kudriavtseva，S. Huot 编辑。，2022 年，【https://pyimg.co/hvxgp 
 
-```
+```py
 @incollection{Mangla_2022_Planning_Next_Steps,
   author = {Puneet Mangla},
   title = {Planning Next Steps When Things Don’t Work Out},

@@ -68,7 +68,7 @@
 
 幸运的是，所有这些都是 pip 可安装的:
 
-```
+```py
 $ pip install opencv-contrib-python
 $ pip install torch torchvision
 $ pip install imutils matplotlib tqdm
@@ -117,7 +117,7 @@ $ pip install imutils matplotlib tqdm
 
 从这里，看一下目录结构:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── flower_photos
@@ -167,7 +167,7 @@ $ tree --dirsfirst --filelimit 10
 
 打开`pyimagesearch`模块中的`config.py`文件，插入以下代码:
 
-```
+```py
 # import the necessary packages
 import torch
 import os
@@ -199,7 +199,7 @@ VAL = os.path.join(BASE_PATH, "val")
 
 我们将微调 ResNet 架构，在 ImageNet 数据集上进行预训练。这意味着我们必须为图像像素缩放设置一些重要的参数:
 
-```
+```py
 # specify ImageNet mean and standard deviation and image size
 MEAN = [0.485, 0.456, 0.406]
 STD = [0.229, 0.224, 0.225]
@@ -223,7 +223,7 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 接下来，我们有一些变量将用于特征提取和微调:
 
-```
+```py
 # specify training hyperparameters
 FEATURE_EXTRACTION_BATCH_SIZE = 256
 FINETUNE_BATCH_SIZE = 64
@@ -243,7 +243,7 @@ LR_FINETUNE = 0.0005
 
 我们将通过设置输出文件路径来结束我们的配置脚本:
 
-```
+```py
 # define paths to store training plots and trained model
 WARMUP_PLOT = os.path.join("output", "warmup.png")
 FINETUNE_PLOT = os.path.join("output", "finetune.png")
@@ -263,7 +263,7 @@ PyTorch 允许我们轻松地从存储在磁盘目录中的图像构建`DataLoad
 
 打开`pyimagesearch`模块内的`create_dataloaders.py`文件，我们开始吧:
 
-```
+```py
 # import the necessary packages
 from . import config
 from torch.utils.data import DataLoader
@@ -280,7 +280,7 @@ import os
 
 在那里，我们定义了`get_dataloader`函数:
 
-```
+```py
 def get_dataloader(rootDir, transforms, batchSize, shuffle=True):
 	# create a dataset and use it to create a data loader
 	ds = datasets.ImageFolder(root=rootDir,
@@ -319,7 +319,7 @@ def get_dataloader(rootDir, transforms, batchSize, shuffle=True):
 
 打开项目目录结构中的`build_dataset.py`文件，插入以下代码:
 
-```
+```py
 # USAGE
 # python build_dataset.py
 
@@ -341,7 +341,7 @@ import os
 
 接下来，我们有我们的`copy_images`函数:
 
-```
+```py
 def copy_images(imagePaths, folder):
 	# check if the destination folder exists and if not create it
 	if not os.path.exists(folder):
@@ -384,7 +384,7 @@ def copy_images(imagePaths, folder):
 
 现在让我们使用这个`copy_images`函数:
 
-```
+```py
 # load all the image paths and randomly shuffle them
 print("[INFO] loading image paths...")
 imagePaths = list(paths.list_images(config.DATA_PATH))
@@ -417,7 +417,7 @@ copy_images(valPaths, config.VAL)
 
 从那里，打开一个 shell 并执行以下命令:
 
-```
+```py
 $ python build_dataset.py
 [INFO] loading image paths...
 [INFO] copying training and validation images...
@@ -425,7 +425,7 @@ $ python build_dataset.py
 
 脚本执行后，您将看到一个新的`dataset`目录已经创建:
 
-```
+```py
 $ tree dataset --dirsfirst --filelimit 10
 dataset
 ├── train
@@ -474,7 +474,7 @@ dataset
 
 打开项目目录结构中的`train_feature_extraction.py`文件，让我们开始吧:
 
-```
+```py
 # USAGE
 # python train_feature_extraction.py
 
@@ -503,7 +503,7 @@ import time
 
 处理好我们的导入后，让我们继续定义我们的数据预处理和增强管道:
 
-```
+```py
 # define augmentation pipelines
 trainTansform = transforms.Compose([
 	transforms.RandomResizedCrop(config.IMAGE_SIZE),
@@ -539,7 +539,7 @@ valTransform = transforms.Compose([
 
 随着我们的训练和验证`Compose`对象的创建，让我们应用我们的`get_dataloader`函数:
 
-```
+```py
 # create data loaders
 (trainDS, trainLoader) = create_dataloaders.get_dataloader(config.TRAIN,
 	transforms=trainTansform,
@@ -557,7 +557,7 @@ valTransform = transforms.Compose([
 
 现在，让我们通过特征提取为迁移学习准备 ResNet50 模型:
 
-```
+```py
 # load up the ResNet50 model
 model = resnet50(pretrained=True)
 
@@ -583,7 +583,7 @@ model = model.to(config.DEVICE)
 
 接下来，我们初始化损失函数和优化方法:
 
-```
+```py
 # initialize loss function and optimizer (notice that we are only
 # providing the parameters of the classification top to our optimizer)
 lossFunc = nn.CrossEntropyLoss()
@@ -604,7 +604,7 @@ H = {"train_loss": [], "train_acc": [], "val_loss": [],
 
 现在，该训练模型了:
 
-```
+```py
 # loop over epochs
 print("[INFO] training the network...")
 startTime = time.time()
@@ -658,7 +658,7 @@ for e in tqdm(range(config.EPOCHS)):
 
 现在纪元已经完成，我们可以根据验证数据评估模型:
 
-```
+```py
 	# switch off autograd
 	with torch.no_grad():
 		# set the model in evaluation mode
@@ -684,7 +684,7 @@ for e in tqdm(range(config.EPOCHS)):
 
 以下代码块汇总了我们的训练/验证损失和准确性，更新了我们的训练历史，然后将损失/准确性信息打印到我们的终端:
 
-```
+```py
 	# calculate the average training and validation loss
 	avgTrainLoss = totalTrainLoss / trainSteps
 	avgValLoss = totalValLoss / valSteps
@@ -709,7 +709,7 @@ for e in tqdm(range(config.EPOCHS)):
 
 我们的最终代码块绘制了我们的训练历史并将我们的模型序列化到磁盘:
 
-```
+```py
 # display the total time needed to perform the training
 endTime = time.time()
 print("[INFO] total time taken to train the model: {:.2f}s".format(
@@ -745,7 +745,7 @@ torch.save(model, config.WARMUP_MODEL)
 
 假设您已经完成了这两个步骤，您可以继续运行`train_feature_extraction.py`脚本:
 
-```
+```py
 $ python train_feature_extraction.py
 [INFO] training the network...
   0% 0/20 [00:00<?, ?it/s][INFO] EPOCH: 1/20
@@ -812,7 +812,7 @@ Val loss: 0.684679, Val accuracy: 0.8774
 
 让我们学习如何通过 PyTorch 的迁移学习来应用微调。打开项目目录结构中的`fine_tune.py`文件，让我们开始吧:
 
-```
+```py
 # USAGE
 # python fine_tune.py
 
@@ -836,7 +836,7 @@ import os
 
 然后，我们定义我们的训练和验证转换，就像我们对特征提取所做的那样:
 
-```
+```py
 # define augmentation pipelines
 trainTansform = transforms.Compose([
 	transforms.RandomResizedCrop(config.IMAGE_SIZE),
@@ -854,7 +854,7 @@ valTransform = transforms.Compose([
 
 对于我们的数据加载器来说也是如此——它们以与特征提取完全相同的方式进行实例化:
 
-```
+```py
 # create data loaders
 (trainDS, trainLoader) = create_dataloaders.get_dataloader(config.TRAIN,
 	transforms=trainTansform, batchSize=config.FINETUNE_BATCH_SIZE)
@@ -865,7 +865,7 @@ valTransform = transforms.Compose([
 
 ***真正的变化*发生在我们从磁盘加载 ResNet 并修改架构本身的时候，所以让我们仔细检查这一部分:**
 
-```
+```py
 # load up the ResNet50 model
 model = resnet50(pretrained=True)
 numFeatures = model.fc.in_features
@@ -913,7 +913,7 @@ model = model.to(config.DEVICE)
 
 完成“网络手术”后，我们可以继续实例化我们的损失函数和优化器:
 
-```
+```py
 # initialize loss function and optimizer (notice that we are only
 # providing the parameters of the classification top to our optimizer)
 lossFunc = nn.CrossEntropyLoss()
@@ -930,7 +930,7 @@ H = {"train_loss": [], "train_acc": [], "val_loss": [],
 
 从那里，我们开始我们的培训渠道:
 
-```
+```py
 # loop over epochs
 print("[INFO] training the network...")
 startTime = time.time()
@@ -976,7 +976,7 @@ for e in tqdm(range(config.EPOCHS)):
 
 培训完成后，我们可以进入新时代的验证阶段:
 
-```
+```py
 	# switch off autograd
 	with torch.no_grad():
 		# set the model in evaluation mode
@@ -1019,7 +1019,7 @@ for e in tqdm(range(config.EPOCHS)):
 
 验证完成后，我们绘制培训历史并将模型序列化到磁盘:
 
-```
+```py
 # display the total time needed to perform the training
 endTime = time.time()
 print("[INFO] total time taken to train the model: {:.2f}s".format(
@@ -1057,7 +1057,7 @@ torch.save(model, config.FINETUNE_MODEL)
 
 从那里，您可以执行以下命令:
 
-```
+```py
 $ python fine_tune.py
 [INFO] training the network...
   0% 0/20 [00:00<?, ?it/s][INFO] EPOCH: 1/20
@@ -1117,7 +1117,7 @@ Val loss: 0.385452, Val accuracy: 0.9019
 
 答案是使用我们的`inference.py`脚本:
 
-```
+```py
 # USAGE
 # python inference.py --model output/warmup_model.pth
 # python inference.py --model output/finetune_model.pth
@@ -1143,7 +1143,7 @@ import torch
 
 说到命令行参数，现在让我们来解析它们:
 
-```
+```py
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-m", "--model", required=True,
@@ -1155,7 +1155,7 @@ args = vars(ap.parse_args())
 
 现在让我们为输入图像创建一个变换对象:
 
-```
+```py
 # build our data pre-processing pipeline
 testTransform = transforms.Compose([
 	transforms.Resize((config.IMAGE_SIZE, config.IMAGE_SIZE)),
@@ -1183,7 +1183,7 @@ deNormalize = transforms.Normalize(mean=invMean, std=invStd)
 
 现在让我们为我们的`config.VAL`目录构建一个`DataLoader`:
 
-```
+```py
 # initialize our test dataset and data loader
 print("[INFO] loading the dataset...")
 (testDS, testLoader) = create_dataloaders.get_dataloader(config.VAL,
@@ -1193,7 +1193,7 @@ print("[INFO] loading the dataset...")
 
 从那里，我们可以设置我们的目标计算设备并加载我们训练过的 PyTorch 模型:
 
-```
+```py
 # check if we have a GPU available, if so, define the map location
 # accordingly
 if torch.cuda.is_available():
@@ -1222,7 +1222,7 @@ model.eval()
 
 现在让我们从`testLoader`中随机抽取一组测试数据:
 
-```
+```py
 # grab a batch of test data
 batch = next(iter(testLoader))
 (images, labels) = (batch[0], batch[1])
@@ -1233,7 +1233,7 @@ fig = plt.figure("Results", figsize=(10, 10))
 
 最后，我们可以根据测试数据做出预测:
 
-```
+```py
 # switch off autograd
 with torch.no_grad():
 	# send the images to the device
@@ -1296,7 +1296,7 @@ with torch.no_grad():
 
 前往本教程的 ***“下载”*** 部分，访问源代码、数据集等。，从那里，您可以执行以下命令:
 
-```
+```py
 $ python inference.py --model output/finetune_model.pth
 [INFO] loading the dataset...
 [INFO] loading the model...
@@ -1328,7 +1328,7 @@ $ python inference.py --model output/finetune_model.pth
 
 **Rosebrock，a .**“py torch:迁移学习和图像分类”， *PyImageSearch* ，2021，[https://PyImageSearch . com/2021/10/11/py torch-Transfer-Learning-and-Image-class ification/](https://pyimagesearch.com/2021/10/11/pytorch-transfer-learning-and-image-classification/)
 
-```
+```py
 @article{Rosebrock_2021_Transfer,
    author = {Adrian Rosebrock},
    title = {{PyTorch}: Transfer Learning and Image Classification},

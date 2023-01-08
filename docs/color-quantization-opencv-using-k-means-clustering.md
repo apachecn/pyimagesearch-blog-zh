@@ -53,7 +53,7 @@
 
 打开一个新文件，命名为`quant.py`，开始编码:
 
-```
+```py
 # import the necessary packages
 from sklearn.cluster import MiniBatchKMeans
 import numpy as np
@@ -81,7 +81,7 @@ args = vars(ap.parse_args())
 
 现在真正有趣的代码开始了:
 
-```
+```py
 # load the image and grab its width and height
 image = cv2.imread(args["image"])
 (h, w) = image.shape[:2]

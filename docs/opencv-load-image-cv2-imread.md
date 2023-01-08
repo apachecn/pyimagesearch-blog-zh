@@ -25,7 +25,7 @@
 
 `cv2.imread`函数接受一个参数，即图像在磁盘上的位置的路径:
 
-```
+```py
 image = cv2.imread("path/to/image.png")
 ```
 
@@ -35,7 +35,7 @@ image = cv2.imread("path/to/image.png")
 
 幸运的是，OpenCV 可以通过 pip 安装:
 
-```
+```py
 $ pip install opencv-contrib-python
 ```
 
@@ -60,7 +60,7 @@ $ pip install opencv-contrib-python
 
 让我们回顾一下我们的项目结构。从 ***“下载”*** 部分获取源代码，解压缩内容，并导航到保存它的位置:
 
-```
+```py
 $ tree . --dirsfirst
 .
 ├── 30th_birthday.png
@@ -79,7 +79,7 @@ $ tree . --dirsfirst
 
 创建一个名为`load_image_opencv.py`的 Python 脚本，并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import cv2
@@ -91,7 +91,7 @@ ap.add_argument("-i", "--image", required=True,
 args = vars(ap.parse_args())
 ```
 
-```
+```py
 # load the image from disk via "cv2.imread" and then grab the spatial
 # dimensions, including width, height, and number of channels
 image = cv2.imread(args["image"])
@@ -110,7 +110,7 @@ print("channels: {}".format(c))
 
 但是，如果我们不知道 OpenCV 是否正确地读取了图像，那么在内存中保存图像又有什么用呢？让我们在屏幕上显示图像进行验证:
 
-```
+```py
 # show the image and wait for a keypress
 cv2.imshow("Image", image)
 cv2.waitKey(0)
@@ -136,7 +136,7 @@ cv2.imwrite("newimage.jpg", image)
 
 从那里，打开一个终端，并执行以下命令:
 
-```
+```py
 $ python load_image_opencv.py --image 30th_birthday.png 
 width: 720 pixels
 height: 764  pixels
@@ -145,12 +145,12 @@ channels: 3
 
 几年前，在我 30 岁生日的时候，我妻子租了一辆近似《侏罗纪公园》(我最喜欢的电影)的复制品，让我们开了一整天。
 
-```
+```py
 $ ls
 30th_birthday.png	jurassic_park.png	load_image_opencv.py	newimage.jpg
 ```
 
-```
+```py
 $ python load_image_opencv.py --image jurassic_park.png 
 width: 577 pixels
 height: 433  pixels
@@ -165,7 +165,7 @@ channels: 3
 
 ### 如果我们将一个无效的图像路径传递给“cv2.imread”会发生什么？
 
-```
+```py
 $ python load_image_opencv.py --image path/does/not/exist.png
 Traceback (most recent call last):
   File "load_image_opencv.py", line 17, in <module>

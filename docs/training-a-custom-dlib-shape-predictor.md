@@ -157,7 +157,7 @@ iBUG-300W 的目标是训练一个形状预测器，能够定位每个单独的�
 
 pip 安装命令包括:
 
-```
+```py
 $ workon <env-name>
 $ pip install dlib
 $ pip install opencv-contrib-python
@@ -177,7 +177,7 @@ $ pip install imutils
 
 我建议将 iBug 300W 数据集放入与本教程下载相关的 zip 文件中，如下所示:
 
-```
+```py
 $ unzip custom-dlib-shape-predictor.zip
 ...
 $ cd custom-dlib-shape-predictor
@@ -189,7 +189,7 @@ $ tar -xvf ibug_300W_large_face_landmark_dataset.tar.gz
 
 或者(即，不点击上面的超链接)，在您的终端中使用`wget`直接下载数据集:
 
-```
+```py
 $ unzip custom-dlib-shape-predictor.zip
 ...
 $ cd custom-dlib-shape-predictor
@@ -205,7 +205,7 @@ $ tar -xvf ibug_300W_large_face_landmark_dataset.tar.gz
 
 假设您已经遵循了上一节中的说明，您的项目目录现在组织如下:
 
-```
+```py
 $ tree --dirsfirst --filelimit 10
 .
 ├── ibug_300W_large_face_landmark_dataset
@@ -263,7 +263,7 @@ iBUG-300W 为数据集中的所有 面部结构(即眉毛、眼睛、鼻子、�
 
 为了理解我们如何做到这一点，让我们首先通过检查`labels_ibug_300W_train.xml`训练文件来考虑如何在 iBUG-300W 数据集中注释面部标志:
 
-```
+```py
 ...
 <images>
   <image file='lfpw/trainset/image_0457.png'>
@@ -398,7 +398,7 @@ iBUG-300W 数据集中的所有训练数据都由结构化的 XML 文件表示�
 
 打开`parse_xml.py`文件，我们开始吧:
 
-```
+```py
 # import the necessary packages
 import argparse
 import re
@@ -424,7 +424,7 @@ args = vars(ap.parse_args())
 
 让我们继续定义我们的眼睛坐标的索引:
 
-```
+```py
 # in the iBUG 300-W dataset, each (x, y)-coordinate maps to a specific
 # facial feature (i.e., eye, mouth, nose, etc.) -- in order to train a
 # dlib shape predictor on *just* the eyes, we must first define the
@@ -439,7 +439,7 @@ LANDMARKS = set(list(range(36, 48)))
 
 现在让我们定义正则表达式并加载原始的输入 XML 文件:
 
-```
+```py
 # to easily parse out the eye locations from the XML file we can
 # utilize regular expressions to determine if there is a 'part'
 # element on any given line
@@ -461,7 +461,7 @@ output = open(args["output"], "w")
 
 现在我们准备好循环遍历*输入的* XML 文件，让**找到并提取眼睛标志:**
 
-```
+```py
 # loop over the rows of the data split file
 for row in rows:
 	# check to see if the current line has the (x, y)-coordinates for
@@ -516,7 +516,7 @@ output.close()
 
 您可以使用以下命令，通过仅解析原始训练文件中的眼睛标志坐标来生成新的**训练文件**:
 
-```
+```py
 $ python parse_xml.py \
 	--input ibug_300W_large_face_landmark_dataset/labels_ibug_300W_train.xml \
 	--output ibug_300W_large_face_landmark_dataset/labels_ibug_300W_train_eyes.xml
@@ -526,7 +526,7 @@ $ python parse_xml.py \
 
 类似地，您可以做同样的事情来创建我们新的**测试文件:**
 
-```
+```py
 $ python parse_xml.py \
 	--input ibug_300W_large_face_landmark_dataset/labels_ibug_300W_test.xml \
 	--output ibug_300W_large_face_landmark_dataset/labels_ibug_300W_test_eyes.xml
@@ -536,7 +536,7 @@ $ python parse_xml.py \
 
 要验证我们的新培训/测试文件是否已创建，请检查 iBUG-300W 根数据集目录中的`labels_ibug_300W_train_eyes.xml`和`labels_ibug_300W_test_eyes.xml`文件:
 
-```
+```py
 $ cd ibug_300W_large_face_landmark_dataset
 $ ls -lh *.xml    
 -rw-r--r--@ 1 adrian  staff    21M Aug 16  2014 labels_ibug_300W.xml
@@ -565,7 +565,7 @@ $ cd ..
 
 要了解如何训练自己的 dlib 形状预测器，请打开项目结构中的`train_shape_predictor.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import multiprocessing
 import argparse
@@ -606,7 +606,7 @@ args = vars(ap.parse_args())
 
 我们将从默认的 dlib 形状预测器选项开始:
 
-```
+```py
 # grab the default options for dlib's shape predictor
 print("[INFO] setting shape predictor options...")
 options = dlib.shape_predictor_training_options()
@@ -615,7 +615,7 @@ options = dlib.shape_predictor_training_options()
 
 在那里，我们将配置`tree_depth`选项:
 
-```
+```py
 # define the depth of each regression tree -- there will be a total
 # of 2^tree_depth leaves in each tree; small values of tree_depth
 # will be *faster* but *less accurate* while larger values will
@@ -633,7 +633,7 @@ options.tree_depth = 4
 
 我们要探索的下一个参数是`nu`，一个正则化参数:
 
-```
+```py
 # regularization parameter in the range [0, 1] that is used to help
 # our model generalize -- values closer to 1 will make our model fit
 # the training data better, but could cause overfitting; values closer
@@ -651,7 +651,7 @@ options.nu = 0.1
 
 我们的下一个参数是`cascade_depth`:
 
-```
+```py
 # the number of cascades used to train the shape predictor -- this
 # parameter has a *dramtic* impact on both the *accuracy* and *output
 # size* of your model; the more cascades you have, the more accurate
@@ -676,7 +676,7 @@ options.cascade_depth = 15
 
 现在让我们继续讨论`feature_pool_size`:
 
-```
+```py
 # number of pixels used to generate features for the random trees at
 # each cascade -- larger pixel values will make your shape predictor
 # more accurate, but slower; use large values if speed is not a
@@ -694,7 +694,7 @@ options.feature_pool_size = 400
 
 我们要设置的下一个参数是`num_test_splits`:
 
-```
+```py
 # selects best features at each cascade when training -- the larger
 # this value is, the *longer* it will take to train but (potentially)
 # the more *accurate* your model will be
@@ -708,7 +708,7 @@ options.num_test_splits = 50
 
 接下来让我们来看看`oversampling_amount`:
 
-```
+```py
 # controls amount of "jitter" (i.e., data augmentation) when training
 # the shape predictor -- applies the supplied number of random
 # deformations, thereby performing regularization and increasing the
@@ -729,7 +729,7 @@ options.oversampling_amount = 5
 
 接下来是`oversampling_translation_jitter`选项:
 
-```
+```py
 # amount of translation jitter to apply -- the dlib docs recommend
 # values in the range [0, 0.5]
 options.oversampling_translation_jitter = 0.1
@@ -742,7 +742,7 @@ options.oversampling_translation_jitter = 0.1
 
 `be_verbose`选项简单地指示 dlib 在我们的形状预测器训练时打印出状态信息:
 
-```
+```py
 # tell the dlib shape predictor to be verbose and print out status
 # messages our model trains
 options.be_verbose = True
@@ -751,7 +751,7 @@ options.be_verbose = True
 
 最后，我们有了`num_threads`参数:
 
-```
+```py
 # number of threads/CPU cores to be used when training -- we default
 # this value to the number of available cores on the system, but you
 # can supply an integer value here if you would like
@@ -765,7 +765,7 @@ options.num_threads = multiprocessing.cpu_count()
 
 既然我们的`options`已经设置好了，最后一步就是简单地调用`train_shape_predictor`:
 
-```
+```py
 # log our training options to the terminal
 print("[INFO] shape predictor options:")
 print(options)
@@ -790,7 +790,7 @@ dlib 库接受(1)我们的训练 XML 文件的路径，(2)我们的输出形状�
 
 完成后，您就可以训练形状预测器了:
 
-```
+```py
 $ python train_shape_predictor.py \
 	--training ibug_300W_large_face_landmark_dataset/labels_ibug_300W_train_eyes.xml \
 	--model eye_predictor.dat
@@ -821,7 +821,7 @@ Training complete, saved predictor to file eye_predictor.dat
 
 要验证您的形状预测器是否已序列化到磁盘，请确保已在您的目录结构中创建了`eye_predictor.dat`:
 
-```
+```py
 $ ls -lh *.dat
 -rw-r--r--@ 1 adrian  staff    18M Dec  4 17:15 eye_predictor.dat
 
@@ -835,7 +835,7 @@ $ ls -lh *.dat
 
 打开`evaluate_shape_predictor.py`文件并插入以下代码:
 
-```
+```py
 # import the necessary packages
 import argparse
 import dlib
@@ -873,7 +873,7 @@ print("[INFO] error: {}".format(error))
 
 从那里，执行下面的命令来评估我们在**训练集上的眼睛界标预测器:**
 
-```
+```py
 $ python evaluate_shape_predictor.py --predictor eye_predictor.dat \
 	--xml ibug_300W_large_face_landmark_dataset/labels_ibug_300W_train_eyes.xml
 [INFO] evaluating shape predictor...
@@ -885,7 +885,7 @@ $ python evaluate_shape_predictor.py --predictor eye_predictor.dat \
 
 现在让我们在我们的**测试集上运行相同的命令:**
 
-```
+```py
 $ python evaluate_shape_predictor.py --predictor eye_predictor.dat \
 	--xml ibug_300W_large_face_landmark_dataset/labels_ibug_300W_test_eyes.xml
 [INFO] evaluating shape predictor...
@@ -916,7 +916,7 @@ $ python evaluate_shape_predictor.py --predictor eye_predictor.dat \
 
 打开`predict_eyes.py`并插入以下代码:
 
-```
+```py
 # import the necessary packages
 from imutils.video import VideoStream
 from imutils import face_utils
@@ -940,7 +940,7 @@ args = vars(ap.parse_args())
 
 让我们执行三个初始化:
 
-```
+```py
 # initialize dlib's face detector (HOG-based) and then load our
 # trained shape predictor
 print("[INFO] loading facial landmark predictor...")
@@ -962,7 +962,7 @@ time.sleep(2.0)
 
 现在我们准备好循环我们相机中的帧:
 
-```
+```py
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the video stream, resize it to have a
@@ -982,7 +982,7 @@ while True:
 
 让我们通过**预测和绘制面部标志:**来处理帧中检测到的面部
 
-```
+```py
 	# loop over the face detections
 	for rect in rects:
 		# convert the dlib rectangle into an OpenCV bounding box and
@@ -1015,7 +1015,7 @@ while True:
 
 最后，我们将显示结果！
 
-```
+```py
 	# show the frame
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
@@ -1042,7 +1042,7 @@ vs.stop()
 
 从那里，您可以执行以下命令:
 
-```
+```py
 $ python predict_eyes.py --shape-predictor eye_predictor.dat
 [INFO] loading facial landmark predictor...
 [INFO] camera sensor warming up...

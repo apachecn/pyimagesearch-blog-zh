@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Error><Code>NoSuchBucket</Code><Message>The specified bucket does not exist</Message><BucketName>static.pyimagesearch.com</BucketName><RequestId>WDGGNW6J7B9NE2V9</RequestId><HostId>TVnockl30sANUEeiKEZ+OQUH9d09QYagxf5MxIFvFJEDGMixRsSdz9B3/Ann1yW3c7ExwL5R4B8=</HostId></Error>
